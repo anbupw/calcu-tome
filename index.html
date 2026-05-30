@@ -417,6 +417,56 @@ body { top: 0px !important; }
 .vybor::-webkit-scrollbar { width: 6px; }
 .vybor::-webkit-scrollbar-track { background: transparent; }
 .vybor::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+/* =========================================
+   7. AUTHOR / DEVELOPER BADGE
+========================================= */
+.author-badge {
+	position: fixed;
+	bottom: 25px;
+	left: 25px;
+	background: rgba(30, 41, 59, 0.7);
+	backdrop-filter: blur(10px);
+	border: 1px solid var(--border-color);
+	padding: 8px 16px;
+	border-radius: 50px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	z-index: 1000;
+	text-decoration: none;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.author-badge:hover {
+	background: rgba(30, 41, 59, 0.95);
+	border-color: #3b82f6;
+	transform: translateY(-3px);
+	text-decoration: none;
+}
+
+.author-badge span {
+	color: var(--text-muted);
+	font-size: 0.85rem;
+	font-weight: 500;
+}
+
+.author-badge strong {
+	color: var(--text-main);
+	font-weight: 600;
+}
+
+.author-badge svg {
+	width: 20px;
+	height: 20px;
+	fill: #2AABEE; /* Warna khas biru Telegram */
+	transition: transform 0.3s ease;
+}
+
+.author-badge:hover svg {
+	transform: scale(1.1) rotate(-10deg);
+}
 </style>
 </head>
 <body>
@@ -750,5 +800,11 @@ function drevo(e,k){
 drevo(616);
 drevo(515,true);
 </script>
+<a href="https://t.me/zulve" target="_blank" class="author-badge" title="Hubungi Developer di Telegram">
+	<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+		<path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.32.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.145-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.432.898-.65a361.35 361.35 0 0 1 7.22-3.111c3.08-1.254 3.72-1.48 4.14-1.486z"/>
+	</svg>
+	<span>Developer by <strong>Zul</strong></span>
+</a>
 </body>
 </html>
