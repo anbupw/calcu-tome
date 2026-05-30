@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta http-equiv="description" content="Menghitung berapa banyak bahan dan tome lvl 1 yang Anda butuhkan untuk membuat tome level 2-5" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Menghitung berapa banyak bahan dan tome lvl 1 yang Anda butuhkan untuk membuat tome level 2-5" />
 <title>Tome Calculator</title>
 <style>
 html, body, div, span, applet, object, iframe,
@@ -30,9 +31,24 @@ body	{	font-size:16px; width:auto; height:auto; font-weight:bold; color:#003; te
 a	{	color:#fff;text-shadow:1px 1px 2px #003; 	}
 a:hover	{	text-shadow:1px 5px 10px #003;	}
 
-.obertka	{	display:table; padding:20px; margin:40px auto 10px; background:#69F;border-radius:40px 250px 40px 40px;	}
-.obertka, .vybor	{	box-shadow:0 0 20px rgba(0,0,0,0.5);	}
-.drevo 	{	display: table-cell; width:380px; 	}
+.obertka { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 20px;
+  justify-content: center;
+  padding: 20px; 
+  margin: 40px auto 10px; 
+  background: #69F;
+  border-radius: 40px 250px 40px 40px; 
+  max-width: 90%; /* Agar tidak mentok di tepi layar */
+  box-sizing: border-box;
+}
+.obertka, .vybor { box-shadow:0 0 20px rgba(0,0,0,0.5); }
+.drevo { 
+  display: block; 
+  width: 100%; 
+  max-width: 380px; 
+}
 .vetv	{	display:table;	}
 .vetv li button	{	display:block; margin:0px auto 2px; width:32px; height:32px; font-style:normal; background:none;  background-image:url(znachki.png); background-position:left top; box-shadow: 0px 0px 20px rgba(0,0,0,0.5); border:none; 	}
 .vetv li button:active	{	box-shadow:0px 0px 10px rgba(0,0,0,0.5);	}
@@ -53,7 +69,14 @@ a:hover	{	text-shadow:1px 5px 10px #003;	}
 #niz	{	font-size:12px;	}
 #strelki	{	font-size:18px;	}
 
-#vychet	{	width:800px; margin:0px auto; visibility:hidden;	}
+#vychet { 
+  width: 100%; 
+  max-width: 800px; 
+  margin: 0px auto; 
+  visibility: hidden; 
+  box-sizing: border-box; 
+  padding: 0 15px; 
+}
 #vychet ul	{	display:inline-block;	}
 #vychet>div	{	width:100%;	}
 
@@ -64,6 +87,34 @@ a:hover	{	text-shadow:1px 5px 10px #003;	}
 #vybor h4	{	padding:2px; padding-left:5px;	}
 #vybor ul	{	width:256px;	}
 #vybor li	{	display:inline-block;	}
+
+@media screen and (max-width: 768px) {
+  .obertka {
+    border-radius: 20px; /* Radius lebih kecil di HP */
+    padding: 15px;
+    margin-top: 60px; /* Memberi ruang untuk menu pop-up di kanan atas */
+  }
+  .drevo {
+    max-width: 100%;
+  }
+  .vybor {
+    right: 10px;
+    top: 10px;
+    max-width: 90%;
+  }
+  /* Membuat daftar icon membungkus ke bawah jika layar terlalu sempit */
+  .drevo ul {
+    display: flex;
+    flex-wrap: wrap;
+    height: auto;
+    margin-left: 0;
+    justify-content: center;
+    padding-bottom: 10px;
+  }
+  .drevo li {
+    display: inline-block;
+  }
+}
 </style>
 <!--
 -->
@@ -351,7 +402,5 @@ function drevo(e,k){
 drevo(616);
 drevo(515,true);
 </script>
-
-
 </body>
 </html>
