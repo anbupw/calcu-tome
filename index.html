@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Tome Calculator - Fully Restored & Modernized" />
+  <meta name="description" content="Tome Calculator - Clean Version" />
   <title>Tome Calculator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -310,7 +310,6 @@
     <div class="nav-tabs">
       <button class="tab-btn active">Tome Calcu</button>
       <button class="tab-btn">⚙️ Catview</button>
-      <button class="tab-btn">🔮 Rune Farming</button>
     </div>
   </div>
 
@@ -424,7 +423,6 @@ function zachest(e, k) { okno_close(); if (!k) { vychet[e] = 0; } vychtennoe(); 
 
 function shelk(t) { var e = t.parentNode.getElementsByTagName('span')[0].title; var uje = t.value * 1; if (uje > 0) { if (!vychet[e]) vychet[e] = 0; vychet[e] += uje; zachest(e, true); }}
 
-// --- PENYELARASAN LINK KLIK PANEL TREE KE PANEL CABANG (RESTORED FUNCTIONAL) ---
 function w_html(e) { 
   var deystv = 'onClick="shelk(this)"'; 
   var spanDeystv = 'onClick="mnojInput.value=\'' + schet[e] + '\'; drevo(' + e + ', true);"';  
@@ -507,7 +505,7 @@ function drevo(e, k) {
   w();
 }
 
-// --- FUNGSI RESET AMAN (TANPA REFRESH) ---
+// --- FUNGSI RESET AMAN ---
 function resetCalculator() {
   vychet = [];
   vychetCopy = [];
