@@ -195,7 +195,7 @@ h1::before, h2::before {
 	display: block;
 	width: 32px; height: 32px;
 	background-image: url('znachki.png');
-	background-repeat: no-repeat;
+	/* background-repeat: no-repeat; -> DIHAPUS agar sprite sheet bekerja seperti versi aslinya */
 	border: none;
 	border-radius: 6px;
 	cursor: pointer;
@@ -503,18 +503,18 @@ function okno_vybora(){
 }
 okno_vybora();
 
-// INI FUNGSI YANG SUDAH DIPERBAIKI MATEMATIKANYA AGAR IKON TIDAK BERANTAKAN
+// INI KODE YANG DIKEMBALIKAN KE VERSI ORISINAL ANDA
 function sdvig(iii){
 	iii = parseInt(iii);
 	switch(iii){
 		case 10:
-			return(' background-position:-32px -32px'); // Sedikit penyesuaian sprite
+			return(' background-position:32px -32px');
 		break;
 		case 11:
-			return(' background-position:-64px 0px');
+			return(' background-position:64px 0px');
 		break;
 		case 12:
-			return(' background-position:-32px 0px');
+			return(' background-position:32px 0px');
 		break;
 	}
 	var ryad = Math.floor(iii/100); 
