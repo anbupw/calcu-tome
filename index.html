@@ -280,6 +280,7 @@ body {
     
     <div class="header-actions">
       <button id="themeToggle" onClick="toggleTheme()" title="Ubah Tema">☀️ Light</button>
+	  <button onClick="resetCalculator()" title="Reset ke kondisi awal">🔄 Reset</button>
 	  <button id="langToggle" onClick="toggleLang()" title="Ubah Bahasa">Bahasa</button>
     </div>
   </header>
@@ -567,6 +568,25 @@ function toggleLang() {
   if(nazvDiv.innerText === "Pilih buku..." || nazvDiv.innerText === "Select book...") {
     nazvDiv.innerText = textDict.selectTome;
   }
+}
+
+// --- FITUR RESET KALKULATOR ---
+function resetCalculator() {
+  // 1. Kosongkan semua data subtract (sudah dimiliki)
+  vychet = [];
+  
+  // 2. Kembalikan multiplier (pengali) ke angka 1
+  mnojInput.value = "1";
+  
+  // 3. Kembalikan teks judul yang di-hover menyesuaikan bahasa yang aktif
+  nazvDiv.innerText = isIndo ? "Pilih buku..." : "Select book...";
+  
+  // 4. Perbarui UI subtract agar elemennya tersembunyi kembali
+  vychtennoe();
+  
+  // 5. Muat ulang kalkulasi default (Pan Gu Creator di kiri, Gang of Hooligans di kanan)
+  drevo(616);
+  drevo(515, true);
 }
 </script>
 
