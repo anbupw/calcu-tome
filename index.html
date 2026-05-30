@@ -212,6 +212,58 @@ body {
   .kalkulator-wrapper { grid-template-columns: 1fr; }
   .header-bar { flex-direction: column; align-items: flex-start; gap: 15px; }
 }
+
+/* --- TEMA TERANG (LIGHT MODE) --- */
+[data-theme="light"] {
+  --bg-color: #f4f5f7; 
+  --card-bg-color: #ffffff; 
+  --list-item-bg: #e2e8f0; 
+  --text-color: #1e293b; 
+  --text-muted: #64748b; 
+  --accent-color: #8b5cf6; 
+  --accent-hover: #a78bfa; 
+  --button-color: #3b82f6; 
+}
+
+/* Memastikan border menyesuaikan tema */
+[data-theme="light"] .card-header,
+[data-theme="light"] .podzagolovok input[type="text"] {
+  border-color: #cbd5e1;
+}
+[data-theme="light"] .podzagolovok input[type="text"] {
+  background-color: #ffffff;
+}
+
+/* --- STYLING TOMBOL HEADER --- */
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.header-actions button {
+  background-color: var(--card-bg-color);
+  color: var(--text-color);
+  border: 1px solid #45475a;
+  border-radius: var(--border-radius-md);
+  padding: 8px 12px;
+  font-family: var(--font-family);
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+[data-theme="light"] .header-actions button {
+  border-color: #cbd5e1;
+}
+
+.header-actions button:hover {
+  background-color: var(--list-item-bg);
+  transform: translateY(-2px);
+}
 </style>
 </head>
 <body>
@@ -222,8 +274,13 @@ body {
       <div class="brand-icon">⚔</div>
       <div class="brand-info">
         <h1>Tome Calculator</h1>
-        <p>Hitung kebutuhan bahan craft Tome.</p>
+        <p id="desc-text">Hitung kebutuhan bahan craft Tome.</p>
       </div>
+    </div>
+    
+    <div class="header-actions">
+      <button id="langToggle" onClick="toggleLang()" title="Ubah Bahasa">🇮🇩 ID</button>
+      <button id="themeToggle" onClick="toggleTheme()" title="Ubah Tema">☀️ Light</button>
     </div>
   </header>
 
@@ -457,6 +514,60 @@ function drevo(e, k) {
 
 drevo(616);
 drevo(515, true);
+
+// --- FITUR TEMA (DARK/LIGHT MODE) ---
+function toggleTheme() {
+  const body = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  
+  if (body.getAttribute('data-theme') === 'light') {
+    body.removeAttribute('data-theme'); // Kembali ke Dark (Default)
+    btn.innerHTML = '☀️ Light';
+  } else {
+    body.setAttribute('data-theme', 'light'); // Pindah ke Light
+    btn.innerHTML = '🌙 Dark';
+  }
+}
+
+// --- FITUR FLASH TRANSLATION (ID <-> EN) ---
+let isIndo = true;
+function toggleLang() {
+  isIndo = !isIndo;
+  const langBtn = document.getElementById('langToggle');
+  
+  // Kamus terjemahan elemen UI
+  const textDict = {
+    descText: isIndo ? "Hitung kebutuhan bahan craft Tome." : "Calculate Tome crafting materials.",
+    calcBtn: isIndo ? "Kalkulasi" : "Calculate",
+    cardTitle1: isIndo ? "Full Material Tree" : "Pohon Material Lengkap",
+    cardTitle2: isIndo ? "Individual Branch" : "Cabang Individu",
+    cardTitle3: isIndo ? "Sudah Dimiliki (Subtracted)" : "Already Owned (Subtracted)",
+    cardTitle4: isIndo ? "Tome Selection Database" : "Basis Data Pilihan Tome",
+    selectTome: isIndo ? "Pilih buku..." : "Select book..."
+  };
+
+  // Terapkan terjemahan ke teks Header & Tombol
+  langBtn.innerHTML = isIndo ? '🇮🇩 ID' : '🇬🇧 EN';
+  document.getElementById('desc-text').innerText = textDict.descText;
+  
+  // Terapkan terjemahan ke tombol di "Individual Branch"
+  const calcButton = document.querySelector('.podzagolovok button');
+  if(calcButton) calcButton.innerText = textDict.calcBtn;
+
+  // Terapkan terjemahan ke Judul Kartu (H2)
+  const headers = document.querySelectorAll('.card-title-group h2');
+  if(headers.length >= 4) {
+    headers[0].innerText = textDict.cardTitle1;
+    headers[1].innerText = textDict.cardTitle2;
+    headers[2].innerText = textDict.cardTitle3;
+    headers[3].innerText = textDict.cardTitle4;
+  }
+  
+  // Terapkan ke tulisan Default "Pilih Buku"
+  if(nazvDiv.innerText === "Pilih buku..." || nazvDiv.innerText === "Select book...") {
+    nazvDiv.innerText = textDict.selectTome;
+  }
+}
 </script>
 
 </body>
