@@ -264,6 +264,55 @@ body {
   background-color: var(--list-item-bg);
   transform: translateY(-2px);
 }
+
+/* --- 1. KOMPRESI VISUAL (MEMBUAT DAFTAR LEBIH PADAT) --- */
+/* Mengurangi jarak atas-bawah pada setiap baris item agar tidak memakan tempat */
+.podzagolovok div {
+  margin-top: 2px !important;
+  margin-bottom: 2px !important;
+  padding: 2px 0;
+}
+
+/* Memperkecil sedikit ukuran font di dalam daftar jika dibuka di HP */
+.podzagolovok {
+  font-size: 14px;
+}
+
+/* --- 2. SISTEM SCROLL INTERNAL UNTUK KARTU --- */
+/* (Cari class yang membungkus isi kartu Anda, biasanya .card-body atau .card-content) */
+/* Jika class Anda berbeda, terapkan max-height dan overflow-y ini ke wadah konten kartu */
+.card-content {
+  max-height: 55vh; /* Maksimal tinggi 55% dari layar, sisanya akan di-scroll */
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 5px; /* Ruang bernapas untuk scrollbar */
+}
+
+/* Mempercantik tampilan Scrollbar agar elegan */
+.card-content::-webkit-scrollbar {
+  width: 6px;
+}
+.card-content::-webkit-scrollbar-track {
+  background: var(--card-bg-color); 
+}
+.card-content::-webkit-scrollbar-thumb {
+  background: #64748b; 
+  border-radius: 10px;
+}
+
+/* --- 3. OPTIMASI SMARTPHONE (RESPONSIVE) --- */
+@media screen and (max-width: 768px) {
+  /* Pastikan kontainer utama berbaris ke bawah (kolom) di HP */
+  .main-container { 
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Di HP, tinggi kartu dikurangi agar tidak menutupi seluruh layar */
+  .card-content {
+    max-height: 350px; 
+  }
+}
 </style>
 </head>
 <body>
