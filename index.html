@@ -13,14 +13,14 @@
    1. GLOBAL VARIABLES & RESET
 ========================================= */
 :root {
-	--bg-main: #0f172a;          /* Biru Dongker Gelap */
-	--bg-card: #1e293b;          /* Warna Kartu */
+	--bg-main: #0f172a;
+	--bg-card: #1e293b;
 	--bg-card-hover: #334155;    
-	--text-main: #f8fafc;        /* Putih Terang */
-	--text-muted: #94a3b8;       /* Abu-abu Terang */
-	--accent: #3b82f6;           /* Biru Elektrik (Utama) */
+	--text-main: #f8fafc;
+	--text-muted: #94a3b8;
+	--accent: #3b82f6;
 	--accent-hover: #2563eb;
-	--danger: #ef4444;           /* Merah untuk tombol Hapus/Kurang */
+	--danger: #ef4444;
 	--danger-hover: #dc2626;
 	--border-color: rgba(255, 255, 255, 0.08);
 }
@@ -130,9 +130,7 @@ h1::before, h2::before {
 	outline: none;
 	transition: border 0.3s;
 }
-.podzagolovok input:focus {
-	border-color: var(--accent);
-}
+.podzagolovok input:focus { border-color: var(--accent); }
 
 .btn-calc {
 	background: var(--accent);
@@ -150,9 +148,6 @@ h1::before, h2::before {
 	background: var(--accent-hover);
 	transform: translateY(-2px);
 	box-shadow: 0 6px 12px -2px rgba(59, 130, 246, 0.5);
-}
-.btn-calc:active {
-	transform: translateY(0);
 }
 
 /* =========================================
@@ -248,7 +243,7 @@ h1::before, h2::before {
 #niz li:first-child { display: none; } 
 
 /* =========================================
-   6. FLOATING SELECTION PANEL (RIGHT)
+   6. FLOATING SELECTION PANEL & CUSTOM UI
 ========================================= */
 .vybor {
 	position: fixed;
@@ -266,7 +261,6 @@ h1::before, h2::before {
 	overflow-y: auto;
 }
 
-/* Desain Tombol Aksi Panel Kanan */
 .panel-actions {
 	display: flex;
 	flex-direction: column;
@@ -274,7 +268,7 @@ h1::before, h2::before {
 	margin-bottom: 15px;
 }
 
-.panel-actions button {
+.panel-actions > button {
 	width: 100%;
 	border: none;
 	color: white;
@@ -288,22 +282,89 @@ h1::before, h2::before {
 	justify-content: center;
 	gap: 8px;
 }
-
 .btn-primary { background: var(--accent); }
 .btn-primary:hover { background: var(--accent-hover); }
 
 .btn-danger { background: var(--danger); }
 .btn-danger:hover { background: var(--danger-hover); }
 
-/* Gemini Credit & Translate Badge */
-.gemini-badge {
-	text-align: center;
-	font-size: 0.75rem;
-	color: var(--text-muted);
+/* CUSTOM TRANSLATE UI (Sesuai Gambar Anda) */
+.custom-translate-container {
+	display: flex;
+	justify-content: center;
 	margin-top: 15px;
-	padding-top: 10px;
+	padding-top: 15px;
 	border-top: 1px dashed var(--border-color);
 }
+
+.mock-gemini-badge {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	background-color: #e2e8f0; /* Abu-abu terang persis gambar */
+	color: #0f172a;
+	padding: 4px 10px;
+	border-radius: 4px;
+	font-family: 'Inter', sans-serif;
+	font-size: 0.8rem;
+	font-weight: 500;
+	cursor: pointer;
+	border: 1px solid #cbd5e1;
+	transition: all 0.2s ease;
+}
+
+.mock-gemini-badge:hover {
+	background-color: #cbd5e1;
+}
+
+.mock-gemini-badge .text-blue {
+	color: #0369a1; /* Warna teks biru Gemini */
+}
+
+/* Tooltip Hitam persis di gambar */
+.mock-gemini-badge .tooltip {
+	visibility: hidden;
+	position: absolute;
+	bottom: 125%; 
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: #1a1a2e;
+	color: #e2e8f0;
+	text-align: center;
+	padding: 10px 14px;
+	border-radius: 8px;
+	font-size: 0.8rem;
+	line-height: 1.4;
+	white-space: nowrap;
+	opacity: 0;
+	transition: opacity 0.2s;
+	z-index: 10;
+	box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+.mock-gemini-badge .tooltip::after {
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -6px;
+	border-width: 6px;
+	border-style: solid;
+	border-color: #1a1a2e transparent transparent transparent;
+}
+
+.mock-gemini-badge:hover .tooltip {
+	visibility: visible;
+	opacity: 1;
+}
+
+/* Sembunyikan Bawaan Google Translate yang Asli */
+#google_translate_element {
+	display: none;
+}
+.skiptranslate { display: none !important; }
+body { top: 0px !important; } /* Mencegah bar Google Translate merusak layout atas */
 
 #vybor h4 {
 	font-size: 0.8rem;
@@ -319,32 +380,18 @@ h1::before, h2::before {
 .vybor::-webkit-scrollbar { width: 6px; }
 .vybor::-webkit-scrollbar-track { background: transparent; }
 .vybor::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
-
-/* Customizing Google Translate Element */
-.goog-te-gadget {
-    font-family: 'Inter', sans-serif !important;
-    color: var(--text-muted) !important;
-}
-.goog-te-combo {
-    background-color: var(--bg-main);
-    color: white;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 5px;
-    outline: none;
-    width: 100%;
-    margin-top: 5px;
-}
 </style>
 </head>
 <body>
 
+<div id="google_translate_element"></div>
 <script type="text/javascript">
 function googleTranslateElementInit() {
   new google.translate.TranslateElement({
-      pageLanguage: 'en', 
-      includedLanguages: 'id,en,ru', 
-      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+	  pageLanguage: 'en', 
+	  includedLanguages: 'id,en,ru', 
+	  layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+	  autoDisplay: false
   }, 'google_translate_element');
 }
 </script>
@@ -388,11 +435,30 @@ function googleTranslateElementInit() {
 	<div id="vybor" class="vetv" style="display:none">
 		</div>
     
-	<div class="gemini-badge">
-		<div id="google_translate_element"></div>
-		<div style="margin-top: 8px;">✨ UI & Terjemahan by Gemini</div>
+	<div class="custom-translate-container">
+		<div class="mock-gemini-badge" onclick="document.querySelector('.goog-te-combo').focus(); alert('Tip: Jika ingin mengubah bahasa menggunakan Google Translate yang tersembunyi, sistem akan memicu dropdown bahasa.');">
+			<span class="text-blue">Gemini-2.5-Flash</span>
+			<span>📖</span>
+			<span>+</span>
+			<span>+</span>
+			<span><img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Google_Translate_logo.svg" width="14" alt="G" style="vertical-align: middle;"></span>
+			
+			<div class="tooltip" id="live-time">
+				Translated at: <span id="current-date"></span><br>
+				<span style="color: #94a3b8; font-size: 0.75rem;">Glossary Enhanced</span><br>
+				<span style="color: #94a3b8; font-size: 0.75rem;">Google Translated</span>
+			</div>
+		</div>
 	</div>
 </div>
+
+<script>
+	const dateSpan = document.getElementById('current-date');
+	const now = new Date();
+	const formattedDate = now.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ' ' + 
+						  now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+	dateSpan.textContent = formattedDate;
+</script>
 
 <script>
 var vetka; var derevo;
