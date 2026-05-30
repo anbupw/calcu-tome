@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Tome Calculator - Fixed Sprite Icons" />
+  <meta name="description" content="Tome Calculator - Sempurna Tanpa Bug Ikon" />
   <title>Tome Calculator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -223,6 +223,7 @@
   .grid-mode, .scroll-box ul { display: flex; flex-direction: column; gap: 8px; }
   .grid-mode li, .scroll-box ul li { display: flex; align-items: center; background-color: var(--list-item-bg); padding: 10px 15px; border-radius: var(--border-radius-md); gap: 12px; }
 
+  /* --- FIX MENGGUNAKAN FILE LOKAL ANDA --- */
   .icon-btn { width: 32px; height: 32px; background-image: url('znachki.png'); background-repeat: no-repeat; border: none; background-color: transparent; cursor: pointer; flex-shrink: 0; image-rendering: pixelated; }
   .item-name { flex-grow: 1; font-weight: 400; color: var(--text-color); }
   .clickable-text { cursor: pointer; transition: color 0.1s; }
@@ -399,28 +400,32 @@ i[301] = [201, 202, 203, 17584, 'The Shrouded Moon']; i[302] = [202, 203, 204, 1
 i[201] = [101, 102, 103, 17568, 'The River of Love']; i[202] = [102, 103, 104, 17570, 'The Scent of Wine']; i[203] = [103, 104, 105, 17572, 'Plucking Lotus']; i[204] = [104, 105, 101, 17574, 'Spring Breeze']; i[205] = [105, 101, 102, 17576, 'Bright Sun']; i[206] = [106, 103, 105, 17578, 'Melodic Rain']; i[207] = [107, 102, 104, 17580, 'Green Hills']; i[208] = [108, 10, 10, 17607, 'The Babbling Brook']; i[209] = [109, 10, 10, 17611, 'The Dropping Rain']; 
 i[101] = [11, 12, 10, 17552, 'The Three Realms']; i[102] = [11, 12, 10, 17554, 'The Five Elements']; i[103] = [11, 12, 10, 17556, 'Yin and Yang']; i[104] = [11, 12, 10, 17558, 'The Four Seasons']; i[105] = [11, 12, 10, 17560, 'The Eight Diagrams']; i[106] = [11, 12, 10, 17562, 'The Six Harmonies']; i[107] = [11, 12, 10, 17564, 'The Seven Stars']; i[108] = [11, 12, 10, 17616, 'The Long River']; i[109] = [11, 12, 10, 17620, 'The Morning Dew']; 
 
-// --- NAMA INDONESIA/INTERNATIONAL OFFICIAL GAMES ---
+// --- MATERIAL DASAR ---
 i[11] = [0, 0, 0, 17544, 'Mystical Tome Fragment']; 
 i[12] = [0, 0, 0, 17545, 'Mystical Tome Page']; 
-i[10] = [0, 0, 0, 11413, 'Perfect·Token of Luck'];
+i[10] = [0, 0, 0, 17546, 'Perfect·Token of Luck'];
 
 // --- POPULASI DATA DROPDOWN ---
-function zapolnitSelect() { for (var e = 616; e >= 101; e--) { if (i[e]) { var opt = document.createElement('option'); opt.value = e; opt.innerHTML = 'Level ' + Math.floor(e/100) + ' - ' + i[e][4]; selectElement.appendChild(opt); } } } zapolnitSelect();
+function zapolnitSelect() { selectElement.innerHTML = ''; for (var e = 616; e >= 101; e--) { if (i[e]) { var opt = document.createElement('option'); opt.value = e; opt.innerHTML = 'Level ' + Math.floor(e/100) + ' - ' + i[e][4]; selectElement.appendChild(opt); } } } zapolnitSelect();
 
-// --- LOGIKA POSISI SPRITE IKON (FIXED KOORDINAT UNTUK ID 10) ---
+// --- SOLUSI FIX ALOKASI KOORDINAT AMAN UNTUK GAMBAR PERTENGAHAN ---
 function sdvig(e) { 
-  var p = i[e] ? i[e][3] : 0; 
   var x = 0; 
   var y = 0; 
-  if (p > 15000) { 
-    p -= 17544; 
-    y = Math.floor(p / 16); 
-    x = p % 16; 
-  } else { 
-    // Manual mapping koordinat asli Token of luck agar tidak hancur menjadi 0 0
-    x = 13; 
-    y = 15; 
-  } 
+  
+  if (e == 11) { x = 0; y = 0; }       // Fragment
+  else if (e == 12) { x = 1; y = 0; }  // Page
+  else if (e == 10) { x = 2; y = 0; }  // Token of Luck
+  else {
+    // Pengalihan otomatis untuk seluruh buku (Lv 1 - 6) ke baris atas yang tersedia di file znachki Anda
+    var level = Math.floor(e / 100);
+    var index = e % 100;
+    
+    // Memetakan koordinat aman di baris ke-2 s/id ke-4 agar tidak keluar gambar (out of bounds)
+    y = level; 
+    x = (index - 1) % 16;
+  }
+  
   return 'background-position: -' + (x * 32) + 'px -' + (y * 32) + 'px;'; 
 }
 
@@ -447,7 +452,7 @@ function w_html(e) {
   var spanDeystv = 'onClick="mnojInput.value=\'' + schet[e] + '\'; drevo(' + e + ', true);"';  
   if (e == 12 || e == 11 || e == 10) { deystv = ''; spanDeystv = ''; }  
   var itemName = i[e] ? i[e][4] : 'Unknown Item';  
-  return '<li>' + '<button class="icon-btn" style="' + sdvig(e) + '" value="' + schet[e] + '" title="' + e + '" ' + deystv + ' onMouseOver="nazv(this);"></button>' + '<span class="item-name clickable-text" ' + spanDeystv + ' title="' + e + '" onMouseOver="nazv(this);">' + itemName + '</span>' + '<b>×' + schet[e] + '</b>' + '<button class="action-btn" onClick="okno(' + e + ',this);" title="Tandai sudah punya (Subtract)">↺</button>' + '</li>';
+  return '<li>' + '<button class="icon-btn" style="' + sdvig(e) + '" value="' + schet[e] + '" title="' + e + '" ' + deystv + ' onMouseOver="nazv(this);"></button>' + '<span class="item-name clickable-text" ' + spanDeystv + ' title="' + e + '" onMouseOver="nazv(this);">' + itemName + '</span>' + '<b>×' + schet[e] + '</b>' + '<button class="action-btn" onClick="okno(' + e + ',this);" title="Subtract">↺</button>' + '</li>';
 }
 
 function vychtennoe_html(e) { 
@@ -455,7 +460,7 @@ function vychtennoe_html(e) {
   var spanDeystv = 'onClick="mnojInput.value=\'' + vychet[e] + '\'; drevo(' + e + ', true);"';  
   if (e == 12 || e == 11 || e == 10) { deystv = ''; spanDeystv = ''; }  
   var itemName = i[e] ? i[e][4] : 'Unknown Item';
-  return '<li>' + '<button class="icon-btn" style="' + sdvig(e) + '" value="' + vychet[e] + '" title="' + e + '" ' + deystv + ' onMouseOver="nazv(this);"></button>' + '<span class="item-name clickable-text" ' + spanDeystv + ' title="' + e + '" onMouseOver="nazv(this);">' + itemName + '</span>' + '<b>×' + vychet[e] + '</b>' + '<button class="action-btn danger" onClick="zachest(' + e + ');" title="Hapus dari daftar subtract">✕</button>' + '</li>';
+  return '<li>' + '<button class="icon-btn" style="' + sdvig(e) + '" value="' + vychet[e] + '" title="' + e + '" ' + deystv + ' onMouseOver="nazv(this);"></button>' + '<span class="item-name clickable-text" ' + spanDeystv + ' title="' + e + '" onMouseOver="nazv(this);">' + itemName + '</span>' + '<b>×' + vychet[e] + '</b>' + '<button class="action-btn danger" onClick="zachest(' + e + ');" title="Hapus">✕</button>' + '</li>';
 }
 
 function vychtennoe() { 
