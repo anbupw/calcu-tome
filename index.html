@@ -60,6 +60,131 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
+/* --- HEADER MODERN STYLE --- */
+.header-wrapper {
+  margin-bottom: 30px;
+}
+
+.header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title-group h1 {
+  font-size: 32px;
+  margin: 0;
+  color: var(--text-color);
+}
+
+.title-group .highlight {
+  color: var(--accent-color, #cba6f7);
+}
+
+.brand-section p {
+  color: var(--text-muted);
+  margin: 5px 0 0 45px; /* Sejajar dengan teks judul, melewati ikon */
+  font-size: 15px;
+}
+
+.controls-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.action-buttons button {
+  background-color: transparent;
+  color: var(--text-color);
+  border: 1px solid #45475a;
+  border-radius: 20px; /* Bentuk Pil */
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.action-buttons button:hover {
+  background-color: #313244;
+}
+
+.meta-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #181825;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid #313244;
+}
+
+.version-badge {
+  color: #89b4fa;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.social-icon {
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.dev-credits {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* --- TABS STYLE --- */
+.nav-tabs {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid #313244;
+  padding-bottom: 0;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 16px;
+  font-weight: 600;
+  padding: 10px 5px;
+  cursor: pointer;
+  position: relative;
+}
+
+.tab-btn:hover {
+  color: var(--text-color);
+}
+
+.tab-btn.active {
+  color: var(--accent-color, #cba6f7);
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--accent-color, #cba6f7);
+  border-radius: 3px 3px 0 0;
+}
+
 .brand-section {
   display: flex;
   align-items: center;
@@ -238,6 +363,13 @@ body {
   text-decoration: underline;
 }
 
+/* Efek hover khusus untuk tombol Reset */
+.action-buttons .reset-btn:hover {
+  background-color: var(--danger-color, #f38ba8);
+  color: #11111b;
+  border-color: var(--danger-color, #f38ba8);
+}
+
 /* Memastikan border menyesuaikan tema */
 [data-theme="light"] .card-header,
 [data-theme="light"] .podzagolovok input[type="text"] {
@@ -332,19 +464,39 @@ body {
 
 <div class="page-wrapper">
   <header class="header-bar">
-    <div class="brand-section">
-      <div class="brand-icon">⚔</div>
-      <div class="brand-info">
-        <h1>Tome Calculator</h1>
-        <p id="desc-text">Hitung kebutuhan bahan craft Tome.</p>
-      </div>
-    </div>
-    
-    <div class="header-actions">
-      <button id="themeToggle" onClick="toggleTheme()" title="Ubah Tema">☀️ Light</button>
-	  <button onClick="resetCalculator()" title="Reset ke kondisi awal">🔄 Reset</button>
-	  <button id="langToggle" onClick="toggleLang()" title="Ubah Bahasa">Bahasa</button>
-    </div>
+    <div class="header-wrapper">
+	  <div class="header-main">
+		<div class="brand-section">
+		  <div class="title-group">
+			<span class="brand-icon">⚔️</span>
+			<h1>Tome <span class="highlight">Calculator</span></h1>
+		  </div>
+		  <p>Calculate Tome crafting materials.</p>
+		</div>
+		
+		<div class="controls-section">
+		  <div class="action-buttons">
+			<button id="themeToggle" onClick="toggleTheme()">☀️ Light Mode</button>
+			<button onClick="resetCalculator()" title="Reset ke kondisi awal">🔄 Reset</button>
+			<button id="langToggle" onClick="toggleLang()">Bahasa</button>
+			</div>
+		  <div class="meta-info">
+			<span class="version-badge">v 1.1.0</span>
+			<a href="#" class="social-icon" title="GitHub">🐙</a>
+			<a href="#" class="social-icon" title="Discord">💬</a>
+		  </div>
+		  <div class="dev-credits">
+			Developed by Zull • zulloxford@gmail.com
+		  </div>
+		</div>
+	  </div>
+
+	  <div class="nav-tabs">
+		<button class="tab-btn active">Tome Calcu</button>
+		<button class="tab-btn">⚙️ Catview</button>
+		<button class="tab-btn">🔮 Rune Farming</button>
+	  </div>
+	</div>
   </header>
 
   <main class="kalkulator-wrapper">
