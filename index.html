@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Menghitung berapa banyak bahan dan tome lvl 1 yang Anda butuhkan untuk membuat tome level 2-5. Didesain ulang dengan antarmuka modern." />
-<title>Tome Calculator - Modernized UI</title>
+<meta name="description" content="Tome Calculator - Modernized & Corrected UI" />
+<title>Tome Calculator - Modern Fixed</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -20,6 +20,7 @@ a { text-decoration: none; color: inherit; transition: color 0.2s; }
 :root {
   --bg-color: #11111b; /* Warna latar belakang utama */
   --card-bg-color: #1e1e2e; /* Warna latar belakang kartu */
+  --list-item-bg: #2a2a3c; /* Warna latar belakang baris */
   --text-color: #cdd6f4; /* Warna teks utama */
   --text-muted: #6c7086; /* Warna teks pudar */
   --accent-color: #cba6f7; /* Warna aksen ungu */
@@ -108,17 +109,6 @@ body {
   font-weight: 700;
 }
 
-.meta-icon {
-  font-size: 18px;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.meta-icon:hover {
-  color: var(--text-color);
-}
-
 /* --- NAVIGASI TAB BARU --- */
 .nav-tabs {
   display: flex;
@@ -150,10 +140,10 @@ body {
   border-color: var(--accent-color);
 }
 
-/* --- KONTEN KARTU KONTEN --- */
+/* --- GRID KONTEN UTAMA --- */
 .kalkulator-wrapper {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
   gap: 30px;
   margin-bottom: 40px;
 }
@@ -163,8 +153,6 @@ body {
   border-radius: var(--border-radius-lg);
   padding: 30px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  display: flex;
-  flex-direction: column;
 }
 
 .card-header {
@@ -194,210 +182,161 @@ body {
   color: var(--text-color);
 }
 
-.card-meta {
-  font-size: 14px;
-  color: var(--text-muted);
-  margin-top: 5px;
-  line-height: 1.4;
+/* --- PENANGANAN IKON SPRITE (DIPERBAIKI) --- */
+
+/* Ini adalah KUNCI perbaikan. Kita mengunci ukuran container pada 32x32px
+   agar koordinat 'sdvig' asli dari JS tetap akurat. */
+.icon-container {
+  width: 32px;
+  height: 32px;
+  position: relative;
+  overflow: hidden; /* Mencegah ikon tetangga terlihat */
+  flex-shrink: 0; /* Mencegah ikon mengecil di flex layout */
+  margin-right: 15px;
 }
 
-/* --- DAFTAR ITEM & POHON BARU --- */
+/* Tombol asli di dalam container. Kita paksa ukurannya sama dan hapus gaya default */
+.vetv li button.item-icon-btn {
+  display: block;
+  width: 32px !important;
+  height: 32px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: transparent !important;
+  /* Gambar diatur di JS via style='background-image:...' */
+  border: none !important;
+  cursor: pointer;
+  transition: transform 0.2s ease-out; /* Animasi zoom saat hover */
+}
+
+/* Efek hover pada tombol ikon - membesar sedikit */
+.vetv li button.item-icon-btn:hover {
+  transform: scale(1.2);
+}
+
+/* --- TATA LETAK DAFTAR BARU (MODERN FIXED) --- */
+
+/* Wadah tingkat (Level X) */
+.vetv .row-level {
+  margin-bottom: 20px;
+}
+
+.vetv .row-level h4 {
+  font-size: 14px;
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  padding-left: 5px;
+}
+
 .vetv ul {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px; /* Jarak antar baris */
 }
 
+/* Gaya Baris Item Tunggal - Meniru Referensi */
 .vetv li {
   display: flex;
   align-items: center;
-  background-color: #313244;
-  padding: 12px 18px;
+  background-color: var(--list-item-bg);
+  padding: 10px 15px;
   border-radius: var(--border-radius-md);
-  position: relative;
+  transition: background-color 0.2s;
 }
 
-.vetv li span {
-  display: none; /* Menyembunyikan tombol 'Back' asli */
+.vetv li:hover {
+  background-color: #35354a;
 }
 
-/* Membuat elemen interaktif 'subtract/tambah' sendiri untuk setiap item */
-.item-subtract-btn {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  margin-right: 10px;
-  font-size: 14px;
-  transition: color 0.2s;
+/* Label nama item yang muncul di samping ikon (via JS) */
+.item-label {
+  color: var(--text-color);
+  font-size: 15px;
+  font-weight: 700;
+  flex-grow: 1; /* Mengisi ruang tengah */
 }
 
-.item-subtract-btn:hover {
-  color: var(--danger-color);
-}
-
-/* Ikon aslinya dipertahankan, tapi ditata ulang */
-.vetv li button {
-  display: block;
-  margin: 0;
-  width: 32px;
-  height: 32px;
-  background: none;
-  /* Ganti dengan URL gambar aslinya */
-  background-image: url('znachki.png');
-  background-position: left top;
-  border: none;
-  margin-right: 15px;
-  transition: transform 0.2s;
-}
-
-.vetv li button:hover {
-  transform: scale(1.1);
-}
-
+/* Teks kuantitas (×5) */
 .vetv li b {
   font-family: var(--font-mono);
   font-size: 16px;
   color: var(--accent-color);
   font-weight: 700;
-  position: absolute;
-  right: 18px;
+  margin-right: 15px;
+  min-width: 40px; /* Menjaga angka tetap sejajar */
+  text-align: right;
 }
 
-/* Styling tautan item yang muncul di JS */
-.drevo .podzagolovok a {
-  color: var(--button-color);
-  font-weight: 700;
+/* Tombol aksi pudar (seperti '↺' atau '–') */
+.action-btn-muted {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 5px;
   transition: color 0.2s;
 }
 
-.drevo .podzagolovok a:hover {
-  color: var(--accent-hover);
-  text-decoration: underline;
+.action-btn-muted:hover {
+  color: var(--text-color);
 }
 
-/* --- KONTROL PEMILIH BARU --- */
+/* --- KONTROL PEMILIH DAN INPUT --- */
 .podzagolovok {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-/* Membuat input angka yang modern */
 .podzagolovok input[type="text"] {
   background-color: #313244;
   color: var(--text-color);
   border: 1px solid #45475a;
   border-radius: var(--border-radius-md);
-  padding: 10px 15px;
+  padding: 8px 12px;
   font-family: var(--font-mono);
   font-size: 14px;
   text-align: center;
-  width: 70px;
-  transition: border-color 0.2s;
+  width: 60px;
 }
 
-.podzagolovok input[type="text"]:focus {
-  border-color: var(--accent-color);
-  outline: none;
-}
-
-/* Membuat tombol 'Quantity/Tambah' yang modern */
 .podzagolovok button {
   background-color: var(--button-color);
   color: var(--bg-color);
   border: none;
   border-radius: var(--border-radius-md);
-  padding: 10px 20px;
+  padding: 8px 16px;
   font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.2s;
+  font-size: 14px;
 }
 
 .podzagolovok button:hover {
   background-color: var(--accent-hover);
 }
 
-/* Area pohon individu asli dipertahankan, ditata ulang sebagai grid */
-#rawrRawr {
+/* Penyesuaian khusus untuk 'Individual Branch' grid */
+#rawrRawr ul {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 15px;
 }
 
 #rawrRawr li {
-  background-color: transparent;
-  padding: 0;
-  justify-content: center;
+  background-color: var(--card-bg-color);
+  border: 1px solid #313244;
+  justify-content: space-between;
 }
 
-#rawrRawr li button {
-  margin: 0;
-  width: 48px;
-  height: 48px;
-  margin-right: 0;
-}
-
-#rawrRawr li b {
-  position: relative;
-  margin-left: 10px;
-  right: auto;
-}
-
-/* Menghapus gaya baris 'niz' yang lama */
-#rawr ul#niz, #rawrRawr ul#niz {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr) auto repeat(2, 1fr);
-  gap: 15px;
-  align-items: center;
-  justify-content: center;
-  border-top: 1px solid #313244;
-  padding-top: 15px;
-}
-
-#niz li {
-  background-color: #313244;
-  justify-content: center;
-}
-
-#niz li:nth-child(2), #niz li:nth-child(4), #niz li:nth-child(6) {
-  padding: 10px 20px;
-}
-
-#strelki {
-  font-size: 24px;
-  color: var(--text-muted);
-}
-
-/* --- BAGIAN PENGURANGAN --- */
-#vychet {
-  margin-bottom: 40px;
-}
-
-#vychet.hidden {
-  display: none !important;
-}
-
-#rawrRawrRawr li span {
-  display: none;
-}
-
-#rawrRawrRawr .item-subtract-btn {
-  color: var(--danger-color);
-}
-
-#rawrRawrRawr .item-subtract-btn:hover {
-  color: var(--text-color);
-}
-
-/* --- PEMILIH ITEM (THEME SELECTION WINDOW) --- */
+/* --- PEMILIH TOME (BOTTOM CARD) --- */
 .vybor {
-  position: static;
   background-color: var(--card-bg-color);
   border-radius: var(--border-radius-lg);
   padding: 30px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  max-width: 100%;
 }
 
 .vybor-header {
@@ -407,13 +346,6 @@ body {
   margin-bottom: 20px;
 }
 
-.vybor-header h2 {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text-color);
-  margin: 0;
-}
-
 .vybor-toggle-btn {
   background-color: #313244;
   color: var(--text-color);
@@ -421,12 +353,6 @@ body {
   border-radius: var(--border-radius-md);
   padding: 10px 20px;
   cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.vybor-toggle-btn:hover {
-  background-color: var(--accent-color);
-  color: var(--bg-color);
 }
 
 #vybor.vetv {
@@ -435,30 +361,23 @@ body {
   gap: 20px;
 }
 
-#vybor h4 {
-  font-size: 18px;
-  color: var(--accent-color);
-  margin-bottom: 10px;
-  font-weight: 700;
-}
-
 #vybor ul {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  gap: 5px;
+  border: none;
+  background: none;
 }
 
 #vybor li {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   padding: 0;
-  background-color: transparent;
+  background: none;
+  justify-content: center;
 }
 
-#vybor li button {
-  width: 48px;
-  height: 48px;
+/* Area khusus untuk item selection, tanpa label */
+#vybor .icon-container {
+  margin-right: 0;
 }
 
 /* --- MEDIA QUERIES --- */
@@ -473,18 +392,9 @@ body {
     flex-direction: column;
     align-items: flex-start;
     gap: 15px;
-    padding: 20px;
-  }
-  .header-meta {
-    align-items: flex-start;
-    font-size: 12px;
   }
   .page-wrapper {
     padding: 20px;
-  }
-  .nav-tabs {
-    flex-wrap: wrap;
-    justify-content: center;
   }
 }
 </style>
@@ -497,35 +407,24 @@ body {
       <div class="brand-icon">⚔</div>
       <div class="brand-info">
         <h1>Tome Calculator</h1>
-        <p>Hitung kebutuhan bahan dan tome level 1 untuk tome level 2-5.</p>
+        <p>Perhitungan kebutuhan material Tome secara instan.</p>
       </div>
     </div>
     <div class="header-meta">
       <div class="meta-row">
-        <span>Developed by Yama</span>
-        <div class="version-badge">v1.1.0</div>
-      </div>
-      <div class="meta-row">
-        <span class="meta-icon" title="Profil GitHub">👤</span>
-        <span class="meta-icon" title="Link Database Resmi">🔗</span>
+        <span>Developed by Yama (Fixed)</span>
+        <div class="version-badge">v1.1.1</div>
       </div>
     </div>
   </header>
-
-  <nav class="nav-tabs">
-    <button class="tab-item active"><span class="tab-icon">🌾</span> Farming List</button>
-    <button class="tab-item"><span class="tab-icon">⚙</span> Setup</button>
-    <button class="tab-item"><span class="tab-icon">📖</span> Rune Farming</button>
-  </nav>
 
   <main class="kalkulator-wrapper">
     <div class="drevo">
       <div class="card-header">
         <div class="card-title-group">
           <div class="card-icon">🌳</div>
-          <h1>Full Tree</h1>
+          <h1>Full Material Tree</h1>
         </div>
-        <div class="card-meta" id="nazvaniye">Pilih buku...</div>
       </div>
       <div id="rawr" class="vetv"></div>
     </div>
@@ -537,53 +436,35 @@ body {
           <h2>Individual Branch</h2>
         </div>
         <div class="podzagolovok">
-          <input type="text" id="mnojitel" value="1" title="Masukan jumlah perkalian">
-          <button onClick="drevo(vetka,true)">Quantity</button>
+          <input type="text" id="mnojitel" value="1" title="Multiplier">
+          <button onClick="drevo(vetka,true)">Multiplier</button>
         </div>
       </div>
-      <div id="rawrRawr" class="vetv Individual">
-        </div>
+      <div id="rawrRawr" class="vetv"></div>
     </div>
   </main>
 
-  <div id="vychet" class="hidden">
-    <div class="drevo full-width">
-      <div class="card-header">
-        <div class="card-title-group">
-          <div class="card-icon">📚</div>
-          <h2>Already existing chapters</h2>
-        </div>
-        <div class="card-meta">Subtracted together with dependencies.</div>
-      </div>
-      <div id="rawrRawrRawr" class="vetv"></div>
-    </div>
-  </div>
-
   <aside class="vybor">
     <div class="vybor-header">
-      <h2>Tract Selection</h2>
-      <button class="vybor-toggle-btn" onClick="toggleVyborWindow()" title="Tampilkan/sembunyikan pemilih item">
-        Pilih Tome
-      </button>
+      <h2>Tome Selection Database</h2>
+      <button class="vybor-toggle-btn" onClick="toggleVyborWindow()">Pilih Tome</button>
     </div>
     <div id="vybor-container" style="display:none">
-      <div id="vybor" class="vetv">
-        </div>
+      <div id="vybor" class="vetv"></div>
     </div>
   </aside>
 
 </div>
 
 <script>
-// --- KONFIGURASI JS ASLI ---
-var vetka; var derevo; var rawr; var mnoj = 1; var mnojInput = document.getElementById('mnojitel'); var nazvDiv = document.getElementById('nazvaniye'); var vychetDiv = document.getElementById('rawrRawrRawr'); var scryt = document.getElementById('vychet').classList; var vyborDiv = document.getElementById('vybor');
+// --- LOGIKA JS ASLI (DIPERTAHANKAN) ---
+var vetka; var derevo; var rawr; var mnoj = 1; var mnojInput = document.getElementById('mnojitel'); var nazvDiv = document.getElementById('nazvaniye'); var vychetDiv = document.getElementById('rawrRawrRawr'); var scryt = document.getElementById('vychet'); var vyborDiv = document.getElementById('vybor');
 var schet; var str=''; var i = []; var vychet = []; var vychetCopy = [];
 // --- DATABASE ITEM ASLI (SAMA SEPERTI ASLINYA) ---
 i[601] = [501, 502, 509, 17615, 'The Calm of Ice']; i[602] = [502, 503, 505, 17622, 'The Khatru']; i[603] = [504, 503, 508, 17628, 'A Carmine Tear']; i[604] = [503, 508, 501, 17630, 'The Fruit of Intense Labor']; i[605] = [505, 512, 509, 17634, 'Tomorrows Phoenix']; i[606] = [505, 506, 507, 17636, 'Riding the Scree']; i[607] = [513, 514, 507, 17642, 'Turning the Tide']; i[608] = [508, 506, 514, 17649, 'Existential Woe']; i[609] = [510, 501, 505, 17655, 'Book of Fragrances']; i[610] = [510, 506, 501, 17657, 'Bouquet of Regrets']; i[611] = [511, 509, 505, 17661, 'The Union']; i[612] = [511, 513, 503, 17663, 'Oblivious Enlightenment']; i[613] = [513, 507, 514, 17669, 'As the Universe Fades']; i[614] = [514, 512, 513, 17676, 'The Concubines Laugh']; i[615] = [515, 501, 507, 17679, 'The Academy of the East']; i[616] = [516, 515, 514, 17683, 'Pan Gu Creator']; i[501] = [401, 408, 405, 17618, 'A Heart like Still Water']; i[502] = [409, 405, 403, 17621, 'The Tsunamis of Yore']; i[503] = [404, 408, 401, 17624, 'Laughing Mad']; i[504] = [408, 404, 401, 17627, 'The Book of Congratulations']; i[505] = [403, 409, 404, 17633, 'The Wrath of Heaven']; i[506] = [409, 403, 402, 17639, 'A Strange Kindness']; i[507] = [402, 404, 409, 17645, 'Flesh of the Lamia']; i[508] = [404, 408, 402, 17648, 'Everything is Emptiness']; i[509] = [403, 401, 405, 17651, 'The Oasis Remembered']; i[510] = [401, 405, 407, 17654, 'The Heavenly Scent']; i[511] = [403, 409, 404, 17660, 'Debt and Tombstones']; i[512] = [409, 403, 404, 17666, 'Endless Waves']; i[513] = [408, 402, 404, 17672, 'Parting Grief']; i[514] = [408, 402, 404, 17675, 'Rouge and Red Lips']; i[515] = [406, 407, 401, 17678, 'Gang of Hooligans']; i[516] = [406, 407, 401, 17682, 'The Voidlands']; i[401] = [303, 307, 304, 17602, 'Burning Desire']; i[402] = [304, 301, 305, 17603, 'Tome of Predestination']; i[403] = [302, 305, 303, 17604, 'The Roses Thorn']; i[404] = [306, 307, 301, 17605, 'Letters of Social Unrest']; i[405] = [303, 307, 306, 17606, 'The Appetites of Spring']; i[406] = [308, 205, 207, 17610, 'The Rivers Edge']; i[407] = [309, 302, 306, 17614, 'The Weak Stream of Many Miles']; i[408] = [301, 304, 302, 17600, 'Battle Tactics']; i[409] = [302, 305, 303, 17601, 'A Bewitching Proposal']; i[301] = [201, 206, 203, 17593, 'Eat Drink and be Merry']; i[302] = [202, 205, 206, 17594, 'Sunset Tales']; i[303] = [207, 203, 202, 17595, 'Adventures and Mishaps']; i[304] = [204, 201, 203, 17596, 'The Sunny Pass']; i[305] = [205, 202, 201, 17597, 'Tales of Beauty']; i[306] = [206, 203, 201, 17598, 'The Bards Wanderlust']; i[307] = [207, 205, 204, 17599, 'A Poets Musings']; i[308] = [208, 202, 204, 17609, 'Decaying Tome']; i[309] = [209, 203, 202, 17613, 'Scene of Carnage']; i[201] = [101, 104, 106, 17586, 'Tome of Iron Will']; i[202] = [102, 105, 106, 17587, 'Misty Peach Blossoms']; i[203] = [107, 103, 102, 17588, 'Tale of the Red Lotus']; i[204] = [101, 104, 103, 17589, 'Tale of the Dolt']; i[205] = [102, 105, 107, 17590, 'Tale of the Peach Fan']; i[206] = [106, 101, 103, 17591, 'Story of the Blockade']; i[207] = [107, 103, 104, 17592, 'Mediations Flame']; i[208] = [108, 103, 101, 17608, 'Guide to Wolf Hunting']; i[209] = [109, 103, 107, 17612, 'Fire Dance']; i[101] = [11, 12, 0, 17579, 'Underestimated Resolve']; i[102] = [11, 12, 0, 17580, 'Soaring Heart']; i[103] = [11, 12, 0, 17581, 'Retributions Flame']; i[104] = [11, 12, 0, 17582, 'Tome of the River Spirits']; i[105] = [11, 12, 0, 17583, 'Flankers Tome']; i[106] = [11, 12, 0, 17584, 'Tome of Hyperbolic Boasts']; i[107] = [11, 12, 0, 17585, 'Tome of Grace']; i[108] = [11, 12, 0, 17607, 'A Flowerless Plant']; i[109] = [11, 12, 0, 17611, 'Eternitys Moon']; i[11] = [0, 0, 0, 17810, 'Mystical Tome Fragment']; i[12] = [10, 0, 0, 18185, 'Mystical Tome Page']; i[10] = [0, 0, 0, 24721, 'Perfect·Token of Luck'];
 
-// --- FUNGSI JS MODERNIZED & PENYESUAIAN UI ---
+// --- FUNGSI JS PENYESUAIAN UI (DIPERBAIKI) ---
 
-// Fungsi baru untuk toggle jendela pemilih item
 function toggleVyborWindow() {
   var container = document.getElementById('vybor-container');
   var btn = document.querySelector('.vybor-toggle-btn');
@@ -596,92 +477,15 @@ function toggleVyborWindow() {
   }
 }
 
-// Menyesuaikan fungsi nazv untuk menampilkan tautan yang lebih modern
-function nazv(t) {
-  iii = t.title * 1;
-  txt = '<a href="http://www.pwdatabase.com/pwi/items/' + i[iii][3] + '" target="_blank">' + i[iii][4] + '</a>';
-  nazvDiv.innerHTML = txt;
-}
+// Fungsi asli nazv dikosongkan karena label nama item sekarang dihandle di w_html
+function nazv(t) {}
 
-// Pertahankan fungsi shelk aslinya
 function shelk(t) {
-  mnojInput.value = t.value * 1;
+  mnojInput.value = t.getAttribute('data-value') * 1;
   drevo(t.title * 1, true);
 }
 
-// Pertahankan fungsi zachest aslinya
-function zachest(e, sw) {
-  if (!sw) vychet[e] = 0;
-  drevo(derevo);
-  if (e == vetka) mnojInput.value = schet[e];
-  drevo(vetka, true);
-  vychtennoe();
-  scryt.remove('hidden'); // Ganti gaya scryt yang lama
-}
-
-// Pertahankan fungsi okno aslinya
-function okno(e, t) {
-  butt = t.parentNode.querySelector('button').value; // Mengambil value dari tombol item
-  uje = prompt('How much?', butt) * 1;
-  if (uje) {
-    if (!vychet[e]) vychet[e] = 0;
-    vychet[e] += uje;
-    zachest(e, true);
-  }
-}
-
-// Membuat HTML untuk item yang dikurangi dengan gaya modern
-function vychtennoe_html(e) {
-  deystv = 'onClick="shelk(this)"';
-  if (e == 12 || e == 11 || e == 10) deystv = '';
-  return '<li>' +
-         '<button class="item-subtract-btn" onClick="zachest(' + e + ');" title="Kurangi item">↺</button>' +
-         '<button class="item-icon" style="' + sdvig(e) + '" value="' + vychet[e] + '" title="' + e + '" ' + deystv + ' onMouseOver="nazv(this);"></button>' +
-         '<b>×' + vychet[e] + '</b>' +
-         '</li>';
-}
-
-// Pertahankan fungsi vychtennoe aslinya, tetapi dengan penyesuaian HTML
-function vychtennoe() {
-  txt = '';
-  lis = '';
-  if (vychet[11]) lis += vychtennoe_html(11);
-  if (vychet[12]) lis += vychtennoe_html(12);
-  if (vychet[10]) lis += vychtennoe_html(10);
-  if (lis != '') txt += '<ul> ' + lis + '</ul>';
-  for (r = 1; r <= 6; r++) {
-    lis = '';
-    nach = r * 100 + 1;
-    konec = r * 100 + 16;
-    for (e = nach; e <= konec; e++) {
-      if (vychet[e]) {
-        lis += vychtennoe_html(e);
-      }
-    }
-    if (lis != '') txt += '<div class="row-level"><h4>Level ' + r + '</h4><ul> ' + lis + '</ul></div>';
-  }
-  vychetDiv.innerHTML = txt;
-}
-
-// Pertahankan fungsi okno_vybora aslinya, tetapi dengan penyesuaian HTML untuk tata letak modern
-function okno_vybora() {
-  txt = '';
-  for (r = 6; r >= 1; r--) {
-    lis = '';
-    nach = r * 100 + 1;
-    konec = r * 100 + 16;
-    for (e = nach; e <= konec; e++) {
-      if (i[e]) {
-        lis += '<li><button style="' + sdvig(e) + '" title="' + e + '" onClick="drevo(this.title)" onMouseOver="nazv(this);"></button></li>';
-      }
-    }
-    txt += '<div><h4>Level ' + r + '</h4><ul> ' + lis + '</ul></div>';
-  }
-  vyborDiv.innerHTML = txt;
-}
-okno_vybora();
-
-// Pertahankan fungsi sdvig aslinya untuk menangani spritesheet asli
+// Fungsi sdvig asli untuk sprite handling
 function sdvig(iii) {
   switch (iii) {
     case 10: return (' background-position:32px -32px'); break;
@@ -693,18 +497,49 @@ function sdvig(iii) {
   return (' background-position:-' + (32 * (num - 1)) + 'px -' + (32 * (ryad - 1)) + 'px');
 }
 
-// Membuat HTML item pohon dengan gaya modern
+// Penyesuaian HTML w_html untuk tata letak modern dan perbaikan ikon (KUNCI PERBAIKAN)
 function w_html(e) {
+  // deystv asli
   deystv = 'onClick="shelk(this)"';
   if (e == 12 || e == 11 || e == 10) deystv = '';
+  
+  // Mengambil nama item dari database untuk label
+  let itemName = i[e] ? i[e][4] : 'Unknown';
+
   return '<li>' +
-         '<button class="item-subtract-btn" onClick="okno(' + e + ',this);" title="Subtract the parts of the treatise already in existence">↺</button>' +
-         '<button style="' + sdvig(e) + '" value="' + schet[e] + '" title="' + e + '" ' + deystv + ' onMouseOver="nazv(this);"></button>' +
+         // Container ikon baru untuk mengunci ukuran 32x32
+         '<div class="icon-container">' +
+            '<button class="item-icon-btn" style="' + sdvig(e) + '" title="' + e + '" ' + deystv + ' data-value="' + schet[e] + '" onMouseOver="nazv(this);"></button>' +
+         '</div>' +
+         '<span class="item-label">' + itemName + '</span>' + // Menampilkan nama item asli
          '<b>×' + schet[e] + '</b>' +
+         '<button class="action-btn-muted" title="Set Multiplier to this value" onClick="shelk(this.previousSibling.previousSibling.firstChild)">–</button>' + // Aksi pudar (pengganti okno)
          '</li>';
 }
 
-// Pertahankan fungsi w aslinya, tetapi dengan penyesuaian HTML untuk tata letak modern
+// Penyesuaian HTML okno_vybora untuk tata letak modern dan perbaikan ikon
+function okno_vybora() {
+  txt = '';
+  for (r = 6; r >= 1; r--) {
+    lis = '';
+    nach = r * 100 + 1;
+    konec = r * 100 + 16;
+    for (e = nach; e <= konec; e++) {
+      if (i[e]) {
+        lis += '<li>' +
+               '<div class="icon-container">' +
+                  '<button class="item-icon-btn" style="' + sdvig(e) + '" title="' + e + '" onClick="drevo(this.title)" onMouseOver="nazv(this);"></button>' +
+               '</div>' +
+               '</li>';
+      }
+    }
+    txt += '<div class="row-level"><h4>Level ' + r + '</h4><ul> ' + lis + '</ul></div>';
+  }
+  vyborDiv.innerHTML = txt;
+}
+okno_vybora();
+
+// Pertahankan fungsi w aslinya, tetapi dengan penyesuaian tata letak modern
 function w() {
   txt = '';
   for (r = 6; r >= 1; r--) {
@@ -716,20 +551,21 @@ function w() {
         lis += w_html(e);
       }
     }
-    if (lis != '') txt += '<ul><li>Level ' + r + '</li>' + lis + '</ul>';
+    if (lis != '') txt += '<div class="row-level"><h4>Level ' + r + '</h4><ul>' + lis + '</ul></div>';
   }
-  // Bagian niz yang baru
-  txt += '<ul id="niz"><li>&nbsp;</li> ';
-  if (schet[11]) txt += w_html(11);
-  txt += '<li>&nbsp;</li>';
-  if (schet[12]) txt += w_html(12);
-  if (schet[10]) txt += '<li id="strelki">→</li>' + w_html(10);
-  txt += '</ul>';
+  
+  // Bagian bawah (niz) ditata ulang
+  var nizLis = '';
+  if (schet[11]) nizLis += w_html(11);
+  if (schet[12]) nizLis += w_html(12);
+  if (schet[10]) nizLis += w_html(10);
+  
+  if (nizLis != '') txt += '<div class="row-level bottom-materials"><h4>Materials</h4><ul>' + nizLis + '</ul></div>';
 
   document.getElementById(rawr ? 'rawrRawr' : 'rawr').innerHTML = txt;
 }
 
-// Pertahankan fungsi reDrevo aslinya
+// --- LOGIKA JS ASLI (DIPERTAHANKAN) ---
 function reDrevo(e) {
   if (!schet[e]) schet[e] = 0;
   if (vychetCopy[e] && vychetCopy[e] > 0) vychetCopy[e]--;
@@ -743,7 +579,6 @@ function reDrevo(e) {
   }
 }
 
-// Pertahankan fungsi drevo aslinya
 function drevo(e, k) {
   rawr = k; mnoj = 1; schet = []; str = ''; vychetCopy = vychet.slice();
   if (rawr) {
