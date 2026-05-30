@@ -134,10 +134,9 @@ body {
   border-radius: var(--border-radius-md);
 }
 
-/* INI YANG SEBELUMNYA HILANG - Memanggil gambar znachki.png */
 .icon-btn {
   background-image: url('znachki.png'); 
-  background-repeat: no-repeat;
+  background-repeat: repeat; /* Kunci perbaikannya ada di sini */
   width: 32px;
   height: 32px;
   border: none;
@@ -274,15 +273,21 @@ i[601] = [501, 502, 509, 17615, 'The Calm of Ice']; i[602] = [502, 503, 505, 176
 
 // --- LOGIKA JS ASLI YG DIPERBAIKI ---
 
-function sdvig(iii) {
-  switch (iii) {
-    case 10: return ('background-position:-32px -32px'); break;
-    case 11: return ('background-position:-64px 0px'); break;
-    case 12: return ('background-position:-32px 0px'); break;
+function sdvig(iii){
+  switch(iii){
+    case 10:
+      return(' background-position:32px -32px');
+    break;
+    case 11:
+      return(' background-position:64px 0px');
+    break;
+    case 12:
+      return(' background-position:32px 0px');
+    break;
   }
-  var ryad = Math.round(iii / 100);
-  var num = iii - (ryad * 100);
-  return ('background-position:-' + (32 * (num - 1)) + 'px -' + (32 * (ryad - 1)) + 'px');
+  var ryad = Math.round(iii/100);
+  var num = iii - (ryad*100);
+  return(' background-position:-'+(32*(num-1))+'px -'+(32*(ryad-1))+'px');
 }
 
 function nazv(t) {
