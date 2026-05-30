@@ -279,8 +279,8 @@ body {
     </div>
     
     <div class="header-actions">
-      <button id="langToggle" onClick="toggleLang()" title="Ubah Bahasa">🇮🇩 ID</button>
       <button id="themeToggle" onClick="toggleTheme()" title="Ubah Tema">☀️ Light</button>
+	  <button id="langToggle" onClick="toggleLang()" title="Ubah Bahasa">Bahasa</button>
     </div>
   </header>
 
@@ -547,7 +547,7 @@ function toggleLang() {
   };
 
   // Terapkan terjemahan ke teks Header & Tombol
-  langBtn.innerHTML = isIndo ? '🇮🇩 ID' : '🇬🇧 EN';
+  langBtn.innerHTML = isIndo ? 'Bahasa' : 'English';
   document.getElementById('desc-text').innerText = textDict.descText;
   
   // Terapkan terjemahan ke tombol di "Individual Branch"
