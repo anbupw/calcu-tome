@@ -411,7 +411,14 @@ function zapolnitSelect() { for (var e = 616; e >= 101; e--) { if (i[e]) { var o
 // --- LOGIKA POSISI SPRITE IKON ---
 function sdvig(e) { var p = i[e] ? i[e][3] : 0; var x = 0; var y = 0; if (p > 15000) { p -= 17544; y = Math.floor(p / 16); x = p % 16; } else { p -= 11413; } return 'background-position: -' + (x * 32) + 'px -' + (y * 32) + 'px;'; }
 
-function nazv(t) { var e = t.title; if (i[e]) { nazvDiv.innerHTML = 'ID: ' + e + ' | <b>' + i[e][4] + '</b>'; } }
+// --- HOVER DESCRIPTION FIXED ---
+function nazv(t) { 
+  var e = t.title; 
+  if (!e && t.getAttribute) e = t.getAttribute('title'); // Antisipasi fallback parameter objek objek literal
+  if (i[e]) { 
+    nazvDiv.innerHTML = 'ID: ' + e + ' | <b>' + i[e][4] + '</b>'; 
+  } 
+}
 
 // --- MODAL POPUP SUBTRACT DIALOG ---
 var oknoDiv = document.getElementById('okno'); var oknoInput = document.getElementById('okno_input');
@@ -531,21 +538,31 @@ function toggleTheme() {
   }
 }
 
-// --- FITUR FLASH TRANSLATION (ID <-> EN) ---
+// --- FITUR FLASH TRANSLATION COMPLETED ---
 let isIndo = true;
 function toggleLang() { 
   isIndo = !isIndo; 
   const langBtn = document.getElementById('langToggle');  
   const textDict = { 
     descText: isIndo ? "Hitung kebutuhan bahan craft Tome." : "Calculate Tome crafting materials.", 
-    resetBtn: isIndo ? "🔄 Reset" : "🔄 Reset",
     cardTitle1: isIndo ? "Full Material Tree" : "Pohon Material Lengkap", 
     cardTitle2: isIndo ? "Individual Branch" : "Cabang Individu", 
     cardTitle3: isIndo ? "Sudah Dimiliki (Subtracted)" : "Already Owned (Subtracted)", 
-    cardTitle4: isIndo ? "Tome Selection Database" : "Basis Data Pilihan Tome"
+    cardTitle4: isIndo ? "Tome Selection Database" : "Basis Data Pilihan Tome",
+    selectPlaceholder: isIndo ? "Pilih buku..." : "Select book...",
+    modalTitle: isIndo ? "Masukkan Jumlah Item yang Sudah Anda Miliki:" : "Enter the Number of Items You Already Own:"
   };
+  
   langBtn.innerHTML = isIndo ? 'Bahasa' : 'English'; 
   document.getElementById('desc-text').innerText = textDict.descText;  
+  
+  if(nazvDiv.innerText === "Pilih buku..." || nazvDiv.innerText === "Select book...") {
+     nazvDiv.innerText = textDict.selectPlaceholder;
+  }
+  
+  const modalLabel = document.querySelector('.modal-input-group label');
+  if(modalLabel) modalLabel.innerText = textDict.modalTitle;
+
   const headers = document.querySelectorAll('.card-title-group h2'); 
   if(headers.length >= 4) { 
     headers[0].innerText = textDict.cardTitle1; 
