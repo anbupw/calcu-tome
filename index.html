@@ -225,6 +225,19 @@ body {
   --button-color: #3b82f6; 
 }
 
+/* Membuat teks nama item menjadi interaktif */
+.clickable-text {
+  cursor: pointer;
+  transition: color 0.2s;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.clickable-text:hover {
+  color: var(--accent-hover, #a78bfa); /* Berubah warna saat di-hover */
+  text-decoration: underline;
+}
+
 /* Memastikan border menyesuaikan tema */
 [data-theme="light"] .card-header,
 [data-theme="light"] .podzagolovok input[type="text"] {
@@ -429,12 +442,18 @@ function okno(e, t) {
 
 function w_html(e) {
   var deystv = 'onClick="shelk(this)"';
-  if (e == 12 || e == 11 || e == 10) deystv = '';
+  // Menonaktifkan klik untuk material dasar (ID 10, 11, 12)
+  if (e == 12 || e == 11 || e == 10) deystv = ''; 
   var itemName = i[e] ? i[e][4] : 'Unknown Item';
   
   return '<li>' +
+         // 1. Ikon asli (Tetap bisa diklik)
          '<button class="icon-btn" style="' + sdvig(e) + '" value="' + schet[e] + '" title="' + e + '" ' + deystv + ' onMouseOver="nazv(this);"></button>' +
-         '<span class="item-name">' + itemName + '</span>' +
+         
+         // 2. Teks Nama (Sekarang bisa diklik, memicu efek hover, dan mewarisi fungsi klik yang sama)
+         '<span class="item-name clickable-text" ' + deystv + ' value="' + schet[e] + '" title="' + e + '" onMouseOver="nazv(this);">' + itemName + '</span>' +
+         
+         // 3. Jumlah dan Tombol Subtract
          '<b>×' + schet[e] + '</b>' +
          '<button class="action-btn" onClick="okno(' + e + ',this);" title="Tandai sudah punya (Subtract)">↺</button>' +
          '</li>';
