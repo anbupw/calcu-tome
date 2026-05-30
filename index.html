@@ -1,256 +1,347 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-  <meta charset="utf-8">
-  <title>Tome Calculator</title>
-  <style>
-    body { 
-      font-family: Arial, sans-serif; 
-      background-color: #f9f9f9; 
-      color: #333; 
-      padding: 20px; 
-    }
-    .layout { 
-      display: flex; 
-      gap: 20px; 
-    }
-    .panel { 
-      background: #fff; 
-      padding: 20px; 
-      border: 1px solid #ddd; 
-      border-radius: 8px; 
-      flex: 1; 
-      max-height: 85vh; 
-      overflow-y: auto; 
-    }
-    .icon-btn { 
-      width: 32px; 
-      height: 32px; 
-      background-image: url('znachki.png'); 
-      background-repeat: no-repeat; 
-      border: none; 
-      background-color: transparent; 
-      cursor: pointer; 
-      vertical-align: middle; 
-    }
-    ul { list-style: none; padding: 0; margin: 0; }
-    li { margin: 8px 0; display: flex; align-items: center; gap: 10px; }
-    .clickable-text { cursor: pointer; color: #0056b3; }
-    .clickable-text:hover { text-decoration: underline; }
-    .level-title { color: #d32f2f; margin: 15px 0 5px 0; font-size: 16px; border-bottom: 1px solid #eee; }
-    
-    /* Tampilan Modal/Pop-up */
-    #okno { 
-      display: none; position: fixed; top: 50%; left: 50%; 
-      transform: translate(-50%, -50%); background: #fff; 
-      padding: 20px; border: 2px solid #333; box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
-      z-index: 1000; border-radius: 8px;
-    }
-    select, input { padding: 5px; font-size: 14px; }
-  </style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="description" content="Menghitung berapa banyak bahan dan tome lvl 1 yang Anda butuhkan untuk membuat tome level 2-5" />
+<title>Tome Calculator</title>
+<style>
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin:0; padding:0; border-spacing:0; border:0; outline:0; vertical-align:baseline;
+	font-weight:inherit; font-style:inherit; font-size:100%; font-family:inherit;
+}
+:focus { outline:0; }
+body, html { line-height:1; color:black; background:white; height:100%; width:100%; }
+ol, ul { list-style:none; }
+table { border-collapse:separate; border-spacing:0; }
+caption, th, td { text-align:left; font-weight:normal; }
+blockquote:before, blockquote:after, q:before, q:after { content:""; }
+blockquote, q { quotes:"" ""; }
+
+body { font-size:16px; width:auto; height:auto; font-weight:bold; color:#003; text-shadow: 1px 1px 20px #003; }
+a { color:#fff;text-shadow:1px 1px 2px #003; }
+a:hover { text-shadow:1px 5px 10px #003; }
+
+.obertka { display:table; padding:20px; margin:40px auto 10px; background:#69F;border-radius:40px 250px 40px 40px; }
+.obertka, .vybor { box-shadow:0 0 20px rgba(0,0,0,0.5); }
+.drevo { display: table-cell; width:380px; }
+.vetv { display:table; }
+.vetv li button { display:block; margin:0px auto 2px; width:32px; height:32px; font-style:normal; background:none; background-image:url('znachki.png'); background-position:left top; box-shadow: 0px 0px 20px rgba(0,0,0,0.5); border:none; }
+.vetv li button:active { box-shadow:0px 0px 10px rgba(0,0,0,0.5); }
+.vetv li b { margin-left:-6px; }
+.vetv li span { display:block; height:10px; margin-top:-10px; font-size:7px; overflow:hidden; font-weight:normal; font-family:Arial, Helvetica, sans-serif; visibility:hidden; cursor:pointer; }
+.vetv li:hover span { visibility:visible; }
+.drevo ul { display:table-row; margin-left:20px; height:55px; }
+.drevo li:first-child { font-size:24px; text-align:left; }
+.drevo li { display:table-cell; width:35px; vertical-align:middle; text-align:center; }
+.drevo h1, .drevo h2 { font-size:21px; margin-left:20px; font-weight:bold; color:#003; text-shadow: 1px 5px 30px #003; }
+.podzagolovok { height:40px; line-height:40px; padding-left:35px; }
+.drevo input { width:16px; text-align:center; }
+.podzagolovok button, .podzagolovok input { line-height:18px;font-family:Arial, Helvetica, sans-serif; font-size:13px; background:#36C; color:white; font-weight:normal; text-decoration:none; border-radius:10px 6px 10px 6px; border:solid 2px #fff; border-bottom-color:#003; border-right-color:#003; padding:0px 7px; }
+.podzagolovok button:hover { text-shadow:1px 1px 0px #003; }
+.podzagolovok button:active, a:active,.podzagolovok input { border-color:#003; border-bottom-color:#fff; border-right-color:#fff; }
+.podzagolovok input { background:#fff; color:#003; position:static; }
+
+#niz { font-size:12px; }
+#strelki { font-size:18px; }
+
+#vychet { width:800px; margin:0px auto; visibility:hidden; }
+#vychet ul { display:inline-block; }
+#vychet>div { width:100%; }
+
+.vybor { position:absolute; right:20px; top:40px; background:black; color:white; background:rgba(0,0,0,0.8); padding:10px; border-radius:10px; text-align:right; font-weight:normal; }
+.vybor button { background:none; border:none; color:white; border-radius:4px; }
+.vybor button:hover { text-decoration:underline; }
+#vybor h4, #vybor ul { text-align:left; }
+#vybor h4 { padding:2px; padding-left:5px; }
+#vybor ul { width:256px; }
+#vybor li { display:inline-block; }
+</style>
 </head>
 <body>
-
-  <h2>Tome Calculator (Versi Dasar)</h2>
-  
-  <div class="layout">
-    <div class="panel">
-      <h3>Full Material Tree</h3>
-      <div id="rawr"></div>
-    </div>
-
-    <div class="panel">
-      <h3>Individual Branch</h3>
-      <div style="margin-bottom: 15px;">
-        <label>Jumlah Craft: </label>
-        <input type="number" id="mnojInput" value="1" min="1" max="999" onInput="drevo(vetka, true)" style="width: 60px;">
-      </div>
-      <div id="rawrRawr"></div>
-      
-      <div id="vychet" style="display: none; margin-top: 30px; border-top: 2px dashed #ccc; padding-top: 15px;">
-        <h3 style="color: #d32f2f;">Sudah Dimiliki</h3>
-        <div id="vychetDiv"></div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <h3>Tome Selection</h3>
-      <select id="bazaTome" onChange="drevo(this.value); mnojInput.value=1; drevo(this.value, true);" style="width: 100%; margin-bottom: 15px;"></select>
-      <div id="nazv" style="font-weight: bold; margin-bottom: 15px; color: #0056b3;">Pilih buku...</div>
-      <div id="vybor"></div>
-    </div>
-  </div>
-
-  <div id="okno">
-    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-      <div id="okno_icon" class="icon-btn"></div>
-      <h3 id="okno_nazv" style="margin: 0;">Nama Item</h3>
-    </div>
-    <label>Masukkan Jumlah Item yang Dimiliki:</label><br><br>
-    <input type="number" id="okno_input" value="1" min="1">
-    <div style="margin-top: 15px; text-align: right;">
-      <button onClick="okno_close()">Batal</button>
-      <button id="okno_ok" style="background: #0056b3; color: white; border: none; padding: 5px 10px; cursor: pointer;">Kurangi</button>
-    </div>
-  </div>
-
+<div class="obertka">
+	<div class="drevo">
+		<h1>Full tree</h1>
+		<div class="podzagolovok" id="nazvaniye">&nbsp;</div>
+		<div id="rawr" class="vetv"></div>
+	</div>
+	<div class="drevo">
+		<h2>Individual branch</h2>
+		<div class="podzagolovok">
+			<input type="text" id="mnojitel" value="1">
+			<button onClick="drevo(vetka,true)">Quantity</button>
+		</div>
+		<div id="rawrRawr" class="vetv"></div>
+	</div>
+</div>
+<div id="vychet">
+	<div class="drevo">
+		<h2>Already existing chapters</h2>
+		<div class="podzagolovok" id="nazvaniye">Subtracted together with dependencies.</div>
+		<div id="rawrRawrRawr" class="vetv"></div>
+	</div>
+</div>
+<div class="vybor">
+	<button onClick="var zu = vyborDiv.style.display; vyborDiv.style.display = (zu == 'none') ? 'block' : 'none';" title="Show/hide the selection window">Tract selection</button>
+	<div id="vybor" class="vetv" style="display:none">
+		111
+	</div>
+</div>
 <script>
-var rawr = false; var vetka = 616; var derevo = 616; var mnoj = 1; 
-var mnojInput = document.getElementById('mnojInput'); var selectElement = document.getElementById('bazaTome'); 
-var nazvDiv = document.getElementById('nazv'); var vychetDiv = document.getElementById('vychetDiv'); 
-var vychetContainer = document.getElementById('vychet'); var vyborDiv = document.getElementById('vybor');
-var schet; var i = []; var vychet = []; var vychetCopy = [];
 
-// Data Base Buku
-i[601] = [501, 502, 509, 17615, 'The Calm of Ice']; i[602] = [502, 503, 505, 17622, 'The Khatru']; i[603] = [504, 503, 508, 17628, 'A Carmine Tear']; i[604] = [503, 508, 501, 17630, 'The Fruit of Intense Labor']; i[605] = [505, 512, 509, 17634, 'Tomorrows Phoenix']; i[606] = [505, 506, 507, 17636, 'Riding the Scree']; i[607] = [513, 514, 507, 17642, 'Turning the Tide']; i[608] = [508, 506, 514, 17649, 'Existential Woe']; i[609] = [510, 501, 505, 17655, 'Book of Fragrances']; i[610] = [510, 506, 501, 17657, 'Bouquet of Regrets']; i[611] = [511, 509, 505, 17661, 'The Union']; i[612] = [511, 513, 503, 17663, 'Oblivious Enlightenment']; i[613] = [513, 507, 514, 17669, 'As the Universe Fades']; i[614] = [514, 512, 513, 17676, 'The Concubines Laugh']; i[615] = [515, 501, 507, 17679, 'The Academy of the East']; i[616] = [516, 515, 514, 17683, 'Pan Gu Creator']; 
-i[501] = [401, 408, 405, 17618, 'A Heart like Still Water']; i[502] = [409, 405, 403, 17621, 'The Tsunamis of Yore']; i[503] = [404, 408, 401, 17624, 'Laughing Mad']; i[504] = [408, 404, 401, 17627, 'The Book of Congratulations']; i[505] = [403, 409, 404, 17633, 'The Wrath of Heaven']; i[506] = [409, 403, 402, 17639, 'A Strange Kindness']; i[507] = [402, 404, 409, 17645, 'Flesh of the Lamia']; i[508] = [404, 408, 402, 17648, 'Everything is Emptiness']; i[509] = [403, 401, 405, 17651, 'The Oasis Remembered']; i[510] = [401, 405, 407, 17654, 'The Heavenly Scent']; i[511] = [403, 409, 404, 17660, 'Debt and Tombstones']; i[512] = [409, 403, 404, 17666, 'Endless Waves']; i[513] = [408, 402, 404, 17672, 'Parting Grief']; i[514] = [408, 402, 404, 17675, 'Rouge and Red Lips']; i[515] = [406, 407, 401, 17678, 'Gang of Hooligans']; i[516] = [406, 407, 401, 17682, 'The Voidlands']; 
-i[401] = [303, 307, 304, 17602, 'Burning Desire']; i[402] = [304, 301, 305, 17603, 'Tome of Predestination']; i[403] = [302, 305, 303, 17604, 'The Roses Thorn']; i[404] = [306, 307, 311, 17605, 'Letters of Social Unrest']; i[405] = [303, 307, 306, 17606, 'The Appetites of Spring']; i[406] = [308, 205, 207, 17610, 'The Rivers Edge']; i[407] = [309, 302, 306, 17614, 'The Weak Stream of Many Miles']; 
-i[408] = [301, 304, 302, 17600, 'Battle Tactics']; i[409] = [302, 305, 303, 17601, 'A Bewitching Proposal']; 
-i[301] = [201, 202, 203, 17584, 'The Shrouded Moon']; i[302] = [202, 203, 204, 17586, 'Upwelling Rage']; i[303] = [203, 204, 205, 17588, 'Great Waves']; i[304] = [204, 205, 201, 17590, 'Clear Thoughts']; i[305] = [205, 201, 202, 17592, 'The Silent Orchid']; i[306] = [206, 201, 202, 17594, 'Gilded Splendor']; i[307] = [207, 203, 204, 17596, 'The Soft Silk']; i[308] = [208, 102, 103, 17608, 'The Mighty River']; i[309] = [209, 106, 104, 17612, 'The Trickling Rill']; 
-i[201] = [101, 102, 103, 17568, 'The River of Love']; i[202] = [102, 103, 104, 17570, 'The Scent of Wine']; i[203] = [103, 104, 105, 17572, 'Plucking Lotus']; i[204] = [104, 105, 101, 17574, 'Spring Breeze']; i[205] = [105, 101, 102, 17576, 'Bright Sun']; i[206] = [106, 103, 105, 17578, 'Melodic Rain']; i[207] = [107, 102, 104, 17580, 'Green Hills']; i[208] = [108, 10, 10, 17607, 'The Babbling Brook']; i[209] = [109, 10, 10, 17611, 'The Dropping Rain']; 
-i[101] = [11, 12, 10, 17552, 'The Three Realms']; i[102] = [11, 12, 10, 17554, 'The Five Elements']; i[103] = [11, 12, 10, 17556, 'Yin and Yang']; i[104] = [11, 12, 10, 17558, 'The Four Seasons']; i[105] = [11, 12, 10, 17560, 'The Eight Diagrams']; i[106] = [11, 12, 10, 17562, 'The Six Harmonies']; i[107] = [11, 12, 10, 17564, 'The Seven Stars']; i[108] = [11, 12, 10, 17616, 'The Long River']; i[109] = [11, 12, 10, 17620, 'The Morning Dew']; 
-i[11] = [0, 0, 0, 17544, 'Mystical Tome Fragment']; i[12] = [0, 0, 0, 17545, 'Mystical Tome Page']; i[10] = [0, 0, 0, 17546, 'Perfect·Token of Luck'];
+var vetka; var derevo;
+var rawr;
+var mnoj = 1;
+var mnojInput = document.getElementById('mnojitel');
+var nazvDiv = document.getElementById('nazvaniye');
+var vychetDiv = document.getElementById('rawrRawrRawr');
+var scryt = document.getElementById('vychet').style;
+var vyborDiv = document.getElementById('vybor');
 
-// Isi Dropdown
-function zapolnitSelect() { 
-  selectElement.innerHTML = ''; 
-  for (var e = 616; e >= 101; e--) { 
-    if (i[e]) { 
-      var opt = document.createElement('option'); 
-      opt.value = e; opt.innerHTML = 'Level ' + Math.floor(e/100) + ' - ' + i[e][4]; 
-      selectElement.appendChild(opt); 
-    } 
-  } 
-} 
-zapolnitSelect();
+var schet;
+var str='';
+var i = [];
+var vychet = [];
+var vychetCopy = [];
 
-// INI LOGIKA KOORDINAT GAMBAR YANG SUDAH DIPERBAIKI SECARA AMAN
-function sdvig(e) { 
-  var x = 0; 
-  var id = parseInt(e);
+i[601] = [501, 502, 509, 17615, 'The Calm of Ice'];
+i[602] = [502, 503, 505, 17622, 'The Khatru'];
+i[603] = [504, 503, 508, 17628, 'A Carmine Tear'];
+i[604] = [503, 508, 501, 17630, 'The Fruit of Intense Labor'];
+i[605] = [505, 512, 509, 17634, 'Tomorrows Phoenix'];
+i[606] = [505, 506, 507, 17636, 'Riding the Scree'];
+i[607] = [513, 514, 507, 17642, 'Turning the Tide'];
+i[608] = [508, 506, 514, 17649, 'Existential Woe'];
+i[609] = [510, 501, 505, 17655, 'Book of Fragrances'];
+i[610] = [510, 506, 501, 17657, 'Bouquet of Regrets'];
+i[611] = [511, 509, 505, 17661, 'The Union'];
+i[612] = [511, 513, 503, 17663, 'Oblivious Enlightenment'];
+i[613] = [513, 507, 514, 17669, 'As the Universe Fades'];
+i[614] = [514, 512, 513, 17676, 'The Concubines Laugh'];
+i[615] = [515, 501, 507, 17679, 'The Academy of the East'];
+i[616] = [516, 515, 514, 17683, 'Pan Gu Creator'];
+i[501] = [401, 408, 405, 17618, 'A Heart like Still Water'];
+i[502] = [409, 405, 403, 17621, 'The Tsunamis of Yore'];
+i[503] = [404, 408, 401, 17624, 'Laughing Mad'];
+i[504] = [408, 404, 401, 17627, 'The Book of Congratulations'];
+i[505] = [403, 409, 404, 17633, 'The Wrath of Heaven'];
+i[506] = [409, 403, 402, 17639, 'A Strange Kindness'];
+i[507] = [402, 404, 409, 17645, 'Flesh of the Lamia'];
+i[508] = [404, 408, 402, 17648, 'Everything is Emptiness'];
+i[509] = [403, 401, 405, 17651, 'The Oasis Remembered'];
+i[510] = [401, 405, 407, 17654, 'The Heavenly Scent'];
+i[511] = [403, 409, 404, 17660, 'Debt and Tombstones'];
+i[512] = [409, 403, 404, 17666, 'Endless Waves'];
+i[513] = [408, 402, 404, 17672, 'Parting Grief'];
+i[514] = [408, 402, 404, 17675, 'Rouge and Red Lips'];
+i[515] = [406, 407, 401, 17678, 'Gang of Hooligans'];
+i[516] = [406, 407, 401, 17682, 'The Voidlands'];
+i[401] = [303, 307, 304, 17602, 'Burning Desire'];
+i[402] = [304, 301, 305, 17603, 'Tome of Predestination'];
+i[403] = [302, 305, 303, 17604, 'The Roses Thorn'];
+i[404] = [306, 307, 301, 17605, 'Letters of Social Unrest'];
+i[405] = [303, 307, 306, 17606, 'The Appetites of Spring'];
+i[406] = [308, 205, 207, 17610, 'The Rivers Edge'];
+i[407] = [309, 302, 306, 17614, 'The Weak Stream of Many Miles'];
+i[408] = [301, 304, 302, 17600, 'Battle Tactics'];
+i[409] = [302, 305, 303, 17601, 'A Bewitching Proposal'];
+i[301] = [201, 206, 203, 17593, 'Eat Drink and be Merry'];
+i[302] = [202, 205, 206, 17594, 'Sunset Tales'];
+i[303] = [207, 203, 202, 17595, 'Adventures and Mishaps'];
+i[304] = [204, 201, 203, 17596, 'The Sunny Pass'];
+i[305] = [205, 202, 201, 17597, 'Tales of Beauty'];
+i[306] = [206, 203, 201, 17598, 'The Bards Wanderlust'];
+i[307] = [207, 205, 204, 17599, 'A Poets Musings'];
+i[308] = [208, 202, 204, 17609, 'Decaying Tome'];
+i[309] = [209, 203, 202, 17613, 'Scene of Carnage'];
+i[201] = [101, 104, 106, 17586, 'Tome of Iron Will'];
+i[202] = [102, 105, 106, 17587, 'Misty Peach Blossoms'];
+i[203] = [107, 103, 102, 17588, 'Tale of the Red Lotus'];
+i[204] = [101, 104, 103, 17589, 'Tale of the Dolt'];
+i[205] = [102, 105, 107, 17590, 'Tale of the Peach Fan'];
+i[206] = [106, 101, 103, 17591, 'Story of the Blockade'];
+i[207] = [107, 103, 104, 17592, 'Mediations Flame'];
+i[208] = [108, 103, 101, 17608, 'Guide to Wolf Hunting'];
+i[209] = [109, 103, 107, 17612, 'Fire Dance'];
+i[101] = [11, 12, 0, 17579, 'Underestimated Resolve'];
+i[102] = [11, 12, 0, 17580, 'Soaring Heart'];
+i[103] = [11, 12, 0, 17581, 'Retributions Flame'];
+i[104] = [11, 12, 0, 17582, 'Tome of the River Spirits'];
+i[105] = [11, 12, 0, 17583, 'Flankers Tome'];
+i[106] = [11, 12, 0, 17584, 'Tome of Hyperbolic Boasts'];
+i[107] = [11, 12, 0, 17585, 'Tome of Grace'];
+i[108] = [11, 12, 0, 17607, 'A Flowerless Plant'];
+i[109] = [11, 12, 0, 17611, 'Eternitys Moon'];
+i[11] = [0, 0, 0, 17810, 'Mystical Tome Fragment'];
+i[12] = [10, 0, 0, 18185, 'Mystical Tome Page'];
+i[10] = [0, 0, 0, 24721, 'Perfect·Token of Luck'];
 
-  if (id === 11) { x = 0; } 
-  else if (id === 12) { x = 1; } 
-  else if (id === 10) { x = 2; } 
-  
-  else if (id === 101) { x = 3; } 
-  else if (id === 102) { x = 4; } 
-  else if (id === 103) { x = 5; }
-  else if (id === 104) { x = 6; } 
-  else if (id === 105) { x = 7; } 
-  else if (id === 106) { x = 8; }
-  else if (id === 107) { x = 9; } 
-  else if (id === 108) { x = 10; } 
-  else if (id === 109) { x = 11; }
-  
-  else if (id >= 201 && id <= 616) { 
-    x = 3 + (id % 9); 
-  }
-  
-  if (x > 11) x = 11;
-  if (x < 0) x = 0;
-  
-  return 'background-position: -' + (x * 32) + 'px 0px;'; 
+function nazv(t){
+	var iii = t.title*1;
+	var txt = '<a href="http://www.pwdatabase.com/pwi/items/'+i[iii][3]+'" target="_blank">'+i[iii][4]+'</a>';
+	nazvDiv.innerHTML = txt;
+}
+function shelk(t){
+	mnojInput.value = t.value*1;
+	drevo(t.title*1,true);
+}
+function zachest(e,sw){
+	if(!sw) vychet[e] = 0;
+	drevo(derevo);
+	if(e == vetka) mnojInput.value = schet[e];
+	drevo(vetka,true);
+	vychtennoe();
+	scryt.visibility = 'visible';
+}
+function okno(e,t){
+	var butt = t.parentNode.getElementsByTagName('button')[0].value;
+	var uje = prompt('How much?',butt)*1;
+	if(uje){
+		if(!vychet[e]) vychet[e]=0;
+		vychet[e] += uje;
+		zachest(e,true);
+	}
+}
+function vychtennoe_html(e){
+	var deystv ='onClick="shelk(this)"';
+	if(e==12 || e==11 || e==10) deystv = '';
+	return '<li><span onClick="zachest('+e+');">Back</span><button style="'+sdvig(e)+'" value="'+vychet[e]+'" title="'+e+'" '+deystv+' onMouseOver="nazv(this);"></button><b>×'+vychet[e]+'</b></li>';
+}
+function vychtennoe(){
+	var txt = '';
+	var lis = '';
+	if(vychet[11]) lis +=vychtennoe_html(11);
+	if(vychet[12]) lis +=vychtennoe_html(12);
+	if(vychet[10]) lis +=vychtennoe_html(10);
+	if(lis!='') txt += '<ul><li>&nbsp;</li> '+lis+'</ul>';
+	for(var r=1; r<=6; r++){
+		lis = '';
+		var nach = r*100+1;
+		var konec = r*100+16;
+		for(var e = nach; e<=konec; e++){
+			if(vychet[e]){
+				lis += vychtennoe_html(e);
+			}
+		}
+		if(lis!='') txt += '<ul><li>'+r+'</li> '+lis+'</ul>';
+	}
+	vychetDiv.innerHTML = txt;
 }
 
-function nazv(t) { 
-  var e = t.title; 
-  if (!e && t.getAttribute) e = t.getAttribute('title');
-  if (i[e]) { nazvDiv.innerHTML = 'ID: ' + e + ' <br> <b>' + i[e][4] + '</b>'; } 
+function okno_vybora(){
+	var txt = '';
+	for(var r=6; r>=1; r--){
+		var lis = '';
+		var nach = r*100+1;
+		var konec = r*100+16;
+		for(var e = nach; e<=konec; e++){
+			if(i[e]){
+				lis +='<li><button style="'+sdvig(e)+'" title="'+e+'" onClick="drevo(this.title)" onMouseOver="nazv(this);"></button></li>';
+			}
+		}
+		txt += '<h4>'+r+'</h4><ul> '+lis+'</ul>';
+	}
+	vyborDiv.innerHTML = txt;
 }
-
-// Logika Pop-up Kurangi Bahan
-var oknoDiv = document.getElementById('okno'); var oknoInput = document.getElementById('okno_input');
-function okno(e, t) { 
-  oknoDiv.style.display = 'block'; 
-  document.getElementById('okno_icon').style = sdvig(e); 
-  document.getElementById('okno_nazv').innerHTML = i[e][4]; 
-  document.getElementById('okno_ok').onclick = function() { 
-    var uje = oknoInput.value * 1; 
-    if (uje > 0) { if (!vychet[e]) vychet[e] = 0; vychet[e] += uje; zachest(e, true); } 
-  }; 
-}
-function okno_close() { oknoDiv.style.display = 'none'; }
-function zachest(e, k) { okno_close(); if (!k) { vychet[e] = 0; } vychtennoe(); drevo(derevo); drevo(vetka, true); }
-function shelk(t) { var e = t.parentNode.getElementsByTagName('button')[0].title; var uje = t.value * 1; if (uje > 0) { if (!vychet[e]) vychet[e] = 0; vychet[e] += uje; zachest(e, true); }}
-
-function w_html(e) { 
-  var deystv = 'onClick="shelk(this)"'; 
-  var spanDeystv = 'onClick="mnojInput.value=\'' + schet[e] + '\'; drevo(' + e + ', true);"';  
-  if (e == 12 || e == 11 || e == 10) { deystv = ''; spanDeystv = ''; }  
-  return '<li>' + '<button class="icon-btn" style="' + sdvig(e) + '" value="' + schet[e] + '" title="' + e + '" ' + deystv + ' onMouseOver="nazv(this);"></button>' + '<span class="clickable-text" ' + spanDeystv + ' title="' + e + '" onMouseOver="nazv(this);">' + i[e][4] + '</span>' + '<b style="margin-left:auto;">×' + schet[e] + '</b>' + '<button style="margin-left:5px;" onClick="okno(' + e + ',this);">Kurangi</button>' + '</li>';
-}
-
-function vychtennoe_html(e) { 
-  var deystv = 'onClick="shelk(this)"'; 
-  var spanDeystv = 'onClick="mnojInput.value=\'' + vychet[e] + '\'; drevo(' + e + ', true);"';  
-  if (e == 12 || e == 11 || e == 10) { deystv = ''; spanDeystv = ''; }  
-  return '<li>' + '<button class="icon-btn" style="' + sdvig(e) + '" value="' + vychet[e] + '" title="' + e + '" ' + deystv + ' onMouseOver="nazv(this);"></button>' + '<span class="clickable-text" ' + spanDeystv + ' title="' + e + '" onMouseOver="nazv(this);">' + i[e][4] + '</span>' + '<b style="margin-left:auto;">×' + vychet[e] + '</b>' + '<button style="margin-left:5px; color:red;" onClick="zachest(' + e + ');">X</button>' + '</li>';
-}
-
-function vychtennoe() { 
-  var txt = ''; var lis = ''; 
-  if (vychet[11]) lis += vychtennoe_html(11); if (vychet[12]) lis += vychtennoe_html(12); if (vychet[10]) lis += vychtennoe_html(10);  
-  if (lis != '') txt += '<div class="level-title">Material Dasar</div><ul> ' + lis + '</ul>';  
-  for (var r = 1; r <= 6; r++) { 
-    lis = ''; var nach = r * 100 + 1; var konec = r * 100 + 16; 
-    for (var e = nach; e <= konec; e++) { if (vychet[e]) { lis += vychtennoe_html(e); } } 
-    if (lis != '') txt += '<div class="level-title">Level ' + r + '</div><ul> ' + lis + '</ul>'; 
-  }  
-  vychetDiv.innerHTML = txt; 
-  vychetContainer.style.display = (txt != '') ? 'block' : 'none';
-}
-
-function okno_vybora() { 
-  var txt = ''; 
-  for (var r = 6; r >= 1; r--) { 
-    var lis = ''; var nach = r * 100 + 1; var konec = r * 100 + 16; 
-    for (var e = nach; e <= konec; e++) { if (i[e]) { lis += '<li>' + '<button class="icon-btn" style="' + sdvig(e) + '" title="' + e + '" onClick="drevo(this.title)" onMouseOver="nazv(this);"></button>' + '<span class="clickable-text" onClick="drevo(' + e + ')" onMouseOver="nazv({title: ' + e + '});">' + i[e][4] + '</span>' + '</li>'; } } 
-    txt += '<div class="level-title">Level ' + r + '</div><ul> ' + lis + '</ul>'; 
-  } 
-  vyborDiv.innerHTML = txt;
-} 
 okno_vybora();
 
-function w() { 
-  var txt = ''; 
-  for (var r = 6; r >= 1; r--) { 
-    var lis = ''; var nach = r * 100 + 1; var konec = r * 100 + 16; 
-    for (var e = nach; e <= konec; e++) { if (schet[e]) { lis += w_html(e); } } 
-    if (lis != '') txt += '<div class="level-title">Level ' + r + '</div><ul>' + lis + '</ul>'; 
-  }  
-  var nizLis = ''; 
-  if (schet[11]) nizLis += w_html(11); if (schet[12]) nizLis += w_html(12); if (schet[10]) nizLis += w_html(10);  
-  if (nizLis != '') txt += '<div class="level-title">Material Dasar</div><ul>' + nizLis + '</ul>';
-  document.getElementById(rawr ? 'rawrRawr' : 'rawr').innerHTML = txt;
+// INI FUNGSI YANG SUDAH DIPERBAIKI MATEMATIKANYA AGAR IKON TIDAK BERANTAKAN
+function sdvig(iii){
+	iii = parseInt(iii);
+	switch(iii){
+		case 10:
+			return(' background-position:32px -32px');
+		break;
+		case 11:
+			return(' background-position:64px 0px');
+		break;
+		case 12:
+			return(' background-position:32px 0px');
+		break;
+	}
+	var ryad = Math.floor(iii/100); 
+	var num = iii - (ryad*100);
+	return(' background-position:-'+(32*(num-1))+'px -'+(32*(ryad-1))+'px');
 }
 
-function reDrevo(e) { 
-  if (!schet[e]) schet[e] = 0; 
-  if (vychetCopy[e] && vychetCopy[e] > 0) vychetCopy[e]--; 
-  else { schet[e]++; if (e > 200) { reDrevo(i[e][0]); reDrevo(i[e][1]); reDrevo(i[e][2]); } }
+function w_html(e){
+	var deystv ='onClick="shelk(this)"';
+	if(e==12 || e==11 || e==10) deystv = '';
+	return '<li><span onClick="okno('+e+',this);" title="Subtract the parts of the treatise already in existence"> </span><button style="'+sdvig(e)+'" value="'+schet[e]+'" title="'+e+'" '+deystv+' onMouseOver="nazv(this);"></button><b>×'+schet[e]+'</b></li>';
 }
 
-function drevo(e, k) { 
-  rawr = k; mnoj = 1; schet = []; vychetCopy = vychet.slice(); 
-  if (rawr) { vetka = e; mnoj = mnojInput.value * 1; if (vychet[e]) mnoj += vychet[e]; } else derevo = e;  
-  for (var z = 1; z <= mnoj; z++) reDrevo(e);  
-  
-  var znach = 0; for (var z = 101; z <= 109; z++) if (schet[z]) znach += schet[z] * 3; 
-  var tempObelisk = schet[10] || 0; 
-  
-  for (var z = 12; z >= 10; z--) { 
-    if (z === 10) { schet[10] = (schet[12] * 80) + tempObelisk; } else { schet[z] = znach; } 
-    if (vychet[z]) schet[z] -= vychet[z] * 1; 
-    if (schet[z] < 0) schet[z] = 0; 
-  } 
-  w();
+function w(){
+	var txt = '';
+	for(var r=6; r>=1; r--){
+		var nach = r*100+1;
+		var konec = r*100+16;
+		txt += '<ul><li>'+r+'</li> ';
+		for(var e = nach; e<=konec; e++){
+			if(schet[e]){
+				txt +=w_html(e);
+			}
+		}
+		txt += '</ul>';		
+	}
+	
+	txt += '<ul id="niz"><li>&nbsp;</li> ';
+	if(schet[11]) txt +=w_html(11);
+	txt += '<li>&nbsp;</li>';
+	if(schet[12]) txt +=w_html(12);
+	
+	if(schet[10]) txt +='<li id="strelki">→ →</li>'+w_html(10);
+	txt += '</ul>';
+	
+	document.getElementById(rawr?'rawrRawr':'rawr').innerHTML = txt;
+}
+function reDrevo(e){
+	if(!schet[e])schet[e]=0;
+	if(vychetCopy[e] && vychetCopy[e]>0)vychetCopy[e]--;
+	else {
+		schet[e]++;
+		if(e>200){ reDrevo(i[e][0]); reDrevo(i[e][1]); reDrevo(i[e][2]); }
+	}
 }
 
-// Inisiasi Pertama Saat Dibuka
+function drevo(e,k){
+	rawr=k;
+	mnoj = 1;
+	schet = [];
+	str='';
+	vychetCopy = vychet.slice();
+	if(rawr){
+		vetka = e;
+		mnoj = mnojInput.value*1;
+		if(vychet[e])mnoj +=vychet[e];
+	} else derevo = e;
+	
+	for(var z=1; z<=mnoj; z++) reDrevo(e);
+	
+	var znach = 0;
+	for(var z=101; z<=109; z++) if(schet[z]) znach += schet[z]*3;
+	
+	for(var z=12; z>=10; z--){
+		switch(z){
+			case 10: schet[10] = schet[12]*80;
+				break;
+			default: schet[z] = znach;
+				break;
+		}
+		if(vychet[z]) schet[z]-= vychet[z]*1;
+		if(schet[z]<0) schet[z] = 0;
+	}
+		
+	w();
+}
+
 drevo(616);
-drevo(515, true);
-
+drevo(515,true);
 </script>
 </body>
 </html>
