@@ -21,6 +21,7 @@
 	--accent: #3b82f6;           /* Biru Elektrik (Utama) */
 	--accent-hover: #2563eb;
 	--danger: #ef4444;           /* Merah untuk tombol Hapus/Kurang */
+	--danger-hover: #dc2626;
 	--border-color: rgba(255, 255, 255, 0.08);
 }
 
@@ -133,7 +134,7 @@ h1::before, h2::before {
 	border-color: var(--accent);
 }
 
-.podzagolovok button {
+.btn-calc {
 	background: var(--accent);
 	color: white;
 	border: none;
@@ -145,12 +146,12 @@ h1::before, h2::before {
 	transition: all 0.2s ease;
 	box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4);
 }
-.podzagolovok button:hover {
+.btn-calc:hover {
 	background: var(--accent-hover);
 	transform: translateY(-2px);
 	box-shadow: 0 6px 12px -2px rgba(59, 130, 246, 0.5);
 }
-.podzagolovok button:active {
+.btn-calc:active {
 	transform: translateY(0);
 }
 
@@ -169,7 +170,6 @@ h1::before, h2::before {
 	align-items: center;
 }
 
-/* Level Indicator */
 .vetv ul li:first-child {
 	width: 100%;
 	font-size: 0.75rem;
@@ -182,7 +182,6 @@ h1::before, h2::before {
 	margin-bottom: 5px;
 }
 
-/* Item Container */
 .vetv ul li {
 	position: relative;
 	display: inline-flex;
@@ -190,12 +189,10 @@ h1::before, h2::before {
 	align-items: center;
 }
 
-/* The Icon Button */
 .vetv li button {
 	display: block;
 	width: 32px; height: 32px;
 	background-image: url('znachki.png');
-	/* background-repeat: no-repeat; -> DIHAPUS agar sprite sheet bekerja seperti versi aslinya */
 	border: none;
 	border-radius: 6px;
 	cursor: pointer;
@@ -207,7 +204,6 @@ h1::before, h2::before {
 	box-shadow: 0 8px 15px rgba(0,0,0,0.5);
 }
 
-/* The Multiplier Badge (x5) */
 .vetv li b {
 	position: absolute;
 	bottom: -8px;
@@ -223,7 +219,6 @@ h1::before, h2::before {
 	z-index: 2;
 }
 
-/* The Hidden "Minus/Action" Button on Hover */
 .vetv li span {
 	position: absolute;
 	top: -8px;
@@ -246,17 +241,11 @@ h1::before, h2::before {
 	align-items: center;
 	justify-content: center;
 }
-.vetv li span::before {
-	content: "-";
-	font-weight: bold;
-}
-.vetv li:hover span {
-	opacity: 1;
-	visibility: visible;
-}
+.vetv li span::before { content: "-"; font-weight: bold; }
+.vetv li:hover span { opacity: 1; visibility: visible; }
 
 #strelki { color: var(--accent); font-weight: bold; letter-spacing: 2px; }
-#niz li:first-child { display: none; } /* Sembunyikan label kosong di baris bawah */
+#niz li:first-child { display: none; } 
 
 /* =========================================
    6. FLOATING SELECTION PANEL (RIGHT)
@@ -272,25 +261,50 @@ h1::before, h2::before {
 	border-radius: 16px;
 	box-shadow: 0 20px 40px rgba(0,0,0,0.6);
 	z-index: 1000;
-	max-width: 320px;
+	width: 320px;
 	max-height: 80vh;
 	overflow-y: auto;
 }
-.vybor > button {
+
+/* Desain Tombol Aksi Panel Kanan */
+.panel-actions {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin-bottom: 15px;
+}
+
+.panel-actions button {
 	width: 100%;
-	background: var(--accent);
 	border: none;
 	color: white;
 	padding: 10px;
 	border-radius: 8px;
 	font-weight: 600;
 	cursor: pointer;
-	margin-bottom: 15px;
 	transition: 0.2s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
 }
-.vybor > button:hover {
-	background: var(--accent-hover);
+
+.btn-primary { background: var(--accent); }
+.btn-primary:hover { background: var(--accent-hover); }
+
+.btn-danger { background: var(--danger); }
+.btn-danger:hover { background: var(--danger-hover); }
+
+/* Gemini Credit & Translate Badge */
+.gemini-badge {
+	text-align: center;
+	font-size: 0.75rem;
+	color: var(--text-muted);
+	margin-top: 15px;
+	padding-top: 10px;
+	border-top: 1px dashed var(--border-color);
 }
+
 #vybor h4 {
 	font-size: 0.8rem;
 	color: var(--text-muted);
@@ -299,22 +313,43 @@ h1::before, h2::before {
 	padding-bottom: 5px;
 	margin-top: 15px;
 }
-#vybor ul {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 8px;
-}
-#vybor li {
-	display: inline-block;
-}
+#vybor ul { display: flex; flex-wrap: wrap; gap: 8px; }
+#vybor li { display: inline-block; }
 
-/* Custom Scrollbar for Vybor */
 .vybor::-webkit-scrollbar { width: 6px; }
 .vybor::-webkit-scrollbar-track { background: transparent; }
 .vybor::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+/* Customizing Google Translate Element */
+.goog-te-gadget {
+    font-family: 'Inter', sans-serif !important;
+    color: var(--text-muted) !important;
+}
+.goog-te-combo {
+    background-color: var(--bg-main);
+    color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 5px;
+    outline: none;
+    width: 100%;
+    margin-top: 5px;
+}
 </style>
 </head>
 <body>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+      pageLanguage: 'en', 
+      includedLanguages: 'id,en,ru', 
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+  }, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 <div class="obertka">
 	<div class="drevo">
 		<h1>Full tree</h1>
@@ -326,7 +361,7 @@ h1::before, h2::before {
 		<h2>Individual branch</h2>
 		<div class="podzagolovok">
 			<input type="text" id="mnojitel" value="1">
-			<button onClick="drevo(vetka,true)">Calculate Quantity</button>
+			<button class="btn-calc" onClick="drevo(vetka,true)">Calculate Quantity</button>
 		</div>
 		<div id="rawrRawr" class="vetv"></div>
 	</div>
@@ -341,9 +376,22 @@ h1::before, h2::before {
 </div>
 
 <div class="vybor">
-	<button onClick="var zu = vyborDiv.style.display; vyborDiv.style.display = (zu == 'none') ? 'block' : 'none';" title="Show/hide the selection window">Tract Selection (Pilih Buku)</button>
+	<div class="panel-actions">
+		<button class="btn-primary" onClick="var zu = vyborDiv.style.display; vyborDiv.style.display = (zu == 'none') ? 'block' : 'none';" title="Tampilkan/Sembunyikan buku">
+			📚 Tract Selection
+		</button>
+		<button class="btn-danger" onClick="if(confirm('Hapus semua perhitungan dan mulai ulang?')) location.reload();" title="Reset Kalkulator">
+			🔄 Reset Kalkulator
+		</button>
+	</div>
+
 	<div id="vybor" class="vetv" style="display:none">
 		</div>
+    
+	<div class="gemini-badge">
+		<div id="google_translate_element"></div>
+		<div style="margin-top: 8px;">✨ UI & Terjemahan by Gemini</div>
+	</div>
 </div>
 
 <script>
@@ -503,19 +551,12 @@ function okno_vybora(){
 }
 okno_vybora();
 
-// INI KODE YANG DIKEMBALIKAN KE VERSI ORISINAL ANDA
 function sdvig(iii){
 	iii = parseInt(iii);
 	switch(iii){
-		case 10:
-			return(' background-position:32px -32px');
-		break;
-		case 11:
-			return(' background-position:64px 0px');
-		break;
-		case 12:
-			return(' background-position:32px 0px');
-		break;
+		case 10: return(' background-position:32px -32px'); break;
+		case 11: return(' background-position:64px 0px'); break;
+		case 12: return(' background-position:32px 0px'); break;
 	}
 	var ryad = Math.floor(iii/100); 
 	var num = iii - (ryad*100);
@@ -581,10 +622,8 @@ function drevo(e,k){
 	
 	for(var z=12; z>=10; z--){
 		switch(z){
-			case 10: schet[10] = schet[12]*80;
-				break;
-			default: schet[z] = znach;
-				break;
+			case 10: schet[10] = schet[12]*80; break;
+			default: schet[z] = znach; break;
 		}
 		if(vychet[z]) schet[z]-= vychet[z]*1;
 		if(schet[z]<0) schet[z] = 0;
