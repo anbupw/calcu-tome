@@ -442,18 +442,20 @@ function okno(e, t) {
 
 function w_html(e) {
   var deystv = 'onClick="shelk(this)"';
+  // Perintah klik khusus untuk teks (menghindari error t.value pada span)
+  var spanDeystv = 'onClick="mnojInput.value=\'' + schet[e] + '\'; drevo(' + e + ', true);"';
+  
   // Menonaktifkan klik untuk material dasar (ID 10, 11, 12)
-  if (e == 12 || e == 11 || e == 10) deystv = ''; 
+  if (e == 12 || e == 11 || e == 10) {
+      deystv = ''; 
+      spanDeystv = '';
+  }
+  
   var itemName = i[e] ? i[e][4] : 'Unknown Item';
   
   return '<li>' +
-         // 1. Ikon asli (Tetap bisa diklik)
          '<button class="icon-btn" style="' + sdvig(e) + '" value="' + schet[e] + '" title="' + e + '" ' + deystv + ' onMouseOver="nazv(this);"></button>' +
-         
-         // 2. Teks Nama (Sekarang bisa diklik, memicu efek hover, dan mewarisi fungsi klik yang sama)
-         '<span class="item-name clickable-text" ' + deystv + ' value="' + schet[e] + '" title="' + e + '" onMouseOver="nazv(this);">' + itemName + '</span>' +
-         
-         // 3. Jumlah dan Tombol Subtract
+         '<span class="item-name clickable-text" ' + spanDeystv + ' title="' + e + '" onMouseOver="nazv(this);">' + itemName + '</span>' +
          '<b>×' + schet[e] + '</b>' +
          '<button class="action-btn" onClick="okno(' + e + ',this);" title="Tandai sudah punya (Subtract)">↺</button>' +
          '</li>';
@@ -461,12 +463,18 @@ function w_html(e) {
 
 function vychtennoe_html(e) {
   var deystv = 'onClick="shelk(this)"';
-  if (e == 12 || e == 11 || e == 10) deystv = '';
+  var spanDeystv = 'onClick="mnojInput.value=\'' + vychet[e] + '\'; drevo(' + e + ', true);"';
+  
+  if (e == 12 || e == 11 || e == 10) {
+      deystv = '';
+      spanDeystv = '';
+  }
+  
   var itemName = i[e] ? i[e][4] : 'Unknown Item';
 
   return '<li>' +
          '<button class="icon-btn" style="' + sdvig(e) + '" value="' + vychet[e] + '" title="' + e + '" ' + deystv + ' onMouseOver="nazv(this);"></button>' +
-         '<span class="item-name">' + itemName + '</span>' +
+         '<span class="item-name clickable-text" ' + spanDeystv + ' title="' + e + '" onMouseOver="nazv(this);">' + itemName + '</span>' +
          '<b>×' + vychet[e] + '</b>' +
          '<button class="action-btn danger" onClick="zachest(' + e + ');" title="Hapus dari daftar subtract">✕</button>' +
          '</li>';
@@ -512,7 +520,7 @@ function okno_vybora() {
       if (i[e]) {
         lis += '<li>' +
                '<button class="icon-btn" style="' + sdvig(e) + '" title="' + e + '" onClick="drevo(this.title)" onMouseOver="nazv(this);"></button>' +
-               '<span class="item-name">' + i[e][4] + '</span>' +
+               '<span class="item-name clickable-text" onClick="drevo(' + e + ')" onMouseOver="nazv({title: ' + e + '});">' + i[e][4] + '</span>' +
                '</li>';
       }
     }
