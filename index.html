@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Tome Calculator - Modernized & Fixed" />
-<title>Tome Calculator - Fixed Version</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="Tome Calculator - Modernized & Fixed" />
+		<title>Tome Calculator - Fixed Version</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght=400;700&family=Roboto:wght=400;700&display=swap" rel="stylesheet">
 <style>
 /* --- RESET CSS & GLOBAL --- */
 *, *::before, *::after { box-sizing: border-box; }
@@ -17,870 +16,544 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 a { text-decoration: none; color: inherit; transition: color 0.2s; }
 
 /* --- TEMA WARNA & TIPOGRAFI MODERN --- */
-:root {
-  --bg-color: #11111b; 
-  --card-bg-color: #1e1e2e; 
-  --list-item-bg: #313244; 
-  --text-color: #cdd6f4; 
-  --text-muted: #a6adc8; 
-  --accent-color: #cba6f7; 
-  --accent-hover: #b4befe; 
-  --danger-color: #f38ba8; 
-  --button-color: #89b4fa; 
-  --font-family: 'Roboto', sans-serif;
-  --font-mono: 'Roboto Mono', monospace;
-  --border-radius-lg: 16px;
+:root { 
+  --bg-color: #11111b;  
+  --card-bg-color: #1e1e2e;  
+  --list-item-bg: #313244;  
+  --text-color: #cdd6f4;  
+  --text-muted: #a6adc8;  
+  --accent-color: #cba6f7;  
+  --accent-hover: #b4befe;  
+  --danger-color: #f38ba8;  
+  --button-color: #89b4fa;  
+  --font-family: 'Roboto', sans-serif; 
+  --font-mono: 'Roboto Mono', monospace; 
+  --border-radius-lg: 16px; 
   --border-radius-md: 8px;
 }
 
-body {
-  font-family: var(--font-family);
-  font-size: 15px;
-  font-weight: 400;
-  color: var(--text-color);
-  background-color: var(--bg-color);
+[data-theme="light"] {
+  --bg-color: #f8fafc;
+  --card-bg-color: #ffffff;
+  --list-item-bg: #f1f5f9;
+  --text-color: #0f172a;
+  --text-muted: #64748b;
+  --accent-color: #7c3aed;
+  --accent-hover: #6d28d9;
+  --danger-color: #ef4444;
+  --button-color: #2563eb;
+}
+
+body { 
+  font-family: var(--font-family); 
+  font-size: 15px; 
+  font-weight: 400; 
+  color: var(--text-color); 
+  background-color: var(--bg-color); 
   line-height: 1.5;
 }
 
-.page-wrapper {
-  max-width: 1400px;
-  margin: 0 auto;
+.page-wrapper { 
+  max-width: 1400px; 
+  margin: 0 auto; 
   padding: 40px 20px;
 }
 
-/* --- HEADER MODERN STYLE --- */
-.header-wrapper {
-  background-color: var(--card-bg-color);
+/* --- HEADER CALCULATOR (Gaya seperti di gambar) --- */
+.header-wrapper { 
+  background-color: var(--card-bg-color); 
   padding: 25px 30px 0 30px; 
-  border-radius: var(--border-radius-lg);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  margin-bottom: 30px;
+  border-radius: var(--border-radius-lg); 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
+  margin-bottom: 30px; 
   overflow: hidden; 
 }
 
-.header-main {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 25px;
+.header-main { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: flex-start; 
+  margin-bottom: 25px; 
   width: 100%;
 }
 
-.title-group {
-  display: flex;
-  align-items: center;
+.title-group { 
+  display: flex; 
+  align-items: center; 
   gap: 15px;
 }
 
-.title-group h1 {
-  font-size: 32px;
-  margin: 0;
+.title-group h1 { 
+  font-size: 32px; 
+  margin: 0; 
   color: var(--text-color);
 }
 
-.title-group .highlight {
-  color: var(--accent-color, #cba6f7);
+.title-group .highlight { 
+  color: var(--accent-color);
 }
 
-.brand-section p {
-  color: var(--text-muted);
-  margin: 5px 0 0 47px; /* Sejajar dengan huruf "T", melewati ikon */
-  font-size: 15px;
-}
-
-.controls-section {
-  display: flex;
-  flex-direction: column;
+.controls-section { 
+  display: flex; 
+  flex-direction: column; 
   align-items: flex-end; 
   gap: 12px;
 }
 
-.action-buttons {
-  display: flex;
+.action-buttons { 
+  display: flex; 
   gap: 10px;
 }
 
-.action-buttons button {
-  background-color: transparent;
-  color: var(--text-color);
-  border: 1px solid #45475a;
+.action-buttons button { 
+  background-color: transparent; 
+  color: var(--text-color); 
+  border: 1px solid #45475a; 
   border-radius: 20px; 
-  padding: 8px 16px;
-  font-family: var(--font-family);
-  font-weight: 600;
-  cursor: pointer;
+  padding: 8px 16px; 
+  font-family: var(--font-family); 
+  font-weight: 600; 
+  cursor: pointer; 
   transition: all 0.2s;
 }
 
-.action-buttons button:hover {
-  background-color: #313244;
+.action-buttons button:hover { 
+  background-color: #313244; 
 }
 
-.action-buttons .reset-btn:hover {
-  background-color: var(--danger-color, #f38ba8);
-  color: #11111b;
-  border-color: var(--danger-color, #f38ba8);
+.action-buttons .reset-btn:hover { 
+  background-color: var(--danger-color); 
+  color: #11111b; 
+  border-color: var(--danger-color); 
 }
 
-.meta-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background-color: #181825;
-  padding: 6px 14px;
-  border-radius: 20px;
+.meta-info { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  background-color: #181825; 
+  padding: 6px 14px; 
+  border-radius: 20px; 
   border: 1px solid #313244;
 }
 
-.version-badge {
-  color: #89b4fa;
-  font-weight: bold;
+.version-badge { 
+  color: #89b4fa; 
+  font-weight: bold; 
   font-size: 12px;
 }
 
-.social-icon {
-  text-decoration: none;
+.social-icon { 
+  text-decoration: none; 
   font-size: 18px;
 }
 
-.dev-credits {
-  font-size: 13px;
+.dev-credits { 
+  font-size: 13px; 
   color: var(--text-muted);
 }
 
-/* --- TABS STYLE --- */
-.nav-tabs {
-  display: flex;
-  gap: 25px;
-  border-bottom: 1px solid #313244;
+/* --- TABS SYSTEM --- */
+.nav-tabs { 
+  display: flex; 
+  gap: 25px; 
+  border-bottom: 1px solid #313244; 
 }
 
-.tab-btn {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  font-size: 16px;
-  font-family: var(--font-family);
-  font-weight: 600;
-  padding: 12px 5px;
-  cursor: pointer;
-  position: relative;
+.tab-btn { 
+  background: none; 
+  border: none; 
+  color: var(--text-muted); 
+  font-size: 16px; 
+  font-family: var(--font-family); 
+  font-weight: 600; 
+  padding: 12px 5px; 
+  cursor: pointer; 
+  position: relative; 
   transition: color 0.2s;
 }
 
-.tab-btn:hover {
-  color: var(--text-color);
+.tab-btn:hover { 
+  color: var(--text-color); 
 }
 
-.tab-btn.active {
-  color: var(--accent-color, #cba6f7);
+.tab-btn.active { 
+  color: var(--accent-color); 
 }
 
-.tab-btn.active::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background-color: var(--accent-color, #cba6f7);
+.tab-btn.active::after { 
+  content: ''; 
+  position: absolute; 
+  bottom: -1px; 
+  left: 0; 
+  width: 100%; 
+  height: 3px; 
+  background-color: var(--accent-color); 
   border-radius: 3px 3px 0 0;
 }
 
-/* Penyesuaian Light Mode */
-[data-theme="light"] .header-wrapper {
-  border: 1px solid #cbd5e1;
-}
-[data-theme="light"] .nav-tabs {
-  border-bottom: 1px solid #cbd5e1;
-}
-[data-theme="light"] .meta-info {
-  background-color: #f1f5f9;
-  border-color: #cbd5e1;
-}
+/* --- KONTEN GRID UTAMA --- */
+.layout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; }
+.card-panel { background-color: var(--card-bg-color); border-radius: var(--border-radius-lg); padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; flex-direction: column; gap: 20px; height: 100%; }
+.card-title-group { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #313244; padding-bottom: 15px; margin-bottom: 5px; }
+[data-theme="light"] .card-title-group { border-bottom: 1px solid #e2e8f0; }
+.card-title-group h2 { font-size: 20px; font-weight: 700; margin: 0; color: var(--text-color); }
 
-/* RESPONSIVE HP */
+/* --- INPUTS & CONTROLS --- */
+.input-control-row { display: flex; align-items: center; gap: 15px; background-color: var(--list-item-bg); padding: 15px 20px; border-radius: var(--border-radius-md); }
+.input-control-row label { font-weight: 700; color: var(--text-muted); white-space: nowrap; }
+.input-number-field { background-color: var(--bg-color); border: 1px solid #45475a; color: var(--text-color); font-family: var(--font-mono); font-size: 16px; font-weight: 700; padding: 8px 12px; border-radius: 6px; width: 80px; text-align: center; }
+[data-theme="light"] .input-number-field { border: 1px solid #cbd5e1; }
+.input-number-field:focus { outline: none; border-color: var(--accent-color); }
+.submit-btn { background-color: var(--button-color); color: #11111b; border: none; font-weight: 700; padding: 10px 24px; border-radius: var(--border-radius-md); cursor: pointer; font-size: 15px; transition: opacity 0.2s; white-space: nowrap; }
+.submit-btn:hover { opacity: 0.9; }
+
+/* --- LISTS & TREE STRUCTURE --- */
+.scroll-box { max-height: 550px; overflow-y: auto; padding-right: 5px; }
+.scroll-box::-webkit-scrollbar { width: 6px; }
+.scroll-box::-webkit-scrollbar-track { background: transparent; }
+.scroll-box::-webkit-scrollbar-thumb { background: #45475a; border-radius: 3px; }
+[data-theme="light"] .scroll-box::-webkit-scrollbar-thumb { background: #cbd5e1; }
+
+.row-level { margin-bottom: 25px; }
+.row-level:last-child { margin-bottom: 0; }
+.row-level h4 { margin: 0 0 12px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color); font-weight: 700; }
+
+.grid-mode, .scroll-box ul { display: flex; flex-direction: column; gap: 8px; }
+.grid-mode li, .scroll-box ul li { display: flex; align-items: center; background-color: var(--list-item-bg); padding: 10px 15px; border-radius: var(--border-radius-md); gap: 12px; }
+
+.icon-btn { width: 32px; height: 32px; background-image: url('https://raw.githubusercontent.com/anbupw/calcu-tome/main/images/item_icons.png'); background-repeat: no-repeat; border: none; background-color: transparent; cursor: pointer; flex-shrink: 0; image-rendering: pixelated; }
+.item-name { flex-grow: 1; font-weight: 400; color: var(--text-color); }
+.clickable-text { cursor: pointer; transition: color 0.1s; }
+.clickable-text:hover { color: var(--accent-hover); text-decoration: underline; }
+.grid-mode b, .scroll-box ul b { font-family: var(--font-mono); font-size: 15px; color: var(--text-color); min-width: 45px; text-align: right; }
+
+.action-btn { background-color: #45475a; color: var(--text-color); border: none; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; transition: background-color 0.2s; }
+.action-btn:hover { background-color: #585b70; }
+.action-btn.danger { background-color: rgba(243, 139, 168, 0.15); color: var(--danger-color); }
+.action-btn.danger:hover { background-color: var(--danger-color); color: #11111b; }
+
+/* --- DATABASE VIEW --- */
+.db-layout { display: flex; flex-direction: column; gap: 20px; }
+#nazv { font-size: 16px; font-weight: 700; color: var(--accent-color); background-color: var(--list-item-bg); padding: 15px; border-radius: var(--border-radius-md); text-align: center; border: 1px dashed #45475a; min-height: 54px; display: flex; align-items: center; justify-content: center; }
+[data-theme="light"] #nazv { border-color: #cbd5e1; }
+
+/* --- SELEKSI UTAMA --- */
+.dropdown-container { display: flex; flex-direction: column; gap: 8px; }
+.dropdown-container label { font-weight: 700; color: var(--text-muted); font-size: 14px; }
+.select-menu { width: 100%; background-color: var(--list-item-bg); border: 1px solid #45475a; color: var(--text-color); padding: 12px 16px; border-radius: var(--border-radius-md); font-size: 15px; font-weight: 700; font-family: var(--font-family); cursor: pointer; outline: none; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23a6adc8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; background-size: 16px; }
+[data-theme="light"] .select-menu { border-color: #cbd5e1; }
+.select-menu:focus { border-color: var(--accent-color); }
+
+/* --- SUBTRACT POPUP WINDOW --- */
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+.modal-box { background-color: var(--card-bg-color); border-radius: var(--border-radius-lg); padding: 30px; max-width: 420px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); border: 1px solid #313244; display: flex; flex-direction: column; gap: 20px; }
+[data-theme="light"] .modal-box { border-color: #cbd5e1; }
+.modal-title-row { display: flex; align-items: center; gap: 12px; }
+.modal-title-row h3 { margin: 0; font-size: 18px; font-weight: 700; color: var(--text-color); }
+.modal-input-group { display: flex; flex-direction: column; gap: 8px; }
+.modal-input-group label { font-size: 13px; color: var(--text-muted); font-weight: 700; }
+.modal-input-group input { background-color: var(--bg-color); border: 1px solid #45475a; color: var(--text-color); padding: 10px 14px; border-radius: var(--border-radius-md); font-family: var(--font-mono); font-size: 16px; font-weight: 700; }
+[data-theme="light"] .modal-input-group input { border-color: #cbd5e1; }
+.modal-input-group input:focus { outline: none; border-color: var(--accent-color); }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px; }
+.modal-btn { border: none; padding: 10px 18px; border-radius: var(--border-radius-md); font-weight: 700; font-size: 14px; cursor: pointer; }
+.modal-btn.primary { background-color: var(--accent-color); color: #11111b; }
+.modal-btn.secondary { background-color: #45475a; color: var(--text-color); }
+.modal-btn.secondary:hover { background-color: #585b70; }
+
+/* --- LIGHT MODE ADJUSTMENT FOR HEADER --- */
+[data-theme="light"] .header-wrapper { border: 1px solid #cbd5e1; }
+[data-theme="light"] .nav-tabs { border-bottom: 1px solid #cbd5e1; }
+[data-theme="light"] .meta-info { background-color: #f1f5f9; border-color: #cbd5e1; }
+
+/* --- RESPONSIVE LAYOUT --- */
+@media screen and (max-width: 1100px) { .layout-grid { grid-template-columns: 1fr; } }
 @media screen and (max-width: 768px) {
+  .page-wrapper { padding: 20px 12px; }
+  .header-wrapper { padding: 20px 20px 0 20px; }
   .header-main { flex-direction: column; gap: 20px; }
   .controls-section { align-items: flex-start; width: 100%; }
   .nav-tabs { overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
   .nav-tabs::-webkit-scrollbar { display: none; }
-}
-
-/* Penyesuaian Light Mode untuk Kotak Header dan Tab */
-[data-theme="light"] .header-wrapper {
-  border: 1px solid #cbd5e1;
-}
-[data-theme="light"] .nav-tabs {
-  border-bottom: 1px solid #cbd5e1;
-}
-[data-theme="light"] .meta-info {
-  background-color: #f1f5f9;
-  border-color: #cbd5e1;
-}
-
-/* --- PERBAIKAN RESPONSIVE (SMARTPHONE) --- */
-@media screen and (max-width: 768px) {
-  .header-main {
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .controls-section {
-    align-items: flex-start; /* Berubah jadi rata kiri di HP */
-    width: 100%;
-  }
-  
-  .nav-tabs {
-    overflow-x: auto; /* Memungkinkan tab digeser ke samping jika layarnya kecil */
-    white-space: nowrap;
-    padding-bottom: 2px;
-  }
-  
-  /* Sembunyikan scrollbar pada tab HP agar bersih */
-  .nav-tabs::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.brand-section {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.brand-icon { font-size: 32px; color: var(--accent-color); }
-.brand-info h1 { font-family: var(--font-mono); font-size: 24px; font-weight: 700; margin: 0; }
-.brand-info p { color: var(--text-muted); margin: 0; font-size: 13px; }
-
-/* --- KARTU KONTEN --- */
-.kalkulator-wrapper {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
-}
-
-.drevo {
-  background-color: var(--card-bg-color);
-  border-radius: var(--border-radius-lg);
-  padding: 25px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #45475a;
-}
-
-.card-title-group h1, .card-title-group h2 {
-  font-size: 20px;
-  font-weight: 700;
-  margin: 0;
-  color: var(--text-color);
-}
-
-/* Status Item yang di-hover */
-#nazvaniye {
-  font-size: 14px;
-  color: var(--accent-color);
-  font-weight: bold;
-}
-#nazvaniye a { color: var(--accent-color); text-decoration: underline; }
-
-/* --- STYLING IKON JS (KUNCI PERBAIKAN) --- */
-.vetv ul {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.vetv .row-level {
-  margin-bottom: 20px;
-}
-.vetv .row-level h4 {
-  font-size: 13px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  margin: 0 0 10px 5px;
-}
-
-.vetv li {
-  display: flex;
-  align-items: center;
-  background-color: var(--list-item-bg);
-  padding: 8px 15px;
-  border-radius: var(--border-radius-md);
-}
-
-.icon-btn {
-  background-image: url('znachki.png'); 
-  background-repeat: repeat; /* Kunci perbaikannya ada di sini */
-  width: 32px;
-  height: 32px;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  margin-right: 15px;
-  flex-shrink: 0;
-  transition: transform 0.1s;
-}
-.icon-btn:hover { transform: scale(1.1); }
-
-.item-name {
-  flex-grow: 1;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.vetv li b {
-  font-family: var(--font-mono);
-  font-size: 16px;
-  color: var(--button-color);
-  margin-right: 15px;
-}
-
-/* Tombol aksi (kurangi/hapus) */
-.action-btn {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: 18px;
-  padding: 5px;
-  transition: color 0.2s;
-}
-.action-btn:hover { color: var(--accent-color); }
-.action-btn.danger:hover { color: var(--danger-color); }
-
-/* --- KONTROL INPUT --- */
-.podzagolovok { display: flex; align-items: center; gap: 10px; }
-.podzagolovok input[type="text"] {
-  background-color: #11111b;
-  color: var(--text-color);
-  border: 1px solid #45475a;
-  border-radius: var(--border-radius-md);
-  padding: 8px;
-  font-family: var(--font-mono);
-  text-align: center;
-  width: 60px;
-}
-.podzagolovok button {
-  background-color: var(--button-color);
-  color: #11111b;
-  border: none;
-  border-radius: var(--border-radius-md);
-  padding: 8px 15px;
-  font-weight: 700;
-  cursor: pointer;
-}
-.podzagolovok button:hover { background-color: var(--accent-hover); }
-
-/* Grid khusus untuk Individual Branch dan Tome Selection */
-#rawrRawr ul.grid-mode, #vybor ul.grid-mode {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 10px;
-}
-#vybor ul.grid-mode li { justify-content: flex-start; }
-
-/* Sembunyikan div */
-#vychet { display: none; margin-bottom: 30px; }
-
-@media screen and (max-width: 768px) {
-  .kalkulator-wrapper { grid-template-columns: 1fr; }
-}
-
-/* --- TEMA TERANG (LIGHT MODE) --- */
-[data-theme="light"] {
-  --bg-color: #f4f5f7; 
-  --card-bg-color: #ffffff; 
-  --list-item-bg: #e2e8f0; 
-  --text-color: #1e293b; 
-  --text-muted: #64748b; 
-  --accent-color: #8b5cf6; 
-  --accent-hover: #a78bfa; 
-  --button-color: #3b82f6; 
-}
-
-/* Membuat teks nama item menjadi interaktif */
-.clickable-text {
-  cursor: pointer;
-  transition: color 0.2s;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.clickable-text:hover {
-  color: var(--accent-hover, #a78bfa); /* Berubah warna saat di-hover */
-  text-decoration: underline;
-}
-
-/* Efek hover khusus untuk tombol Reset */
-.action-buttons .reset-btn:hover {
-  background-color: var(--danger-color, #f38ba8);
-  color: #11111b;
-  border-color: var(--danger-color, #f38ba8);
-}
-
-/* Memastikan border menyesuaikan tema */
-[data-theme="light"] .card-header,
-[data-theme="light"] .podzagolovok input[type="text"] {
-  border-color: #cbd5e1;
-}
-[data-theme="light"] .podzagolovok input[type="text"] {
-  background-color: #ffffff;
-}
-
-/* RESPONSIVE HP */
-@media screen and (max-width: 768px) {
-  .header-main { flex-direction: column; gap: 20px; }
-  .controls-section { align-items: flex-start; width: 100%; }
-  .nav-tabs { overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
-  .nav-tabs::-webkit-scrollbar { display: none; }
-}
-
-/* --- STYLING TOMBOL HEADER --- */
-.header-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.header-actions button {
-  background-color: var(--card-bg-color);
-  color: var(--text-color);
-  border: 1px solid #45475a;
-  border-radius: var(--border-radius-md);
-  padding: 8px 12px;
-  font-family: var(--font-family);
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-[data-theme="light"] .header-actions button {
-  border-color: #cbd5e1;
-}
-
-.header-actions button:hover {
-  background-color: var(--list-item-bg);
-  transform: translateY(-2px);
-}
-
-/* --- 1. KOMPRESI VISUAL (MEMBUAT DAFTAR LEBIH PADAT) --- */
-/* Mengurangi jarak atas-bawah pada setiap baris item agar tidak memakan tempat */
-.podzagolovok div {
-  margin-top: 2px !important;
-  margin-bottom: 2px !important;
-  padding: 2px 0;
-}
-
-/* Memperkecil sedikit ukuran font di dalam daftar jika dibuka di HP */
-.podzagolovok {
-  font-size: 14px;
-}
-
-/* --- 2. SISTEM SCROLL INTERNAL UNTUK KARTU --- */
-/* (Cari class yang membungkus isi kartu Anda, biasanya .card-body atau .card-content) */
-/* Jika class Anda berbeda, terapkan max-height dan overflow-y ini ke wadah konten kartu */
-.card-content {
-  max-height: 55vh; /* Maksimal tinggi 55% dari layar, sisanya akan di-scroll */
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-right: 5px; /* Ruang bernapas untuk scrollbar */
-}
-
-/* Mempercantik tampilan Scrollbar agar elegan */
-.card-content::-webkit-scrollbar {
-  width: 6px;
-}
-.card-content::-webkit-scrollbar-track {
-  background: var(--card-bg-color); 
-}
-.card-content::-webkit-scrollbar-thumb {
-  background: #64748b; 
-  border-radius: 10px;
-}
-
-/* --- 3. OPTIMASI SMARTPHONE (RESPONSIVE) --- */
-@media screen and (max-width: 768px) {
-  /* Pastikan kontainer utama berbaris ke bawah (kolom) di HP */
-  .main-container { 
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Di HP, tinggi kartu dikurangi agar tidak menutupi seluruh layar */
-  .card-content {
-    max-height: 350px; 
-  }
+  .card-panel { padding: 20px; }
 }
 </style>
 </head>
 <body>
 
 <div class="page-wrapper">
-    <div class="header-wrapper">
-	  <div class="header-main">
-		<div class="brand-section">
-		  <div class="title-group">
-			<span class="brand-icon" style="font-size: 28px;">⚔️</span>
-			<h1 class="brand-title">Tome <span class="highlight">Calculator</span></h1>
-		  </div>
-		  <p id="desc-text" class="text-muted" style="margin: 5px 0 0 45px;">Hitung kebutuhan bahan craft Tome.</p>
-		</div>
-		
-		<div class="controls-section">
-		  <div class="action-buttons">
-			<button id="themeToggle" onClick="toggleTheme()">☀️ Light Mode</button>
-			<button id="langToggle" onClick="toggleLang()">Bahasa</button>
-			<button class="reset-btn" onClick="location.reload()" title="Reset semua kalkulasi">🔄 Reset</button>
-		  </div>
-		  <div class="meta-info">
-			<span class="version-badge">v 1.1.0</span>
-			<a href="#" class="social-icon" title="GitHub">🐙</a>
-			<a href="#" class="social-icon" title="Discord">💬</a>
-		  </div>
-		  <div class="dev-credits">
-			Developed by Zull • zulloxford@gmail.com
-		  </div>
-		</div>
-	  </div>
-
-	  <div class="nav-tabs">
-		<button class="tab-btn active">Tome Calcu</button>
-		<button class="tab-btn">⚙️ Catview</button>
-		<button class="tab-btn">🔮 Rune Farming</button>
-	  </div>
-	</div>
-  </header>
-
-  <main class="kalkulator-wrapper">
-    <div class="drevo">
-      <div class="card-header">
-        <div class="card-title-group"><h2>Full Material Tree</h2></div>
-        <div id="nazvaniye">Pilih buku...</div>
+  
+  <div class="header-wrapper">
+    <div class="header-main">
+      <div class="brand-section">
+        <div class="title-group">
+          <span class="brand-icon" style="font-size: 28px;">⚔️</span>
+          <h1 class="brand-title">Tome <span class="highlight">Calculator</span></h1>
+        </div>
+        <p id="desc-text" class="text-muted" style="margin: 5px 0 0 45px;">Hitung kebutuhan bahan craft Tome.</p>
       </div>
-      <div id="rawr" class="vetv"></div>
-    </div>
-
-    <div class="drevo">
-      <div class="card-header">
-        <div class="card-title-group"><h2>Individual Branch</h2></div>
-        <div class="podzagolovok">
-          <input type="text" id="mnojitel" value="1" title="Multiplier">
-          <button onClick="drevo(vetka,true)">Kalkulasi</button>
+      
+      <div class="controls-section">
+        <div class="action-buttons">
+          <button id="themeToggle" onClick="toggleTheme()">☀️ Light Mode</button>
+          <button id="langToggle" onClick="toggleLang()">Bahasa</button>
+          <button class="reset-btn" onClick="resetCalculator()" title="Reset semua kalkulasi">🔄 Reset</button>
+        </div>
+        <div class="meta-info">
+          <span class="version-badge">v 1.1.0</span>
+          <a href="#" class="social-icon" title="GitHub">🐙</a>
+          <a href="#" class="social-icon" title="Discord">💬</a>
+        </div>
+        <div class="dev-credits">
+          Developed by Zull • zulloxford@gmail.com
         </div>
       </div>
-      <div id="rawrRawr" class="vetv"></div>
+    </div>
+
+    <div class="nav-tabs">
+      <button class="tab-btn active">Tome Calcu</button>
+      <button class="tab-btn">⚙️ Catview</button>
+      <button class="tab-btn">🔮 Rune Farming</button>
+    </div>
+  </div>
+
+  <main class="layout-grid">
+    
+    <section class="card-panel">
+      <div class="card-title-group">
+        <h2>Full Material Tree</h2>
+      </div>
+      <div id="rawr" class="scroll-box">
+        </div>
+    </section>
+
+    <div style="display: flex; flex-direction: column; gap: 30px;">
+      
+      <section class="card-panel">
+        <div class="card-title-group">
+          <h2>Individual Branch</h2>
+        </div>
+        <div class="input-control-row">
+          <label for="mnojInput">Jumlah Craft:</label>
+          <input type="number" id="mnojInput" class="input-number-field" value="1" min="1" max="999" onInput="drevo(vetka, true)">
+          <button class="submit-btn" style="display:none;">Kalkulasi</button>
+        </div>
+        <div id="rawrRawr" class="scroll-box" style="max-height: 260px;">
+          </div>
+      </section>
+
+      <section id="vychet" class="card-panel" style="display: none;">
+        <div class="card-title-group">
+          <h2>Sudah Dimiliki (Subtracted)</h2>
+        </div>
+        <div id="vychetDiv" class="scroll-box" style="max-height: 260px;">
+          </div>
+      </section>
+
+      <section class="card-panel">
+        <div class="card-title-group">
+          <h2>Tome Selection Database</h2>
+        </div>
+        <div class="db-layout">
+          <div class="dropdown-container">
+            <label for="bazaTome">Pilih Formula Berdasarkan Buku Target:</label>
+            <select id="bazaTome" class="select-menu" onChange="drevo(this.value); mnojInput.value=1; drevo(this.value, true);">
+              <option value="616">Level 6 - Pan Gu Creator (Buku Utama)</option>
+            </select>
+          </div>
+          <div id="nazv">Pilih buku...</div>
+          <div id="vybor" class="scroll-box" style="max-height: 260px;">
+            </div>
+        </div>
+      </section>
+
     </div>
   </main>
+</div>
 
-  <div id="vychet" class="drevo">
-    <div class="card-header">
-      <div class="card-title-group"><h2>Sudah Dimiliki (Subtracted)</h2></div>
+<div id="okno" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-title-row">
+      <div id="okno_icon" class="icon-btn"></div>
+      <h3 id="okno_nazv">Nama Item</h3>
     </div>
-    <div id="rawrRawrRawr" class="vetv"></div>
-  </div>
-
-  <div class="drevo">
-    <div class="card-header">
-      <div class="card-title-group"><h2>Tome Selection Database</h2></div>
+    <div class="modal-input-group">
+      <label for="okno_input">Masukkan Jumlah Item yang Sudah Anda Miliki:</label>
+      <input type="number" id="okno_input" value="1" min="1">
     </div>
-    <div id="vybor" class="vetv"></div>
+    <div class="modal-actions">
+      <button class="modal-btn secondary" onClick="okno_close()">Batal</button>
+      <button id="okno_ok" class="modal-btn primary">Kurangi Kebutuhan</button>
+    </div>
   </div>
-
 </div>
 
 <script>
-// --- VARIABEL & DATABASE ASLI (TIDAK DIUBAH) ---
-var vetka; var derevo; var rawr; var mnoj = 1; var mnojInput = document.getElementById('mnojitel'); var nazvDiv = document.getElementById('nazvaniye'); var vychetDiv = document.getElementById('rawrRawrRawr'); var vychetContainer = document.getElementById('vychet'); var vyborDiv = document.getElementById('vybor');
+// --- BASIS DATA FORMULA TOME (DATABASE) ---
+var rawr = false; var vetka = 616; var derevo = 616; var mnoj = 1; 
+var mnojInput = document.getElementById('mnojInput'); var selectElement = document.getElementById('bazaTome'); 
+var nazvDiv = document.getElementById('nazv'); var vychetDiv = document.getElementById('vychetDiv'); 
+var vychetContainer = document.getElementById('vychet'); var vyborDiv = document.getElementById('vybor');
 var schet; var str=''; var i = []; var vychet = []; var vychetCopy = [];
 
-i[601] = [501, 502, 509, 17615, 'The Calm of Ice']; i[602] = [502, 503, 505, 17622, 'The Khatru']; i[603] = [504, 503, 508, 17628, 'A Carmine Tear']; i[604] = [503, 508, 501, 17630, 'The Fruit of Intense Labor']; i[605] = [505, 512, 509, 17634, 'Tomorrows Phoenix']; i[606] = [505, 506, 507, 17636, 'Riding the Scree']; i[607] = [513, 514, 507, 17642, 'Turning the Tide']; i[608] = [508, 506, 514, 17649, 'Existential Woe']; i[609] = [510, 501, 505, 17655, 'Book of Fragrances']; i[610] = [510, 506, 501, 17657, 'Bouquet of Regrets']; i[611] = [511, 509, 505, 17661, 'The Union']; i[612] = [511, 513, 503, 17663, 'Oblivious Enlightenment']; i[613] = [513, 507, 514, 17669, 'As the Universe Fades']; i[614] = [514, 512, 513, 17676, 'The Concubines Laugh']; i[615] = [515, 501, 507, 17679, 'The Academy of the East']; i[616] = [516, 515, 514, 17683, 'Pan Gu Creator']; i[501] = [401, 408, 405, 17618, 'A Heart like Still Water']; i[502] = [409, 405, 403, 17621, 'The Tsunamis of Yore']; i[503] = [404, 408, 401, 17624, 'Laughing Mad']; i[504] = [408, 404, 401, 17627, 'The Book of Congratulations']; i[505] = [403, 409, 404, 17633, 'The Wrath of Heaven']; i[506] = [409, 403, 402, 17639, 'A Strange Kindness']; i[507] = [402, 404, 409, 17645, 'Flesh of the Lamia']; i[508] = [404, 408, 402, 17648, 'Everything is Emptiness']; i[509] = [403, 401, 405, 17651, 'The Oasis Remembered']; i[510] = [401, 405, 407, 17654, 'The Heavenly Scent']; i[511] = [403, 409, 404, 17660, 'Debt and Tombstones']; i[512] = [409, 403, 404, 17666, 'Endless Waves']; i[513] = [408, 402, 404, 17672, 'Parting Grief']; i[514] = [408, 402, 404, 17675, 'Rouge and Red Lips']; i[515] = [406, 407, 401, 17678, 'Gang of Hooligans']; i[516] = [406, 407, 401, 17682, 'The Voidlands']; i[401] = [303, 307, 304, 17602, 'Burning Desire']; i[402] = [304, 301, 305, 17603, 'Tome of Predestination']; i[403] = [302, 305, 303, 17604, 'The Roses Thorn']; i[404] = [306, 307, 301, 17605, 'Letters of Social Unrest']; i[405] = [303, 307, 306, 17606, 'The Appetites of Spring']; i[406] = [308, 205, 207, 17610, 'The Rivers Edge']; i[407] = [309, 302, 306, 17614, 'The Weak Stream of Many Miles']; i[408] = [301, 304, 302, 17600, 'Battle Tactics']; i[409] = [302, 305, 303, 17601, 'A Bewitching Proposal']; i[301] = [201, 206, 203, 17593, 'Eat Drink and be Merry']; i[302] = [202, 205, 206, 17594, 'Sunset Tales']; i[303] = [207, 203, 202, 17595, 'Adventures and Mishaps']; i[304] = [204, 201, 203, 17596, 'The Sunny Pass']; i[305] = [205, 202, 201, 17597, 'Tales of Beauty']; i[306] = [206, 203, 201, 17598, 'The Bards Wanderlust']; i[307] = [207, 205, 204, 17599, 'A Poets Musings']; i[308] = [208, 202, 204, 17609, 'Decaying Tome']; i[309] = [209, 203, 202, 17613, 'Scene of Carnage']; i[201] = [101, 104, 106, 17586, 'Tome of Iron Will']; i[202] = [102, 105, 106, 17587, 'Misty Peach Blossoms']; i[203] = [107, 103, 102, 17588, 'Tale of the Red Lotus']; i[204] = [101, 104, 103, 17589, 'Tale of the Dolt']; i[205] = [102, 105, 107, 17590, 'Tale of the Peach Fan']; i[206] = [106, 101, 103, 17591, 'Story of the Blockade']; i[207] = [107, 103, 104, 17592, 'Mediations Flame']; i[208] = [108, 103, 101, 17608, 'Guide to Wolf Hunting']; i[209] = [109, 103, 107, 17612, 'Fire Dance']; i[101] = [11, 12, 0, 17579, 'Underestimated Resolve']; i[102] = [11, 12, 0, 17580, 'Soaring Heart']; i[103] = [11, 12, 0, 17581, 'Retributions Flame']; i[104] = [11, 12, 0, 17582, 'Tome of the River Spirits']; i[105] = [11, 12, 0, 17583, 'Flankers Tome']; i[106] = [11, 12, 0, 17584, 'Tome of Hyperbolic Boasts']; i[107] = [11, 12, 0, 17585, 'Tome of Grace']; i[108] = [11, 12, 0, 17607, 'A Flowerless Plant']; i[109] = [11, 12, 0, 17611, 'Eternitys Moon']; i[11] = [0, 0, 0, 17810, 'Mystical Tome Fragment']; i[12] = [10, 0, 0, 18185, 'Mystical Tome Page']; i[10] = [0, 0, 0, 24721, 'Perfect·Token of Luck'];
+i[601] = [501, 502, 509, 17615, 'The Calm of Ice']; i[602] = [502, 503, 505, 17622, 'The Khatru']; i[603] = [504, 503, 508, 17628, 'A Carmine Tear']; i[604] = [503, 508, 501, 17630, 'The Fruit of Intense Labor']; i[605] = [505, 512, 509, 17634, 'Tomorrows Phoenix']; i[606] = [505, 506, 507, 17636, 'Riding the Scree']; i[607] = [513, 514, 507, 17642, 'Turning the Tide']; i[608] = [508, 506, 514, 17649, 'Existential Woe']; i[609] = [510, 501, 505, 17655, 'Book of Fragrances']; i[610] = [510, 506, 501, 17657, 'Bouquet of Regrets']; i[611] = [511, 509, 505, 17661, 'The Union']; i[612] = [511, 513, 503, 17663, 'Oblivious Enlightenment']; i[613] = [513, 507, 514, 17669, 'As the Universe Fades']; i[614] = [514, 512, 513, 17676, 'The Concubines Laugh']; i[615] = [515, 501, 507, 17679, 'The Academy of the East']; i[616] = [516, 515, 514, 17683, 'Pan Gu Creator']; 
+i[501] = [401, 408, 405, 17618, 'A Heart like Still Water']; i[502] = [409, 405, 403, 17621, 'The Tsunamis of Yore']; i[503] = [404, 408, 401, 17624, 'Laughing Mad']; i[504] = [408, 404, 401, 17627, 'The Book of Congratulations']; i[505] = [403, 409, 404, 17633, 'The Wrath of Heaven']; i[506] = [409, 403, 402, 17639, 'A Strange Kindness']; i[507] = [402, 404, 409, 17645, 'Flesh of the Lamia']; i[508] = [404, 408, 402, 17648, 'Everything is Emptiness']; i[509] = [403, 401, 405, 17651, 'The Oasis Remembered']; i[510] = [401, 405, 407, 17654, 'The Heavenly Scent']; i[511] = [403, 409, 404, 17660, 'Debt and Tombstones']; i[512] = [409, 403, 404, 17666, 'Endless Waves']; i[513] = [408, 402, 404, 17672, 'Parting Grief']; i[514] = [408, 402, 404, 17675, 'Rouge and Red Lips']; i[515] = [406, 407, 401, 17678, 'Gang of Hooligans']; i[516] = [406, 407, 401, 17682, 'The Voidlands']; 
+i[401] = [303, 307, 304, 17602, 'Burning Desire']; i[402] = [304, 301, 305, 17603, 'Tome of Predestination']; i[403] = [302, 305, 303, 17604, 'The Roses Thorn']; i[404] = [306, 307, 301, 17605, 'Letters of Social Unrest']; i[405] = [303, 307, 306, 17606, 'The Appetites of Spring']; i[406] = [308, 205, 207, 17610, 'The Rivers Edge']; i[407] = [309, 302, 306, 17614, 'The Weak Stream of Many Miles']; i[408] = [301, 304, 302, 17600, 'Battle Tactics']; i[409] = [302, 305, 303, 17601, 'A Bewitching Proposal']; 
+i[301] = [201, 202, 203, 17584, 'The Shrouded Moon']; i[302] = [202, 203, 204, 17586, 'Upwelling Rage']; i[303] = [203, 204, 205, 17588, 'Great Waves']; i[304] = [204, 205, 201, 17590, 'Clear Thoughts']; i[305] = [205, 201, 202, 17592, 'The Silent Orchid']; i[306] = [206, 201, 202, 17594, 'Gilded Splendor']; i[307] = [207, 203, 204, 17596, 'The Soft Silk']; i[308] = [208, 102, 103, 17608, 'The Mighty River']; i[309] = [209, 106, 104, 17612, 'The Trickling Rill']; 
+i[201] = [101, 102, 103, 17568, 'The River of Love']; i[202] = [102, 103, 104, 17570, 'The Scent of Wine']; i[203] = [103, 104, 105, 17572, 'Plucking Lotus']; i[204] = [104, 105, 101, 17574, 'Spring Breeze']; i[205] = [105, 101, 102, 17576, 'Bright Sun']; i[206] = [106, 103, 105, 17578, 'Melodic Rain']; i[207] = [107, 102, 104, 17580, 'Green Hills']; i[208] = [108, 10, 10, 17607, 'The Babbling Brook']; i[209] = [109, 10, 10, 17611, 'The Dropping Rain']; 
+i[101] = [11, 12, 10, 17552, 'The Three Realms']; i[102] = [11, 12, 10, 17554, 'The Five Elements']; i[103] = [11, 12, 10, 17556, 'Yin and Yang']; i[104] = [11, 12, 10, 17558, 'The Four Seasons']; i[105] = [11, 12, 10, 17560, 'The Eight Diagrams']; i[106] = [11, 12, 10, 17562, 'The Six Harmonies']; i[107] = [11, 12, 10, 17564, 'The Seven Stars']; i[108] = [11, 12, 10, 17616, 'The Long River']; i[109] = [11, 12, 10, 17620, 'The Morning Dew']; 
+i[11] = [0, 0, 0, 17544, 'Mystical Page']; i[12] = [0, 0, 0, 17545, 'Blank Celestial Tome']; i[10] = [0, 0, 0, 11413, 'Chipped Obelisk'];
 
-// --- LOGIKA JS ASLI YG DIPERBAIKI ---
+// --- POPULASI DATA DROPDOWN ---
+function zapolnitSelect() { for (var e = 616; e >= 101; e--) { if (i[e]) { var opt = document.createElement('option'); opt.value = e; opt.innerHTML = 'Level ' + Math.floor(e/100) + ' - ' + i[e][4]; selectElement.appendChild(opt); } } } zapolnitSelect();
 
-function sdvig(iii){
-  switch(iii){
-    case 10:
-      return(' background-position:32px -32px');
-    break;
-    case 11:
-      return(' background-position:64px 0px');
-    break;
-    case 12:
-      return(' background-position:32px 0px');
-    break;
-  }
-  var ryad = Math.round(iii/100);
-  var num = iii - (ryad*100);
-  return(' background-position:-'+(32*(num-1))+'px -'+(32*(ryad-1))+'px');
+// --- LOGIKA POSISI SPRITE IKON ---
+function sdvig(e) { var p = i[e] ? i[e][3] : 0; var x = 0; var y = 0; if (p > 15000) { p -= 17544; y = Math.floor(p / 16); x = p % 16; } else { p -= 11413; } return 'background-position: -' + (x * 32) + 'px -' + (y * 32) + 'px;'; }
+
+function nazv(t) { var e = t.title; if (i[e]) { nazvDiv.innerHTML = 'ID: ' + e + ' | <b>' + i[e][4] + '</b>'; } }
+
+// --- MODAL POPUP SUBTRACT DIALOG ---
+var oknoDiv = document.getElementById('okno'); var oknoInput = document.getElementById('okno_input');
+function okno(e, t) { oknoDiv.style.display = 'flex'; document.getElementById('okno_icon').style = sdvig(e); document.getElementById('okno_nazv').innerHTML = i[e][4]; document.getElementById('okno_ok').onclick = function() { var uje = oknoInput.value * 1; if (uje > 0) { if (!vychet[e]) vychet[e] = 0; vychet[e] += uje; zachest(e, true); } }; }
+function okno_close() { oknoDiv.style.display = 'none'; }
+
+function zachest(e, k) { okno_close(); if (!k) { vychet[e] = 0; } vychtennoe(); drevo(derevo); drevo(vetka, true); }
+
+function shelk(t) { var e = t.parentNode.getElementsByTagName('span')[0].title; var uje = t.value * 1; if (uje > 0) { if (!vychet[e]) vychet[e] = 0; vychet[e] += uje; zachest(e, true); }}
+
+function w_html(e) { 
+  var deystv = 'onClick="shelk(this)"'; 
+  var spanDeystv = 'onClick="mnojInput.value=\'' + schet[e] + '\'; drevo(' + e + ', true);"';  
+  if (e == 12 || e == 11 || e == 10) { deystv = ''; spanDeystv = ''; }  
+  var itemName = i[e] ? i[e][4] : 'Unknown Item';  
+  return '<li>' + '<button class="icon-btn" style="' + sdvig(e) + '" value="' + schet[e] + '" title="' + e + '" ' + deystv + ' onMouseOver="nazv(this);"></button>' + '<span class="item-name clickable-text" ' + spanDeystv + ' title="' + e + '" onMouseOver="nazv(this);">' + itemName + '</span>' + '<b>×' + schet[e] + '</b>' + '<button class="action-btn" onClick="okno(' + e + ',this);" title="Tandai sudah punya (Subtract)">↺</button>' + '</li>';
 }
 
-function nazv(t) {
-  var iii = t.title * 1;
-  var txt = i[iii] ? '<a href="http://www.pwdatabase.com/pwi/items/' + i[iii][3] + '" target="_blank">' + i[iii][4] + '</a>' : '';
-  nazvDiv.innerHTML = txt;
-}
-
-function shelk(t) {
-  mnojInput.value = t.value * 1;
-  drevo(t.title * 1, true);
-}
-
-function zachest(e, sw) {
-  if (!sw) vychet[e] = 0;
-  drevo(derevo);
-  if (e == vetka) mnojInput.value = schet[e] || 1;
-  drevo(vetka, true);
-  vychtennoe();
-}
-
-function okno(e, t) {
-  // t.parentNode mencari tombol pertama yang merupakan ikon
-  var butt = t.parentNode.querySelector('button.icon-btn').value; 
-  var uje = prompt('How much?', butt) * 1;
-  if (uje) {
-    if (!vychet[e]) vychet[e] = 0;
-    vychet[e] += uje;
-    zachest(e, true);
-  }
-}
-
-function w_html(e) {
-  var deystv = 'onClick="shelk(this)"';
-  // Perintah klik khusus untuk teks (menghindari error t.value pada span)
-  var spanDeystv = 'onClick="mnojInput.value=\'' + schet[e] + '\'; drevo(' + e + ', true);"';
-  
-  // Menonaktifkan klik untuk material dasar (ID 10, 11, 12)
-  if (e == 12 || e == 11 || e == 10) {
-      deystv = ''; 
-      spanDeystv = '';
-  }
-  
+function vychtennoe_html(e) { 
+  var deystv = 'onClick="shelk(this)"'; 
+  var spanDeystv = 'onClick="mnojInput.value=\'' + vychet[e] + '\'; drevo(' + e + ', true);"';  
+  if (e == 12 || e == 11 || e == 10) { deystv = ''; spanDeystv = ''; }  
   var itemName = i[e] ? i[e][4] : 'Unknown Item';
-  
-  return '<li>' +
-         '<button class="icon-btn" style="' + sdvig(e) + '" value="' + schet[e] + '" title="' + e + '" ' + deystv + ' onMouseOver="nazv(this);"></button>' +
-         '<span class="item-name clickable-text" ' + spanDeystv + ' title="' + e + '" onMouseOver="nazv(this);">' + itemName + '</span>' +
-         '<b>×' + schet[e] + '</b>' +
-         '<button class="action-btn" onClick="okno(' + e + ',this);" title="Tandai sudah punya (Subtract)">↺</button>' +
-         '</li>';
+  return '<li>' + '<button class="icon-btn" style="' + sdvig(e) + '" value="' + vychet[e] + '" title="' + e + '" ' + deystv + ' onMouseOver="nazv(this);"></button>' + '<span class="item-name clickable-text" ' + spanDeystv + ' title="' + e + '" onMouseOver="nazv(this);">' + itemName + '</span>' + '<b>×' + vychet[e] + '</b>' + '<button class="action-btn danger" onClick="zachest(' + e + ');" title="Hapus dari daftar subtract">✕</button>' + '</li>';
 }
 
-function vychtennoe_html(e) {
-  var deystv = 'onClick="shelk(this)"';
-  var spanDeystv = 'onClick="mnojInput.value=\'' + vychet[e] + '\'; drevo(' + e + ', true);"';
-  
-  if (e == 12 || e == 11 || e == 10) {
-      deystv = '';
-      spanDeystv = '';
-  }
-  
-  var itemName = i[e] ? i[e][4] : 'Unknown Item';
-
-  return '<li>' +
-         '<button class="icon-btn" style="' + sdvig(e) + '" value="' + vychet[e] + '" title="' + e + '" ' + deystv + ' onMouseOver="nazv(this);"></button>' +
-         '<span class="item-name clickable-text" ' + spanDeystv + ' title="' + e + '" onMouseOver="nazv(this);">' + itemName + '</span>' +
-         '<b>×' + vychet[e] + '</b>' +
-         '<button class="action-btn danger" onClick="zachest(' + e + ');" title="Hapus dari daftar subtract">✕</button>' +
-         '</li>';
+function vychtennoe() { 
+  var txt = ''; var lis = ''; 
+  if (vychet[11]) lis += vychtennoe_html(11); 
+  if (vychet[12]) lis += vychtennoe_html(12); 
+  if (vychet[10]) lis += vychtennoe_html(10);  
+  if (lis != '') txt += '<div class="row-level"><h4>Material Dasar</h4><ul class="grid-mode"> ' + lis + '</ul></div>';  
+  for (var r = 1; r <= 6; r++) { 
+    lis = ''; var nach = r * 100 + 1; var konec = r * 100 + 16; 
+    for (var e = nach; e <= konec; e++) { if (vychet[e]) { lis += vychtennoe_html(e); } } 
+    if (lis != '') txt += '<div class="row-level"><h4>Level ' + r + '</h4><ul class="grid-mode"> ' + lis + '</ul></div>'; 
+  }  
+  vychetDiv.innerHTML = txt; 
+  if(txt != '') { vychetContainer.style.display = 'flex'; } else { vychetContainer.style.display = 'none'; }
 }
 
-function vychtennoe() {
-  var txt = '';
-  var lis = '';
-  if (vychet[11]) lis += vychtennoe_html(11);
-  if (vychet[12]) lis += vychtennoe_html(12);
-  if (vychet[10]) lis += vychtennoe_html(10);
-  
-  if (lis != '') txt += '<div class="row-level"><h4>Material Dasar</h4><ul class="grid-mode"> ' + lis + '</ul></div>';
-  
-  for (var r = 1; r <= 6; r++) {
-    lis = '';
-    var nach = r * 100 + 1;
-    var konec = r * 100 + 16;
-    for (var e = nach; e <= konec; e++) {
-      if (vychet[e]) {
-        lis += vychtennoe_html(e);
-      }
-    }
-    if (lis != '') txt += '<div class="row-level"><h4>Level ' + r + '</h4><ul class="grid-mode"> ' + lis + '</ul></div>';
-  }
-  
-  vychetDiv.innerHTML = txt;
-  // Menampilkan/menyembunyikan div otomatis
-  if(txt != '') {
-    vychetContainer.style.display = 'block';
-  } else {
-    vychetContainer.style.display = 'none';
-  }
-}
-
-function okno_vybora() {
-  var txt = '';
-  for (var r = 6; r >= 1; r--) {
-    var lis = '';
-    var nach = r * 100 + 1;
-    var konec = r * 100 + 16;
-    for (var e = nach; e <= konec; e++) {
-      if (i[e]) {
-        lis += '<li>' +
-               '<button class="icon-btn" style="' + sdvig(e) + '" title="' + e + '" onClick="drevo(this.title)" onMouseOver="nazv(this);"></button>' +
-               '<span class="item-name clickable-text" onClick="drevo(' + e + ')" onMouseOver="nazv({title: ' + e + '});">' + i[e][4] + '</span>' +
-               '</li>';
-      }
-    }
-    txt += '<div class="row-level"><h4>Level ' + r + '</h4><ul class="grid-mode"> ' + lis + '</ul></div>';
-  }
+function okno_vybora() { 
+  var txt = ''; 
+  for (var r = 6; r >= 1; r--) { 
+    var lis = ''; var nach = r * 100 + 1; var konec = r * 100 + 16; 
+    for (var e = nach; e <= konec; e++) { 
+      if (i[e]) { lis += '<li>' + '<button class="icon-btn" style="' + sdvig(e) + '" title="' + e + '" onClick="drevo(this.title)" onMouseOver="nazv(this);"></button>' + '<span class="item-name clickable-text" onClick="drevo(' + e + ')" onMouseOver="nazv({title: ' + e + '});">' + i[e][4] + '</span>' + '</li>'; } 
+    } 
+    txt += '<div class="row-level"><h4>Level ' + r + '</h4><ul class="grid-mode"> ' + lis + '</ul></div>'; 
+  } 
   vyborDiv.innerHTML = txt;
-}
+} 
 okno_vybora();
 
-function w() {
-  var txt = '';
-  for (var r = 6; r >= 1; r--) {
-    var lis = '';
-    var nach = r * 100 + 1;
-    var konec = r * 100 + 16;
-    for (var e = nach; e <= konec; e++) {
-      if (schet[e]) {
-        lis += w_html(e);
-      }
-    }
-    if (lis != '') txt += '<div class="row-level"><h4>Level ' + r + '</h4><ul ' + (rawr ? 'class="grid-mode"' : '') + '>' + lis + '</ul></div>';
-  }
-  
-  var nizLis = '';
-  if (schet[11]) nizLis += w_html(11);
-  if (schet[12]) nizLis += w_html(12);
-  if (schet[10]) nizLis += w_html(10);
-  
+function w() { 
+  var txt = ''; 
+  for (var r = 6; r >= 1; r--) { 
+    var lis = ''; var nach = r * 100 + 1; var konec = r * 100 + 16; 
+    for (var e = nach; e <= konec; e++) { if (schet[e]) { lis += w_html(e); } } 
+    if (lis != '') txt += '<div class="row-level"><h4>Level ' + r + '</h4><ul ' + (rawr ? 'class="grid-mode"' : '') + '>' + lis + '</ul></div>'; 
+  }  
+  var nizLis = ''; 
+  if (schet[11]) nizLis += w_html(11); 
+  if (schet[12]) nizLis += w_html(12); 
+  if (schet[10]) nizLis += w_html(10);  
   if (nizLis != '') txt += '<div class="row-level"><h4>Material Dasar</h4><ul ' + (rawr ? 'class="grid-mode"' : '') + '>' + nizLis + '</ul></div>';
-
   document.getElementById(rawr ? 'rawrRawr' : 'rawr').innerHTML = txt;
 }
 
-function reDrevo(e) {
-  if (!schet[e]) schet[e] = 0;
-  if (vychetCopy[e] && vychetCopy[e] > 0) vychetCopy[e]--;
-  else {
-    schet[e]++;
-    if (e > 200) {
-      reDrevo(i[e][0]);
-      reDrevo(i[e][1]);
-      reDrevo(i[e][2]);
-    }
+function reDrevo(e) { 
+  if (!schet[e]) schet[e] = 0; 
+  if (vychetCopy[e] && vychetCopy[e] > 0) vychetCopy[e]--; 
+  else { 
+    schet[e]++; 
+    if (e > 200) { reDrevo(i[e][0]); reDrevo(i[e][1]); reDrevo(i[e][2]); } 
   }
 }
 
-function drevo(e, k) {
-  rawr = k; mnoj = 1; schet = []; str = ''; vychetCopy = vychet.slice();
-  if (rawr) {
-    vetka = e; mnoj = mnojInput.value * 1;
-    if (vychet[e]) mnoj += vychet[e];
-  } else derevo = e;
-  
-  for (var z = 1; z <= mnoj; z++) reDrevo(e);
-  
-  var znach = 0;
-  for (var z = 101; z <= 109; z++) if (schet[z]) znach += schet[z] * 3;
-  for (var z = 12; z >= 10; z--) {
-    switch (z) {
-      case 10: schet[10] = schet[12] * 80; break;
-      default: schet[z] = znach; break;
-    }
-    if (vychet[z]) schet[z] -= vychet[z] * 1;
-    if (schet[z] < 0) schet[z] = 0;
-  }
+function drevo(e, k) { 
+  rawr = k; mnoj = 1; schet = []; str = ''; vychetCopy = vychet.slice(); 
+  if (rawr) { vetka = e; mnoj = mnojInput.value * 1; if (vychet[e]) mnoj += vychet[e]; } else derevo = e;  
+  for (var z = 1; z <= mnoj; z++) reDrevo(e);  
+  var znach = 0; 
+  for (var z = 101; z <= 109; z++) if (schet[z]) znach += schet[z] * 3; 
+  for (var z = 12; z >= 10; z--) { 
+    switch (z) { case 10: schet[10] = schet[12] * 80; break; default: schet[z] = znach; break; } 
+    if (vychet[z]) schet[z] -= vychet[z] * 1; 
+    if (schet[z] < 0) schet[z] = 0; 
+  } 
   w();
 }
 
+// --- FUNGSI RESET TANPA REFRESH ---
+function resetCalculator() {
+  vychet = [];
+  vychetCopy = [];
+  mnojInput.value = 1;
+  vchtennoe();
+  drevo(derevo);
+  drevo(vetka, true);
+}
+
+// Inisialisasi awal pohon
 drevo(616);
 drevo(515, true);
 
 // --- FITUR TEMA (DARK/LIGHT MODE) ---
-function toggleTheme() {
-  const body = document.documentElement;
-  const btn = document.getElementById('themeToggle');
-  
-  if (body.getAttribute('data-theme') === 'light') {
-    body.removeAttribute('data-theme'); // Kembali ke Dark (Default)
-    btn.innerHTML = '☀️ Light';
-  } else {
-    body.setAttribute('data-theme', 'light'); // Pindah ke Light
-    btn.innerHTML = '🌙 Dark';
+function toggleTheme() { 
+  const body = document.documentElement; 
+  const btn = document.getElementById('themeToggle');  
+  if (body.getAttribute('data-theme') === 'light') { 
+    body.removeAttribute('data-theme'); 
+    btn.innerHTML = '☀️ Light Mode'; 
+  } else { 
+    body.setAttribute('data-theme', 'light'); 
+    btn.innerHTML = '🌙 Dark Mode'; 
   }
 }
 
 // --- FITUR FLASH TRANSLATION (ID <-> EN) ---
 let isIndo = true;
-function toggleLang() {
-  isIndo = !isIndo;
-  const langBtn = document.getElementById('langToggle');
-  
-  // Kamus terjemahan elemen UI
-  const textDict = {
-    descText: isIndo ? "Hitung kebutuhan bahan craft Tome." : "Calculate Tome crafting materials.",
-    calcBtn: isIndo ? "Kalkulasi" : "Calculate",
-    cardTitle1: isIndo ? "Full Material Tree" : "Pohon Material Lengkap",
-    cardTitle2: isIndo ? "Individual Branch" : "Cabang Individu",
-    cardTitle3: isIndo ? "Sudah Dimiliki (Subtracted)" : "Already Owned (Subtracted)",
-    cardTitle4: isIndo ? "Tome Selection Database" : "Basis Data Pilihan Tome",
-    selectTome: isIndo ? "Pilih buku..." : "Select book..."
+function toggleLang() { 
+  isIndo = !isIndo; 
+  const langBtn = document.getElementById('langToggle');  
+  const textDict = { 
+    descText: isIndo ? "Hitung kebutuhan bahan craft Tome." : "Calculate Tome crafting materials.", 
+    resetBtn: isIndo ? "🔄 Reset" : "🔄 Reset",
+    cardTitle1: isIndo ? "Full Material Tree" : "Pohon Material Lengkap", 
+    cardTitle2: isIndo ? "Individual Branch" : "Cabang Individu", 
+    cardTitle3: isIndo ? "Sudah Dimiliki (Subtracted)" : "Already Owned (Subtracted)", 
+    cardTitle4: isIndo ? "Tome Selection Database" : "Basis Data Pilihan Tome"
   };
-
-  // Terapkan terjemahan ke teks Header & Tombol
-  langBtn.innerHTML = isIndo ? 'Bahasa' : 'English';
-  document.getElementById('desc-text').innerText = textDict.descText;
-  
-  // Terapkan terjemahan ke tombol di "Individual Branch"
-  const calcButton = document.querySelector('.podzagolovok button');
-  if(calcButton) calcButton.innerText = textDict.calcBtn;
-
-  // Terapkan terjemahan ke Judul Kartu (H2)
-  const headers = document.querySelectorAll('.card-title-group h2');
-  if(headers.length >= 4) {
-    headers[0].innerText = textDict.cardTitle1;
-    headers[1].innerText = textDict.cardTitle2;
-    headers[2].innerText = textDict.cardTitle3;
-    headers[3].innerText = textDict.cardTitle4;
-  }
-  
-  // Terapkan ke tulisan Default "Pilih Buku"
-  if(nazvDiv.innerText === "Pilih buku..." || nazvDiv.innerText === "Select book...") {
-    nazvDiv.innerText = textDict.selectTome;
-  }
-}
-
-// --- FITUR RESET KALKULATOR ---
-function resetCalculator() {
-  // 1. Kosongkan semua data subtract (sudah dimiliki)
-  vychet = [];
-  
-  // 2. Kembalikan multiplier (pengali) ke angka 1
-  mnojInput.value = "1";
-  
-  // 3. Kembalikan teks judul yang di-hover menyesuaikan bahasa yang aktif
-  nazvDiv.innerText = isIndo ? "Pilih buku..." : "Select book...";
-  
-  // 4. Perbarui UI subtract agar elemennya tersembunyi kembali
-  vychtennoe();
-  
-  // 5. Muat ulang kalkulasi default (Pan Gu Creator di kiri, Gang of Hooligans di kanan)
-  drevo(616);
-  drevo(515, true);
+  langBtn.innerHTML = isIndo ? 'Bahasa' : 'English'; 
+  document.getElementById('desc-text').innerText = textDict.descText;  
+  const headers = document.querySelectorAll('.card-title-group h2'); 
+  if(headers.length >= 4) { 
+    headers[0].innerText = textDict.cardTitle1; 
+    headers[1].innerText = textDict.cardTitle2; 
+    headers[2].innerText = textDict.cardTitle3; 
+    headers[3].innerText = textDict.cardTitle4; 
+  } 
 }
 </script>
-
 </body>
 </html>
