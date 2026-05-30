@@ -3,8 +3,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Tome Calculator - Modern Edition" />
-<title>Tome Calculator | Modern UI</title>
+<meta name="description" content="Kalkulator Tome - Edisi Modern" />
+<title>Kalkulator Tome | UI Modern</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -245,10 +245,31 @@ h1::before, h2::before {
 /* =========================================
    6. FLOATING SELECTION PANEL & CUSTOM UI
 ========================================= */
+.menu-toggle-btn {
+	position: fixed;
+	top: 25px;
+	right: 25px;
+	background: var(--accent);
+	color: white;
+	border: none;
+	padding: 10px 18px;
+	border-radius: 8px;
+	font-weight: 600;
+	font-family: 'Inter', sans-serif;
+	cursor: pointer;
+	z-index: 1001;
+	box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+	transition: 0.2s ease;
+}
+.menu-toggle-btn:hover {
+	background: var(--accent-hover);
+	transform: translateY(-2px);
+}
+
 .vybor {
 	position: fixed;
-	right: 30px;
-	top: 30px;
+	right: 25px;
+	top: 75px; 
 	background: rgba(15, 23, 42, 0.95);
 	backdrop-filter: blur(10px);
 	border: 1px solid var(--accent);
@@ -288,7 +309,6 @@ h1::before, h2::before {
 .btn-danger { background: var(--danger); }
 .btn-danger:hover { background: var(--danger-hover); }
 
-/* CUSTOM TRANSLATE UI (Sesuai Gambar Anda) */
 .custom-translate-container {
 	display: flex;
 	justify-content: center;
@@ -302,7 +322,7 @@ h1::before, h2::before {
 	display: inline-flex;
 	align-items: center;
 	gap: 6px;
-	background-color: #e2e8f0; /* Abu-abu terang persis gambar */
+	background-color: #e2e8f0;
 	color: #0f172a;
 	padding: 4px 10px;
 	border-radius: 4px;
@@ -319,10 +339,9 @@ h1::before, h2::before {
 }
 
 .mock-gemini-badge .text-blue {
-	color: #0369a1; /* Warna teks biru Gemini */
+	color: #0369a1; 
 }
 
-/* Tooltip Hitam persis di gambar */
 .mock-gemini-badge .tooltip {
 	visibility: hidden;
 	position: absolute;
@@ -359,12 +378,9 @@ h1::before, h2::before {
 	opacity: 1;
 }
 
-/* Sembunyikan Bawaan Google Translate yang Asli */
-#google_translate_element {
-	display: none;
-}
+#google_translate_element { display: none; }
 .skiptranslate { display: none !important; }
-body { top: 0px !important; } /* Mencegah bar Google Translate merusak layout atas */
+body { top: 0px !important; } 
 
 #vybor h4 {
 	font-size: 0.8rem;
@@ -399,16 +415,16 @@ function googleTranslateElementInit() {
 
 <div class="obertka">
 	<div class="drevo">
-		<h1>Full tree</h1>
-		<div class="podzagolovok" id="nazvaniye">Arahkan kursor ke ikon untuk melihat nama item.</div>
+		<h1>Kebutuhan Total</h1>
+		<div class="podzagolovok" id="nazvaniye">Arahkan kursor ke ikon untuk melihat nama buku.</div>
 		<div id="rawr" class="vetv"></div>
 	</div>
 	
 	<div class="drevo">
-		<h2>Individual branch</h2>
+		<h2>Cabang Terpilih</h2>
 		<div class="podzagolovok">
 			<input type="text" id="mnojitel" value="1">
-			<button class="btn-calc" onClick="drevo(vetka,true)">Calculate Quantity</button>
+			<button class="btn-calc" onClick="drevo(vetka,true)">Hitung Kuantitas</button>
 		</div>
 		<div id="rawrRawr" class="vetv"></div>
 	</div>
@@ -416,18 +432,22 @@ function googleTranslateElementInit() {
 
 <div id="vychet">
 	<div class="drevo">
-		<h2>Already existing chapters</h2>
-		<div class="podzagolovok" id="nazvaniye_vychet">Bahan yang Anda klik (minus) akan masuk ke sini dan dikurangi dari total.</div>
+		<h2>Buku & Bahan yang Sudah Dimiliki</h2>
+		<div class="podzagolovok" id="nazvaniye_vychet">Bahan yang Anda klik (tombol minus) pada daftar di atas akan masuk ke sini dan dikurangi dari total perhitungan.</div>
 		<div id="rawrRawrRawr" class="vetv"></div>
 	</div>
 </div>
 
-<div class="vybor">
+<button class="menu-toggle-btn" onclick="var panel = document.getElementById('mainMenuPanel'); panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';">
+	⚙️ Buka Menu
+</button>
+
+<div class="vybor" id="mainMenuPanel" style="display:none;">
 	<div class="panel-actions">
 		<button class="btn-primary" onClick="var zu = vyborDiv.style.display; vyborDiv.style.display = (zu == 'none') ? 'block' : 'none';" title="Tampilkan/Sembunyikan buku">
-			📚 Tract Selection
+			📚 Pilihan Buku Target
 		</button>
-		<button class="btn-danger" onClick="if(confirm('Hapus semua perhitungan dan mulai ulang?')) location.reload();" title="Reset Kalkulator">
+		<button class="btn-danger" onClick="if(confirm('Hapus semua perhitungan dan mulai dari awal?')) location.reload();" title="Reset Kalkulator">
 			🔄 Reset Kalkulator
 		</button>
 	</div>
@@ -436,7 +456,7 @@ function googleTranslateElementInit() {
 		</div>
     
 	<div class="custom-translate-container">
-		<div class="mock-gemini-badge" onclick="document.querySelector('.goog-te-combo').focus(); alert('Tip: Jika ingin mengubah bahasa menggunakan Google Translate yang tersembunyi, sistem akan memicu dropdown bahasa.');">
+		<div class="mock-gemini-badge" onclick="document.querySelector('.goog-te-combo').focus(); alert('Tip: Fitur ini memicu Google Translate jika Anda ingin mengubah bahasa halaman secara menyeluruh.');">
 			<span class="text-blue">Gemini-2.5-Flash</span>
 			<span>📖</span>
 			<span>+</span>
@@ -444,9 +464,9 @@ function googleTranslateElementInit() {
 			<span><img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Google_Translate_logo.svg" width="14" alt="G" style="vertical-align: middle;"></span>
 			
 			<div class="tooltip" id="live-time">
-				Translated at: <span id="current-date"></span><br>
-				<span style="color: #94a3b8; font-size: 0.75rem;">Glossary Enhanced</span><br>
-				<span style="color: #94a3b8; font-size: 0.75rem;">Google Translated</span>
+				Diterjemahkan pada: <span id="current-date"></span><br>
+				<span style="color: #94a3b8; font-size: 0.75rem;">Penyempurnaan Kosakata</span><br>
+				<span style="color: #94a3b8; font-size: 0.75rem;">Diterjemahkan oleh Sistem</span>
 			</div>
 		</div>
 	</div>
@@ -567,7 +587,7 @@ function zachest(e,sw){
 }
 function okno(e,t){
 	var butt = t.parentNode.getElementsByTagName('button')[0].value;
-	var uje = prompt('Berapa banyak yang ingin dikurangi?', butt)*1;
+	var uje = prompt('Berapa banyak bahan/buku ini yang sudah Anda miliki?', butt)*1;
 	if(uje){
 		if(!vychet[e]) vychet[e]=0;
 		vychet[e] += uje;
@@ -577,7 +597,7 @@ function okno(e,t){
 function vychtennoe_html(e){
 	var deystv ='onClick="shelk(this)"';
 	if(e==12 || e==11 || e==10) deystv = '';
-	return '<li><span onClick="zachest('+e+');" title="Kembalikan / Hapus"></span><button style="'+sdvig(e)+'" value="'+vychet[e]+'" title="'+e+'" '+deystv+' onMouseOver="nazv(this);"></button><b>×'+vychet[e]+'</b></li>';
+	return '<li><span onClick="zachest('+e+');" title="Kembalikan / Hapus dari daftar ini"></span><button style="'+sdvig(e)+'" value="'+vychet[e]+'" title="'+e+'" '+deystv+' onMouseOver="nazv(this);"></button><b>×'+vychet[e]+'</b></li>';
 }
 function vychtennoe(){
 	var txt = '';
@@ -585,7 +605,7 @@ function vychtennoe(){
 	if(vychet[11]) lis +=vychtennoe_html(11);
 	if(vychet[12]) lis +=vychtennoe_html(12);
 	if(vychet[10]) lis +=vychtennoe_html(10);
-	if(lis!='') txt += '<ul><li>Base Material</li> '+lis+'</ul>';
+	if(lis!='') txt += '<ul><li>Bahan Dasar</li> '+lis+'</ul>';
 	for(var r=1; r<=6; r++){
 		lis = '';
 		var nach = r*100+1;
@@ -611,7 +631,7 @@ function okno_vybora(){
 				lis +='<li><button style="'+sdvig(e)+'" title="'+e+'" onClick="drevo(this.title)" onMouseOver="nazv(this);"></button></li>';
 			}
 		}
-		txt += '<h4>Level '+r+'</h4><ul> '+lis+'</ul>';
+		txt += '<h4>Tome Level '+r+'</h4><ul> '+lis+'</ul>';
 	}
 	vyborDiv.innerHTML = txt;
 }
@@ -632,7 +652,7 @@ function sdvig(iii){
 function w_html(e){
 	var deystv ='onClick="shelk(this)"';
 	if(e==12 || e==11 || e==10) deystv = '';
-	return '<li><span onClick="okno('+e+',this);" title="Kurangi bagian yang sudah ada"></span><button style="'+sdvig(e)+'" value="'+schet[e]+'" title="'+e+'" '+deystv+' onMouseOver="nazv(this);"></button><b>×'+schet[e]+'</b></li>';
+	return '<li><span onClick="okno('+e+',this);" title="Klik jika Anda sudah punya bahan ini (kurangi dari total)"></span><button style="'+sdvig(e)+'" value="'+schet[e]+'" title="'+e+'" '+deystv+' onMouseOver="nazv(this);"></button><b>×'+schet[e]+'</b></li>';
 }
 
 function w(){
@@ -652,7 +672,7 @@ function w(){
 		if(hasItem) txt += tempTxt;
 	}
 	
-	txt += '<ul id="niz"><li>Base Material</li> ';
+	txt += '<ul id="niz"><li>Bahan Dasar</li> ';
 	if(schet[11]) txt +=w_html(11);
 	if(schet[12]) txt +=w_html(12);
 	if(schet[10]) txt +='<li id="strelki" style="margin: 0 10px;">→</li>'+w_html(10);
