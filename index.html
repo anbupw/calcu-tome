@@ -1,100 +1,352 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta http-equiv="description" content="Menghitung berapa banyak bahan dan tome lvl 1 yang Anda butuhkan untuk membuat tome level 2-5" />
-<title>Tome Calculator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Tome Calculator - Modern Edition" />
+<title>Tome Calculator | Modern UI</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, font, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td {
-	margin:0; padding:0; border-spacing:0; border:0; outline:0; vertical-align:baseline;
-	font-weight:inherit; font-style:inherit; font-size:100%; font-family:inherit;
+/* =========================================
+   1. GLOBAL VARIABLES & RESET
+========================================= */
+:root {
+	--bg-main: #0f172a;          /* Biru Dongker Gelap */
+	--bg-card: #1e293b;          /* Warna Kartu */
+	--bg-card-hover: #334155;    
+	--text-main: #f8fafc;        /* Putih Terang */
+	--text-muted: #94a3b8;       /* Abu-abu Terang */
+	--accent: #3b82f6;           /* Biru Elektrik (Utama) */
+	--accent-hover: #2563eb;
+	--danger: #ef4444;           /* Merah untuk tombol Hapus/Kurang */
+	--border-color: rgba(255, 255, 255, 0.08);
 }
-:focus { outline:0; }
-body, html { line-height:1; color:black; background:white; height:100%; width:100%; }
-ol, ul { list-style:none; }
-table { border-collapse:separate; border-spacing:0; }
-caption, th, td { text-align:left; font-weight:normal; }
-blockquote:before, blockquote:after, q:before, q:after { content:""; }
-blockquote, q { quotes:"" ""; }
 
-body { font-size:16px; width:auto; height:auto; font-weight:bold; color:#003; text-shadow: 1px 1px 20px #003; }
-a { color:#fff;text-shadow:1px 1px 2px #003; }
-a:hover { text-shadow:1px 5px 10px #003; }
+* {
+	box-sizing: border-box;
+	margin: 0; padding: 0;
+}
 
-.obertka { display:table; padding:20px; margin:40px auto 10px; background:#69F;border-radius:40px 250px 40px 40px; }
-.obertka, .vybor { box-shadow:0 0 20px rgba(0,0,0,0.5); }
-.drevo { display: table-cell; width:380px; }
-.vetv { display:table; }
-.vetv li button { display:block; margin:0px auto 2px; width:32px; height:32px; font-style:normal; background:none; background-image:url('znachki.png'); background-position:left top; box-shadow: 0px 0px 20px rgba(0,0,0,0.5); border:none; }
-.vetv li button:active { box-shadow:0px 0px 10px rgba(0,0,0,0.5); }
-.vetv li b { margin-left:-6px; }
-.vetv li span { display:block; height:10px; margin-top:-10px; font-size:7px; overflow:hidden; font-weight:normal; font-family:Arial, Helvetica, sans-serif; visibility:hidden; cursor:pointer; }
-.vetv li:hover span { visibility:visible; }
-.drevo ul { display:table-row; margin-left:20px; height:55px; }
-.drevo li:first-child { font-size:24px; text-align:left; }
-.drevo li { display:table-cell; width:35px; vertical-align:middle; text-align:center; }
-.drevo h1, .drevo h2 { font-size:21px; margin-left:20px; font-weight:bold; color:#003; text-shadow: 1px 5px 30px #003; }
-.podzagolovok { height:40px; line-height:40px; padding-left:35px; }
-.drevo input { width:16px; text-align:center; }
-.podzagolovok button, .podzagolovok input { line-height:18px;font-family:Arial, Helvetica, sans-serif; font-size:13px; background:#36C; color:white; font-weight:normal; text-decoration:none; border-radius:10px 6px 10px 6px; border:solid 2px #fff; border-bottom-color:#003; border-right-color:#003; padding:0px 7px; }
-.podzagolovok button:hover { text-shadow:1px 1px 0px #003; }
-.podzagolovok button:active, a:active,.podzagolovok input { border-color:#003; border-bottom-color:#fff; border-right-color:#fff; }
-.podzagolovok input { background:#fff; color:#003; position:static; }
+body {
+	font-family: 'Inter', sans-serif;
+	background-color: var(--bg-main);
+	color: var(--text-main);
+	line-height: 1.6;
+	min-height: 100vh;
+	padding: 30px;
+	background-image: 
+		radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+		radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+	background-attachment: fixed;
+}
 
-#niz { font-size:12px; }
-#strelki { font-size:18px; }
+ul { list-style: none; }
+a { color: var(--accent); text-decoration: none; transition: 0.3s; }
+a:hover { color: #60a5fa; text-decoration: underline; }
 
-#vychet { width:800px; margin:0px auto; visibility:hidden; }
-#vychet ul { display:inline-block; }
-#vychet>div { width:100%; }
+/* =========================================
+   2. LAYOUT & CONTAINERS
+========================================= */
+.obertka {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 24px;
+	justify-content: center;
+	max-width: 1400px;
+	margin: 0 auto;
+}
 
-.vybor { position:absolute; right:20px; top:40px; background:black; color:white; background:rgba(0,0,0,0.8); padding:10px; border-radius:10px; text-align:right; font-weight:normal; }
-.vybor button { background:none; border:none; color:white; border-radius:4px; }
-.vybor button:hover { text-decoration:underline; }
-#vybor h4, #vybor ul { text-align:left; }
-#vybor h4 { padding:2px; padding-left:5px; }
-#vybor ul { width:256px; }
-#vybor li { display:inline-block; }
+.drevo {
+	background: var(--bg-card);
+	border: 1px solid var(--border-color);
+	border-radius: 20px;
+	padding: 25px;
+	width: 100%;
+	max-width: 480px;
+	box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+	position: relative;
+	backdrop-filter: blur(10px);
+}
+
+#vychet {
+	max-width: 985px;
+	margin: 24px auto 0;
+}
+#vychet .drevo {
+	max-width: 100%;
+}
+
+/* =========================================
+   3. TYPOGRAPHY & HEADERS
+========================================= */
+h1, h2 {
+	font-size: 1.25rem;
+	font-weight: 700;
+	color: #e2e8f0;
+	margin-bottom: 20px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+h1::before, h2::before {
+	content: '';
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	background: var(--accent);
+	border-radius: 3px;
+}
+
+.podzagolovok {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 20px;
+	background: rgba(0,0,0,0.2);
+	padding: 12px 16px;
+	border-radius: 12px;
+	border: 1px solid var(--border-color);
+	font-size: 0.9rem;
+	color: var(--text-muted);
+	min-height: 50px;
+}
+
+/* =========================================
+   4. FORM ELEMENTS
+========================================= */
+.podzagolovok input {
+	background: #0f172a;
+	border: 1px solid #475569;
+	color: white;
+	font-weight: 600;
+	border-radius: 8px;
+	padding: 8px 12px;
+	width: 70px;
+	text-align: center;
+	font-size: 1rem;
+	outline: none;
+	transition: border 0.3s;
+}
+.podzagolovok input:focus {
+	border-color: var(--accent);
+}
+
+.podzagolovok button {
+	background: var(--accent);
+	color: white;
+	border: none;
+	padding: 9px 18px;
+	border-radius: 8px;
+	font-weight: 600;
+	font-size: 0.9rem;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4);
+}
+.podzagolovok button:hover {
+	background: var(--accent-hover);
+	transform: translateY(-2px);
+	box-shadow: 0 6px 12px -2px rgba(59, 130, 246, 0.5);
+}
+.podzagolovok button:active {
+	transform: translateY(0);
+}
+
+/* =========================================
+   5. TREE LIST (ICONS & BADGES)
+========================================= */
+.vetv ul {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 15px;
+	background: rgba(255, 255, 255, 0.02);
+	border: 1px solid var(--border-color);
+	border-radius: 16px;
+	padding: 16px;
+	margin-bottom: 16px;
+	align-items: center;
+}
+
+/* Level Indicator */
+.vetv ul li:first-child {
+	width: 100%;
+	font-size: 0.75rem;
+	font-weight: 700;
+	color: var(--text-muted);
+	text-transform: uppercase;
+	letter-spacing: 1.5px;
+	border-bottom: 1px dashed var(--border-color);
+	padding-bottom: 8px;
+	margin-bottom: 5px;
+}
+
+/* Item Container */
+.vetv ul li {
+	position: relative;
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+/* The Icon Button */
+.vetv li button {
+	display: block;
+	width: 32px; height: 32px;
+	background-image: url('znachki.png');
+	background-repeat: no-repeat;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.vetv li button:hover {
+	transform: scale(1.15) translateY(-2px);
+	box-shadow: 0 8px 15px rgba(0,0,0,0.5);
+}
+
+/* The Multiplier Badge (x5) */
+.vetv li b {
+	position: absolute;
+	bottom: -8px;
+	right: -10px;
+	background: var(--accent);
+	color: #fff;
+	font-size: 0.7rem;
+	font-weight: 700;
+	padding: 2px 6px;
+	border-radius: 12px;
+	border: 2px solid var(--bg-card);
+	pointer-events: none;
+	z-index: 2;
+}
+
+/* The Hidden "Minus/Action" Button on Hover */
+.vetv li span {
+	position: absolute;
+	top: -8px;
+	left: -8px;
+	width: 18px;
+	height: 18px;
+	background: var(--danger);
+	color: white;
+	font-size: 14px;
+	line-height: 14px;
+	text-align: center;
+	border-radius: 50%;
+	cursor: pointer;
+	opacity: 0;
+	visibility: hidden;
+	transition: all 0.2s ease;
+	z-index: 3;
+	border: 2px solid var(--bg-card);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.vetv li span::before {
+	content: "-";
+	font-weight: bold;
+}
+.vetv li:hover span {
+	opacity: 1;
+	visibility: visible;
+}
+
+#strelki { color: var(--accent); font-weight: bold; letter-spacing: 2px; }
+#niz li:first-child { display: none; } /* Sembunyikan label kosong di baris bawah */
+
+/* =========================================
+   6. FLOATING SELECTION PANEL (RIGHT)
+========================================= */
+.vybor {
+	position: fixed;
+	right: 30px;
+	top: 30px;
+	background: rgba(15, 23, 42, 0.95);
+	backdrop-filter: blur(10px);
+	border: 1px solid var(--accent);
+	padding: 20px;
+	border-radius: 16px;
+	box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+	z-index: 1000;
+	max-width: 320px;
+	max-height: 80vh;
+	overflow-y: auto;
+}
+.vybor > button {
+	width: 100%;
+	background: var(--accent);
+	border: none;
+	color: white;
+	padding: 10px;
+	border-radius: 8px;
+	font-weight: 600;
+	cursor: pointer;
+	margin-bottom: 15px;
+	transition: 0.2s;
+}
+.vybor > button:hover {
+	background: var(--accent-hover);
+}
+#vybor h4 {
+	font-size: 0.8rem;
+	color: var(--text-muted);
+	border-bottom: 1px solid var(--border-color);
+	margin-bottom: 10px;
+	padding-bottom: 5px;
+	margin-top: 15px;
+}
+#vybor ul {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+#vybor li {
+	display: inline-block;
+}
+
+/* Custom Scrollbar for Vybor */
+.vybor::-webkit-scrollbar { width: 6px; }
+.vybor::-webkit-scrollbar-track { background: transparent; }
+.vybor::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 </style>
 </head>
 <body>
 <div class="obertka">
 	<div class="drevo">
 		<h1>Full tree</h1>
-		<div class="podzagolovok" id="nazvaniye">&nbsp;</div>
+		<div class="podzagolovok" id="nazvaniye">Arahkan kursor ke ikon untuk melihat nama item.</div>
 		<div id="rawr" class="vetv"></div>
 	</div>
+	
 	<div class="drevo">
 		<h2>Individual branch</h2>
 		<div class="podzagolovok">
 			<input type="text" id="mnojitel" value="1">
-			<button onClick="drevo(vetka,true)">Quantity</button>
+			<button onClick="drevo(vetka,true)">Calculate Quantity</button>
 		</div>
 		<div id="rawrRawr" class="vetv"></div>
 	</div>
 </div>
+
 <div id="vychet">
 	<div class="drevo">
 		<h2>Already existing chapters</h2>
-		<div class="podzagolovok" id="nazvaniye">Subtracted together with dependencies.</div>
+		<div class="podzagolovok" id="nazvaniye_vychet">Bahan yang Anda klik (minus) akan masuk ke sini dan dikurangi dari total.</div>
 		<div id="rawrRawrRawr" class="vetv"></div>
 	</div>
 </div>
-<div class="vybor">
-	<button onClick="var zu = vyborDiv.style.display; vyborDiv.style.display = (zu == 'none') ? 'block' : 'none';" title="Show/hide the selection window">Tract selection</button>
-	<div id="vybor" class="vetv" style="display:none">
-		111
-	</div>
-</div>
-<script>
 
+<div class="vybor">
+	<button onClick="var zu = vyborDiv.style.display; vyborDiv.style.display = (zu == 'none') ? 'block' : 'none';" title="Show/hide the selection window">Tract Selection (Pilih Buku)</button>
+	<div id="vybor" class="vetv" style="display:none">
+		</div>
+</div>
+
+<script>
 var vetka; var derevo;
 var rawr;
 var mnoj = 1;
@@ -184,7 +436,7 @@ i[10] = [0, 0, 0, 24721, 'Perfect·Token of Luck'];
 
 function nazv(t){
 	var iii = t.title*1;
-	var txt = '<a href="http://www.pwdatabase.com/pwi/items/'+i[iii][3]+'" target="_blank">'+i[iii][4]+'</a>';
+	var txt = '<a href="http://www.pwdatabase.com/pwi/items/'+i[iii][3]+'" target="_blank">► '+i[iii][4]+'</a>';
 	nazvDiv.innerHTML = txt;
 }
 function shelk(t){
@@ -201,7 +453,7 @@ function zachest(e,sw){
 }
 function okno(e,t){
 	var butt = t.parentNode.getElementsByTagName('button')[0].value;
-	var uje = prompt('How much?',butt)*1;
+	var uje = prompt('Berapa banyak yang ingin dikurangi?', butt)*1;
 	if(uje){
 		if(!vychet[e]) vychet[e]=0;
 		vychet[e] += uje;
@@ -211,7 +463,7 @@ function okno(e,t){
 function vychtennoe_html(e){
 	var deystv ='onClick="shelk(this)"';
 	if(e==12 || e==11 || e==10) deystv = '';
-	return '<li><span onClick="zachest('+e+');">Back</span><button style="'+sdvig(e)+'" value="'+vychet[e]+'" title="'+e+'" '+deystv+' onMouseOver="nazv(this);"></button><b>×'+vychet[e]+'</b></li>';
+	return '<li><span onClick="zachest('+e+');" title="Kembalikan / Hapus"></span><button style="'+sdvig(e)+'" value="'+vychet[e]+'" title="'+e+'" '+deystv+' onMouseOver="nazv(this);"></button><b>×'+vychet[e]+'</b></li>';
 }
 function vychtennoe(){
 	var txt = '';
@@ -219,7 +471,7 @@ function vychtennoe(){
 	if(vychet[11]) lis +=vychtennoe_html(11);
 	if(vychet[12]) lis +=vychtennoe_html(12);
 	if(vychet[10]) lis +=vychtennoe_html(10);
-	if(lis!='') txt += '<ul><li>&nbsp;</li> '+lis+'</ul>';
+	if(lis!='') txt += '<ul><li>Base Material</li> '+lis+'</ul>';
 	for(var r=1; r<=6; r++){
 		lis = '';
 		var nach = r*100+1;
@@ -229,7 +481,7 @@ function vychtennoe(){
 				lis += vychtennoe_html(e);
 			}
 		}
-		if(lis!='') txt += '<ul><li>'+r+'</li> '+lis+'</ul>';
+		if(lis!='') txt += '<ul><li>Level '+r+'</li> '+lis+'</ul>';
 	}
 	vychetDiv.innerHTML = txt;
 }
@@ -245,7 +497,7 @@ function okno_vybora(){
 				lis +='<li><button style="'+sdvig(e)+'" title="'+e+'" onClick="drevo(this.title)" onMouseOver="nazv(this);"></button></li>';
 			}
 		}
-		txt += '<h4>'+r+'</h4><ul> '+lis+'</ul>';
+		txt += '<h4>Level '+r+'</h4><ul> '+lis+'</ul>';
 	}
 	vyborDiv.innerHTML = txt;
 }
@@ -256,13 +508,13 @@ function sdvig(iii){
 	iii = parseInt(iii);
 	switch(iii){
 		case 10:
-			return(' background-position:32px -32px');
+			return(' background-position:-32px -32px'); // Sedikit penyesuaian sprite
 		break;
 		case 11:
-			return(' background-position:64px 0px');
+			return(' background-position:-64px 0px');
 		break;
 		case 12:
-			return(' background-position:32px 0px');
+			return(' background-position:-32px 0px');
 		break;
 	}
 	var ryad = Math.floor(iii/100); 
@@ -273,7 +525,7 @@ function sdvig(iii){
 function w_html(e){
 	var deystv ='onClick="shelk(this)"';
 	if(e==12 || e==11 || e==10) deystv = '';
-	return '<li><span onClick="okno('+e+',this);" title="Subtract the parts of the treatise already in existence"> </span><button style="'+sdvig(e)+'" value="'+schet[e]+'" title="'+e+'" '+deystv+' onMouseOver="nazv(this);"></button><b>×'+schet[e]+'</b></li>';
+	return '<li><span onClick="okno('+e+',this);" title="Kurangi bagian yang sudah ada"></span><button style="'+sdvig(e)+'" value="'+schet[e]+'" title="'+e+'" '+deystv+' onMouseOver="nazv(this);"></button><b>×'+schet[e]+'</b></li>';
 }
 
 function w(){
@@ -281,21 +533,22 @@ function w(){
 	for(var r=6; r>=1; r--){
 		var nach = r*100+1;
 		var konec = r*100+16;
-		txt += '<ul><li>'+r+'</li> ';
+		var hasItem = false;
+		var tempTxt = '<ul><li>Level '+r+'</li> ';
 		for(var e = nach; e<=konec; e++){
 			if(schet[e]){
-				txt +=w_html(e);
+				tempTxt +=w_html(e);
+				hasItem = true;
 			}
 		}
-		txt += '</ul>';		
+		tempTxt += '</ul>';
+		if(hasItem) txt += tempTxt;
 	}
 	
-	txt += '<ul id="niz"><li>&nbsp;</li> ';
+	txt += '<ul id="niz"><li>Base Material</li> ';
 	if(schet[11]) txt +=w_html(11);
-	txt += '<li>&nbsp;</li>';
 	if(schet[12]) txt +=w_html(12);
-	
-	if(schet[10]) txt +='<li id="strelki">→ →</li>'+w_html(10);
+	if(schet[10]) txt +='<li id="strelki" style="margin: 0 10px;">→</li>'+w_html(10);
 	txt += '</ul>';
 	
 	document.getElementById(rawr?'rawrRawr':'rawr').innerHTML = txt;
