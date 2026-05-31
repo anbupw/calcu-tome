@@ -41,8 +41,8 @@ body {
 		radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
 		radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
 	background-attachment: fixed;
-	display: flex;
-	flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 ul { list-style: none; }
@@ -92,45 +92,39 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 /* --- UI Floating Tooltip (In-game Style) --- */
 .floating-tooltip {
-	position: fixed;
-	background: rgba(10, 15, 30, 0.96);
-	border: 2px solid #475569;
-	border-radius: 10px;
-	padding: 14px 18px;
-	box-shadow: 0 15px 35px rgba(0,0,0,0.85), inset 0 0 15px rgba(0,0,0,0.7);
-	z-index: 10000;
-	pointer-events: none; 
-	display: none;
-	min-width: 240px;
-	max-width: 300px;
-	font-family: 'Inter', sans-serif;
-	backdrop-filter: blur(6px);
+    position: fixed;
+    background: rgba(10, 15, 30, 0.96);
+    border: 2px solid #475569;
+    border-radius: 10px;
+    padding: 14px 18px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.85), inset 0 0 15px rgba(0,0,0,0.7);
+    z-index: 10000;
+    pointer-events: none; 
+    display: none;
+    min-width: 240px;
+    max-width: 300px;
+    font-family: 'Inter', sans-serif;
+    backdrop-filter: blur(6px);
 }
 .tooltip-title {
-	color: #f59e0b;
-	font-size: 1rem;
-	font-weight: 700;
-	margin-bottom: 5px;
-	display: flex;
-	align-items: center;
-	gap: 10px;
+    color: #f59e0b; /* Golden Color */
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 .tooltip-type {
-	color: #94a3b8;
-	font-size: 0.75rem;
-	margin-bottom: 10px;
-	border-bottom: 1px dashed rgba(255,255,255,0.15);
-	padding-bottom: 5px;
+    color: #94a3b8;
+    font-size: 0.75rem;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed rgba(255,255,255,0.15);
+    padding-bottom: 5px;
 }
 .tooltip-list { display: flex; flex-direction: column; gap: 4px; }
 .tooltip-stat { color: #60a5fa; font-size: 0.85rem; font-weight: 600; }
 .tooltip-footer { color: #64748b; font-size: 0.75rem; font-style: italic; margin-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 6px; }
-
-/* Audio Floating Mute Button */
-.mute-toggle {
-	position: fixed; bottom: 25px; right: 25px; background: var(--bg-card); border: 1px solid var(--accent); color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: 0.2s;
-}
-.mute-toggle:hover { background: var(--accent); transform: scale(1.1); }
 
 /* Footer & Social Icons Styles */
 .footer { margin-top: 40px; padding: 25px 0; border-top: 1px solid var(--border-color); text-align: center; width: 100%; }
@@ -185,7 +179,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 	<div class="calc-card">
 		<h2 data-i18n="title2">Cabang Terpilih</h2>
 		<div class="podzagolovok">
-			<input type="number" id="mnojitel" value="1" min="1" max="99" onchange="processTree(rightTreeId, true)">
+			<input type="number" id="mnojitel" value="1" min="1" max="99">
 			<button class="btn-calc" data-i18n="btnCalc" onClick="processTree(rightTreeId, true)">Hitung Kuantitas</button>
 		</div>
         <div class="progress-container">
@@ -220,7 +214,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
             <div id="totalCostDisplay" class="total-cost-value">0 Gold</div>
         </div>
     </div>
-	
+    
     <div id="deductions">
         <div class="calc-card">
             <h2 data-i18n="title4">📦 Inventory (Bahan Dimiliki)</h2>
@@ -245,11 +239,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
     </div>
 </footer>
 
-<audio id="sfx-click" preload="auto"><source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav" type="audio/wav"></audio>
-<audio id="sfx-success" preload="auto"><source src="https://assets.mixkit.co/active_storage/sfx/2019/2019-84.wav" type="audio/wav"></audio>
-<button id="muteBtn" class="mute-toggle" onclick="toggleMute()" style="display:none;"><i class="fas fa-volume-up"></i></button>
-
-<button class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleMenuPanel()">⚙️ Buka Menu</button>
+<button class="menu-toggle-btn" id="menuToggleBtn" onclick="var panel = document.getElementById('mainMenuPanel'); panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';">⚙️ Buka Menu</button>
 
 <div class="vybor" id="mainMenuPanel" style="display:none;">
     <h4 style="margin-top: 0; font-size: 0.85rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px;">📁 Kelola Profil Build</h4>
@@ -265,7 +255,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
             <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importProfilesData(event)">
         </div>
     </div>
-	
+    
 	<div class="panel-actions">
 		<button class="btn-primary" onClick="toggleBookPanel();"><span data-i18n="btnTarget">📚 Pilihan Buku Target</span></button>
 		<button class="btn-success" onClick="copyShareLink()"><span data-i18n="btnShare">🔗 Bagikan Build (Copy Link)</span></button>
@@ -307,18 +297,6 @@ const LANG = {
 };
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
-let soundMuted = false;
-
-function playSFX(id) {
-	if(soundMuted) return;
-	const audio = document.getElementById(id);
-	if(audio) { audio.currentTime = 0; audio.play().catch(()=>{}); }
-}
-
-function toggleMute() {
-	soundMuted = !soundMuted;
-	document.getElementById('muteBtn').innerHTML = soundMuted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
-}
 
 function applyLanguage() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -328,8 +306,10 @@ function applyLanguage() {
             else el.innerHTML = LANG[currentLang][key]; 
         }
     });
+    
     document.getElementById('langBtn').innerText = currentLang === 'id' ? '🌐 Switch to English' : '🌐 Ganti ke Indonesia';
     document.getElementById('menuToggleBtn').innerText = LANG[currentLang]['menuBtnText'];
+    
     processTree(leftTreeId, false);
     processTree(rightTreeId, true);
     renderDeductions();
@@ -339,7 +319,6 @@ function applyLanguage() {
 function toggleLanguage() {
     currentLang = currentLang === 'id' ? 'en' : 'id';
     localStorage.setItem('tomeLang', currentLang);
-    playSFX('sfx-click');
     applyLanguage();
 }
 
@@ -351,113 +330,305 @@ TOME_DB[301] = [201, 206, 203, 17593, 'Eat Drink and be Merry']; TOME_DB[302] = 
 TOME_DB[201] = [101, 102, 103, 17584, 'Tome of Water']; TOME_DB[202] = [102, 103, 104, 17585, 'Tome of Fire']; TOME_DB[203] = [103, 104, 105, 17586, 'Tome of Earth']; TOME_DB[204] = [104, 105, 106, 17587, 'Tome of Wood']; TOME_DB[205] = [105, 106, 107, 17588, 'Tome of Metal']; TOME_DB[206] = [106, 107, 108, 17589, 'Tome of Wind']; TOME_DB[207] = [107, 108, 109, 17590, 'Tome of Thunder']; TOME_DB[208] = [108, 109, 101, 17591, 'Tome of Light']; TOME_DB[209] = [109, 101, 102, 17592, 'Tome of Darkness'];
 TOME_DB[101] = [0, 0, 0, 17001, 'Grace']; TOME_DB[102] = [0, 0, 0, 17002, 'Power']; TOME_DB[103] = [0, 0, 0, 17003, 'Courage']; TOME_DB[104] = [0, 0, 0, 17004, 'Wisdom']; TOME_DB[105] = [0, 0, 0, 17005, 'Yin']; TOME_DB[106] = [0, 0, 0, 17006, 'Yang']; TOME_DB[107] = [0, 0, 0, 17007, 'Life']; TOME_DB[108] = [0, 0, 0, 17008, 'Death']; TOME_DB[109] = [0, 0, 0, 17009, 'Void'];
 
+// DATABASE STATUS RESMI SEMUA TOME (LEVEL 1 S.D LEVEL 6) DARI PWDATABASE.COM
 const TOME_STATS = {
-    101: ["+5 Magic"], 102: ["+5 Strength"], 103: ["+5 Dexterity"], 104: ["+5 Vitality"], 105: ["HP Regeneration +3", "Exp Gain +1%"], 106: ["MP Regeneration +3", "Exp Gain +1%"], 107: ["+4 Strength", "+3 Vitality"], 108: ["+4 Dexterity", "+3 Vitality"], 109: ["+4 Magic", "+3 Vitality"],
-    201: ["+7 Magic", "+6 Vitality"], 202: ["+7 Strength", "+6 Vitality"], 203: ["+7 Dexterity", "+6 Vitality"], 204: ["+9 Magic"], 205: ["+9 Strength"], 206: ["+9 Dexterity"], 207: ["+9 Vitality"], 208: ["HP Regeneration +5", "Exp Gain +2%"], 209: ["MP Regeneration +5", "Exp Gain +2%"],
-    301: ["+10 Strength", "Critical Hit Rate +1%"], 302: ["+10 Magic", "Channelling -1%"], 303: ["+10 Dexterity", "Critical Hit Rate +1%"], 304: ["+10 Vitality", "Maximum HP +100"], 305: ["+7 Strength", "+7 Dexterity"], 306: ["+7 Magic", "+7 Vitality"], 307: ["+12 Strength"], 308: ["+12 Dexterity"], 309: ["+12 Magic"],
-    401: ["+15 Strength", "Critical Hit Rate +1%"], 402: ["+15 Magic", "Channelling -2%"], 403: ["+15 Dexterity", "Critical Hit Rate +1%"], 404: ["+15 Vitality", "Maximum HP +150"], 405: ["+10 Strength", "+10 Vitality"], 406: ["+10 Dexterity", "+10 Vitality"], 407: ["+10 Magic", "+10 Vitality"], 408: ["+8 Strength", "+8 Dexterity", "+8 Vitality"], 409: ["+8 Magic", "+8 Dexterity", "+8 Vitality"],
-    501: ["+20 Strength", "Critical Hit Rate +1%"], 502: ["+20 Magic", "Channelling -2%"], 503: ["+20 Dexterity", "Critical Hit Rate +1%"], 504: ["+20 Vitality", "Maximum HP +200"], 505: ["+15 Strength", "+15 Dexterity"], 506: ["+15 Magic", "+15 Vitality"], 507: ["+12 Strength", "+12 Dexterity", "+12 Vitality"], 508: ["+12 Magic", "+12 Dexterity", "+12 Vitality"], 509: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"], 510: ["+15 Strength", "Physical Attack +20"], 511: ["+15 Magic", "Magic Attack +20"], 512: ["+15 Dexterity", "Critical Hit Rate +2%"], 513: ["+15 Vitality", "Physical Defense +100"], 514: ["Maximum HP +300"], 515: ["+18 Magic", "Channelling -3%"], 516: ["+18 Strength", "Critical Hit Rate +2%"],
-    601: ["+15 Strength", "+15 Dexterity", "Critical Hit Rate +1%"], 602: ["+15 Magic", "+15 Vitality", "Channelling -3%"], 603: ["+15 Strength", "+15 Vitality", "Maximum HP +150"], 604: ["+20 Dexterity", "Attack Interval -0.05", "Movement Speed +0.10"], 605: ["+20 Magic", "Channelling -3", "Maximum MP +200"], 606: ["+20 Strength", "Critical Hit Rate +1%", "Physical Attack +30"], 607: ["+20 Vitality", "Maximum HP +200", "Physical Defense +50"], 608: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"], 609: ["+15 Dexterity", "+15 Vitality", "Critical Hit Rate +1%"], 610: ["+15 Magic", "+15 Dexterity", "Channelling -3%"], 611: ["+15 Strength", "+15 Magic", "Physical Attack +20"], 612: ["+25 Magic", "Channelling -3%"], 613: ["+25 Strength", "Critical Hit Rate +1%"], 614: ["+25 Dexterity", "Attack Interval -0.05"], 615: ["+20 Magic", "+20 Dexterity", "Channelling -3%", "Critical Hit Rate +1%"], 616: ["+20 Strength", "+20 Dexterity", "+20 Magic", "+20 Vitality", "Critical Hit Rate +1%"]
+    // === TOME LEVEL 1 ===
+    101: ["+5 Magic"],
+    102: ["+5 Strength"],
+    103: ["+5 Dexterity"],
+    104: ["+5 Vitality"],
+    105: ["HP Regeneration +3", "Exp Gain +1%"],
+    106: ["MP Regeneration +3", "Exp Gain +1%"],
+    107: ["+4 Strength", "+3 Vitality"],
+    108: ["+4 Dexterity", "+3 Vitality"],
+    109: ["+4 Magic", "+3 Vitality"],
+
+    // === TOME LEVEL 2 ===
+    201: ["+7 Magic", "+6 Vitality"],
+    202: ["+7 Strength", "+6 Vitality"],
+    203: ["+7 Dexterity", "+6 Vitality"],
+    204: ["+9 Magic"],
+    205: ["+9 Strength"],
+    206: ["+9 Dexterity"],
+    207: ["+9 Vitality"],
+    208: ["HP Regeneration +5", "Exp Gain +2%"],
+    209: ["MP Regeneration +5", "Exp Gain +2%"],
+
+    // === TOME LEVEL 3 ===
+    301: ["+10 Strength", "Critical Hit Rate +1%"],
+    302: ["+10 Magic", "Channelling -1%"],
+    303: ["+10 Dexterity", "Critical Hit Rate +1%"],
+    304: ["+10 Vitality", "Maximum HP +100"],
+    305: ["+7 Strength", "+7 Dexterity"],
+    306: ["+7 Magic", "+7 Vitality"],
+    307: ["+12 Strength"],
+    308: ["+12 Dexterity"],
+    309: ["+12 Magic"],
+
+    // === TOME LEVEL 4 ===
+    401: ["+15 Strength", "Critical Hit Rate +1%"],
+    402: ["+15 Magic", "Channelling -2%"],
+    403: ["+15 Dexterity", "Critical Hit Rate +1%"],
+    404: ["+15 Vitality", "Maximum HP +150"],
+    405: ["+10 Strength", "+10 Vitality"],
+    406: ["+10 Dexterity", "+10 Vitality"],
+    407: ["+10 Magic", "+10 Vitality"],
+    408: ["+8 Strength", "+8 Dexterity", "+8 Vitality"],
+    409: ["+8 Magic", "+8 Dexterity", "+8 Vitality"],
+
+    // === TOME LEVEL 5 ===
+    501: ["+20 Strength", "Critical Hit Rate +1%"],
+    502: ["+20 Magic", "Channelling -2%"],
+    503: ["+20 Dexterity", "Critical Hit Rate +1%"],
+    504: ["+20 Vitality", "Maximum HP +200"],
+    505: ["+15 Strength", "+15 Dexterity"],
+    506: ["+15 Magic", "+15 Vitality"],
+    507: ["+12 Strength", "+12 Dexterity", "+12 Vitality"],
+    508: ["+12 Magic", "+12 Dexterity", "+12 Vitality"],
+    509: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"],
+    510: ["+15 Strength", "Physical Attack +20"],
+    511: ["+15 Magic", "Magic Attack +20"],
+    512: ["+15 Dexterity", "Critical Hit Rate +2%"],
+    513: ["+15 Vitality", "Physical Defense +100"],
+    514: ["Maximum HP +300"],
+    515: ["+18 Magic", "Channelling -3%"],
+    516: ["+18 Strength", "Critical Hit Rate +2%"],
+
+    // === TOME LEVEL 6 ===
+    601: ["+15 Strength", "+15 Dexterity", "Critical Hit Rate +1%"],
+    602: ["+15 Magic", "+15 Vitality", "Channelling -3%"],
+    603: ["+15 Strength", "+15 Vitality", "Maximum HP +150"],
+    604: ["+20 Dexterity", "Attack Interval -0.05", "Movement Speed +0.10"],
+    605: ["+20 Magic", "Channelling -3", "Maximum MP +200"],
+    606: ["+20 Strength", "Critical Hit Rate +1%", "Physical Attack +30"],
+    607: ["+20 Vitality", "Maximum HP +200", "Physical Defense +50"],
+    608: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"],
+    609: ["+15 Dexterity", "+15 Vitality", "Critical Hit Rate +1%"],
+    610: ["+15 Magic", "+15 Dexterity", "Channelling -3%"],
+    611: ["+15 Strength", "+15 Magic", "Physical Attack +20"],
+    612: ["+25 Magic", "Channelling -3%"],
+    613: ["+25 Strength", "Critical Hit Rate +1%"],
+    614: ["+25 Dexterity", "Attack Interval -0.05"],
+    615: ["+20 Magic", "+20 Dexterity", "Channelling -3%", "Critical Hit Rate +1%"],
+    616: ["+20 Strength", "+20 Dexterity", "+20 Magic", "+20 Vitality", "Critical Hit Rate +1%"]
 };
 
-let itemCounts = {};       
+let itemCounts = [];       
 let deductions = [];       
-let deductionsCopy = {};   
+let deductionsCopy = [];   
 let leftTreeId = 616;
 let rightTreeId = 515;
 let activeModalItemId = null;
+
 let profiles = {};
 let currentProfile = 'Default';
 
+// LOGIKA MANAJEMEN FLOATING TOOLTIP
 function showTooltip(element, event) {
-    const id = parseInt(element.getAttribute('data-id'));
+    const id = parseInt(element.title);
+    if (!TOME_DB[id] && id !== 10 && id !== 11 && id !== 12) return;
+    
     const tooltip = document.getElementById('floatingTooltip');
-    if(!id || !TOME_DB[id]) return;
+    let nameText = "";
+    let typeText = LANG[currentLang]['matDesc'];
+    let statsHtml = "";
     
-    let lvl = Math.floor(id / 100);
-    let titleColor = lvl >= 6 ? '#ffcc00' : lvl >= 4 ? '#b046ff' : '#ffffff';
-    let name = TOME_DB[id][4];
-    let stats = TOME_STATS[id] || [];
-    
-    let html = `<div class="tooltip-title" style="color: ${titleColor}">${name}</div>
-                <div class="tooltip-type">${LANG[currentLang]['lvl']} ${lvl}</div>
-                <div class="tooltip-list">`;
-    stats.forEach(stat => { html += `<div class="tooltip-stat">${stat}</div>`; });
-    html += `</div><div class="tooltip-footer">${LANG[currentLang]['statEquipDesc']}</div>`;
+    if (id === 10) { 
+        nameText = "Token of Luck"; 
+        typeText = currentLang === 'id' ? "Mata Uang Kegiatan" : "Event Currency";
+    } else if (id === 11) { 
+        nameText = "Tome Fragment"; 
+    } else if (id === 12) { 
+        nameText = "Tome Page"; 
+    } else { 
+        nameText = TOME_DB[id][4]; 
+        const lvl = Math.floor(id / 100);
+        typeText = `Tome (${LANG[currentLang]['lvl']} ${lvl})`;
+        
+        // Render Status Atribut Komplit
+        if (TOME_STATS[id]) {
+            TOME_STATS[id].forEach(stat => {
+                statsHtml += `<span class="tooltip-stat">• ${stat}</span>`;
+            });
+        }
+    }
+
+    let html = `
+        <div class="tooltip-title">
+            <span style="display:inline-block; width:32px; height:32px; background-image:url('znachki.png'); ${getSpritePosition(id)}; transform: scale(0.8); pointer-events:none;"></span>
+            ${nameText}
+        </div>
+        <div class="tooltip-type">${typeText}</div>
+        <div class="tooltip-list">${statsHtml}</div>
+        <div class="tooltip-footer">${LANG[currentLang]['statEquipDesc']}</div>
+    `;
     
     tooltip.innerHTML = html;
     tooltip.style.display = 'block';
-    positionTooltip(event);
+    moveTooltip(event);
+    
+    // Sinkronisasi teks tautan info atas
+    let linkUrl = (id === 10) ? "http://www.pwdatabase.com/pwi/items/24722" :
+                  (id === 11) ? "http://www.pwdatabase.com/pwi/items/17011" :
+                  (id === 12) ? "http://www.pwdatabase.com/pwi/items/17010" :
+                  `http://www.pwdatabase.com/pwi/items/${TOME_DB[id][3]}`;
+    document.getElementById('nazvaniye').innerHTML = `<a href="${linkUrl}" target="_blank">► ${nameText}</a>`;
+}
+
+function moveTooltip(event) {
+    const tooltip = document.getElementById('floatingTooltip');
+    if (tooltip.style.display !== 'block') return;
+    
+    let x = event.clientX + 15;
+    let y = event.clientY + 15;
+    
+    const tooltipWidth = tooltip.offsetWidth || 240;
+    const tooltipHeight = tooltip.offsetHeight || 160;
+    
+    // Proteksi Batas Monitor Layar Browser
+    if (x + tooltipWidth > window.innerWidth) {
+        x = event.clientX - tooltipWidth - 15;
+    }
+    if (y + tooltipHeight > window.innerHeight) {
+        y = event.clientY - tooltipHeight - 15;
+    }
+    
+    tooltip.style.left = x + 'px';
+    tooltip.style.top = y + 'px';
 }
 
 function hideTooltip() {
     document.getElementById('floatingTooltip').style.display = 'none';
 }
 
-function positionTooltip(e) {
-    const tooltip = document.getElementById('floatingTooltip');
-    if(tooltip.style.display === 'block') {
-        let x = e.clientX + 15; let y = e.clientY + 15;
-        if (x + tooltip.offsetWidth > window.innerWidth) x = e.clientX - tooltip.offsetWidth - 15;
-        if (y + tooltip.offsetHeight > window.innerHeight) y = e.clientY - tooltip.offsetHeight - 15;
-        tooltip.style.left = x + 'px'; tooltip.style.top = y + 'px';
-    }
-}
-document.addEventListener('mousemove', positionTooltip);
-
-function calculateNode(id) {
-    if (!id || id === 0) return;
-    if (deductionsCopy[id] && deductionsCopy[id] > 0) {
-        deductionsCopy[id]--;
-        return;
-    }
-    itemCounts[id] = (itemCounts[id] || 0) + 1;
-    if (TOME_DB[id] && TOME_DB[id][0] !== 0) {
-        calculateNode(TOME_DB[id][0]);
-        calculateNode(TOME_DB[id][1]);
-        calculateNode(TOME_DB[id][2]);
+function copyShareLink() {
+    const compD = {};
+    deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
+    const finalState = { l: leftTreeId, r: rightTreeId, m: document.getElementById('mnojitel').value, d: compD };
+    const hash = btoa(JSON.stringify(finalState));
+    const url = window.location.origin + window.location.pathname + "#" + hash;
+    
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(() => alert(LANG[currentLang]['alertCopy'])).catch(() => prompt(LANG[currentLang]['promptCopy'], url));
     } else {
-        itemCounts[11] = (itemCounts[11] || 0) + 4; 
-        itemCounts[12] = (itemCounts[12] || 0) + 1; 
+        prompt(LANG[currentLang]['promptCopy'], url);
     }
 }
 
-function processTree(id, isRightTree = false) {
-    if(isRightTree) playSFX('sfx-click');
-    itemCounts = { 10: 0, 11: 0, 12: 0 };
-    deductionsCopy = {};
-    deductions.forEach(d => { deductionsCopy[d.id] = d.count; });
-    
-    let multiplier = 1;
-    if (isRightTree) {
-        rightTreeId = id;
-        let inputVal = parseInt(document.getElementById('mnojitel').value);
-        if (isNaN(inputVal) || inputVal < 1) inputVal = 1;
-        multiplier = inputVal;
-    } else { leftTreeId = id; }
-
-    for (let z = 0; z < multiplier; z++) { calculateNode(id); }
-    renderTreeDOM(isRightTree ? 'rightTree' : 'leftTree', id);
-    updateCostAndProgress();
+function loadFromHash() {
+    if (window.location.hash) {
+        try {
+            const state = JSON.parse(atob(window.location.hash.substring(1)));
+            if (state.l) leftTreeId = state.l;
+            if (state.r) rightTreeId = state.r;
+            if (state.m) document.getElementById('mnojitel').value = state.m;
+            if (state.d) {
+                deductions = [];
+                for (let k in state.d) deductions[parseInt(k)] = state.d[k];
+                saveDeductions(); 
+            }
+            history.replaceState(null, null, ' ');
+        } catch(e) {}
+    }
 }
 
-function renderTreeDOM(elementId, targetId) {
-    const container = document.getElementById(elementId);
-    if (!container) return;
-    let lvl = Math.floor(targetId / 100);
-    let html = `<ul><li>Level ${lvl}: ${TOME_DB[targetId][4]}</li>`;
-    
-    for (let id in itemCounts) {
-        if (itemCounts[id] > 0 && id > 20) {
-            html += `<li data-id="${id}" onmouseenter="showTooltip(this, event)" onmouseleave="hideTooltip()">
-                <button style="background-position:-${(id%10)*32}px -${Math.floor(id/100)*32}px;"></button>
-                <b>${itemCounts[id]}</b>
-                <span onclick="addDeduction(${id}, 1)"></span>
-            </li>`;
-        }
+function saveDeductions() { 
+    localStorage.setItem('tomeDeductions', JSON.stringify(deductions)); 
+    saveActiveProfile(); 
+}
+
+function resetCalculator() {
+    if (confirm(LANG[currentLang]['alertReset'])) {
+        localStorage.removeItem('tomeProfiles');
+        localStorage.removeItem('tomeCurrentProfile');
+        localStorage.removeItem('tomeDeductions');
+        localStorage.removeItem('tomePrice10');
+        localStorage.removeItem('tomePrice11');
+        localStorage.removeItem('tomePrice12');
+        history.replaceState(null, null, ' ');
+        location.reload();
     }
-    html += `</ul>`;
-    container.innerHTML = html;
+}
+
+function handleItemClick(element) {
+    let clickedVal = parseInt(element.value) || 1;
+    if(clickedVal > 99) clickedVal = 99;
+	document.getElementById('mnojitel').value = clickedVal;
+	processTree(parseInt(element.title), true);
+}
+
+function addDeduction(id) {
+    const btn = document.querySelector(`.branch button[title="${id}"]`);
+    activeModalItemId = id;
+    
+    let itemName = LANG[currentLang]['modalTitleAdd'];
+    if (id === 10) itemName = "Token of Luck";
+    else if (id === 11) itemName = "Tome Fragment";
+    else if (id === 12) itemName = "Tome Page";
+    else if (TOME_DB[id]) itemName = TOME_DB[id][4];
+
+    document.getElementById('modalTitle').innerText = itemName;
+    document.getElementById('modalInput').value = btn ? btn.value : 1;
+    document.getElementById('customModal').style.display = 'flex';
+    document.getElementById('modalInput').focus();
+}
+
+function closeModal() { document.getElementById('customModal').style.display = 'none'; activeModalItemId = null; }
+
+function confirmModal() {
+    const amount = parseInt(document.getElementById('modalInput').value);
+    if (!isNaN(amount) && amount > 0 && activeModalItemId) {
+        if (!deductions[activeModalItemId]) deductions[activeModalItemId] = 0;
+        deductions[activeModalItemId] += amount;
+        saveDeductions();
+        processTree(leftTreeId, false);
+        processTree(rightTreeId, true);
+        renderDeductions();
+    }
+    closeModal();
+}
+
+function removeDeduction(id) {
+    deductions[id] = 0;
+    saveDeductions();
+    processTree(leftTreeId, false);
+    processTree(rightTreeId, true);
+    renderDeductions();
+}
+
+function getSpritePosition(id) { 
+    const parsedId = parseInt(id);
+    if (parsedId === 10) return 'background-position:32px -32px';
+    if (parsedId === 11) return 'background-position:64px 0px';
+    if (parsedId === 12) return 'background-position:32px 0px';
+    let row = Math.floor(parsedId / 100);
+    let num = parsedId - (row * 100);
+    return `background-position:-${32 * (num - 1)}px -${32 * (row - 1)}px`;
+}
+
+function toggleBookPanel() {
+    const panel = document.getElementById('vyborDiv');
+    const search = document.getElementById('bookSearch');
+    const isHidden = panel.style.display === 'none';
+    panel.style.display = isHidden ? 'block' : 'none';
+    search.style.display = isHidden ? 'block' : 'none';
+    if(isHidden) search.focus();
+}
+
+function filterBooks(query) {
+    const q = query.toLowerCase();
+    document.querySelectorAll('#vyborDiv ul').forEach(ul => {
+        let hasVisibleItem = false;
+        ul.querySelectorAll('li').forEach(li => {
+            const id = li.querySelector('button').title;
+            const bookName = TOME_DB[id] ? TOME_DB[id][4].toLowerCase() : '';
+            if (bookName.includes(q)) { li.style.display = 'inline-block'; hasVisibleItem = true; } 
+            else li.style.display = 'none';
+        });
+        const header = ul.previousElementSibling;
+        if (header && header.tagName === 'H4') header.style.display = hasVisibleItem ? 'block' : 'none';
+        ul.style.display = hasVisibleItem ? 'flex' : 'none';
+    });
 }
 
 function updateCostAndProgress() {
@@ -465,240 +636,358 @@ function updateCostAndProgress() {
     let price11 = parseInt(document.getElementById('price11').value) || 0;
     let price12 = parseInt(document.getElementById('price12').value) || 0;
     
-    let totalCost = ((itemCounts[10]||0)*price10) + ((itemCounts[11]||0)*price11) + ((itemCounts[12]||0)*price12);
+    localStorage.setItem('tomePrice10', price10);
+    localStorage.setItem('tomePrice11', price11);
+    localStorage.setItem('tomePrice12', price12);
+    
+    saveActiveProfile(); 
+
+    let netCounts = [];
+    let dedCopy = [...deductions];
+    let multiplier = parseInt(document.getElementById('mnojitel').value) || 1;
+    if (multiplier < 1) multiplier = 1; if (multiplier > 99) multiplier = 99;
+
+    function calcNetNode(nodeId) {
+        if (!netCounts[nodeId]) netCounts[nodeId] = 0;
+        if (dedCopy[nodeId] && dedCopy[nodeId] > 0) {
+            dedCopy[nodeId]--;
+        } else {
+            netCounts[nodeId]++;
+            if (nodeId > 200) { calcNetNode(TOME_DB[nodeId][0]); calcNetNode(TOME_DB[nodeId][1]); calcNetNode(TOME_DB[nodeId][2]); }
+        }
+    }
+
+    for (let z = 0; z < multiplier; z++) calcNetNode(rightTreeId);
+
+    let netBaseMats = 0;
+    for (let z = 101; z <= 109; z++) if (netCounts[z]) netBaseMats += netCounts[z] * 3;
+    
+    netCounts[12] = netBaseMats; if (deductions[12]) netCounts[12] -= deductions[12]; if (netCounts[12] < 0) netCounts[12] = 0;
+    netCounts[11] = netBaseMats; if (deductions[11]) netCounts[11] -= deductions[11]; if (netCounts[11] < 0) netCounts[11] = 0;
+    netCounts[10] = netCounts[12] * 80; if (deductions[10]) netCounts[10] -= deductions[10]; if (netCounts[10] < 0) netCounts[10] = 0;
+
+    let grossCounts = [];
+    function calcGrossNode(nodeId) {
+        if (!grossCounts[nodeId]) grossCounts[nodeId] = 0;
+        grossCounts[nodeId]++;
+        if (nodeId > 200) { calcGrossNode(TOME_DB[nodeId][0]); calcGrossNode(TOME_DB[nodeId][1]); calcGrossNode(TOME_DB[nodeId][2]); }
+    }
+    for (let z = 0; z < multiplier; z++) calcGrossNode(rightTreeId);
+    
+    let grossBaseMats = 0;
+    for (let z = 101; z <= 109; z++) if (grossCounts[z]) grossBaseMats += grossCounts[z] * 3;
+    grossCounts[11] = grossBaseMats; grossCounts[12] = grossBaseMats; grossCounts[10] = grossBaseMats * 80;
+
+    let totalCost = (netCounts[10] || 0) * price10 + (netCounts[11] || 0) * price11 + (netCounts[12] || 0) * price12;
     document.getElementById('totalCostDisplay').innerText = totalCost.toLocaleString('id-ID') + " Gold";
 
-    let totalNeeded = 0; Object.values(itemCounts).forEach(v => totalNeeded+=v);
-    let totalOwned = 0; deductions.forEach(d => totalOwned += d.count);
-    let pct = totalNeeded > 0 ? (totalOwned / (totalNeeded + totalOwned)) * 100 : 0;
-    if(pct > 100) pct = 100;
+    let grossVal = (grossCounts[10] || 0) + (grossCounts[12] || 0) * 80 + (grossCounts[11] || 0) * 80;
+    let netVal = (netCounts[10] || 0) + (netCounts[12] || 0) * 80 + (netCounts[11] || 0) * 80;
     
-    document.getElementById('progressPercentText').innerText = pct.toFixed(1) + "%";
-    document.getElementById('progressBar').style.width = pct + "%";
-}
+    let pct = grossVal > 0 ? ((grossVal - netVal) / grossVal) * 100 : 0;
+    if (pct < 0) pct = 0; if (pct > 100) pct = 100;
 
-function renderMenu() {
-    let vyborDiv = document.getElementById('vyborDiv');
-    if (!vyborDiv) return;
-    let html = "";
-    let categories = { 6:[], 5:[], 4:[], 3:[], 2:[], 1:[] };
-    for(let id in TOME_DB) { categories[Math.floor(id/100)].push(id); }
-    
-    for(let lvl = 6; lvl >= 1; lvl--) {
-        html += `<h4>Level ${lvl}</h4><ul>`;
-        categories[lvl].forEach(id => {
-            html += `<li data-id="${id}" onmouseenter="showTooltip(this, event)" onmouseleave="hideTooltip()">
-                <button style="background-position:-${(id%10)*32}px -${Math.floor(id/100)*32}px;" onclick="selectTarget(${id})"></button>
-            </li>`;
-        });
-        html += `</ul>`;
-    }
-    vyborDiv.innerHTML = html;
-}
+    document.getElementById('progressBar').style.width = pct.toFixed(1) + '%';
+    document.getElementById('progressPercentText').innerText = pct.toFixed(1) + '%';
 
-function selectTarget(id) {
-    playSFX('sfx-success');
-    leftTreeId = id; rightTreeId = id;
-    processTree(leftTreeId, false);
-    processTree(rightTreeId, true);
-    toggleBookPanel();
-}
-
-function toggleBookPanel() {
-    playSFX('sfx-click');
-    let div = document.getElementById('vyborDiv');
-    let search = document.getElementById('bookSearch');
-    let disp = div.style.display === 'none' ? 'block' : 'none';
-    div.style.display = disp; search.style.display = disp;
-}
-
-function filterBooks(query) {
-    let lis = document.querySelectorAll('#vyborDiv li');
-    lis.forEach(li => {
-        let id = li.getAttribute('data-id');
-        let matches = TOME_DB[id][4].toLowerCase().includes(query.toLowerCase());
-        li.style.display = matches ? 'inline-block' : 'none';
-    });
-}
-
-function toggleMenuPanel() {
-    playSFX('sfx-click');
-    let panel = document.getElementById('mainMenuPanel');
-    panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';
-}
-
-function openInventoryModal() {
-    playSFX('sfx-click');
-    document.getElementById('inventoryModal').style.display = 'flex';
-    let container = document.getElementById('invItemList');
-    let html = "<ul>";
-    for(let id in TOME_DB) {
-        html += `<li data-id="${id}" onmouseenter="showTooltip(this, event)" onmouseleave="hideTooltip()" style="display:inline-block; margin:4px;">
-            <button style="background-position:-${(id%10)*32}px -${Math.floor(id/100)*32}px;" onclick="triggerAddInventory(${id})"></button>
-        </li>`;
-    }
-    html += "</ul>"; container.innerHTML = html;
-}
-
-function closeInventoryModal() {
-    playSFX('sfx-click');
-    document.getElementById('inventoryModal').style.display = 'none';
-}
-
-function filterInventorySearch(query) {
-    let lis = document.querySelectorAll('#invItemList li');
-    lis.forEach(li => {
-        let id = li.getAttribute('data-id');
-        let matches = TOME_DB[id][4].toLowerCase().includes(query.toLowerCase());
-        li.style.display = matches ? 'inline-block' : 'none';
-    });
-}
-
-function triggerAddInventory(id) {
-    activeModalItemId = id;
-    document.getElementById('customModal').style.display = 'flex';
-}
-
-function confirmModal() {
-    playSFX('sfx-success');
-    let qty = parseInt(document.getElementById('modalInput').value) || 1;
-    if(activeModalItemId) { addDeduction(activeModalItemId, qty); }
-    closeModal(); closeInventoryModal();
-}
-
-function closeModal() {
-    playSFX('sfx-click');
-    document.getElementById('customModal').style.display = 'none';
-}
-
-function addDeduction(id, count) {
-    let exist = deductions.find(d => d.id === id);
-    if(exist) { exist.count += count; } else { deductions.push({id: id, count: count}); }
-    saveProfiles(); renderDeductions(); processTree(rightTreeId, true);
-}
-
-function removeDeduction(index) {
-    playSFX('sfx-click');
-    deductions.splice(index, 1);
-    saveProfiles(); renderDeductions(); processTree(rightTreeId, true);
-}
-
-function renderDeductions() {
-    let list = document.getElementById('deductionsList');
-    if(!list) return;
-    if(deductions.length === 0) { list.innerHTML = ""; return; }
-    let html = "<ul><li>Bahan Dimiliki</li>";
-    deductions.forEach((d, i) => {
-        html += `<li data-id="${d.id}" onmouseenter="showTooltip(this, event)" onmouseleave="hideTooltip()">
-            <button style="background-position:-${(d.id%10)*32}px -${Math.floor(d.id/100)*32}px;"></button>
-            <b>${d.count}</b>
-            <span style="opacity:1; visibility:visible;" onclick="removeDeduction(${i})"></span>
-        </li>`;
-    });
-    html += "</ul>"; list.innerHTML = html;
-}
-
-function saveProfiles() {
-    profiles[currentProfile] = { leftTreeId, rightTreeId, deductions, prices: [
-        document.getElementById('price10').value, document.getElementById('price11').value, document.getElementById('price12').value
-    ]};
-    localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
-    localStorage.setItem('tomeCurrentProfile', currentProfile);
-}
-
-function loadProfiles() {
-    let saved = localStorage.getItem('tomeProfiles');
-    if (saved) { profiles = JSON.parse(saved); } 
-    else { profiles = { 'Default': { leftTreeId: 616, rightTreeId: 515, deductions: [], prices:[0,0,0] } }; }
-    currentProfile = localStorage.getItem('tomeCurrentProfile') || 'Default';
-    
-    let select = document.getElementById('profileSelect');
-    select.innerHTML = "";
-    for(let name in profiles) {
-        let opt = document.createElement('option'); opt.value = name; opt.innerText = name;
-        if(name === currentProfile) opt.selected = true;
-        select.appendChild(opt);
-    }
-    handleProfileChange(currentProfile);
-}
-
-function handleProfileChange(name) {
-    currentProfile = name;
-    let p = profiles[name] || { leftTreeId: 616, rightTreeId: 515, deductions: [], prices:[0,0,0] };
-    leftTreeId = p.leftTreeId || 616; rightTreeId = p.rightTreeId || 515;
-    deductions = p.deductions || [];
-    if(p.prices) {
-        document.getElementById('price10').value = p.prices[0] || 0;
-        document.getElementById('price11').value = p.prices[1] || 0;
-        document.getElementById('price12').value = p.prices[2] || 0;
-    }
-    renderDeductions(); processTree(leftTreeId, false); processTree(rightTreeId, true);
-}
-
-function createNewProfile() {
-    playSFX('sfx-click');
-    let name = prompt("Nama profil baru:");
-    if(!name) return;
-    profiles[name] = { leftTreeId: 616, rightTreeId: 515, deductions: [], prices:[0,0,0] };
-    currentProfile = name; saveProfiles(); loadProfiles();
-}
-
-function removeCurrentProfile() {
-    playSFX('sfx-click');
-    if(currentProfile === 'Default') return alert("Profil default tidak bisa dihapus!");
-    delete profiles[currentProfile]; currentProfile = 'Default';
-    saveProfiles(); loadProfiles();
-}
-
-function exportProfilesData() {
-    playSFX('sfx-click');
-    let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(profiles));
-    let dl = document.createElement('a'); dl.setAttribute("href", dataStr); dl.setAttribute("download", "tome_profiles.json");
-    dl.click();
-}
-
-function importProfilesData(e) {
-    playSFX('sfx-click');
-    let file = e.target.files[0]; if(!file) return;
-    let reader = new FileReader();
-    reader.onload = function(evt) {
-        try {
-            profiles = JSON.parse(evt.target.result); saveProfiles(); loadProfiles();
-        } catch(err) { alert("Format file rusak!"); }
-    };
-    reader.readAsText(file);
-}
-
-function copyShareLink() {
-    playSFX('sfx-click');
-    let state = { l: leftTreeId, r: rightTreeId, d: deductions };
-    let base64 = btoa(JSON.stringify(state));
-    let url = window.location.href.split('?')[0] + "?build=" + base64;
-    navigator.clipboard.writeText(url).then(() => alert(LANG[currentLang].alertCopy));
+    if (pct === 100 && !window.confettiFired) {
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#3b82f6', '#10b981', '#f59e0b'] });
+        window.confettiFired = true; 
+    } else if (pct < 100) window.confettiFired = false; 
 }
 
 function exportToImage(e) {
-    playSFX('sfx-click');
-    html2canvas(document.querySelector(".container")).then(canvas => {
-        let a = document.createElement('a'); a.download = 'tome-build.png'; a.href = canvas.toDataURL(); a.click();
-    });
+    const btn = e.currentTarget || document.querySelector('button[onClick*="exportToImage"]');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = "⏳ Memproses...";
+    html2canvas(document.querySelector('.container'), { backgroundColor: "#0f172a", scale: 2, logging: false, useCORS: true }).then(canvas => {
+        const link = document.createElement('a'); link.download = 'Tome-Build-Export.png'; link.href = canvas.toDataURL('image/png'); link.click(); btn.innerHTML = originalText;
+    }).catch(() => { btn.innerHTML = "❌ Gagal!"; setTimeout(() => btn.innerHTML = originalText, 2000); });
 }
 
-function resetCalculator() {
-    playSFX('sfx-click');
-    if(confirm(LANG[currentLang]['alertReset'])) { localStorage.clear(); location.reload(); }
+function getTreeItemHtml(id, isDeductionList = false) {
+    const count = isDeductionList ? deductions[id] : itemCounts[id];
+    let actionSpan = isDeductionList ? `<span onClick="removeDeduction(${id});" title="Hapus dari daftar ini"></span>` : `<span onClick="addDeduction(${id});" title="Kurangi dari total"></span>`;
+    let clickAction = isDeductionList ? '' : 'onClick="handleItemClick(this)"';
+    if (!isDeductionList && (id === 12 || id === 11 || id === 10)) clickAction = '';
+    return `<li>${actionSpan}<button style="${getSpritePosition(id)}" value="${count}" title="${id}" ${clickAction} onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button><b>×${count}</b></li>`;
 }
 
-window.onload = function() {
-    let params = new URLSearchParams(window.location.search);
-    let build = params.get('build');
-    if(build) {
-        try {
-            let parsed = JSON.parse(atob(build));
-            leftTreeId = parsed.l; rightTreeId = parsed.r; deductions = parsed.d;
-        } catch(e){}
+function renderTree(isRightTree) {
+	let txt = '';
+    const txtLvl = LANG[currentLang]['lvl'];
+    const txtBase = LANG[currentLang]['baseMat'];
+
+	for (let r = 6; r >= 1; r--) {
+		let start = r * 100 + 1; let end = r * 100 + 16; let hasItem = false;
+		let tempTxt = `<ul><li>${txtLvl} ${r}</li> `;
+		for (let e = start; e <= end; e++) {
+			if (itemCounts[e]) { tempTxt += getTreeItemHtml(e); hasItem = true; }
+		}
+		tempTxt += '</ul>';
+		if (hasItem) txt += tempTxt;
+	}
+	
+	txt += `<ul id="niz"><li>${txtBase}</li> `;
+	if (itemCounts[11]) txt += getTreeItemHtml(11);
+	if (itemCounts[12]) txt += getTreeItemHtml(12);
+	if (itemCounts[10]) txt += `<li id="strelki" style="margin: 0 10px;">→</li>${getTreeItemHtml(10)}`;
+	txt += `</ul>`;
+	document.getElementById(isRightTree ? 'rightTree' : 'leftTree').innerHTML = txt;
+}
+
+function renderDeductions() {
+    let txt = ''; let lis = ''; const deductionsDiv = document.getElementById('deductionsList');
+    if (deductions[11]) lis += getTreeItemHtml(11, true); if (deductions[12]) lis += getTreeItemHtml(12, true); if (deductions[10]) lis += getTreeItemHtml(10, true);
+    if (lis !== '') txt += `<ul><li>${LANG[currentLang]['baseMat']}</li> ${lis}</ul>`;
+    for (let r = 1; r <= 6; r++) {
+        lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
+        for (let e = start; e <= end; e++) if (deductions[e]) lis += getTreeItemHtml(e, true);
+        if (lis !== '') txt += `<ul><li>${LANG[currentLang]['lvl']} ${r}</li> ${lis}</ul>`;
     }
-    loadProfiles(); applyLanguage();
+    deductionsDiv.innerHTML = txt;
+}
+
+function renderMenu() {
+    let txt = '';
+    for (let r = 6; r >= 1; r--) {
+        let lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
+        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="${getSpritePosition(e)}" title="${e}" onClick="processTree(${e}, false)" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
+        txt += `<h4>Tome ${LANG[currentLang]['lvl']} ${r}</h4><ul style="display: flex; flex-wrap: wrap; gap: 8px;"> ${lis}</ul>`;
+    }
+    document.getElementById('vyborDiv').innerHTML = txt;
+}
+
+function calculateNode(id) {
+	if (!itemCounts[id]) itemCounts[id] = 0;
+	if (deductionsCopy[id] && deductionsCopy[id] > 0) {
+		deductionsCopy[id]--;
+	} else {
+		itemCounts[id]++;
+		if (id > 200) { 
+            calculateNode(TOME_DB[id][0]); 
+            calculateNode(TOME_DB[id][1]); 
+            calculateNode(TOME_DB[id][2]); 
+        }
+	}
+}
+
+function processTree(id, isRightTree = false) {
+    itemCounts = [];
+    deductionsCopy = [...deductions];
+    let multiplier = 1;
+
+    if (isRightTree) {
+        rightTreeId = id;
+        let inputField = document.getElementById('mnojitel');
+        let inputVal = parseInt(inputField.value);
+        if (isNaN(inputVal) || inputVal < 1) inputVal = 1;
+        if (inputVal > 99) inputVal = 99;
+        inputField.value = inputVal; 
+        multiplier = inputVal;
+    } else leftTreeId = id;
+
+    for (let z = 0; z < multiplier; z++) calculateNode(id);
+
+    let baseMats = 0;
+    for (let z = 101; z <= 109; z++) if (itemCounts[z]) baseMats += itemCounts[z] * 3;
+
+    for (let z = 12; z >= 10; z--) {
+        itemCounts[z] = z === 10 ? (itemCounts[12] || 0) * 80 : baseMats;
+        if (deductions[z]) itemCounts[z] -= deductions[z];
+        if (itemCounts[z] < 0) itemCounts[z] = 0;
+    }
+        
+    renderTree(isRightTree);
+    updateCostAndProgress(); 
+}
+
+function openInventoryModal() {
+    document.getElementById('inventoryModal').style.display = 'flex';
+    document.getElementById('invSearch').value = '';
+    renderInventorySelection('');
+    document.getElementById('invSearch').focus();
+}
+
+function closeInventoryModal() { document.getElementById('inventoryModal').style.display = 'none'; }
+
+function renderInventorySelection(query) {
+    let html = '<ul style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">';
+    const q = query.toLowerCase();
+    
+    const baseMats = [ {id: 12, name: 'Tome Page'}, {id: 11, name: 'Tome Fragment'}, {id: 10, name: 'Token of Luck'} ];
+    baseMats.forEach(mat => {
+        if (mat.name.toLowerCase().includes(q)) {
+            html += `<li><button style="${getSpritePosition(mat.id)}" title="${mat.id}" onClick="selectItemForInventory(${mat.id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
+        }
+    });
+
+	TOME_DB.forEach((tome, id) => {
+        if (tome && tome[4].toLowerCase().includes(q)) {
+            html += `<li><button style="${getSpritePosition(id)}" title="${id}" onClick="selectItemForInventory(${id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
+        }
+    });
+    
+    html += '</ul>';
+    document.getElementById('invItemList').innerHTML = html;
+}
+
+function filterInventorySearch(val) { renderInventorySelection(val); }
+
+function selectItemForInventory(id) {
+    closeInventoryModal();
+    addDeduction(id); 
+}
+
+function initProfiles() {
+    try {
+        const saved = localStorage.getItem('tomeProfiles');
+        if (saved) profiles = JSON.parse(saved);
+    } catch (e) { profiles = {}; }
+    
+    if (!profiles['Default']) {
+        profiles['Default'] = { l: 616, r: 515, m: 1, d: [], p10: 0, p11: 0, p12: 0 };
+    }
+    
+    currentProfile = localStorage.getItem('tomeCurrentProfile') || 'Default';
+    if (!profiles[currentProfile]) currentProfile = 'Default';
+    
+    loadProfileData(currentProfile);
+    renderProfileDropdown();
+}
+
+function renderProfileDropdown() {
+    const select = document.getElementById('profileSelect');
+    if (!select) return;
+    select.innerHTML = '';
+    for (let name in profiles) {
+        let opt = document.createElement('option');
+        opt.value = name;
+        opt.innerText = name;
+        if (name === currentProfile) opt.selected = true;
+        select.appendChild(opt);
+    }
+}
+
+function loadProfileData(name) {
+    currentProfile = name;
+    localStorage.setItem('tomeCurrentProfile', name);
+    
+    const data = profiles[name];
+    leftTreeId = data.l || 616;
+    rightTreeId = data.r || 515;
+    document.getElementById('mnojitel').value = data.m || 1;
+    deductions = data.d || [];
+    
+    document.getElementById('price10').value = data.p10 || 0;
+    document.getElementById('price11').value = data.p11 || 0;
+    document.getElementById('price12').value = data.p12 || 0;
+    
+    localStorage.setItem('tomeDeductions', JSON.stringify(deductions));
+    localStorage.setItem('tomePrice10', data.p10 || 0);
+    localStorage.setItem('tomePrice11', data.p11 || 0);
+    localStorage.setItem('tomePrice12', data.p12 || 0);
+}
+
+function handleProfileChange(name) {
+    loadProfileData(name);
+    applyLanguage();
+}
+
+function saveActiveProfile() {
+    let p10 = parseInt(document.getElementById('price10').value) || 0;
+    let p11 = parseInt(document.getElementById('price11').value) || 0;
+    let p12 = parseInt(document.getElementById('price12').value) || 0;
+    let m = parseInt(document.getElementById('mnojitel').value) || 1;
+
+    profiles[currentProfile] = {
+        l: leftTreeId,
+        r: rightTreeId,
+        m: m,
+        d: deductions,
+        p10: p10,
+        p11: p11,
+        p12: p12
+    };
+    localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
+}
+
+function createNewProfile() {
+    let name = prompt("Masukkan nama profil baru (misal: Mage DPS, Alt Cleric):");
+    if (!name) return;
+    name = name.trim();
+    if (name === "") return;
+    if (profiles[name]) { alert("Nama profil tersebut sudah ada!"); return; }
+    
+    currentProfile = name;
+    saveActiveProfile();
+    renderProfileDropdown();
+    loadProfileData(name);
+    applyLanguage();
+}
+
+function removeCurrentProfile() {
+    if (currentProfile === 'Default') {
+        alert("Profil 'Default' sistem tidak dapat dihapus.");
+        return;
+    }
+    if (confirm(`Apakah Anda yakin ingin menghapus profil "${currentProfile}" beserta seluruh data di dalamnya?`)) {
+        delete profiles[currentProfile];
+        localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
+        currentProfile = 'Default';
+        loadProfileData('Default');
+        renderProfileDropdown();
+        applyLanguage();
+    }
+}
+
+function exportProfilesData() {
+    const dataStr = JSON.stringify(profiles, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "Tome-Profiles-Backup.json"; 
+    document.body.appendChild(a);
+    a.click();
+    
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function importProfilesData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+            if (typeof importedData === 'object' && importedData !== null) {
+                profiles = { ...profiles, ...importedData };
+                localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
+                
+                renderProfileDropdown();
+                loadProfileData(currentProfile);
+                applyLanguage();
+                alert(currentLang === 'id' ? "Data profil berhasil diimpor!" : "Profile data imported successfully!");
+            } else {
+                alert(currentLang === 'id' ? "Format file tidak valid!" : "Invalid file format!");
+            }
+        } catch (err) {
+            alert(currentLang === 'id' ? "Gagal membaca file JSON!" : "Failed to read JSON file!");
+        }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+}
+
+window.onload = () => {
+    initProfiles(); 
+    loadFromHash(); 
+    applyLanguage(); 
+    document.getElementById('modalInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') confirmModal(); });
 };
 </script>
 </body>
