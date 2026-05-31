@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 
     <style>
         :root {
@@ -18,7 +17,6 @@
             --accent-blue: #3b82f6;
             --accent-green: #10b981;
             --accent-red: #ef4444;
-            --accent-purple: #8b5cf6;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: #475569;
@@ -76,7 +74,6 @@
         .btn-danger { background-color: var(--accent-red); }
         .btn-success { background-color: var(--accent-green); }
         .btn-secondary { background-color: var(--bg-input); border: 1px solid var(--border-color); }
-        .btn-purple { background-color: var(--accent-purple); }
 
         select, input[type="number"], input[type="text"] {
             background-color: var(--bg-input);
@@ -214,29 +211,6 @@
             font-weight: 500;
         }
 
-        #networkContainer {
-            width: 100%;
-            height: 500px;
-            background-color: #0b0f19;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            margin-top: 10px;
-            display: none;
-        }
-
-        .graph-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-bottom: none;
-            border-radius: 12px 12px 0 0;
-            margin-top: 20px;
-            display: none;
-        }
-
         #floatingTooltip {
             position: fixed;
             background: rgba(15, 23, 42, 0.95);
@@ -327,7 +301,6 @@
         <button id="langBtn" class="btn-secondary" onclick="toggleLanguage()">🌐 Language</button>
         <button id="menuToggleBtn" class="btn-secondary" onclick="toggleBookPanel()">⚙️ Menu Buku</button>
         <button class="btn-success" onclick="openInventoryModal()">📥 Tambah Item Manual</button>
-        <button class="btn-purple" onclick="toggleGraph()">📊 Visualisasi Graph Tree</button>
         
         <button class="btn-danger" style="margin-left: auto;" onclick="resetCalculator()">🔄 Reset</button>
     </div>
@@ -381,12 +354,6 @@
             </div>
         </div>
     </div>
-    
-    <div id="graphHeader" class="graph-header">
-        <h3 style="font-size: 15px;" data-i18n="graphTitle">Interactive Tech Tree (Rute Crafting)</h3>
-        <span style="font-size: 12px; color: var(--text-muted);">* Scroll Mouse = Zoom | Tarik Node = Geser Posisi</span>
-    </div>
-    <div id="networkContainer"></div>
 
     <div class="card" style="margin-top:20px;">
         <div class="card-title" data-i18n="title4">📦 Tas Inventory Anda (Bahan yang Sudah Dimiliki)</div>
@@ -413,8 +380,8 @@
 
 <script>
 const LANG = {
-    id: { title1: "Kebutuhan Bersih Bahan", title2: "Target Crafting", title3: "Harga Pasar Satuan (Gold)", title4: "📦 Tas Inventory Anda (Bahan yang Sudah Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", progText: "Selesai Dirakit:", totalCostLabel: "Estimasi Sisa Biaya:", menuBtnText: "⚙️ Menu Buku", btnShare: "🔗 Copy Link Build", btnExport: "📸 Unduh Gambar Build", modalTitleAdd: "Tambah Bahan ke Inventaris", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin!", graphTitle: "Interactive Tech Tree (Rute Crafting)", footerText: "Kalkulator Tome © 2026" },
-    en: { title1: "Net Resource Requirements", title2: "Target Crafting", title3: "Market Unit Price (Gold)", title4: "📦 Your Inventory (Owned Materials)", desc1: "Hover mouse over icons to reveal names.", progText: "Crafting Progress:", totalCostLabel: "Estimated Remaining Cost:", menuBtnText: "⚙️ Book Menu", btnShare: "🔗 Copy Build Link", btnExport: "📸 Download Build Image", modalTitleAdd: "Add Materials to Inventory", baseMat: "Base Mats", lvl: "Level", alertCopy: "Build Link copied successfully!", graphTitle: "Interactive Tech Tree (Crafting Route)", footerText: "Tome Calculator © 2026" }
+    id: { title1: "Kebutuhan Bersih Bahan", title2: "Target Crafting", title3: "Harga Pasar Satuan (Gold)", title4: "📦 Tas Inventory Anda (Bahan yang Sudah Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", progText: "Selesai Dirakit:", totalCostLabel: "Estimasi Sisa Biaya:", menuBtnText: "⚙️ Menu Buku", btnShare: "🔗 Copy Link Build", btnExport: "📸 Unduh Gambar Build", modalTitleAdd: "Tambah Bahan ke Inventaris", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin!", footerText: "Kalkulator Tome © 2026" },
+    en: { title1: "Net Resource Requirements", title2: "Target Crafting", title3: "Market Unit Price (Gold)", title4: "📦 Your Inventory (Owned Materials)", desc1: "Hover mouse over icons to reveal names.", progText: "Crafting Progress:", totalCostLabel: "Estimated Remaining Cost:", menuBtnText: "⚙️ Book Menu", btnShare: "🔗 Copy Build Link", btnExport: "📸 Download Build Image", modalTitleAdd: "Add Materials to Inventory", baseMat: "Base Mats", lvl: "Level", alertCopy: "Build Link copied successfully!", footerText: "Tome Calculator © 2026" }
 };
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
@@ -470,7 +437,6 @@ let itemCounts = {};
 let profiles = JSON.parse(localStorage.getItem('tomeProfiles')) || { 'Default': { targetId: 616, inventory: {} } };
 let currentProfile = localStorage.getItem('tomeCurrentProfile') || 'Default';
 let rightTreeId = profiles[currentProfile]?.targetId || 616;
-let visNetwork = null;
 
 function applyLanguage() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -559,7 +525,7 @@ function processTree(id, isRightTree = true) {
             recurse(TOME_DB[nodeId][1], count);
             recurse(TOME_DB[nodeId][2], count);
         } else if (nodeId >= 101 && nodeId <= 109) {
-            // Simulasi konversi Level 1 ke item mentah dasar: 1 Buku Lvl 1 = 3 Tome Page
+            // Konversi manual Lvl 1 ke Item Mentah Dasar
             itemCounts[12] = (itemCounts[12] || 0) + (count * 3);
         }
     }
@@ -600,7 +566,6 @@ function updateCostAndProgress() {
 
     document.getElementById('totalCostDisplay').innerText = totalCost.toLocaleString('id-ID') + " Gold";
 
-    // Hitung progress bar sederhana berdasarkan jumlah item unik di inventaris dibanding kebutuhan
     let inv = profiles[currentProfile].inventory;
     let totalOwned = 0, totalNeeded = 0;
     for (let id in itemCounts) { totalNeeded += itemCounts[id]; }
@@ -637,11 +602,9 @@ function openInventoryModal() {
     let div = document.getElementById('invItemList');
     let html = '';
     
-    // Tambah item mentah dasar
     for (let id in RAW_MATS) {
         html += `<button class="btn-success" style="padding:6px; text-align:left;" onclick="modifyInventory(${id}, 1)">+1 ${RAW_MATS[id]}</button>`;
     }
-    // Tambah list buku
     TOME_DB.forEach((item, id) => {
         html += `<button class="btn-secondary" style="padding:6px; text-align:left;" onclick="modifyInventory(${id}, 1)">+1 ${item[4]} (Lvl ${Math.floor(id/100)})</button>`;
     });
@@ -657,64 +620,6 @@ function modifyInventory(id, amount) {
     saveProfiles();
     renderDeductions();
     processTree(rightTreeId, false);
-}
-
-// VISUALISASI GRAPH TECH TREE (VIS.JS)
-function toggleGraph() {
-    let container = document.getElementById('networkContainer');
-    let header = document.getElementById('graphHeader');
-    if (container.style.display === 'none' || container.style.display === '') {
-        container.style.display = 'block';
-        header.style.display = 'flex';
-        drawGraph();
-    } else {
-        container.style.display = 'none';
-        header.style.display = 'none';
-    }
-}
-
-function drawGraph() {
-    let container = document.getElementById('networkContainer');
-    if (container.style.display !== 'block') return;
-
-    let nodes = [], edges = [], visited = new Set();
-
-    function buildGraph(id) {
-        if (!id || visited.has(id)) return;
-        visited.add(id);
-
-        let name = TOME_DB[id] ? TOME_DB[id][4] : 'Unknown';
-        let isTarget = id === rightTreeId;
-
-        nodes.push({
-            id: id,
-            label: `${name}\n(Lvl ${Math.floor(id/100)})`,
-            shape: 'box',
-            color: {
-                background: isTarget ? '#ef4444' : '#1e293b',
-                border: isTarget ? '#f87171' : '#475569'
-            },
-            font: { color: '#ffffff', size: 12 }
-        });
-
-        if (TOME_DB[id] && id > 200) {
-            [TOME_DB[id][0], TOME_DB[id][1], TOME_DB[id][2]].forEach(childId => {
-                edges.push({ from: childId, to: id, arrows: 'to', color: '#64748b' });
-                buildGraph(childId);
-            });
-        }
-    }
-
-    buildGraph(rightTreeId);
-
-    let data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
-    let options = {
-        layout: { hierarchical: { direction: 'DU', sortMethod: 'directed', nodeSpacing: 150 } },
-        physics: false
-    };
-
-    if (visNetwork) visNetwork.destroy();
-    visNetwork = new vis.Network(container, data, options);
 }
 
 // PROFILES ENGINE
