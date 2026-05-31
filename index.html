@@ -14,35 +14,35 @@
 
 <style>
 :root {
-    --bg-main: #0f172a;
-    --bg-card: #1e293b;
-    --bg-card-hover: #334155;    
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --accent: #3b82f6;
-    --accent-hover: #2563eb;
-    --danger: #ef4444;
-    --danger-hover: #dc2626;
-    --success: #10b981;
-    --success-hover: #059669;
-    --border-color: rgba(255, 255, 255, 0.08);
+	--bg-main: #0f172a;
+	--bg-card: #1e293b;
+	--bg-card-hover: #334155;    
+	--text-main: #f8fafc;
+	--text-muted: #94a3b8;
+	--accent: #3b82f6;
+	--accent-hover: #2563eb;
+	--danger: #ef4444;
+	--danger-hover: #dc2626;
+	--success: #10b981;
+	--success-hover: #059669;
+	--border-color: rgba(255, 255, 255, 0.08);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg-main);
-    color: var(--text-main);
-    line-height: 1.6;
-    min-height: 100vh;
-    padding: 30px 30px 10px 30px; 
-    background-image: 
-        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
-    background-attachment: fixed;
-    display: flex;
-    flex-direction: column;
+	font-family: 'Inter', sans-serif;
+	background-color: var(--bg-main);
+	color: var(--text-main);
+	line-height: 1.6;
+	min-height: 100vh;
+	padding: 30px 30px 10px 30px; 
+	background-image: 
+		radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+		radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+	background-attachment: fixed;
+	display: flex;
+	flex-direction: column;
 }
 
 ul { list-style: none; }
@@ -92,39 +92,45 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 /* --- UI Floating Tooltip (In-game Style) --- */
 .floating-tooltip {
-    position: fixed;
-    background: rgba(10, 15, 30, 0.96);
-    border: 2px solid #475569;
-    border-radius: 10px;
-    padding: 14px 18px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.85), inset 0 0 15px rgba(0,0,0,0.7);
-    z-index: 10000;
-    pointer-events: none; 
-    display: none;
-    min-width: 240px;
-    max-width: 300px;
-    font-family: 'Inter', sans-serif;
-    backdrop-filter: blur(6px);
+	position: fixed;
+	background: rgba(10, 15, 30, 0.96);
+	border: 2px solid #475569;
+	border-radius: 10px;
+	padding: 14px 18px;
+	box-shadow: 0 15px 35px rgba(0,0,0,0.85), inset 0 0 15px rgba(0,0,0,0.7);
+	z-index: 10000;
+	pointer-events: none; 
+	display: none;
+	min-width: 240px;
+	max-width: 300px;
+	font-family: 'Inter', sans-serif;
+	backdrop-filter: blur(6px);
 }
 .tooltip-title {
-    color: #f59e0b; /* Golden Color */
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 5px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+	color: #f59e0b;
+	font-size: 1rem;
+	font-weight: 700;
+	margin-bottom: 5px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 .tooltip-type {
-    color: #94a3b8;
-    font-size: 0.75rem;
-    margin-bottom: 10px;
-    border-bottom: 1px dashed rgba(255,255,255,0.15);
-    padding-bottom: 5px;
+	color: #94a3b8;
+	font-size: 0.75rem;
+	margin-bottom: 10px;
+	border-bottom: 1px dashed rgba(255,255,255,0.15);
+	padding-bottom: 5px;
 }
 .tooltip-list { display: flex; flex-direction: column; gap: 4px; }
 .tooltip-stat { color: #60a5fa; font-size: 0.85rem; font-weight: 600; }
 .tooltip-footer { color: #64748b; font-size: 0.75rem; font-style: italic; margin-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 6px; }
+
+/* Audio Floating Mute Button */
+.mute-toggle {
+	position: fixed; bottom: 25px; right: 25px; background: var(--bg-card); border: 1px solid var(--accent); color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: 0.2s;
+}
+.mute-toggle:hover { background: var(--accent); transform: scale(1.1); }
 
 /* Footer & Social Icons Styles */
 .footer { margin-top: 40px; padding: 25px 0; border-top: 1px solid var(--border-color); text-align: center; width: 100%; }
@@ -165,29 +171,23 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 #invItemList::-webkit-scrollbar { width: 6px; }
 #invItemList::-webkit-scrollbar-track { background: transparent; }
 #invItemList::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
-
-/* --- FITUR AUDIO BARU --- */
-.mute-toggle {
-    position: fixed; bottom: 20px; right: 20px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--accent); padding: 14px; border-radius: 50%; cursor: pointer; z-index: 9999; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px;
-}
-.mute-toggle:hover { background: var(--bg-card-hover); color: var(--accent-hover); transform: scale(1.1); }
 </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="calc-card">
-        <h1 data-i18n="title1">Kebutuhan Total</h1>
-        <div class="podzagolovok" id="nazvaniye" data-i18n="desc1">Arahkan kursor ke ikon untuk melihat nama buku.</div>
-        <div id="leftTree" class="branch"></div>
-    </div>
-    
-    <div class="calc-card">
-        <h2 data-i18n="title2">Cabang Terpilih</h2>
-        <div class="podzagolovok">
-            <input type="number" id="mnojitel" value="1" min="1" max="99">
-            <button class="btn-calc" data-i18n="btnCalc" onClick="processTree(rightTreeId, true)">Hitung Kuantitas</button>
-        </div>
+	<div class="calc-card">
+		<h1 data-i18n="title1">Kebutuhan Total</h1>
+		<div class="podzagolovok" id="nazvaniye" data-i18n="desc1">Arahkan kursor ke ikon untuk melihat nama buku.</div>
+		<div id="leftTree" class="branch"></div>
+	</div>
+	
+	<div class="calc-card">
+		<h2 data-i18n="title2">Cabang Terpilih</h2>
+		<div class="podzagolovok">
+			<input type="number" id="mnojitel" value="1" min="1" max="99" onchange="processTree(rightTreeId, true)">
+			<button class="btn-calc" data-i18n="btnCalc" onClick="processTree(rightTreeId, true)">Hitung Kuantitas</button>
+		</div>
         <div class="progress-container">
             <div class="progress-text">
                 <span data-i18n="progText">Progres Pengumpulan:</span>
@@ -197,8 +197,8 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
                 <div id="progressBar" class="progress-bar"></div>
             </div>
         </div>
-        <div id="rightTree" class="branch"></div>
-    </div>
+		<div id="rightTree" class="branch"></div>
+	</div>
 
     <div class="calc-card">
         <h1 data-i18n="title3">Estimasi Biaya Pasar</h1>
@@ -220,7 +220,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
             <div id="totalCostDisplay" class="total-cost-value">0 Gold</div>
         </div>
     </div>
-    
+	
     <div id="deductions">
         <div class="calc-card">
             <h2 data-i18n="title4">📦 Inventory (Bahan Dimiliki)</h2>
@@ -245,7 +245,11 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
     </div>
 </footer>
 
-<button class="menu-toggle-btn" id="menuToggleBtn" onclick="var panel = document.getElementById('mainMenuPanel'); panel.style.display = (panel.style.display === 'none') ? 'block' : 'none'; playSFX('sfx-click');">⚙️ Buka Menu</button>
+<audio id="sfx-click" preload="auto"><source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav" type="audio/wav"></audio>
+<audio id="sfx-success" preload="auto"><source src="https://assets.mixkit.co/active_storage/sfx/2019/2019-84.wav" type="audio/wav"></audio>
+<button id="muteBtn" class="mute-toggle" onclick="toggleMute()" style="display:none;"><i class="fas fa-volume-up"></i></button>
+
+<button class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleMenuPanel()">⚙️ Buka Menu</button>
 
 <div class="vybor" id="mainMenuPanel" style="display:none;">
     <h4 style="margin-top: 0; font-size: 0.85rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px;">📁 Kelola Profil Build</h4>
@@ -261,28 +265,28 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
             <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importProfilesData(event)">
         </div>
     </div>
-    
-    <div class="panel-actions">
-        <button class="btn-primary" onClick="toggleBookPanel();"><span data-i18n="btnTarget">📚 Pilihan Buku Target</span></button>
-        <button class="btn-success" onClick="copyShareLink()"><span data-i18n="btnShare">🔗 Bagikan Build (Copy Link)</span></button>
-        <button class="btn-primary" style="background: #ea580c;" onClick="exportToImage(event)"><span data-i18n="btnExport">📸 Download Gambar Build</span></button>
-        <button class="btn-purple" onClick="toggleLanguage()" id="langBtn">🌐 Switch to English</button>
-        <button class="btn-danger" onClick="resetCalculator()"><span data-i18n="btnReset">🔄 Reset Kalkulator</span></button>
-    </div>
-    <input type="text" id="bookSearch" class="search-box" data-i18n="searchPlaceholder" placeholder="🔍 Cari nama buku target..." oninput="filterBooks(this.value)" style="display:none;">
-    <div id="vyborDiv" class="branch" style="display:none"></div>
+	
+	<div class="panel-actions">
+		<button class="btn-primary" onClick="toggleBookPanel();"><span data-i18n="btnTarget">📚 Pilihan Buku Target</span></button>
+		<button class="btn-success" onClick="copyShareLink()"><span data-i18n="btnShare">🔗 Bagikan Build (Copy Link)</span></button>
+		<button class="btn-primary" style="background: #ea580c;" onClick="exportToImage(event)"><span data-i18n="btnExport">📸 Download Gambar Build</span></button>
+		<button class="btn-purple" onClick="toggleLanguage()" id="langBtn">🌐 Switch to English</button>
+		<button class="btn-danger" onClick="resetCalculator()"><span data-i18n="btnReset">🔄 Reset Kalkulator</span></button>
+	</div>
+	<input type="text" id="bookSearch" class="search-box" data-i18n="searchPlaceholder" placeholder="🔍 Cari nama buku target..." oninput="filterBooks(this.value)" style="display:none;">
+	<div id="vyborDiv" class="branch" style="display:none"></div>
 </div>
 
 <div id="customModal" class="modal-backdrop" style="display:none;">
-    <div class="modal-content">
-        <h3 id="modalTitle" data-i18n="modalTitleAdd">Tambah Buku/Bahan</h3>
-        <p data-i18n="modalDesc">Berapa banyak item ini yang sudah Anda miliki saat ini?</p>
-        <input type="number" id="modalInput" min="1" max="999" value="1">
-        <div class="modal-buttons">
-            <button class="modal-btn-confirm" data-i18n="btnSave" onClick="confirmModal()">Simpan</button>
-            <button class="modal-btn-cancel" data-i18n="btnCancel" onClick="closeModal()">Batal</button>
-        </div>
-    </div>
+	<div class="modal-content">
+		<h3 id="modalTitle" data-i18n="modalTitleAdd">Tambah Buku/Bahan</h3>
+		<p data-i18n="modalDesc">Berapa banyak item ini yang sudah Anda miliki saat ini?</p>
+		<input type="number" id="modalInput" min="1" max="999" value="1">
+		<div class="modal-buttons">
+			<button class="modal-btn-confirm" data-i18n="btnSave" onClick="confirmModal()">Simpan</button>
+			<button class="modal-btn-cancel" data-i18n="btnCancel" onClick="closeModal()">Batal</button>
+		</div>
+	</div>
 </div>
 
 <div id="inventoryModal" class="modal-backdrop" style="display:none; z-index: 2001;">
@@ -296,17 +300,6 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 <div id="floatingTooltip" class="floating-tooltip"></div>
 
-<audio id="sfx-click" preload="auto">
-    <source src="assets/pw-click.mp3" type="audio/mpeg">
-</audio>
-<audio id="sfx-success" preload="auto">
-    <source src="assets/pw-craft-success.mp3" type="audio/mpeg">
-</audio>
-
-<button id="btn-mute" class="mute-toggle" onclick="toggleAudio()" title="Matikan/Hidupkan Suara">
-    <i class="fa-solid fa-volume-high"></i>
-</button>
-
 <script>
 const LANG = {
     id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>[Nama Author]</strong>", matDesc: "Bahan Crafting" },
@@ -314,6 +307,18 @@ const LANG = {
 };
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
+let soundMuted = false;
+
+function playSFX(id) {
+	if(soundMuted) return;
+	const audio = document.getElementById(id);
+	if(audio) { audio.currentTime = 0; audio.play().catch(()=>{}); }
+}
+
+function toggleMute() {
+	soundMuted = !soundMuted;
+	document.getElementById('muteBtn').innerHTML = soundMuted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+}
 
 function applyLanguage() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -323,16 +328,19 @@ function applyLanguage() {
             else el.innerHTML = LANG[currentLang][key]; 
         }
     });
-    
     document.getElementById('langBtn').innerText = currentLang === 'id' ? '🌐 Switch to English' : '🌐 Ganti ke Indonesia';
     document.getElementById('menuToggleBtn').innerText = LANG[currentLang]['menuBtnText'];
+    processTree(leftTreeId, false);
+    processTree(rightTreeId, true);
+    renderDeductions();
+    renderMenu();
 }
 
 function toggleLanguage() {
     currentLang = currentLang === 'id' ? 'en' : 'id';
     localStorage.setItem('tomeLang', currentLang);
-    applyLanguage();
     playSFX('sfx-click');
+    applyLanguage();
 }
 
 const TOME_DB = [];
@@ -344,80 +352,26 @@ TOME_DB[201] = [101, 102, 103, 17584, 'Tome of Water']; TOME_DB[202] = [102, 103
 TOME_DB[101] = [0, 0, 0, 17001, 'Grace']; TOME_DB[102] = [0, 0, 0, 17002, 'Power']; TOME_DB[103] = [0, 0, 0, 17003, 'Courage']; TOME_DB[104] = [0, 0, 0, 17004, 'Wisdom']; TOME_DB[105] = [0, 0, 0, 17005, 'Yin']; TOME_DB[106] = [0, 0, 0, 17006, 'Yang']; TOME_DB[107] = [0, 0, 0, 17007, 'Life']; TOME_DB[108] = [0, 0, 0, 17008, 'Death']; TOME_DB[109] = [0, 0, 0, 17009, 'Void'];
 
 const TOME_STATS = {
-    101: ["+5 Magic"], 102: ["+5 Strength"], 103: ["+5 Dexterity"], 104: ["+5 Vitality"],
-    105: ["HP Regeneration +3", "Exp Gain +1%"], 106: ["MP Regeneration +3", "Exp Gain +1%"],
-    107: ["+4 Strength", "+3 Vitality"], 108: ["+4 Dexterity", "+3 Vitality"], 109: ["+4 Magic", "+3 Vitality"],
-    201: ["+7 Magic", "+6 Vitality"], 202: ["+7 Strength", "+6 Vitality"], 203: ["+7 Dexterity", "+6 Vitality"],
-    204: ["+9 Magic"], 205: ["+9 Strength"], 206: ["+9 Dexterity"], 207: ["+9 Vitality"],
-    208: ["HP Regeneration +5", "Exp Gain +2%"], 209: ["MP Regeneration +5", "Exp Gain +2%"],
-    301: ["+10 Strength", "Critical Hit Rate +1%"], 302: ["+10 Magic", "Channelling -1%"],
-    303: ["+10 Dexterity", "Critical Hit Rate +1%"], 304: ["+10 Vitality", "Maximum HP +100"],
-    305: ["+7 Strength", "+7 Dexterity"], 306: ["+7 Magic", "+7 Vitality"],
-    307: ["+12 Strength"], 308: ["+12 Dexterity"], 309: ["+12 Magic"],
-    401: ["+15 Strength", "Critical Hit Rate +1%"], 402: ["+15 Magic", "Channelling -2%"],
-    403: ["+15 Dexterity", "Critical Hit Rate +1%"], 404: ["+15 Vitality", "Maximum HP +150"],
-    405: ["+10 Strength", "+10 Vitality"], 406: ["+10 Dexterity", "+10 Vitality"],
-    407: ["+10 Magic", "+10 Vitality"], 408: ["+8 Strength", "+8 Dexterity", "+8 Vitality"],
-    409: ["+8 Magic", "+8 Dexterity", "+8 Vitality"],
-    501: ["+20 Strength", "Critical Hit Rate +1%"], 502: ["+20 Magic", "Channelling -2%"],
-    503: ["+20 Dexterity", "Critical Hit Rate +1%"], 504: ["+20 Vitality", "Maximum HP +200"],
-    505: ["+15 Strength", "+15 Dexterity"], 506: ["+15 Magic", "+15 Vitality"],
-    507: ["+12 Strength", "+12 Dexterity", "+12 Vitality"], 508: ["+12 Magic", "+12 Dexterity", "+12 Vitality"],
-    509: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"],
-    510: ["+15 Strength", "Physical Attack +20"], 511: ["+15 Magic", "Magic Attack +20"],
-    512: ["+15 Dexterity", "Critical Hit Rate +2%"], 513: ["+15 Vitality", "Physical Defense +100"],
-    514: ["Maximum HP +300"], 515: ["+18 Magic", "Channelling -3%"], 516: ["+18 Strength", "Critical Hit Rate +2%"],
-    601: ["+15 Strength", "+15 Dexterity", "Critical Hit Rate +1%"], 602: ["+15 Magic", "+15 Vitality", "Channelling -3%"],
-    603: ["+15 Strength", "+15 Vitality", "Maximum HP +150"], 604: ["+20 Dexterity", "Attack Interval -0.05", "Movement Speed +0.10"],
-    605: ["+20 Magic", "Channelling -3", "Maximum MP +200"], 606: ["+20 Strength", "Critical Hit Rate +1%", "Physical Attack +30"],
-    607: ["+20 Vitality", "Maximum HP +200", "Physical Defense +50"], 608: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"],
-    609: ["+15 Dexterity", "+15 Vitality", "Critical Hit Rate +1%"], 610: ["+15 Magic", "+15 Dexterity", "Channelling -3%"],
-    611: ["+15 Strength", "+15 Magic", "Physical Attack +20"], 612: ["+25 Magic", "Channelling -3%"],
-    613: ["+25 Strength", "Critical Hit Rate +1%"], 614: ["+25 Dexterity", "Attack Interval -0.05"],
-    615: ["+20 Magic", "+20 Dexterity", "Channelling -3%", "Critical Hit Rate +1%"],
-    616: ["+20 Strength", "+20 Dexterity", "+20 Magic", "+20 Vitality", "Critical Hit Rate +1%"]
+    101: ["+5 Magic"], 102: ["+5 Strength"], 103: ["+5 Dexterity"], 104: ["+5 Vitality"], 105: ["HP Regeneration +3", "Exp Gain +1%"], 106: ["MP Regeneration +3", "Exp Gain +1%"], 107: ["+4 Strength", "+3 Vitality"], 108: ["+4 Dexterity", "+3 Vitality"], 109: ["+4 Magic", "+3 Vitality"],
+    201: ["+7 Magic", "+6 Vitality"], 202: ["+7 Strength", "+6 Vitality"], 203: ["+7 Dexterity", "+6 Vitality"], 204: ["+9 Magic"], 205: ["+9 Strength"], 206: ["+9 Dexterity"], 207: ["+9 Vitality"], 208: ["HP Regeneration +5", "Exp Gain +2%"], 209: ["MP Regeneration +5", "Exp Gain +2%"],
+    301: ["+10 Strength", "Critical Hit Rate +1%"], 302: ["+10 Magic", "Channelling -1%"], 303: ["+10 Dexterity", "Critical Hit Rate +1%"], 304: ["+10 Vitality", "Maximum HP +100"], 305: ["+7 Strength", "+7 Dexterity"], 306: ["+7 Magic", "+7 Vitality"], 307: ["+12 Strength"], 308: ["+12 Dexterity"], 309: ["+12 Magic"],
+    401: ["+15 Strength", "Critical Hit Rate +1%"], 402: ["+15 Magic", "Channelling -2%"], 403: ["+15 Dexterity", "Critical Hit Rate +1%"], 404: ["+15 Vitality", "Maximum HP +150"], 405: ["+10 Strength", "+10 Vitality"], 406: ["+10 Dexterity", "+10 Vitality"], 407: ["+10 Magic", "+10 Vitality"], 408: ["+8 Strength", "+8 Dexterity", "+8 Vitality"], 409: ["+8 Magic", "+8 Dexterity", "+8 Vitality"],
+    501: ["+20 Strength", "Critical Hit Rate +1%"], 502: ["+20 Magic", "Channelling -2%"], 503: ["+20 Dexterity", "Critical Hit Rate +1%"], 504: ["+20 Vitality", "Maximum HP +200"], 505: ["+15 Strength", "+15 Dexterity"], 506: ["+15 Magic", "+15 Vitality"], 507: ["+12 Strength", "+12 Dexterity", "+12 Vitality"], 508: ["+12 Magic", "+12 Dexterity", "+12 Vitality"], 509: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"], 510: ["+15 Strength", "Physical Attack +20"], 511: ["+15 Magic", "Magic Attack +20"], 512: ["+15 Dexterity", "Critical Hit Rate +2%"], 513: ["+15 Vitality", "Physical Defense +100"], 514: ["Maximum HP +300"], 515: ["+18 Magic", "Channelling -3%"], 516: ["+18 Strength", "Critical Hit Rate +2%"],
+    601: ["+15 Strength", "+15 Dexterity", "Critical Hit Rate +1%"], 602: ["+15 Magic", "+15 Vitality", "Channelling -3%"], 603: ["+15 Strength", "+15 Vitality", "Maximum HP +150"], 604: ["+20 Dexterity", "Attack Interval -0.05", "Movement Speed +0.10"], 605: ["+20 Magic", "Channelling -3", "Maximum MP +200"], 606: ["+20 Strength", "Critical Hit Rate +1%", "Physical Attack +30"], 607: ["+20 Vitality", "Maximum HP +200", "Physical Defense +50"], 608: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"], 609: ["+15 Dexterity", "+15 Vitality", "Critical Hit Rate +1%"], 610: ["+15 Magic", "+15 Dexterity", "Channelling -3%"], 611: ["+15 Strength", "+15 Magic", "Physical Attack +20"], 612: ["+25 Magic", "Channelling -3%"], 613: ["+25 Strength", "Critical Hit Rate +1%"], 614: ["+25 Dexterity", "Attack Interval -0.05"], 615: ["+20 Magic", "+20 Dexterity", "Channelling -3%", "Critical Hit Rate +1%"], 616: ["+20 Strength", "+20 Dexterity", "+20 Magic", "+20 Vitality", "Critical Hit Rate +1%"]
 };
 
-let itemCounts = [];       
+let itemCounts = {};       
 let deductions = [];       
-let deductionsCopy = [];   
+let deductionsCopy = {};   
 let leftTreeId = 616;
 let rightTreeId = 515;
 let activeModalItemId = null;
 let profiles = {};
 let currentProfile = 'Default';
 
-// --- SISTEM AUDIO BARU ---
-let isAudioMuted = false;
-
-function playSFX(audioId) {
-    if (isAudioMuted) return;
-    const sound = document.getElementById(audioId);
-    if (sound) {
-        sound.currentTime = 0; 
-        sound.volume = 0.5;
-        sound.play().catch(e => console.log("Audio diblokir browser:", e));
-    }
-}
-
-function toggleAudio() {
-    isAudioMuted = !isAudioMuted;
-    const muteBtn = document.getElementById('btn-mute');
-    if (isAudioMuted) {
-        muteBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
-        muteBtn.style.color = 'var(--danger)';
-    } else {
-        muteBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
-        muteBtn.style.color = 'var(--accent)';
-        playSFX('sfx-click'); 
-    }
-}
-
-// LOGIKA MANAJEMEN FLOATING TOOLTIP
 function showTooltip(element, event) {
     const id = parseInt(element.getAttribute('data-id'));
     const tooltip = document.getElementById('floatingTooltip');
-    
     if(!id || !TOME_DB[id]) return;
     
     let lvl = Math.floor(id / 100);
@@ -428,77 +382,82 @@ function showTooltip(element, event) {
     let html = `<div class="tooltip-title" style="color: ${titleColor}">${name}</div>
                 <div class="tooltip-type">${LANG[currentLang]['lvl']} ${lvl}</div>
                 <div class="tooltip-list">`;
-                
-    stats.forEach(stat => {
-        html += `<div class="tooltip-stat">${stat}</div>`;
-    });
-    
+    stats.forEach(stat => { html += `<div class="tooltip-stat">${stat}</div>`; });
     html += `</div><div class="tooltip-footer">${LANG[currentLang]['statEquipDesc']}</div>`;
     
     tooltip.innerHTML = html;
     tooltip.style.display = 'block';
-    
-    // Posisi Dinamis
-    let x = event.clientX + 15;
-    let y = event.clientY + 15;
-    if (x + tooltip.offsetWidth > window.innerWidth) x = event.clientX - tooltip.offsetWidth - 15;
-    if (y + tooltip.offsetHeight > window.innerHeight) y = event.clientY - tooltip.offsetHeight - 15;
-    
-    tooltip.style.left = x + 'px';
-    tooltip.style.top = y + 'px';
+    positionTooltip(event);
 }
 
 function hideTooltip() {
     document.getElementById('floatingTooltip').style.display = 'none';
 }
 
-document.addEventListener('mousemove', function(e) {
+function positionTooltip(e) {
     const tooltip = document.getElementById('floatingTooltip');
     if(tooltip.style.display === 'block') {
-        let x = e.clientX + 15;
-        let y = e.clientY + 15;
+        let x = e.clientX + 15; let y = e.clientY + 15;
         if (x + tooltip.offsetWidth > window.innerWidth) x = e.clientX - tooltip.offsetWidth - 15;
         if (y + tooltip.offsetHeight > window.innerHeight) y = e.clientY - tooltip.offsetHeight - 15;
-        tooltip.style.left = x + 'px';
-        tooltip.style.top = y + 'px';
+        tooltip.style.left = x + 'px'; tooltip.style.top = y + 'px';
     }
-});
+}
+document.addEventListener('mousemove', positionTooltip);
 
 function calculateNode(id) {
-    if (!itemCounts[id]) itemCounts[id] = 0;
+    if (!id || id === 0) return;
     if (deductionsCopy[id] && deductionsCopy[id] > 0) {
         deductionsCopy[id]--;
+        return;
+    }
+    itemCounts[id] = (itemCounts[id] || 0) + 1;
+    if (TOME_DB[id] && TOME_DB[id][0] !== 0) {
+        calculateNode(TOME_DB[id][0]);
+        calculateNode(TOME_DB[id][1]);
+        calculateNode(TOME_DB[id][2]);
     } else {
-        itemCounts[id]++;
-        if (id > 200) {
-            calculateNode(TOME_DB[id][0]);
-            calculateNode(TOME_DB[id][1]);
-            calculateNode(TOME_DB[id][2]);
-        }
+        itemCounts[11] = (itemCounts[11] || 0) + 4; 
+        itemCounts[12] = (itemCounts[12] || 0) + 1; 
     }
 }
 
 function processTree(id, isRightTree = false) {
-    playSFX('sfx-click'); // Memicu suara saat buku diklik
+    if(isRightTree) playSFX('sfx-click');
+    itemCounts = { 10: 0, 11: 0, 12: 0 };
+    deductionsCopy = {};
+    deductions.forEach(d => { deductionsCopy[d.id] = d.count; });
     
-    itemCounts = [];
-    deductionsCopy = [...deductions];
     let multiplier = 1;
-
     if (isRightTree) {
         rightTreeId = id;
-        let inputField = document.getElementById('mnojitel');
-        let inputVal = parseInt(inputField.value);
+        let inputVal = parseInt(document.getElementById('mnojitel').value);
         if (isNaN(inputVal) || inputVal < 1) inputVal = 1;
-        if (inputVal > 99) inputVal = 99;
-        inputField.value = inputVal;
         multiplier = inputVal;
-    } else {
-        leftTreeId = id;
-    }
+    } else { leftTreeId = id; }
 
-    for (let z = 0; z < multiplier; z++) calculateNode(id);
+    for (let z = 0; z < multiplier; z++) { calculateNode(id); }
+    renderTreeDOM(isRightTree ? 'rightTree' : 'leftTree', id);
     updateCostAndProgress();
+}
+
+function renderTreeDOM(elementId, targetId) {
+    const container = document.getElementById(elementId);
+    if (!container) return;
+    let lvl = Math.floor(targetId / 100);
+    let html = `<ul><li>Level ${lvl}: ${TOME_DB[targetId][4]}</li>`;
+    
+    for (let id in itemCounts) {
+        if (itemCounts[id] > 0 && id > 20) {
+            html += `<li data-id="${id}" onmouseenter="showTooltip(this, event)" onmouseleave="hideTooltip()">
+                <button style="background-position:-${(id%10)*32}px -${Math.floor(id/100)*32}px;"></button>
+                <b>${itemCounts[id]}</b>
+                <span onclick="addDeduction(${id}, 1)"></span>
+            </li>`;
+        }
+    }
+    html += `</ul>`;
+    container.innerHTML = html;
 }
 
 function updateCostAndProgress() {
@@ -506,31 +465,240 @@ function updateCostAndProgress() {
     let price11 = parseInt(document.getElementById('price11').value) || 0;
     let price12 = parseInt(document.getElementById('price12').value) || 0;
     
-    // (Tambahkan logika pengitungan konversi Base Mats seperti asli Anda jika dibutuhkan)
-    
-    let totalCost = (itemCounts[10] || 0) * price10 + (itemCounts[11] || 0) * price11 + (itemCounts[12] || 0) * price12;
+    let totalCost = ((itemCounts[10]||0)*price10) + ((itemCounts[11]||0)*price11) + ((itemCounts[12]||0)*price12);
     document.getElementById('totalCostDisplay').innerText = totalCost.toLocaleString('id-ID') + " Gold";
 
-    if (totalCost > 0) playSFX('sfx-success'); // Suara sukses saat total kalkulasi berbunyi
+    let totalNeeded = 0; Object.values(itemCounts).forEach(v => totalNeeded+=v);
+    let totalOwned = 0; deductions.forEach(d => totalOwned += d.count);
+    let pct = totalNeeded > 0 ? (totalOwned / (totalNeeded + totalOwned)) * 100 : 0;
+    if(pct > 100) pct = 100;
+    
+    document.getElementById('progressPercentText').innerText = pct.toFixed(1) + "%";
+    document.getElementById('progressBar').style.width = pct + "%";
+}
+
+function renderMenu() {
+    let vyborDiv = document.getElementById('vyborDiv');
+    if (!vyborDiv) return;
+    let html = "";
+    let categories = { 6:[], 5:[], 4:[], 3:[], 2:[], 1:[] };
+    for(let id in TOME_DB) { categories[Math.floor(id/100)].push(id); }
+    
+    for(let lvl = 6; lvl >= 1; lvl--) {
+        html += `<h4>Level ${lvl}</h4><ul>`;
+        categories[lvl].forEach(id => {
+            html += `<li data-id="${id}" onmouseenter="showTooltip(this, event)" onmouseleave="hideTooltip()">
+                <button style="background-position:-${(id%10)*32}px -${Math.floor(id/100)*32}px;" onclick="selectTarget(${id})"></button>
+            </li>`;
+        });
+        html += `</ul>`;
+    }
+    vyborDiv.innerHTML = html;
+}
+
+function selectTarget(id) {
+    playSFX('sfx-success');
+    leftTreeId = id; rightTreeId = id;
+    processTree(leftTreeId, false);
+    processTree(rightTreeId, true);
+    toggleBookPanel();
 }
 
 function toggleBookPanel() {
     playSFX('sfx-click');
-    // Logika buka tutup panel
+    let div = document.getElementById('vyborDiv');
+    let search = document.getElementById('bookSearch');
+    let disp = div.style.display === 'none' ? 'block' : 'none';
+    div.style.display = disp; search.style.display = disp;
+}
+
+function filterBooks(query) {
+    let lis = document.querySelectorAll('#vyborDiv li');
+    lis.forEach(li => {
+        let id = li.getAttribute('data-id');
+        let matches = TOME_DB[id][4].toLowerCase().includes(query.toLowerCase());
+        li.style.display = matches ? 'inline-block' : 'none';
+    });
+}
+
+function toggleMenuPanel() {
+    playSFX('sfx-click');
+    let panel = document.getElementById('mainMenuPanel');
+    panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';
+}
+
+function openInventoryModal() {
+    playSFX('sfx-click');
+    document.getElementById('inventoryModal').style.display = 'flex';
+    let container = document.getElementById('invItemList');
+    let html = "<ul>";
+    for(let id in TOME_DB) {
+        html += `<li data-id="${id}" onmouseenter="showTooltip(this, event)" onmouseleave="hideTooltip()" style="display:inline-block; margin:4px;">
+            <button style="background-position:-${(id%10)*32}px -${Math.floor(id/100)*32}px;" onclick="triggerAddInventory(${id})"></button>
+        </li>`;
+    }
+    html += "</ul>"; container.innerHTML = html;
+}
+
+function closeInventoryModal() {
+    playSFX('sfx-click');
+    document.getElementById('inventoryModal').style.display = 'none';
+}
+
+function filterInventorySearch(query) {
+    let lis = document.querySelectorAll('#invItemList li');
+    lis.forEach(li => {
+        let id = li.getAttribute('data-id');
+        let matches = TOME_DB[id][4].toLowerCase().includes(query.toLowerCase());
+        li.style.display = matches ? 'inline-block' : 'none';
+    });
+}
+
+function triggerAddInventory(id) {
+    activeModalItemId = id;
+    document.getElementById('customModal').style.display = 'flex';
+}
+
+function confirmModal() {
+    playSFX('sfx-success');
+    let qty = parseInt(document.getElementById('modalInput').value) || 1;
+    if(activeModalItemId) { addDeduction(activeModalItemId, qty); }
+    closeModal(); closeInventoryModal();
+}
+
+function closeModal() {
+    playSFX('sfx-click');
+    document.getElementById('customModal').style.display = 'none';
+}
+
+function addDeduction(id, count) {
+    let exist = deductions.find(d => d.id === id);
+    if(exist) { exist.count += count; } else { deductions.push({id: id, count: count}); }
+    saveProfiles(); renderDeductions(); processTree(rightTreeId, true);
+}
+
+function removeDeduction(index) {
+    playSFX('sfx-click');
+    deductions.splice(index, 1);
+    saveProfiles(); renderDeductions(); processTree(rightTreeId, true);
+}
+
+function renderDeductions() {
+    let list = document.getElementById('deductionsList');
+    if(!list) return;
+    if(deductions.length === 0) { list.innerHTML = ""; return; }
+    let html = "<ul><li>Bahan Dimiliki</li>";
+    deductions.forEach((d, i) => {
+        html += `<li data-id="${d.id}" onmouseenter="showTooltip(this, event)" onmouseleave="hideTooltip()">
+            <button style="background-position:-${(d.id%10)*32}px -${Math.floor(d.id/100)*32}px;"></button>
+            <b>${d.count}</b>
+            <span style="opacity:1; visibility:visible;" onclick="removeDeduction(${i})"></span>
+        </li>`;
+    });
+    html += "</ul>"; list.innerHTML = html;
+}
+
+function saveProfiles() {
+    profiles[currentProfile] = { leftTreeId, rightTreeId, deductions, prices: [
+        document.getElementById('price10').value, document.getElementById('price11').value, document.getElementById('price12').value
+    ]};
+    localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
+    localStorage.setItem('tomeCurrentProfile', currentProfile);
+}
+
+function loadProfiles() {
+    let saved = localStorage.getItem('tomeProfiles');
+    if (saved) { profiles = JSON.parse(saved); } 
+    else { profiles = { 'Default': { leftTreeId: 616, rightTreeId: 515, deductions: [], prices:[0,0,0] } }; }
+    currentProfile = localStorage.getItem('tomeCurrentProfile') || 'Default';
+    
+    let select = document.getElementById('profileSelect');
+    select.innerHTML = "";
+    for(let name in profiles) {
+        let opt = document.createElement('option'); opt.value = name; opt.innerText = name;
+        if(name === currentProfile) opt.selected = true;
+        select.appendChild(opt);
+    }
+    handleProfileChange(currentProfile);
+}
+
+function handleProfileChange(name) {
+    currentProfile = name;
+    let p = profiles[name] || { leftTreeId: 616, rightTreeId: 515, deductions: [], prices:[0,0,0] };
+    leftTreeId = p.leftTreeId || 616; rightTreeId = p.rightTreeId || 515;
+    deductions = p.deductions || [];
+    if(p.prices) {
+        document.getElementById('price10').value = p.prices[0] || 0;
+        document.getElementById('price11').value = p.prices[1] || 0;
+        document.getElementById('price12').value = p.prices[2] || 0;
+    }
+    renderDeductions(); processTree(leftTreeId, false); processTree(rightTreeId, true);
+}
+
+function createNewProfile() {
+    playSFX('sfx-click');
+    let name = prompt("Nama profil baru:");
+    if(!name) return;
+    profiles[name] = { leftTreeId: 616, rightTreeId: 515, deductions: [], prices:[0,0,0] };
+    currentProfile = name; saveProfiles(); loadProfiles();
+}
+
+function removeCurrentProfile() {
+    playSFX('sfx-click');
+    if(currentProfile === 'Default') return alert("Profil default tidak bisa dihapus!");
+    delete profiles[currentProfile]; currentProfile = 'Default';
+    saveProfiles(); loadProfiles();
+}
+
+function exportProfilesData() {
+    playSFX('sfx-click');
+    let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(profiles));
+    let dl = document.createElement('a'); dl.setAttribute("href", dataStr); dl.setAttribute("download", "tome_profiles.json");
+    dl.click();
+}
+
+function importProfilesData(e) {
+    playSFX('sfx-click');
+    let file = e.target.files[0]; if(!file) return;
+    let reader = new FileReader();
+    reader.onload = function(evt) {
+        try {
+            profiles = JSON.parse(evt.target.result); saveProfiles(); loadProfiles();
+        } catch(err) { alert("Format file rusak!"); }
+    };
+    reader.readAsText(file);
+}
+
+function copyShareLink() {
+    playSFX('sfx-click');
+    let state = { l: leftTreeId, r: rightTreeId, d: deductions };
+    let base64 = btoa(JSON.stringify(state));
+    let url = window.location.href.split('?')[0] + "?build=" + base64;
+    navigator.clipboard.writeText(url).then(() => alert(LANG[currentLang].alertCopy));
+}
+
+function exportToImage(e) {
+    playSFX('sfx-click');
+    html2canvas(document.querySelector(".container")).then(canvas => {
+        let a = document.createElement('a'); a.download = 'tome-build.png'; a.href = canvas.toDataURL(); a.click();
+    });
 }
 
 function resetCalculator() {
     playSFX('sfx-click');
-    if(confirm(LANG[currentLang]['alertReset'])) {
-        localStorage.clear();
-        location.reload();
-    }
+    if(confirm(LANG[currentLang]['alertReset'])) { localStorage.clear(); location.reload(); }
 }
 
-// Inisialisasi awal saat load
 window.onload = function() {
-    applyLanguage();
-    // Inisialisasi logic render asli Anda
+    let params = new URLSearchParams(window.location.search);
+    let build = params.get('build');
+    if(build) {
+        try {
+            let parsed = JSON.parse(atob(build));
+            leftTreeId = parsed.l; rightTreeId = parsed.r; deductions = parsed.d;
+        } catch(e){}
+    }
+    loadProfiles(); applyLanguage();
 };
 </script>
 </body>
