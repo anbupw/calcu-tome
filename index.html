@@ -90,6 +90,33 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 #strelki { color: var(--accent); font-weight: bold; letter-spacing: 2px; }
 #niz li:first-child { display: none; } 
 
+/* --- UI Pratinjau Status (In-game Style Tooltip) --- */
+.stats-box {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+.stats-title {
+    color: #f59e0b;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed var(--border-color);
+    padding-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.stats-list { display: flex; flex-direction: column; gap: 4px; }
+.stat-item { color: #60a5fa; font-size: 0.85rem; font-weight: 600; font-family: monospace; }
+.stat-item-white { color: var(--text-muted); font-size: 0.8rem; font-style: italic; margin-top: 6px; border-top: 1px dashed rgba(255,255,255,0.05); padding-top: 4px; }
+
 /* Footer & Social Icons Styles */
 .footer { margin-top: 40px; padding: 25px 0; border-top: 1px solid var(--border-color); text-align: center; width: 100%; }
 .footer-text { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; }
@@ -126,7 +153,6 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 .modal-btn-confirm { background: var(--accent); color: white; } .modal-btn-confirm:hover { background: var(--accent-hover); }
 .modal-btn-cancel { background: #334155; color: #cbd5e1; } .modal-btn-cancel:hover { background: #475569; }
 
-/* Custom scrollbar untuk inventory list */
 #invItemList::-webkit-scrollbar { width: 6px; }
 #invItemList::-webkit-scrollbar-track { background: transparent; }
 #invItemList::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
@@ -156,6 +182,9 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
                 <div id="progressBar" class="progress-bar"></div>
             </div>
         </div>
+        
+        <div id="targetStatsPanel" class="stats-box"></div>
+        
 		<div id="rightTree" class="branch"></div>
 	</div>
 
@@ -207,16 +236,13 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 <button class="menu-toggle-btn" id="menuToggleBtn" onclick="var panel = document.getElementById('mainMenuPanel'); panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';">⚙️ Buka Menu</button>
 
 <div class="vybor" id="mainMenuPanel" style="display:none;">
-
     <h4 style="margin-top: 0; font-size: 0.85rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px;">📁 Kelola Profil Build</h4>
     <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
         <select id="profileSelect" onchange="handleProfileChange(this.value)" style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid var(--border-color); color: white; border-radius: 6px; outline: none; font-family: 'Inter', sans-serif; font-size: 0.85rem; cursor: pointer;"></select>
-        
         <div style="display: flex; gap: 8px;">
             <button class="btn-success" onClick="createNewProfile()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: 600;">💾 Baru</button>
             <button class="btn-danger" onClick="removeCurrentProfile()" style="padding: 6px 10px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-trash"></i></button>
         </div>
-        
         <div style="display: flex; gap: 8px; margin-top: 4px;">
             <button class="btn-primary" onClick="exportProfilesData()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-export"></i> Ekspor</button>
             <button class="btn-purple" onClick="document.getElementById('importFileInput').click()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-import"></i> Impor</button>
@@ -251,16 +277,15 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
     <div class="modal-content" style="max-width: 450px;">
         <h3>Pilih Item untuk Inventory</h3>
         <input type="text" id="invSearch" class="search-box" placeholder="🔍 Cari nama buku/bahan..." onkeyup="filterInventorySearch(this.value)">
-        <div id="invItemList" class="branch" style="max-height: 250px; overflow-y: auto; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
-            </div>
+        <div id="invItemList" class="branch" style="max-height: 250px; overflow-y: auto; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);"></div>
         <button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onClick="closeInventoryModal()">Tutup Jendela</button>
     </div>
 </div>
 
 <script>
 const LANG = {
-    id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>[Nama Author]</strong>" },
-    en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "📚 Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations, profiles, and start over?", promptCopy: "Copy the link below:", footerText: "Tome Calculator © 2026 | Created by <strong>[Author Name]</strong>" }
+    id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>[Nama Author]</strong>" },
+    en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "📚 Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations, profiles, and start over?", promptCopy: "Copy the link below:", statEquipDesc: "* Bind on Equip.", footerText: "Tome Calculator © 2026 | Created by <strong>[Author Name]</strong>" }
 };
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
@@ -297,6 +322,26 @@ TOME_DB[301] = [201, 206, 203, 17593, 'Eat Drink and be Merry']; TOME_DB[302] = 
 TOME_DB[201] = [101, 102, 103, 17584, 'Tome of Water']; TOME_DB[202] = [102, 103, 104, 17585, 'Tome of Fire']; TOME_DB[203] = [103, 104, 105, 17586, 'Tome of Earth']; TOME_DB[204] = [104, 105, 106, 17587, 'Tome of Wood']; TOME_DB[205] = [105, 106, 107, 17588, 'Tome of Metal']; TOME_DB[206] = [106, 107, 108, 17589, 'Tome of Wind']; TOME_DB[207] = [107, 108, 109, 17590, 'Tome of Thunder']; TOME_DB[208] = [108, 109, 101, 17591, 'Tome of Light']; TOME_DB[209] = [109, 101, 102, 17592, 'Tome of Darkness'];
 TOME_DB[101] = [0, 0, 0, 17001, 'Grace']; TOME_DB[102] = [0, 0, 0, 17002, 'Power']; TOME_DB[103] = [0, 0, 0, 17003, 'Courage']; TOME_DB[104] = [0, 0, 0, 17004, 'Wisdom']; TOME_DB[105] = [0, 0, 0, 17005, 'Yin']; TOME_DB[106] = [0, 0, 0, 17006, 'Yang']; TOME_DB[107] = [0, 0, 0, 17007, 'Life']; TOME_DB[108] = [0, 0, 0, 17008, 'Death']; TOME_DB[109] = [0, 0, 0, 17009, 'Void'];
 
+// DATABASE STATS PREVIEW
+const TOME_STATS = {
+    601: ["+15 Str", "+15 Dex", "Crit +1%"], 
+    602: ["+15 Mag", "+15 Vit", "Channeling -3%"], 
+    603: ["+15 Str", "+15 Vit", "Max HP +150"], 
+    604: ["+20 Dex", "Atk Interval -0.05", "Move Speed +0.10"], 
+    605: ["+20 Mag", "Channeling -3%", "Max MP +200"], 
+    606: ["+20 Str", "Crit +1%", "Phys Atk +30"], 
+    607: ["+20 Vit", "Max HP +200", "Def +50"], 
+    608: ["+10 Str", "+10 Dex", "+10 Mag", "+10 Vit"], 
+    609: ["+15 Dex", "+15 Vit", "Crit +1%"], 
+    610: ["+15 Mag", "+15 Dex", "Channeling -3%"], 
+    611: ["+15 Str", "+15 Mag", "Phys Atk +20"], 
+    612: ["+25 Mag", "Channeling -3%"], 
+    613: ["+25 Str", "Crit +1%"], 
+    614: ["+25 Dex", "Atk Interval -0.05"], 
+    615: ["+20 Mag", "+20 Dex", "Channeling -3%", "Crit +1%"], 
+    616: ["+20 Str", "+20 Dex", "+20 Mag", "+20 Vit", "Crit +1%"] 
+};
+
 let itemCounts = [];       
 let deductions = [];       
 let deductionsCopy = [];   
@@ -304,7 +349,6 @@ let leftTreeId = 616;
 let rightTreeId = 515;
 let activeModalItemId = null;
 
-// Variabel Baru Manajemen Profil
 let profiles = {};
 let currentProfile = 'Default';
 
@@ -341,7 +385,7 @@ function loadFromHash() {
 
 function saveDeductions() { 
     localStorage.setItem('tomeDeductions', JSON.stringify(deductions)); 
-    saveActiveProfile(); // Simpan ke Profil Aktif
+    saveActiveProfile(); 
 }
 
 function resetCalculator() {
@@ -450,6 +494,32 @@ function filterBooks(query) {
         if (header && header.tagName === 'H4') header.style.display = hasVisibleItem ? 'block' : 'none';
         ul.style.display = hasVisibleItem ? 'flex' : 'none';
     });
+}
+
+function renderTargetStats(bookId) {
+    const statsPanel = document.getElementById('targetStatsPanel');
+    const statsData = TOME_STATS[bookId];
+    
+    if (!statsData || !TOME_DB[bookId]) {
+        statsPanel.style.display = 'none';
+        return;
+    }
+    
+    const bookName = TOME_DB[bookId][4];
+    const bookLevel = Math.floor(bookId / 100);
+    
+    let html = `<div class="stats-title"><span style="display:inline-block; width:32px; height:32px; background-image:url('znachki.png'); ${getSpritePosition(bookId)}; transform: scale(0.8); pointer-events:none;"></span> ${bookName} (Lv. ${bookLevel})</div>`;
+    html += `<div class="stats-list">`;
+    
+    statsData.forEach(stat => {
+        html += `<span class="stat-item">• ${stat}</span>`;
+    });
+    
+    html += `<span class="stat-item-white">${LANG[currentLang]['statEquipDesc']}</span>`;
+    html += `</div>`;
+    
+    statsPanel.innerHTML = html;
+    statsPanel.style.display = 'block';
 }
 
 function updateCostAndProgress() {
@@ -579,7 +649,6 @@ function renderMenu() {
     document.getElementById('vyborDiv').innerHTML = txt;
 }
 
-// === FIX BUG DITERAPKAN DI SINI ===
 function calculateNode(id) {
 	if (!itemCounts[id]) itemCounts[id] = 0;
 	if (deductionsCopy[id] && deductionsCopy[id] > 0) {
@@ -622,6 +691,10 @@ function processTree(id, isRightTree = false) {
         
     renderTree(isRightTree);
     updateCostAndProgress(); 
+    
+    if (isRightTree || id === rightTreeId) {
+        renderTargetStats(rightTreeId);
+    }
 }
 
 function openInventoryModal() {
@@ -661,7 +734,6 @@ function selectItemForInventory(id) {
     addDeduction(id); 
 }
 
-// LOGIKA JAVASCRIPT PROFIL BUILD
 function initProfiles() {
     try {
         const saved = localStorage.getItem('tomeProfiles');
@@ -764,7 +836,6 @@ function removeCurrentProfile() {
     }
 }
 
-// FITUR EXPORT / IMPORT PROFIL
 function exportProfilesData() {
     const dataStr = JSON.stringify(profiles, null, 2);
     const blob = new Blob([dataStr], { type: "application/json" });
@@ -788,7 +859,6 @@ function importProfilesData(event) {
     reader.onload = function(e) {
         try {
             const importedData = JSON.parse(e.target.result);
-            
             if (typeof importedData === 'object' && importedData !== null) {
                 profiles = { ...profiles, ...importedData };
                 localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
@@ -796,7 +866,6 @@ function importProfilesData(event) {
                 renderProfileDropdown();
                 loadProfileData(currentProfile);
                 applyLanguage();
-                
                 alert(currentLang === 'id' ? "Data profil berhasil diimpor!" : "Profile data imported successfully!");
             } else {
                 alert(currentLang === 'id' ? "Format file tidak valid!" : "Invalid file format!");
