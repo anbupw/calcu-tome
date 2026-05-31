@@ -22,6 +22,7 @@
 	--accent-hover: #2563eb;
 	--danger: #ef4444;
 	--danger-hover: #dc2626;
+	--success: #10b981;
 	--border-color: rgba(255, 255, 255, 0.08);
 }
 
@@ -65,14 +66,14 @@ a:hover { color: #60a5fa; text-decoration: underline; }
     border-radius: 20px; 
     padding: 25px; 
     width: 100%; 
-    max-width: 480px; 
+    max-width: 440px; 
     box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); 
     position: relative; 
     backdrop-filter: blur(10px);
 }
 
 #deductions { 
-    max-width: 985px; 
+    max-width: 1370px; 
     margin: 24px auto 0;
 }
 #deductions .calc-card { 
@@ -151,7 +152,105 @@ h1::before, h2::before {
 }
 
 /* =========================================
-   5. TREE LIST (ICONS & BADGES)
+   5. PROGRESS BAR VISUAL (NEW)
+========================================= */
+.progress-container {
+    margin-bottom: 20px;
+    background: rgba(0, 0, 0, 0.15);
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+.progress-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+.progress-text #progressPercentText {
+    color: var(--success);
+}
+.progress-bar-bg {
+    background: #0f172a;
+    border-radius: 50px;
+    height: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.progress-bar {
+    background: linear-gradient(90deg, var(--accent), var(--success));
+    width: 0%;
+    height: 100%;
+    border-radius: 50px;
+    transition: width 0.4s ease-in-out;
+}
+
+/* =========================================
+   6. MARKET COST ESTIMATOR UI (NEW)
+========================================= */
+.cost-input-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    background: rgba(0,0,0,0.15);
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+}
+.cost-input-group label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.cost-input-group label span {
+    display: inline-block;
+    width: 32px; height: 32px;
+    background-image: url('znachki.png');
+    transform: scale(0.85);
+}
+.cost-input-group input {
+    background: #0f172a;
+    border: 1px solid #475569;
+    color: var(--success);
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 6px 10px;
+    width: 140px;
+    text-align: right;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+}
+.cost-input-group input:focus { border-color: var(--accent); }
+
+.total-cost-box {
+    margin-top: 20px;
+    background: rgba(16, 185, 129, 0.06);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+}
+.total-cost-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+}
+.total-cost-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--success);
+    text-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+}
+
+/* =========================================
+   7. TREE LIST (ICONS & BADGES)
 ========================================= */
 .branch ul { 
     display: flex; 
@@ -246,7 +345,7 @@ h1::before, h2::before {
 #niz li:first-child { display: none; } 
 
 /* =========================================
-   6. FLOATING SELECTION PANEL & NAV
+   8. FLOATING SELECTION PANEL & NAV
 ========================================= */
 .menu-toggle-btn {
 	position: fixed;
@@ -340,7 +439,6 @@ h1::before, h2::before {
 .btn-danger { background: var(--danger); }
 .btn-danger:hover { background: var(--danger-hover); }
 
-/* FITUR SEARCH BAR BARU */
 .search-box {
 	width: 100%;
 	padding: 10px 14px;
@@ -373,7 +471,7 @@ h1::before, h2::before {
 .vybor::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 
 /* =========================================
-   7. AUTHOR SOCIAL CONTAINER
+   9. AUTHOR SOCIAL CONTAINER
 ========================================= */
 .author-social-container {
 	display: flex;
@@ -418,7 +516,6 @@ h1::before, h2::before {
 	transition: all 0.2s ease;
 }
 
-/* Hover Effects */
 .social-btn.telegram:hover { background: rgba(42, 171, 238, 0.15); border-color: #2AABEE; }
 .social-btn.telegram:hover svg { fill: #2AABEE; transform: scale(1.1) rotate(-10deg); }
 
@@ -429,7 +526,7 @@ h1::before, h2::before {
 .social-btn.github:hover svg { fill: #ffffff; transform: scale(1.1); }
 
 /* =========================================
-   8. FLOATING AUTHOR BADGE (BOTTOM LEFT)
+   10. FLOATING AUTHOR BADGE
 ========================================= */
 .author-badge {
 	position: fixed;
@@ -479,7 +576,7 @@ h1::before, h2::before {
 }
 
 /* =========================================
-   9. CUSTOM DIALOG MODAL SYSTEM (NEW)
+   11. CUSTOM DIALOG MODAL SYSTEM
 ========================================= */
 .modal-backdrop {
 	position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -557,8 +654,42 @@ h1::before, h2::before {
 			<input type="number" id="mnojitel" value="1" min="1" max="99">
 			<button class="btn-calc" onClick="processTree(rightTreeId, true)">Hitung Kuantitas</button>
 		</div>
+
+        <div class="progress-container">
+            <div class="progress-text">
+                <span>Progres Pengumpulan:</span>
+                <span id="progressPercentText">0.0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
+        </div>
+
 		<div id="rightTree" class="branch"></div>
 	</div>
+
+    <div class="calc-card">
+        <h1>Estimasi Biaya Pasar</h1>
+        <div class="podzagolovok">Masukkan harga pasar per item untuk mengestimasi koin yang dibutuhkan.</div>
+        
+        <div class="cost-input-group">
+            <label><span style="background-position:32px -32px;"></span> Token of Luck:</label>
+            <input type="number" id="price10" value="0" oninput="updateCostAndProgress()" placeholder="0">
+        </div>
+        <div class="cost-input-group">
+            <label><span style="background-position:64px 0px;"></span> Tome Fragment:</label>
+            <input type="number" id="price11" value="0" oninput="updateCostAndProgress()" placeholder="0">
+        </div>
+        <div class="cost-input-group">
+            <label><span style="background-position:32px 0px;"></span> Tome Page:</label>
+            <input type="number" id="price12" value="0" oninput="updateCostAndProgress()" placeholder="0">
+        </div>
+
+        <div class="total-cost-box">
+            <div class="total-cost-label">Total Sisa Biaya:</div>
+            <div id="totalCostDisplay" class="total-cost-value">0 Coin</div>
+        </div>
+    </div>
 </div>
 
 <div id="deductions">
@@ -708,7 +839,7 @@ let deductions = [];
 let deductionsCopy = [];   
 let leftTreeId = 616;
 let rightTreeId = 515;
-let activeModalItemId = null; // Menyimpan ID item yang sedang diproses modal
+let activeModalItemId = null;
 
 // --- LOCAL STORAGE WITH PROTECTION ---
 function loadDeductions() {
@@ -730,6 +861,9 @@ function saveDeductions() {
 function resetCalculator() {
     if(confirm('Hapus semua perhitungan dan mulai dari awal?')) {
         localStorage.removeItem('tomeDeductions');
+        localStorage.removeItem('tomePrice10');
+        localStorage.removeItem('tomePrice11');
+        localStorage.removeItem('tomePrice12');
         location.reload();
     }
 }
@@ -744,18 +878,17 @@ function showNameTooltip(element) {
 
 function handleItemClick(element) {
     let clickedVal = parseInt(element.value) || 1;
-    if(clickedVal > 99) clickedVal = 99; // Proteksi visual input wajar
+    if(clickedVal > 99) clickedVal = 99;
 	document.getElementById('mnojitel').value = clickedVal;
 	processTree(parseInt(element.title), true);
 }
 
-// --- SYSTEM MODAL FUNCTIONS BARU ---
+// --- SYSTEM MODAL FUNCTIONS ---
 function addDeduction(id) {
     const btn = document.querySelector(`.branch button[title="${id}"]`);
     const val = btn ? btn.value : 1;
     activeModalItemId = id;
     
-    // Tampilkan Nama Item di Judul Modal
     document.getElementById('modalTitle').innerText = TOME_DB[id] ? `Bahan: ${TOME_DB[id][4]}` : 'Tambah Bahan';
     document.getElementById('modalInput').value = val;
     document.getElementById('customModal').style.display = 'flex';
@@ -801,7 +934,7 @@ function getSpritePosition(id) {
     return `background-position:-${32 * (num - 1)}px -${32 * (row - 1)}px`;
 }
 
-// --- FITUR PANEL & LIVE SEARCH BARU ---
+// --- PANEL & LIVE SEARCH ---
 function toggleBookPanel() {
     const panel = document.getElementById('vyborDiv');
     const search = document.getElementById('bookSearch');
@@ -833,7 +966,6 @@ function filterBooks(query) {
             }
         });
         
-        // Sembunyikan Header Kategori Level jika tidak ada buku yang cocok
         const header = ul.previousElementSibling;
         if (header && header.tagName === 'H4') {
             header.style.display = hasVisibleItem ? 'block' : 'none';
@@ -842,16 +974,109 @@ function filterBooks(query) {
     });
 }
 
+// --- FITUR LOGIKA BARU: PROGRESS & COST REALTIME (NEW) ---
+function updateCostAndProgress() {
+    let price10 = parseInt(document.getElementById('price10').value) || 0;
+    let price11 = parseInt(document.getElementById('price11').value) || 0;
+    let price12 = parseInt(document.getElementById('price12').value) || 0;
+    
+    localStorage.setItem('tomePrice10', price10);
+    localStorage.setItem('tomePrice11', price11);
+    localStorage.setItem('tomePrice12', price12);
+
+    let netCounts = [];
+    let dedCopy = [...deductions];
+    let inputVal = parseInt(document.getElementById('mnojitel').value) || 1;
+    if (inputVal < 1) inputVal = 1;
+    if (inputVal > 99) inputVal = 99;
+    let multiplier = inputVal;
+    if (deductions[rightTreeId]) multiplier += deductions[rightTreeId];
+
+    function calcNetNode(nodeId) {
+        if (!netCounts[nodeId]) netCounts[nodeId] = 0;
+        if (dedCopy[nodeId] && dedCopy[nodeId] > 0) {
+            dedCopy[nodeId]--;
+        } else {
+            netCounts[nodeId]++;
+            if (nodeId > 200) {
+                calcNetNode(TOME_DB[nodeId][0]);
+                calcNetNode(TOME_DB[nodeId][1]);
+                calcNetNode(TOME_DB[nodeId][2]);
+            }
+        }
+    }
+
+    for (let z = 0; z < multiplier; z++) {
+        calcNetNode(rightTreeId);
+    }
+
+    let netBaseMats = 0;
+    for (let z = 101; z <= 109; z++) {
+        if (netCounts[z]) netBaseMats += netCounts[z] * 3;
+    }
+    
+    netCounts[12] = netBaseMats;
+    if (deductions[12]) netCounts[12] -= deductions[12];
+    if (netCounts[12] < 0) netCounts[12] = 0;
+
+    netCounts[11] = netBaseMats;
+    if (deductions[11]) netCounts[11] -= deductions[11];
+    if (netCounts[11] < 0) netCounts[11] = 0;
+
+    netCounts[10] = netCounts[12] * 80;
+    if (deductions[10]) netCounts[10] -= deductions[10];
+    if (netCounts[10] < 0) netCounts[10] = 0;
+
+    let grossCounts = [];
+    function calcGrossNode(nodeId) {
+        if (!grossCounts[nodeId]) grossCounts[nodeId] = 0;
+        grossCounts[nodeId]++;
+        if (nodeId > 200) {
+            calcGrossNode(TOME_DB[nodeId][0]);
+            calcGrossNode(TOME_DB[nodeId][1]);
+            calcGrossNode(TOME_DB[nodeId][2]);
+        }
+    }
+    for (let z = 0; z < multiplier; z++) {
+        calcGrossNode(rightTreeId);
+    }
+    let grossBaseMats = 0;
+    for (let z = 101; z <= 109; z++) {
+        if (grossCounts[z]) grossBaseMats += grossCounts[z] * 3;
+    }
+    grossCounts[11] = grossBaseMats;
+    grossCounts[12] = grossBaseMats;
+    grossCounts[10] = grossBaseMats * 80;
+
+    let totalCost = (netCounts[10] || 0) * price10 + 
+                    (netCounts[11] || 0) * price11 + 
+                    (netCounts[12] || 0) * price12;
+    
+    document.getElementById('totalCostDisplay').innerText = totalCost.toLocaleString('id-ID') + " Coin";
+
+    let grossVal = (grossCounts[10] || 0) + (grossCounts[12] || 0) * 80 + (grossCounts[11] || 0) * 80;
+    let netVal = (netCounts[10] || 0) + (netCounts[12] || 0) * 80 + (netCounts[11] || 0) * 80;
+    
+    let pct = 0;
+    if (grossVal > 0) {
+        pct = ((grossVal - netVal) / grossVal) * 100;
+    }
+    if (pct < 0) pct = 0;
+    if (pct > 100) pct = 100;
+
+    document.getElementById('progressBar').style.width = pct.toFixed(1) + '%';
+    document.getElementById('progressPercentText').innerText = pct.toFixed(1) + '%';
+}
+
 // --- HTML RENDERING ---
 function getTreeItemHtml(id, isDeductionList = false) {
     const count = isDeductionList ? deductions[id] : itemCounts[id];
     let actionSpan = isDeductionList 
-        ? `<span onClick="removeDeduction(${id});" title="Kembalikan / Hapus dari daftar ini"></span>`
-        : `<span onClick="addDeduction(${id});" title="Klik jika Anda sudah punya bahan ini (kurangi dari total)"></span>`;
+        ? `<span onClick="removeDeduction(${id});" title="Hapus dari daftar ini"></span>`
+        : `<span onClick="addDeduction(${id});" title="Kurangi dari total"></span>`;
     
     let clickAction = isDeductionList ? '' : 'onClick="handleItemClick(this)"';
     if (!isDeductionList && (id === 12 || id === 11 || id === 10)) clickAction = '';
-    if (isDeductionList && (id === 12 || id === 11 || id === 10)) actionSpan = `<span onClick="removeDeduction(${id});" title="Kembalikan"></span>`;
 
     return `<li>
         ${actionSpan}
@@ -928,7 +1153,7 @@ function renderMenu() {
     document.getElementById('vyborDiv').innerHTML = txt;
 }
 
-// --- CORE CALCULATION LOGIC WITH VALIDATION ANTI-CRASH ---
+// --- CORE CALCULATION LOGIC ---
 function calculateNode(id) {
 	if (!itemCounts[id]) itemCounts[id] = 0;
 	
@@ -951,12 +1176,10 @@ function processTree(id, isRightTree = false) {
 
     if (isRightTree) {
         rightTreeId = id;
-        
-        // PENGAMAN CRASH: Memastikan input aman (tidak kosong, tidak negatif, tidak over-stack)
         let inputField = document.getElementById('mnojitel');
         let inputVal = parseInt(inputField.value);
         if (isNaN(inputVal) || inputVal < 1) inputVal = 1;
-        if (inputVal > 99) inputVal = 99; // Batas aman rekursif front-end browser
+        if (inputVal > 99) inputVal = 99;
         inputField.value = inputVal; 
 
         multiplier = inputVal;
@@ -986,17 +1209,25 @@ function processTree(id, isRightTree = false) {
     }
         
     renderTree(isRightTree);
+    updateCostAndProgress(); // Otomatis picu update progres dan biaya
 }
 
 // --- INIT ---
 window.onload = () => {
     loadDeductions();
+    
+    // Memuat harga dari penyimpanan lokal
+    document.getElementById('price10').value = localStorage.getItem('tomePrice10') || 0;
+    document.getElementById('price11').value = localStorage.getItem('tomePrice11') || 0;
+    document.getElementById('price12').value = localStorage.getItem('tomePrice12') || 0;
+
     renderMenu();
     processTree(616, false); // Kiri (Kebutuhan Total)
     processTree(515, true);  // Kanan (Cabang Terpilih)
     renderDeductions();
     
-    // Trigger tombol ENTER di dalam modal agar eksekusi cepat
+    updateCostAndProgress();
+
     document.getElementById('modalInput').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') confirmModal();
     });
