@@ -315,7 +315,7 @@ function applyLanguage() {
     document.getElementById('langBtn').innerText = currentLang === 'id' ? '🌐 Switch to English' : '🌐 Ganti ke Indonesia';
     document.getElementById('menuToggleBtn').innerText = LANG[currentLang]['menuBtnText'];
     
-    updateRightTreeHeader(); // Memperbarui teks header dengan nama buku yang aktif tracker-nya
+    updateRightTreeHeader();
     processTree(leftTreeId, false);
     processTree(rightTreeId, true);
     renderDeductions();
@@ -478,15 +478,12 @@ function resetCalculator() {
     }
 }
 
-// Fungsi utama pemicu Reverse Crafting Tracker
 function handleItemClick(element) {
     let clickedId = parseInt(element.title);
     if (!TOME_DB[clickedId]) return;
 
-    // Reset multiplier ke 1 agar pelacakan fokus ke buku tersebut
 	document.getElementById('mnojitel').value = 1;
 	
-    // Balikkan pelacakan: Jadikan item yang di-klik sebagai fokus cabang kanan
     processTree(clickedId, true);
     updateRightTreeHeader();
 }
@@ -661,7 +658,6 @@ function getTreeItemHtml(id, isDeductionList = false) {
     const count = isDeductionList ? deductions[id] : itemCounts[id];
     let actionSpan = isDeductionList ? `<span onClick="removeDeduction(${id});" title="Hapus dari daftar ini"></span>` : `<span onClick="addDeduction(${id});" title="Kurangi dari total"></span>`;
     
-    // Aktifkan handleItemClick baik untuk kolom kiri maupun kanan
     let clickAction = 'onClick="handleItemClick(this)"';
     if (isDeductionList || id === 12 || id === 11 || id === 10) clickAction = '';
     
