@@ -199,15 +199,15 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
         <div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
         <div class="cost-input-group">
             <label><span style="background-position:32px -32px;"></span> Token of Luck:</label>
-            <input type="number" id="price10" value="0" oninput="updateCostAndProgress()" placeholder="0">
+            <input type="number" id="price10" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
         </div>
         <div class="cost-input-group">
             <label><span style="background-position:64px 0px;"></span> Tome Fragment:</label>
-            <input type="number" id="price11" value="0" oninput="updateCostAndProgress()" placeholder="0">
+            <input type="number" id="price11" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
         </div>
         <div class="cost-input-group">
             <label><span style="background-position:32px 0px;"></span> Tome Page:</label>
-            <input type="number" id="price12" value="0" oninput="updateCostAndProgress()" placeholder="0">
+            <input type="number" id="price12" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
         </div>
         <div class="total-cost-box">
             <div class="total-cost-label" data-i18n="totalCostLabel">Total Sisa Biaya:</div>
@@ -330,87 +330,13 @@ TOME_DB[301] = [201, 206, 203, 17593, 'Eat Drink and be Merry']; TOME_DB[302] = 
 TOME_DB[201] = [101, 102, 103, 17584, 'Tome of Water']; TOME_DB[202] = [102, 103, 104, 17585, 'Tome of Fire']; TOME_DB[203] = [103, 104, 105, 17586, 'Tome of Earth']; TOME_DB[204] = [104, 105, 106, 17587, 'Tome of Wood']; TOME_DB[205] = [105, 106, 107, 17588, 'Tome of Metal']; TOME_DB[206] = [106, 107, 108, 17589, 'Tome of Wind']; TOME_DB[207] = [107, 108, 109, 17590, 'Tome of Thunder']; TOME_DB[208] = [108, 109, 101, 17591, 'Tome of Light']; TOME_DB[209] = [109, 101, 102, 17592, 'Tome of Darkness'];
 TOME_DB[101] = [0, 0, 0, 17001, 'Grace']; TOME_DB[102] = [0, 0, 0, 17002, 'Power']; TOME_DB[103] = [0, 0, 0, 17003, 'Courage']; TOME_DB[104] = [0, 0, 0, 17004, 'Wisdom']; TOME_DB[105] = [0, 0, 0, 17005, 'Yin']; TOME_DB[106] = [0, 0, 0, 17006, 'Yang']; TOME_DB[107] = [0, 0, 0, 17007, 'Life']; TOME_DB[108] = [0, 0, 0, 17008, 'Death']; TOME_DB[109] = [0, 0, 0, 17009, 'Void'];
 
-// DATABASE STATUS RESMI SEMUA TOME (LEVEL 1 S.D LEVEL 6) DARI PWDATABASE.COM
 const TOME_STATS = {
-    // === TOME LEVEL 1 ===
-    101: ["+5 Magic"],
-    102: ["+5 Strength"],
-    103: ["+5 Dexterity"],
-    104: ["+5 Vitality"],
-    105: ["HP Regeneration +3", "Exp Gain +1%"],
-    106: ["MP Regeneration +3", "Exp Gain +1%"],
-    107: ["+4 Strength", "+3 Vitality"],
-    108: ["+4 Dexterity", "+3 Vitality"],
-    109: ["+4 Magic", "+3 Vitality"],
-
-    // === TOME LEVEL 2 ===
-    201: ["+7 Magic", "+6 Vitality"],
-    202: ["+7 Strength", "+6 Vitality"],
-    203: ["+7 Dexterity", "+6 Vitality"],
-    204: ["+9 Magic"],
-    205: ["+9 Strength"],
-    206: ["+9 Dexterity"],
-    207: ["+9 Vitality"],
-    208: ["HP Regeneration +5", "Exp Gain +2%"],
-    209: ["MP Regeneration +5", "Exp Gain +2%"],
-
-    // === TOME LEVEL 3 ===
-    301: ["+10 Strength", "Critical Hit Rate +1%"],
-    302: ["+10 Magic", "Channelling -1%"],
-    303: ["+10 Dexterity", "Critical Hit Rate +1%"],
-    304: ["+10 Vitality", "Maximum HP +100"],
-    305: ["+7 Strength", "+7 Dexterity"],
-    306: ["+7 Magic", "+7 Vitality"],
-    307: ["+12 Strength"],
-    308: ["+12 Dexterity"],
-    309: ["+12 Magic"],
-
-    // === TOME LEVEL 4 ===
-    401: ["+15 Strength", "Critical Hit Rate +1%"],
-    402: ["+15 Magic", "Channelling -2%"],
-    403: ["+15 Dexterity", "Critical Hit Rate +1%"],
-    404: ["+15 Vitality", "Maximum HP +150"],
-    405: ["+10 Strength", "+10 Vitality"],
-    406: ["+10 Dexterity", "+10 Vitality"],
-    407: ["+10 Magic", "+10 Vitality"],
-    408: ["+8 Strength", "+8 Dexterity", "+8 Vitality"],
-    409: ["+8 Magic", "+8 Dexterity", "+8 Vitality"],
-
-    // === TOME LEVEL 5 ===
-    501: ["+20 Strength", "Critical Hit Rate +1%"],
-    502: ["+20 Magic", "Channelling -2%"],
-    503: ["+20 Dexterity", "Critical Hit Rate +1%"],
-    504: ["+20 Vitality", "Maximum HP +200"],
-    505: ["+15 Strength", "+15 Dexterity"],
-    506: ["+15 Magic", "+15 Vitality"],
-    507: ["+12 Strength", "+12 Dexterity", "+12 Vitality"],
-    508: ["+12 Magic", "+12 Dexterity", "+12 Vitality"],
-    509: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"],
-    510: ["+15 Strength", "Physical Attack +20"],
-    511: ["+15 Magic", "Magic Attack +20"],
-    512: ["+15 Dexterity", "Critical Hit Rate +2%"],
-    513: ["+15 Vitality", "Physical Defense +100"],
-    514: ["Maximum HP +300"],
-    515: ["+18 Magic", "Channelling -3%"],
-    516: ["+18 Strength", "Critical Hit Rate +2%"],
-
-    // === TOME LEVEL 6 ===
-    601: ["+15 Strength", "+15 Dexterity", "Critical Hit Rate +1%"],
-    602: ["+15 Magic", "+15 Vitality", "Channelling -3%"],
-    603: ["+15 Strength", "+15 Vitality", "Maximum HP +150"],
-    604: ["+20 Dexterity", "Attack Interval -0.05", "Movement Speed +0.10"],
-    605: ["+20 Magic", "Channelling -3", "Maximum MP +200"],
-    606: ["+20 Strength", "Critical Hit Rate +1%", "Physical Attack +30"],
-    607: ["+20 Vitality", "Maximum HP +200", "Physical Defense +50"],
-    608: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"],
-    609: ["+15 Dexterity", "+15 Vitality", "Critical Hit Rate +1%"],
-    610: ["+15 Magic", "+15 Dexterity", "Channelling -3%"],
-    611: ["+15 Strength", "+15 Magic", "Physical Attack +20"],
-    612: ["+25 Magic", "Channelling -3%"],
-    613: ["+25 Strength", "Critical Hit Rate +1%"],
-    614: ["+25 Dexterity", "Attack Interval -0.05"],
-    615: ["+20 Magic", "+20 Dexterity", "Channelling -3%", "Critical Hit Rate +1%"],
-    616: ["+20 Strength", "+20 Dexterity", "+20 Magic", "+20 Vitality", "Critical Hit Rate +1%"]
+    101: ["+5 Magic"], 102: ["+5 Strength"], 103: ["+5 Dexterity"], 104: ["+5 Vitality"], 105: ["HP Regeneration +3", "Exp Gain +1%"], 106: ["MP Regeneration +3", "Exp Gain +1%"], 107: ["+4 Strength", "+3 Vitality"], 108: ["+4 Dexterity", "+3 Vitality"], 109: ["+4 Magic", "+3 Vitality"],
+    201: ["+7 Magic", "+6 Vitality"], 202: ["+7 Strength", "+6 Vitality"], 203: ["+7 Dexterity", "+6 Vitality"], 204: ["+9 Magic"], 205: ["+9 Strength"], 206: ["+9 Dexterity"], 207: ["+9 Vitality"], 208: ["HP Regeneration +5", "Exp Gain +2%"], 209: ["MP Regeneration +5", "Exp Gain +2%"],
+    301: ["+10 Strength", "Critical Hit Rate +1%"], 302: ["+10 Magic", "Channelling -1%"], 303: ["+10 Dexterity", "Critical Hit Rate +1%"], 304: ["+10 Vitality", "Maximum HP +100"], 305: ["+7 Strength", "+7 Dexterity"], 306: ["+7 Magic", "+7 Vitality"], 307: ["+12 Strength"], 308: ["+12 Dexterity"], 309: ["+12 Magic"],
+    401: ["+15 Strength", "Critical Hit Rate +1%"], 402: ["+15 Magic", "Channelling -2%"], 403: ["+15 Dexterity", "Critical Hit Rate +1%"], 404: ["+15 Vitality", "Maximum HP +150"], 405: ["+10 Strength", "+10 Vitality"], 406: ["+10 Dexterity", "+10 Vitality"], 407: ["+10 Magic", "+10 Vitality"], 408: ["+8 Strength", "+8 Dexterity", "+8 Vitality"], 409: ["+8 Magic", "+8 Dexterity", "+8 Vitality"],
+    501: ["+20 Strength", "Critical Hit Rate +1%"], 502: ["+20 Magic", "Channelling -2%"], 503: ["+20 Dexterity", "Critical Hit Rate +1%"], 504: ["+20 Vitality", "Maximum HP +200"], 505: ["+15 Strength", "+15 Dexterity"], 506: ["+15 Magic", "+15 Vitality"], 507: ["+12 Strength", "+12 Dexterity", "+12 Vitality"], 508: ["+12 Magic", "+12 Dexterity", "+12 Vitality"], 509: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"], 510: ["+15 Strength", "Physical Attack +20"], 511: ["+15 Magic", "Magic Attack +20"], 512: ["+15 Dexterity", "Critical Hit Rate +2%"], 513: ["+15 Vitality", "Physical Defense +100"], 514: ["Maximum HP +300"], 515: ["+18 Magic", "Channelling -3%"], 516: ["+18 Strength", "Critical Hit Rate +2%"],
+    601: ["+15 Strength", "+15 Dexterity", "Critical Hit Rate +1%"], 602: ["+15 Magic", "+15 Vitality", "Channelling -3%"], 603: ["+15 Strength", "+15 Vitality", "Maximum HP +150"], 604: ["+20 Dexterity", "Attack Interval -0.05", "Movement Speed +0.10"], 605: ["+20 Magic", "Channelling -3", "Maximum MP +200"], 606: ["+20 Strength", "Critical Hit Rate +1%", "Physical Attack +30"], 607: ["+20 Vitality", "Maximum HP +200", "Physical Defense +50"], 608: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"], 609: ["+15 Dexterity", "+15 Vitality", "Critical Hit Rate +1%"], 610: ["+15 Magic", "+15 Dexterity", "Channelling -3%"], 611: ["+15 Strength", "+15 Magic", "Physical Attack +20"], 612: ["+25 Magic", "Channelling -3%"], 613: ["+25 Strength", "Critical Hit Rate +1%"], 614: ["+25 Dexterity", "Attack Interval -0.05"], 615: ["+20 Magic", "+20 Dexterity", "Channelling -3%", "Critical Hit Rate +1%"], 616: ["+20 Strength", "+20 Dexterity", "+20 Magic", "+20 Vitality", "Critical Hit Rate +1%"]
 };
 
 let itemCounts = [];       
@@ -423,7 +349,6 @@ let activeModalItemId = null;
 let profiles = {};
 let currentProfile = 'Default';
 
-// LOGIKA MANAJEMEN FLOATING TOOLTIP
 function showTooltip(element, event) {
     const id = parseInt(element.title);
     if (!TOME_DB[id] && id !== 10 && id !== 11 && id !== 12) return;
@@ -445,7 +370,6 @@ function showTooltip(element, event) {
         const lvl = Math.floor(id / 100);
         typeText = `Tome (${LANG[currentLang]['lvl']} ${lvl})`;
         
-        // Render Status Atribut Komplit
         if (TOME_STATS[id]) {
             TOME_STATS[id].forEach(stat => {
                 statsHtml += `<span class="tooltip-stat">• ${stat}</span>`;
@@ -467,7 +391,6 @@ function showTooltip(element, event) {
     tooltip.style.display = 'block';
     moveTooltip(event);
     
-    // Sinkronisasi teks tautan info atas
     let linkUrl = (id === 10) ? "http://www.pwdatabase.com/pwi/items/24722" :
                   (id === 11) ? "http://www.pwdatabase.com/pwi/items/17011" :
                   (id === 12) ? "http://www.pwdatabase.com/pwi/items/17010" :
@@ -485,7 +408,6 @@ function moveTooltip(event) {
     const tooltipWidth = tooltip.offsetWidth || 240;
     const tooltipHeight = tooltip.offsetHeight || 160;
     
-    // Proteksi Batas Monitor Layar Browser
     if (x + tooltipWidth > window.innerWidth) {
         x = event.clientX - tooltipWidth - 15;
     }
@@ -632,9 +554,13 @@ function filterBooks(query) {
 }
 
 function updateCostAndProgress() {
-    let price10 = parseInt(document.getElementById('price10').value) || 0;
-    let price11 = parseInt(document.getElementById('price11').value) || 0;
-    let price12 = parseInt(document.getElementById('price12').value) || 0;
+    let price10 = Math.max(0, parseInt(document.getElementById('price10').value) || 0);
+    let price11 = Math.max(0, parseInt(document.getElementById('price11').value) || 0);
+    let price12 = Math.max(0, parseInt(document.getElementById('price12').value) || 0);
+    
+    document.getElementById('price10').value = price10;
+    document.getElementById('price11').value = price11;
+    document.getElementById('price12').value = price12;
     
     localStorage.setItem('tomePrice10', price10);
     localStorage.setItem('tomePrice11', price11);
@@ -643,17 +569,20 @@ function updateCostAndProgress() {
     saveActiveProfile(); 
 
     let netCounts = [];
-    let dedCopy = [...deductions];
-    let multiplier = parseInt(document.getElementById('mnojitel').value) || 1;
-    if (multiplier < 1) multiplier = 1; if (multiplier > 99) multiplier = 99;
+    let dedCopy = Object.assign([], deductions);
+    let multiplier = Math.max(1, Math.min(99, parseInt(document.getElementById('mnojitel').value) || 1));
 
     function calcNetNode(nodeId) {
         if (!netCounts[nodeId]) netCounts[nodeId] = 0;
         if (dedCopy[nodeId] && dedCopy[nodeId] > 0) {
             dedCopy[nodeId]--;
-        } else {
-            netCounts[nodeId]++;
-            if (nodeId > 200) { calcNetNode(TOME_DB[nodeId][0]); calcNetNode(TOME_DB[nodeId][1]); calcNetNode(TOME_DB[nodeId][2]); }
+            return; 
+        }
+        netCounts[nodeId]++;
+        if (nodeId > 200) { 
+            calcNetNode(TOME_DB[nodeId][0]); 
+            calcNetNode(TOME_DB[nodeId][1]); 
+            calcNetNode(TOME_DB[nodeId][2]); 
         }
     }
 
@@ -685,7 +614,7 @@ function updateCostAndProgress() {
     let netVal = (netCounts[10] || 0) + (netCounts[12] || 0) * 80 + (netCounts[11] || 0) * 80;
     
     let pct = grossVal > 0 ? ((grossVal - netVal) / grossVal) * 100 : 0;
-    if (pct < 0) pct = 0; if (pct > 100) pct = 100;
+    pct = Math.max(0, Math.min(100, pct));
 
     document.getElementById('progressBar').style.width = pct.toFixed(1) + '%';
     document.getElementById('progressPercentText').innerText = pct.toFixed(1) + '%';
@@ -762,19 +691,19 @@ function calculateNode(id) {
 	if (!itemCounts[id]) itemCounts[id] = 0;
 	if (deductionsCopy[id] && deductionsCopy[id] > 0) {
 		deductionsCopy[id]--;
-	} else {
-		itemCounts[id]++;
-		if (id > 200) { 
-            calculateNode(TOME_DB[id][0]); 
-            calculateNode(TOME_DB[id][1]); 
-            calculateNode(TOME_DB[id][2]); 
-        }
+        return; 
 	}
+	itemCounts[id]++;
+	if (id > 200) { 
+        calculateNode(TOME_DB[id][0]); 
+        calculateNode(TOME_DB[id][1]); 
+        calculateNode(TOME_DB[id][2]); 
+    }
 }
 
 function processTree(id, isRightTree = false) {
     itemCounts = [];
-    deductionsCopy = [...deductions];
+    deductionsCopy = Object.assign([], deductions);
     let multiplier = 1;
 
     if (isRightTree) {
@@ -934,6 +863,7 @@ function removeCurrentProfile() {
     if (confirm(`Apakah Anda yakin ingin menghapus profil "${currentProfile}" beserta seluruh data di dalamnya?`)) {
         delete profiles[currentProfile];
         localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
+        localStorage.setItem('tomeCurrentProfile', 'Default'); 
         currentProfile = 'Default';
         loadProfileData('Default');
         renderProfileDropdown();
