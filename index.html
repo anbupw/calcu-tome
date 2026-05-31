@@ -12,7 +12,6 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
-/* --- CSS SAMA SEPERTI SEBELUMNYA --- */
 :root {
 	--bg-main: #0f172a;
 	--bg-card: #1e293b;
@@ -216,7 +215,6 @@ const LANG = {
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
 
-// [BUGFIX 1] Pemanggilan renderTree dipisah agar memori Cabang Kiri dan Kanan tidak tertukar
 function applyLanguage() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
@@ -386,7 +384,6 @@ function filterBooks(query) {
     });
 }
 
-// [BUGFIX 2] Menghapus penambahan Target vs Owned (Multiplier Logic) di fungsi Cost
 function updateCostAndProgress() {
     let price10 = parseInt(document.getElementById('price10').value) || 0;
     let price11 = parseInt(document.getElementById('price11').value) || 0;
@@ -522,7 +519,6 @@ function calculateNode(id) {
 	}
 }
 
-// [BUGFIX 2] Menghapus penambahan Target vs Owned (Multiplier Logic) di fungsi Tree
 function processTree(id, isRightTree = false) {
     itemCounts = [];
     deductionsCopy = [...deductions];
