@@ -1,454 +1,299 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Tome Pro & Pembuat Build</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Kalkulator Tome Perfect World - Edisi Imersif" />
+<title>Kalkulator Tome | UI Modern Floating Tooltip</title>
 
-    <style>
-        :root {
-            --bg-main: #0f172a;
-            --bg-card: #1e293b;
-            --bg-input: #334155;
-            --accent-blue: #3b82f6;
-            --accent-green: #10b981;
-            --accent-red: #ef4444;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: #475569;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-        body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            padding: 24px;
-            display: flex;
-            justify-content: center;
-        }
+<style>
+:root {
+	--bg-main: #0f172a;
+	--bg-card: #1e293b;
+	--bg-card-hover: #334155;    
+	--text-main: #f8fafc;
+	--text-muted: #94a3b8;
+	--accent: #3b82f6;
+	--accent-hover: #2563eb;
+	--danger: #ef4444;
+	--danger-hover: #dc2626;
+	--success: #10b981;
+	--success-hover: #059669;
+	--border-color: rgba(255, 255, 255, 0.08);
+}
 
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            background-color: var(--bg-main);
-            padding: 16px;
-            border-radius: 12px;
-        }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* Top Header Control Banner */
-        .control-banner {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            background-color: var(--bg-card);
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            align-items: center;
-            border: 1px solid var(--border-color);
-        }
+body {
+	font-family: 'Inter', sans-serif;
+	background-color: var(--bg-main);
+	color: var(--text-main);
+	line-height: 1.6;
+	min-height: 100vh;
+	padding: 30px 30px 10px 30px; 
+	background-image: 
+		radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+		radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+	background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+}
 
-        button {
-            background-color: var(--accent-blue);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 14px;
-            transition: opacity 0.2s ease;
-        }
+ul { list-style: none; }
+a { color: var(--accent); text-decoration: none; transition: 0.3s; }
+a:hover { color: #60a5fa; text-decoration: underline; }
 
-        button:hover {
-            opacity: 0.9;
-        }
+.container { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; max-width: 1400px; margin: 0 auto; flex: 1; }
+.calc-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; width: 100%; max-width: 440px; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); position: relative; backdrop-filter: blur(10px); }
+#deductions { max-width: 1370px; margin: 24px auto 0; width: 100%; }
+#deductions .calc-card { max-width: 100%; }
 
-        .btn-danger { background-color: var(--accent-red); }
-        .btn-success { background-color: var(--accent-green); }
-        .btn-secondary { background-color: var(--bg-input); border: 1px solid var(--border-color); }
+h1, h2 { font-size: 1.25rem; font-weight: 700; color: #e2e8f0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+h1::before, h2::before { content: ''; display: inline-block; width: 12px; height: 12px; background: var(--accent); border-radius: 3px; }
+.podzagolovok { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color); font-size: 0.9rem; color: var(--text-muted); min-height: 50px; }
 
-        select, input[type="number"], input[type="text"] {
-            background-color: var(--bg-input);
-            border: 1px solid var(--border-color);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            outline: none;
-            font-size: 14px;
-        }
+.podzagolovok input[type="number"] { background: #0f172a; border: 1px solid #475569; color: white; font-weight: 600; border-radius: 8px; padding: 8px 12px; width: 80px; text-align: center; font-size: 1rem; outline: none; transition: border 0.3s; }
+.podzagolovok input:focus { border-color: var(--accent); }
+.btn-calc { background: var(--accent); color: white; border: none; padding: 9px 18px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4); }
+.btn-calc:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 6px 12px -2px rgba(59, 130, 246, 0.5); }
 
-        /* Workspace Grid Layout */
-        .workspace {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
+.progress-container { margin-bottom: 20px; background: rgba(0, 0, 0, 0.15); padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); }
+.progress-text { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+.progress-text #progressPercentText { color: var(--success); }
+.progress-bar-bg { background: #0f172a; border-radius: 50px; height: 10px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05); }
+.progress-bar { background: linear-gradient(90deg, var(--accent), var(--success)); width: 0%; height: 100%; border-radius: 50px; transition: width 0.4s ease-in-out; }
 
-        @media (max-width: 900px) {
-            .workspace { grid-template-columns: 1fr; }
-        }
+.cost-input-group { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; background: rgba(0,0,0,0.15); padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border-color); }
+.cost-input-group label { font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+.cost-input-group label span { display: inline-block; width: 32px; height: 32px; background-image: url('znachki.png'); transform: scale(0.85); }
+.cost-input-group input { background: #0f172a; border: 1px solid #475569; color: var(--success); font-weight: 600; border-radius: 6px; padding: 6px 10px; width: 140px; text-align: right; outline: none; font-family: 'Inter', sans-serif; }
+.cost-input-group input:focus { border-color: var(--accent); }
+.total-cost-box { margin-top: 20px; background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.2); padding: 15px; border-radius: 12px; text-align: center; }
+.total-cost-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 5px; }
+.total-cost-value { font-size: 1.4rem; font-weight: 700; color: var(--success); text-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
 
-        .card {
-            background-color: var(--bg-card);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
+.branch ul { display: flex; flex-wrap: wrap; gap: 15px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; margin-bottom: 16px; align-items: center; }
+.branch ul li:first-child { width: 100%; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px; margin-bottom: 5px; }
+.branch ul li { position: relative; display: inline-flex; flex-direction: column; align-items: center; }
+.branch li button { display: block; width: 32px; height: 32px; transform: scale(1.2); margin: 6px; background-image: url('znachki.png'); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.branch li button:hover { transform: scale(1.35) translateY(-2px); box-shadow: 0 8px 15px rgba(0,0,0,0.5); }
+.branch li b { position: absolute; bottom: -8px; right: -5px; background: var(--accent); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 12px; border: 2px solid var(--bg-card); pointer-events: none; z-index: 2; }
+.branch li span { position: absolute; top: -5px; left: -5px; width: 20px; height: 20px; background: var(--danger); color: white; font-size: 14px; line-height: 14px; text-align: center; border-radius: 50%; cursor: pointer; opacity: 0; visibility: hidden; transition: all 0.2s ease; z-index: 3; border: 2px solid var(--bg-card); display: flex; align-items: center; justify-content: center; }
+.branch li span::before { content: "-"; font-weight: bold; }
+.branch li:hover span { opacity: 1; visibility: visible; }
+#strelki { color: var(--accent); font-weight: bold; letter-spacing: 2px; }
+#niz li:first-child { display: none; } 
 
-        .card-title {
-            font-size: 18px;
-            font-weight: 600;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+/* --- UI Floating Tooltip (In-game Style) --- */
+.floating-tooltip {
+    position: fixed;
+    background: rgba(10, 15, 30, 0.96);
+    border: 2px solid #475569;
+    border-radius: 10px;
+    padding: 14px 18px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.85), inset 0 0 15px rgba(0,0,0,0.7);
+    z-index: 10000;
+    pointer-events: none; 
+    display: none;
+    min-width: 240px;
+    max-width: 300px;
+    font-family: 'Inter', sans-serif;
+    backdrop-filter: blur(6px);
+}
+.tooltip-title {
+    color: #f59e0b; /* Golden Color */
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.tooltip-type {
+    color: #94a3b8;
+    font-size: 0.75rem;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed rgba(255,255,255,0.15);
+    padding-bottom: 5px;
+}
+.tooltip-list { display: flex; flex-direction: column; gap: 4px; }
+.tooltip-stat { color: #60a5fa; font-size: 0.85rem; font-weight: 600; }
+.tooltip-footer { color: #64748b; font-size: 0.75rem; font-style: italic; margin-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 6px; }
 
-        #nazvaniye {
-            font-size: 15px;
-            color: var(--accent-blue);
-            min-height: 24px;
-            font-weight: 500;
-        }
-        #nazvaniye a {
-            color: var(--accent-blue);
-            text-decoration: none;
-        }
-        #nazvaniye a:hover {
-            text-decoration: underline;
-        }
+/* Footer & Social Icons Styles */
+.footer { margin-top: 40px; padding: 25px 0; border-top: 1px solid var(--border-color); text-align: center; width: 100%; }
+.footer-text { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; }
+.social-icons { display: flex; justify-content: center; gap: 18px; }
+.social-icons a { color: var(--text-muted); font-size: 1.4rem; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.05); transition: all 0.3s ease; }
+.social-icons a:hover { color: white; background: var(--accent); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4); }
 
-        /* Tree List Formatting styles */
-        .branch ul {
-            list-style: none;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
-            background: rgba(255,255,255,0.02);
-            padding: 8px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
+.menu-toggle-btn { position: fixed; top: 25px; right: 25px; background: var(--accent); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; z-index: 1001; box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: 0.2s ease; }
+.menu-toggle-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
+.vybor { position: fixed; right: 25px; top: 75px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--accent); padding: 20px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); z-index: 1000; width: 340px; max-height: 80vh; overflow-y: auto; }
 
-        .branch ul li:first-child {
-            font-weight: 600;
-            color: var(--text-muted);
-            min-width: 80px;
-            font-size: 13px;
-            text-transform: uppercase;
-        }
+.panel-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+.panel-actions > button { width: 100%; border: none; color: white; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-primary { background: var(--accent); } .btn-primary:hover { background: var(--accent-hover); }
+.btn-success { background: var(--success); } .btn-success:hover { background: var(--success-hover); }
+.btn-purple { background: #8b5cf6; } .btn-purple:hover { background: #7c3aed; }
+.btn-danger { background: var(--danger); } .btn-danger:hover { background: var(--danger-hover); }
+.search-box { width: 100%; padding: 10px 14px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: white; font-family: 'Inter', sans-serif; font-size: 0.9rem; margin-top: 10px; margin-bottom: 5px; outline: none; transition: 0.2s; }
+.search-box:focus { border-color: var(--accent); }
+#vyborDiv h4 { font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); margin-bottom: 10px; padding-bottom: 5px; margin-top: 15px; }
+#vyborDiv ul { display: flex; flex-wrap: wrap; gap: 8px; }
+#vyborDiv li { display: inline-block; }
+.vybor::-webkit-scrollbar { width: 6px; } .vybor::-webkit-scrollbar-track { background: transparent; } .vybor::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 
-        .branch ul li {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            position: relative;
-        }
+.modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 1; transition: opacity 0.2s ease; }
+.modal-content { background: var(--bg-card); border: 1px solid var(--accent); padding: 25px; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6); text-align: center; animation: modalSlide 0.3s ease; }
+@keyframes modalSlide { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-content h3 { margin-bottom: 10px; color: #e2e8f0; font-size: 1.1rem; }
+.modal-content p { margin-bottom: 18px; color: var(--text-muted); font-size: 0.9rem; }
+.modal-content input { background: #0f172a; border: 1px solid #475569; color: white; padding: 10px; border-radius: 8px; width: 100%; text-align: center; font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; outline: none; }
+.modal-content input:focus { border-color: var(--accent); }
+.modal-buttons { display: flex; gap: 12px; }
+.modal-buttons button { flex: 1; padding: 10px; font-weight: 600; border-radius: 8px; border: none; cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
+.modal-btn-confirm { background: var(--accent); color: white; } .modal-btn-confirm:hover { background: var(--accent-hover); }
+.modal-btn-cancel { background: #334155; color: #cbd5e1; } .modal-btn-cancel:hover { background: #475569; }
 
-        .branch button {
-            width: 32px;
-            height: 32px;
-            padding: 0;
-            border-radius: 4px;
-            background-color: #111;
-            border: 1px solid #555;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .branch b {
-            font-size: 13px;
-        }
-
-        /* Remove Action Trigger */
-        .branch ul li span {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background-color: var(--accent-red);
-            color: white;
-            width: 14px;
-            height: 14px;
-            font-size: 10px;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 5;
-            line-height: 1;
-        }
-        .branch ul li span::before {
-            content: '×';
-        }
-        #deductionsList ul li:hover span {
-            display: flex;
-        }
-
-        /* Progress Bar */
-        .progress-container {
-            background-color: var(--bg-input);
-            border-radius: 20px;
-            height: 20px;
-            width: 100%;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        .progress-bar {
-            background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
-            height: 100%;
-            width: 0%;
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .progress-text-wrapper {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        /* Floating Custom Tooltip Element */
-        #floatingTooltip {
-            position: fixed;
-            background: rgba(15, 23, 42, 0.95);
-            border: 1px solid var(--accent-blue);
-            padding: 12px;
-            border-radius: 8px;
-            color: white;
-            font-size: 13px;
-            z-index: 9999;
-            pointer-events: none;
-            display: none;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            min-width: 220px;
-            max-width: 300px;
-        }
-
-        .tooltip-title {
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 4px;
-        }
-
-        .tooltip-type {
-            font-size: 11px;
-            color: var(--accent-blue);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        .tooltip-stat {
-            display: block;
-            color: var(--accent-green);
-            margin-bottom: 2px;
-        }
-
-        .tooltip-footer {
-            font-size: 10px;
-            color: var(--text-muted);
-            margin-top: 6px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 4px;
-        }
-
-        /* Modal Structure Design */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-        }
-
-        .modal-content {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            padding: 24px;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 400px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        /* Hidden standard selection block */
-        #vyborDiv {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 20px;
-            display: none;
-        }
-        #vyborDiv h4 {
-            margin: 8px 0 4px 0;
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-        #bookSearch {
-            margin-bottom: 10px;
-            width: 100%;
-            display: none;
-        }
-
-        .cost-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255,255,255,0.02);
-            padding: 10px;
-            border-radius: 6px;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-    </style>
+#invItemList::-webkit-scrollbar { width: 6px; }
+#invItemList::-webkit-scrollbar-track { background: transparent; }
+#invItemList::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+</style>
 </head>
 <body>
 
 <div class="container">
-    
-    <div class="control-banner">
-        <select id="profileSelect" onchange="handleProfileChange(this.value)"></select>
-        <button class="btn-secondary" onclick="createNewProfile()">➕ Profil</button>
-        <button class="btn-danger" style="padding: 8px 12px;" onclick="removeCurrentProfile()">🗑️</button>
-        
-        <button id="langBtn" class="btn-secondary" onclick="toggleLanguage()">🌐 Language</button>
-        <button id="menuToggleBtn" class="btn-secondary" onclick="toggleBookPanel()">⚙️ Menu</button>
-        <button class="btn-success" onclick="openInventoryModal()">📥 Add to Inventory</button>
-        
-        <button class="btn-secondary" onclick="exportProfilesData()">📤 Backup JSON</button>
-        <input type="file" id="importFile" style="display:none;" onchange="importProfilesData(event)">
-        <button class="btn-secondary" onclick="document.getElementById('importFile').click()">📥 Restore JSON</button>
-        
-        <button class="btn-danger" style="margin-left: auto;" data-i18n="btnReset" onclick="resetCalculator()">🔄 Reset</button>
-    </div>
-
-    <input type="text" id="bookSearch" placeholder="🔍 Cari..." oninput="filterBooks(this.value)">
-    <div id="vyborDiv"></div>
-
-    <div class="workspace">
-        
-        <div class="card">
-            <div class="card-title">
-                <span data-i18n="title2">Cabang Terpilih</span>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-size:14px; font-weight:normal;">Qty:</span>
-                    <input type="number" id="mnojitel" value="1" min="1" max="99" style="width: 60px; padding: 4px 8px;" oninput="processTree(rightTreeId, true)">
-                </div>
-            </div>
-            <div id="nazvaniye" data-i18n="desc1">Arahkan kursor ke ikon untuk melihat nama buku.</div>
-            <div id="rightTree" class="branch"></div>
-        </div>
-
-        <div class="card">
-            <div class="card-title" data-i18n="title1">Kebutuhan Total</div>
-            <div id="leftTree" class="branch"></div>
-            
-            <div class="card-title" data-i18n="title3">Estimasi Biaya Pasar</div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px;">
-                <div>
-                    <label style="font-size:11px; color:var(--text-muted);">Tome Page</label>
-                    <input type="number" id="price12" value="0" style="width:100%;" oninput="updateCostAndProgress()">
-                </div>
-                <div>
-                    <label style="font-size:11px; color:var(--text-muted);">Tome Fragment</label>
-                    <input type="number" id="price11" value="0" style="width:100%;" oninput="updateCostAndProgress()">
-                </div>
-                <div>
-                    <label style="font-size:11px; color:var(--text-muted);">Token of Luck</label>
-                    <input type="number" id="price10" value="0" style="width:100%;" oninput="updateCostAndProgress()">
-                </div>
-            </div>
-            <div class="cost-row">
-                <span style="font-weight:600;" data-i18n="totalCostLabel">Total Sisa Biaya:</span>
-                <span id="totalCostDisplay" style="color:var(--accent-green); font-weight:700; font-size:18px;">0 Gold</span>
-            </div>
-
-            <div class="progress-text-wrapper">
+	<div class="calc-card">
+		<h1 data-i18n="title1">Kebutuhan Total</h1>
+		<div class="podzagolovok" id="nazvaniye" data-i18n="desc1">Arahkan kursor ke ikon untuk melihat nama buku.</div>
+		<div id="leftTree" class="branch"></div>
+	</div>
+	
+	<div class="calc-card">
+		<h2 data-i18n="title2">Cabang Terpilih</h2>
+		<div class="podzagolovok">
+			<input type="number" id="mnojitel" value="1" min="1" max="99">
+			<button class="btn-calc" data-i18n="btnCalc" onClick="processTree(rightTreeId, true)">Hitung Kuantitas</button>
+		</div>
+        <div class="progress-container">
+            <div class="progress-text">
                 <span data-i18n="progText">Progres Pengumpulan:</span>
-                <span id="progressPercentText">0%</span>
+                <span id="progressPercentText">0.0%</span>
             </div>
-            <div class="progress-container">
+            <div class="progress-bar-bg">
                 <div id="progressBar" class="progress-bar"></div>
             </div>
         </div>
+		<div id="rightTree" class="branch"></div>
+	</div>
 
-    </div>
-
-    <div class="card" style="margin-top:20px;">
-        <div class="card-title" data-i18n="title4">📦 Inventory (Bahan Dimiliki)</div>
-        <div id="deductionsList" class="branch"></div>
-        <div style="display:flex; gap:10px; margin-top:10px;">
-            <button class="btn-secondary" data-i18n="btnShare" onclick="copyShareLink()">🔗 Bagikan Build (Copy)</button>
-            <button class="btn-secondary" data-i18n="btnExport" onclick="exportToImage(event)">📸 Download Gambar Build</button>
+    <div class="calc-card">
+        <h1 data-i18n="title3">Estimasi Biaya Pasar</h1>
+        <div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
+        <div class="cost-input-group">
+            <label><span style="background-position:32px -32px;"></span> Token of Luck:</label>
+            <input type="number" id="price10" value="0" oninput="updateCostAndProgress()" placeholder="0">
+        </div>
+        <div class="cost-input-group">
+            <label><span style="background-position:64px 0px;"></span> Tome Fragment:</label>
+            <input type="number" id="price11" value="0" oninput="updateCostAndProgress()" placeholder="0">
+        </div>
+        <div class="cost-input-group">
+            <label><span style="background-position:32px 0px;"></span> Tome Page:</label>
+            <input type="number" id="price12" value="0" oninput="updateCostAndProgress()" placeholder="0">
+        </div>
+        <div class="total-cost-box">
+            <div class="total-cost-label" data-i18n="totalCostLabel">Total Sisa Biaya:</div>
+            <div id="totalCostDisplay" class="total-cost-value">0 Gold</div>
         </div>
     </div>
-
-    <div class="footer" data-i18n="footerText">Kalkulator Tome © 2026</div>
-
-</div>
-
-<div id="floatingTooltip"></div>
-
-<div id="customModal" class="modal-overlay" onclick="if(event.target===this) closeModal();">
-    <div class="modal-content">
-        <h3 id="modalTitle">Tambah Item</h3>
-        <p style="font-size:13px; color:var(--text-muted);" data-i18n="modalDesc">Berapa banyak item ini yang sudah Anda miliki?</p>
-        <input type="number" id="modalInput" value="1" min="1">
-        <div style="display:flex; justify-content:flex-end; gap:10px;">
-            <button class="btn-secondary" data-i18n="btnCancel" onclick="closeModal()">Batal</button>
-            <button class="btn-success" data-i18n="btnSave" onclick="confirmModal()">Simpan</button>
+    
+    <div id="deductions">
+        <div class="calc-card">
+            <h2 data-i18n="title4">📦 Inventory (Bahan Dimiliki)</h2>
+            <div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center;">
+                <span data-i18n="desc4" style="flex:1;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
+                <button class="btn-success" onClick="openInventoryModal()" style="white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600;">➕ Tambah Item</button>
+            </div>
+            <div id="deductionsList" class="branch"></div>
         </div>
     </div>
 </div>
 
-<div id="inventoryModal" class="modal-overlay" onclick="if(event.target===this) closeInventoryModal();">
-    <div class="modal-content" style="max-width: 500px;">
-        <h3 data-i18n="modalTitleAdd">Tambah Buku/Bahan</h3>
-        <input type="text" id="invSearch" placeholder="Cari nama buku..." oninput="filterInventorySearch(this.value)">
-        <div id="invItemList" style="max-height:300px; overflow-y:auto; padding:10px 0;"></div>
-        <button class="btn-secondary" data-i18n="btnCancel" onclick="closeInventoryModal()">Tutup</button>
+<footer class="footer">
+    <div class="footer-text" data-i18n="footerText">
+        Kalkulator Tome &copy; 2026 | Dibuat oleh <strong>[Nama Author/Komunitas]</strong>
+    </div>
+    <div class="social-icons">
+        <a href="#" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" target="_blank" title="Discord"><i class="fab fa-discord"></i></a>
+        <a href="#" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="#" target="_blank" title="Website"><i class="fas fa-globe"></i></a>
+    </div>
+</footer>
+
+<button class="menu-toggle-btn" id="menuToggleBtn" onclick="var panel = document.getElementById('mainMenuPanel'); panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';">⚙️ Buka Menu</button>
+
+<div class="vybor" id="mainMenuPanel" style="display:none;">
+    <h4 style="margin-top: 0; font-size: 0.85rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px;">📁 Kelola Profil Build</h4>
+    <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
+        <select id="profileSelect" onchange="handleProfileChange(this.value)" style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid var(--border-color); color: white; border-radius: 6px; outline: none; font-family: 'Inter', sans-serif; font-size: 0.85rem; cursor: pointer;"></select>
+        <div style="display: flex; gap: 8px;">
+            <button class="btn-success" onClick="createNewProfile()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: 600;">💾 Baru</button>
+            <button class="btn-danger" onClick="removeCurrentProfile()" style="padding: 6px 10px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-trash"></i></button>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 4px;">
+            <button class="btn-primary" onClick="exportProfilesData()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-export"></i> Ekspor</button>
+            <button class="btn-purple" onClick="document.getElementById('importFileInput').click()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-import"></i> Impor</button>
+            <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importProfilesData(event)">
+        </div>
+    </div>
+    
+	<div class="panel-actions">
+		<button class="btn-primary" onClick="toggleBookPanel();"><span data-i18n="btnTarget">📚 Pilihan Buku Target</span></button>
+		<button class="btn-success" onClick="copyShareLink()"><span data-i18n="btnShare">🔗 Bagikan Build (Copy Link)</span></button>
+		<button class="btn-primary" style="background: #ea580c;" onClick="exportToImage(event)"><span data-i18n="btnExport">📸 Download Gambar Build</span></button>
+		<button class="btn-purple" onClick="toggleLanguage()" id="langBtn">🌐 Switch to English</button>
+		<button class="btn-danger" onClick="resetCalculator()"><span data-i18n="btnReset">🔄 Reset Kalkulator</span></button>
+	</div>
+	<input type="text" id="bookSearch" class="search-box" data-i18n="searchPlaceholder" placeholder="🔍 Cari nama buku target..." oninput="filterBooks(this.value)" style="display:none;">
+	<div id="vyborDiv" class="branch" style="display:none"></div>
+</div>
+
+<div id="customModal" class="modal-backdrop" style="display:none;">
+	<div class="modal-content">
+		<h3 id="modalTitle" data-i18n="modalTitleAdd">Tambah Buku/Bahan</h3>
+		<p data-i18n="modalDesc">Berapa banyak item ini yang sudah Anda miliki saat ini?</p>
+		<input type="number" id="modalInput" min="1" max="999" value="1">
+		<div class="modal-buttons">
+			<button class="modal-btn-confirm" data-i18n="btnSave" onClick="confirmModal()">Simpan</button>
+			<button class="modal-btn-cancel" data-i18n="btnCancel" onClick="closeModal()">Batal</button>
+		</div>
+	</div>
+</div>
+
+<div id="inventoryModal" class="modal-backdrop" style="display:none; z-index: 2001;">
+    <div class="modal-content" style="max-width: 450px;">
+        <h3>Pilih Item untuk Inventory</h3>
+        <input type="text" id="invSearch" class="search-box" placeholder="🔍 Cari nama buku/bahan..." onkeyup="filterInventorySearch(this.value)">
+        <div id="invItemList" class="branch" style="max-height: 250px; overflow-y: auto; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);"></div>
+        <button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onClick="closeInventoryModal()">Tutup Jendela</button>
     </div>
 </div>
+
+<div id="floatingTooltip" class="floating-tooltip"></div>
 
 <script>
 const LANG = {
-    id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Pilihan Buku", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat Khusus untuk Pengelolaan Build Pemain", matDesc: "Bahan Crafting" },
-    en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Book Menu", btnTarget: "Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations, profiles, and start over?", promptCopy: "Copy the link below:", statEquipDesc: "* Bind on Equip.", footerText: "Tome Calculator © 2026 | Created for Advanced Player Build Management", matDesc: "Crafting Material" }
+    id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>[Nama Author]</strong>", matDesc: "Bahan Crafting" },
+    en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations, profiles, and start over?", promptCopy: "Copy the link below:", statEquipDesc: "* Bind on Equip.", footerText: "Tome Calculator © 2026 | Created by <strong>[Author Name]</strong>", matDesc: "Crafting Material" }
 };
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
@@ -480,18 +325,92 @@ function toggleLanguage() {
 const TOME_DB = [];
 TOME_DB[601] = [501, 502, 509, 17615, 'The Calm of Ice']; TOME_DB[602] = [502, 503, 505, 17622, 'The Khatru']; TOME_DB[603] = [504, 503, 508, 17628, 'A Carmine Tear']; TOME_DB[604] = [503, 508, 501, 17630, 'The Fruit of Intense Labor']; TOME_DB[605] = [505, 512, 509, 17634, 'Tomorrows Phoenix']; TOME_DB[606] = [505, 506, 507, 17636, 'Riding the Scree']; TOME_DB[607] = [513, 514, 507, 17642, 'Turning the Tide']; TOME_DB[608] = [508, 506, 514, 17649, 'Existential Woe']; TOME_DB[609] = [510, 501, 505, 17655, 'Book of Fragrances']; TOME_DB[610] = [510, 506, 501, 17657, 'Bouquet of Regrets']; TOME_DB[611] = [511, 509, 505, 17661, 'The Union']; TOME_DB[612] = [511, 513, 503, 17663, 'Oblivious Enlightenment']; TOME_DB[613] = [513, 507, 514, 17669, 'As the Universe Fades']; TOME_DB[614] = [514, 512, 513, 17676, 'The Concubines Laugh']; TOME_DB[615] = [515, 501, 507, 17679, 'The Academy of the East']; TOME_DB[616] = [516, 515, 514, 17683, 'Pan Gu Creator'];
 TOME_DB[501] = [401, 408, 405, 17618, 'A Heart like Still Water']; TOME_DB[502] = [409, 405, 403, 17621, 'The Tsunamis of Yore']; TOME_DB[503] = [404, 408, 401, 17624, 'Laughing Mad']; TOME_DB[504] = [408, 404, 401, 17627, 'The Book of Congratulations']; TOME_DB[505] = [403, 409, 404, 17633, 'The Wrath of Heaven']; TOME_DB[506] = [409, 403, 402, 17639, 'A Strange Kindness']; TOME_DB[507] = [402, 404, 409, 17645, 'Flesh of the Lamia']; TOME_DB[508] = [404, 408, 402, 17648, 'Everything is Emptiness']; TOME_DB[509] = [403, 401, 405, 17651, 'The Oasis Remembered']; TOME_DB[510] = [401, 405, 407, 17654, 'The Heavenly Scent']; TOME_DB[511] = [403, 409, 404, 17660, 'Debt and Tombstones']; TOME_DB[512] = [409, 403, 404, 17666, 'Endless Waves']; TOME_DB[513] = [408, 402, 404, 17672, 'Parting Grief']; TOME_DB[514] = [408, 402, 404, 17675, 'Rouge and Red Lips']; TOME_DB[515] = [406, 407, 401, 17678, 'Gang of Hooligans']; TOME_DB[516] = [406, 407, 401, 17682, 'The Voidlands'];
-TOME_DB[401] = [303, 307, 304, 17602, 'Burning Desire']; TOME_DB[402] = [304, 301, 305, 17603, 'Tome of Predestination']; TOME_DB[403] = [302, 305, 303, 17604, 'The Roses Thorn']; TOME_DB[404] = [306, 307, 311, 17605, 'Letters of Social Unrest']; TOME_DB[405] = [303, 307, 306, 17606, 'The Appetites of Spring']; TOME_DB[406] = [308, 205, 207, 17610, 'The Rivers Edge']; TOME_DB[407] = [309, 302, 306, 17614, 'The Weak Stream of Many Miles']; TOME_DB[408] = [301, 304, 302, 17600, 'Battle Tactics']; TOME_DB[409] = [302, 305, 303, 17601, 'A Bewitching Proposal'];
+TOME_DB[401] = [303, 307, 304, 17602, 'Burning Desire']; TOME_DB[402] = [304, 301, 305, 17603, 'Tome of Predestination']; TOME_DB[403] = [302, 305, 303, 17604, 'The Roses Thorn']; TOME_DB[404] = [306, 307, 301, 17605, 'Letters of Social Unrest']; TOME_DB[405] = [303, 307, 306, 17606, 'The Appetites of Spring']; TOME_DB[406] = [308, 205, 207, 17610, 'The Rivers Edge']; TOME_DB[407] = [309, 302, 306, 17614, 'The Weak Stream of Many Miles']; TOME_DB[408] = [301, 304, 302, 17600, 'Battle Tactics']; TOME_DB[409] = [302, 305, 303, 17601, 'A Bewitching Proposal'];
 TOME_DB[301] = [201, 206, 203, 17593, 'Eat Drink and be Merry']; TOME_DB[302] = [202, 205, 206, 17594, 'Sunset Tales']; TOME_DB[303] = [207, 203, 202, 17595, 'Adventures and Mishaps']; TOME_DB[304] = [204, 201, 203, 17596, 'The Sunny Pass']; TOME_DB[305] = [205, 202, 201, 17597, 'Tales of Beauty']; TOME_DB[306] = [206, 203, 201, 17598, 'The Bards Wanderlust']; TOME_DB[307] = [207, 205, 204, 17599, 'A Poets Musings']; TOME_DB[308] = [208, 202, 204, 17609, 'Decaying Tome']; TOME_DB[309] = [209, 203, 202, 17613, 'Scene of Carnage'];
 TOME_DB[201] = [101, 102, 103, 17584, 'Tome of Water']; TOME_DB[202] = [102, 103, 104, 17585, 'Tome of Fire']; TOME_DB[203] = [103, 104, 105, 17586, 'Tome of Earth']; TOME_DB[204] = [104, 105, 106, 17587, 'Tome of Wood']; TOME_DB[205] = [105, 106, 107, 17588, 'Tome of Metal']; TOME_DB[206] = [106, 107, 108, 17589, 'Tome of Wind']; TOME_DB[207] = [107, 108, 109, 17590, 'Tome of Thunder']; TOME_DB[208] = [108, 109, 101, 17591, 'Tome of Light']; TOME_DB[209] = [109, 101, 102, 17592, 'Tome of Darkness'];
 TOME_DB[101] = [0, 0, 0, 17001, 'Grace']; TOME_DB[102] = [0, 0, 0, 17002, 'Power']; TOME_DB[103] = [0, 0, 0, 17003, 'Courage']; TOME_DB[104] = [0, 0, 0, 17004, 'Wisdom']; TOME_DB[105] = [0, 0, 0, 17005, 'Yin']; TOME_DB[106] = [0, 0, 0, 17006, 'Yang']; TOME_DB[107] = [0, 0, 0, 17007, 'Life']; TOME_DB[108] = [0, 0, 0, 17008, 'Death']; TOME_DB[109] = [0, 0, 0, 17009, 'Void'];
 
+// DATABASE STATUS RESMI SEMUA TOME (LEVEL 1 S.D LEVEL 6) DARI PWDATABASE.COM
 const TOME_STATS = {
-    101: ["+5 Magic"], 102: ["+5 Strength"], 103: ["+5 Dexterity"], 104: ["+5 Vitality"], 105: ["HP Regeneration +3", "Exp Gain +1%"], 106: ["MP Regeneration +3", "Exp Gain +1%"], 107: ["+4 Strength", "+3 Vitality"], 108: ["+4 Dexterity", "+3 Vitality"], 109: ["+4 Magic", "+3 Vitality"],
-    201: ["+7 Magic", "+6 Vitality"], 202: ["+7 Strength", "+6 Vitality"], 203: ["+7 Dexterity", "+6 Vitality"], 204: ["+9 Magic"], 205: ["+9 Strength"], 206: ["+9 Dexterity"], 207: ["+9 Vitality"], 208: ["HP Regeneration +5", "Exp Gain +2%"], 209: ["MP Regeneration +5", "Exp Gain +2%"],
-    301: ["+10 Strength", "Critical Hit Rate +1%"], 302: ["+10 Magic", "Channelling -1%"], 303: ["+10 Dexterity", "Critical Hit Rate +1%"], 304: ["+10 Vitality", "Maximum HP +100"], 305: ["+7 Strength", "+7 Dexterity"], 306: ["+7 Magic", "+7 Vitality"], 307: ["+12 Strength"], 308: ["+12 Dexterity"], 309: ["+12 Magic"],
-    401: ["+15 Strength", "Critical Hit Rate +1%"], 402: ["+15 Magic", "Channelling -2%"], 403: ["+15 Dexterity", "Critical Hit Rate +1%"], 404: ["+15 Vitality", "Maximum HP +150"], 405: ["+10 Strength", "+10 Vitality"], 406: ["+10 Dexterity", "+10 Vitality"], 407: ["+10 Magic", "+10 Vitality"], 408: ["+8 Strength", "+8 Dexterity", "+8 Vitality"], 409: ["+8 Magic", "+8 Dexterity", "+8 Vitality"],
-    501: ["+20 Strength", "Critical Hit Rate +1%"], 502: ["+20 Magic", "Channelling -2%"], 503: ["+20 Dexterity", "Critical Hit Rate +1%"], 504: ["+20 Vitality", "Maximum HP +200"], 505: ["+15 Strength", "+15 Dexterity"], 506: ["+15 Magic", "+15 Vitality"], 507: ["+12 Strength", "+12 Dexterity", "+12 Vitality"], 508: ["+12 Magic", "+12 Dexterity", "+12 Vitality"], 509: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"], 510: ["+15 Strength", "Physical Attack +20"], 511: ["+15 Magic", "Magic Attack +20"], 512: ["+15 Dexterity", "Critical Hit Rate +2%"], 513: ["+15 Vitality", "Physical Defense +100"], 514: ["Maximum HP +300"], 515: ["+18 Magic", "Channelling -3%"], 516: ["+18 Strength", "Critical Hit Rate +2%"],
-    601: ["+15 Strength", "+15 Dexterity", "Critical Hit Rate +1%"], 602: ["+15 Magic", "+15 Vitality", "Channelling -3%"], 603: ["+15 Strength", "+15 Vitality", "Maximum HP +150"], 604: ["+20 Dexterity", "Attack Interval -0.05", "Movement Speed +0.10"], 605: ["+20 Magic", "Channelling -3%", "Maximum MP +200"], 606: ["+20 Strength", "Critical Hit Rate +1%", "Physical Attack +30"], 607: ["+20 Vitality", "Maximum HP +200", "Physical Defense +50"], 608: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"], 609: ["+15 Dexterity", "+15 Vitality", "Critical Hit Rate +1%"], 610: ["+15 Magic", "+15 Dexterity", "Channelling -3%"], 611: ["+15 Strength", "+15 Magic", "Physical Attack +20"], 612: ["+25 Magic", "Channelling -3%"], 613: ["+25 Strength", "Critical Hit Rate +1%"], 614: ["+25 Dexterity", "Attack Interval -0.05"], 615: ["+20 Magic", "+20 Dexterity", "Channelling -3%", "Critical Hit Rate +1%"], 616: ["+20 Strength", "+20 Dexterity", "+20 Magic", "+20 Vitality", "Critical Hit Rate +1%"]
+    // === TOME LEVEL 1 ===
+    101: ["+5 Magic"],
+    102: ["+5 Strength"],
+    103: ["+5 Dexterity"],
+    104: ["+5 Vitality"],
+    105: ["HP Regeneration +3", "Exp Gain +1%"],
+    106: ["MP Regeneration +3", "Exp Gain +1%"],
+    107: ["+4 Strength", "+3 Vitality"],
+    108: ["+4 Dexterity", "+3 Vitality"],
+    109: ["+4 Magic", "+3 Vitality"],
+
+    // === TOME LEVEL 2 ===
+    201: ["+7 Magic", "+6 Vitality"],
+    202: ["+7 Strength", "+6 Vitality"],
+    203: ["+7 Dexterity", "+6 Vitality"],
+    204: ["+9 Magic"],
+    205: ["+9 Strength"],
+    206: ["+9 Dexterity"],
+    207: ["+9 Vitality"],
+    208: ["HP Regeneration +5", "Exp Gain +2%"],
+    209: ["MP Regeneration +5", "Exp Gain +2%"],
+
+    // === TOME LEVEL 3 ===
+    301: ["+10 Strength", "Critical Hit Rate +1%"],
+    302: ["+10 Magic", "Channelling -1%"],
+    303: ["+10 Dexterity", "Critical Hit Rate +1%"],
+    304: ["+10 Vitality", "Maximum HP +100"],
+    305: ["+7 Strength", "+7 Dexterity"],
+    306: ["+7 Magic", "+7 Vitality"],
+    307: ["+12 Strength"],
+    308: ["+12 Dexterity"],
+    309: ["+12 Magic"],
+
+    // === TOME LEVEL 4 ===
+    401: ["+15 Strength", "Critical Hit Rate +1%"],
+    402: ["+15 Magic", "Channelling -2%"],
+    403: ["+15 Dexterity", "Critical Hit Rate +1%"],
+    404: ["+15 Vitality", "Maximum HP +150"],
+    405: ["+10 Strength", "+10 Vitality"],
+    406: ["+10 Dexterity", "+10 Vitality"],
+    407: ["+10 Magic", "+10 Vitality"],
+    408: ["+8 Strength", "+8 Dexterity", "+8 Vitality"],
+    409: ["+8 Magic", "+8 Dexterity", "+8 Vitality"],
+
+    // === TOME LEVEL 5 ===
+    501: ["+20 Strength", "Critical Hit Rate +1%"],
+    502: ["+20 Magic", "Channelling -2%"],
+    503: ["+20 Dexterity", "Critical Hit Rate +1%"],
+    504: ["+20 Vitality", "Maximum HP +200"],
+    505: ["+15 Strength", "+15 Dexterity"],
+    506: ["+15 Magic", "+15 Vitality"],
+    507: ["+12 Strength", "+12 Dexterity", "+12 Vitality"],
+    508: ["+12 Magic", "+12 Dexterity", "+12 Vitality"],
+    509: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"],
+    510: ["+15 Strength", "Physical Attack +20"],
+    511: ["+15 Magic", "Magic Attack +20"],
+    512: ["+15 Dexterity", "Critical Hit Rate +2%"],
+    513: ["+15 Vitality", "Physical Defense +100"],
+    514: ["Maximum HP +300"],
+    515: ["+18 Magic", "Channelling -3%"],
+    516: ["+18 Strength", "Critical Hit Rate +2%"],
+
+    // === TOME LEVEL 6 ===
+    601: ["+15 Strength", "+15 Dexterity", "Critical Hit Rate +1%"],
+    602: ["+15 Magic", "+15 Vitality", "Channelling -3%"],
+    603: ["+15 Strength", "+15 Vitality", "Maximum HP +150"],
+    604: ["+20 Dexterity", "Attack Interval -0.05", "Movement Speed +0.10"],
+    605: ["+20 Magic", "Channelling -3", "Maximum MP +200"],
+    606: ["+20 Strength", "Critical Hit Rate +1%", "Physical Attack +30"],
+    607: ["+20 Vitality", "Maximum HP +200", "Physical Defense +50"],
+    608: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"],
+    609: ["+15 Dexterity", "+15 Vitality", "Critical Hit Rate +1%"],
+    610: ["+15 Magic", "+15 Dexterity", "Channelling -3%"],
+    611: ["+15 Strength", "+15 Magic", "Physical Attack +20"],
+    612: ["+25 Magic", "Channelling -3%"],
+    613: ["+25 Strength", "Critical Hit Rate +1%"],
+    614: ["+25 Dexterity", "Attack Interval -0.05"],
+    615: ["+20 Magic", "+20 Dexterity", "Channelling -3%", "Critical Hit Rate +1%"],
+    616: ["+20 Strength", "+20 Dexterity", "+20 Magic", "+20 Vitality", "Critical Hit Rate +1%"]
 };
 
 let itemCounts = [];       
@@ -500,12 +419,13 @@ let deductionsCopy = [];
 let leftTreeId = 616;
 let rightTreeId = 515;
 let activeModalItemId = null;
+
 let profiles = {};
 let currentProfile = 'Default';
 
-// MOUSE OVER FLOATING TOOLTIP SYNC MANAGEMENT
+// LOGIKA MANAJEMEN FLOATING TOOLTIP
 function showTooltip(element, event) {
-    const id = parseInt(element.getAttribute('data-id'));
+    const id = parseInt(element.title);
     if (!TOME_DB[id] && id !== 10 && id !== 11 && id !== 12) return;
     
     const tooltip = document.getElementById('floatingTooltip');
@@ -525,6 +445,7 @@ function showTooltip(element, event) {
         const lvl = Math.floor(id / 100);
         typeText = `Tome (${LANG[currentLang]['lvl']} ${lvl})`;
         
+        // Render Status Atribut Komplit
         if (TOME_STATS[id]) {
             TOME_STATS[id].forEach(stat => {
                 statsHtml += `<span class="tooltip-stat">• ${stat}</span>`;
@@ -546,6 +467,7 @@ function showTooltip(element, event) {
     tooltip.style.display = 'block';
     moveTooltip(event);
     
+    // Sinkronisasi teks tautan info atas
     let linkUrl = (id === 10) ? "http://www.pwdatabase.com/pwi/items/24722" :
                   (id === 11) ? "http://www.pwdatabase.com/pwi/items/17011" :
                   (id === 12) ? "http://www.pwdatabase.com/pwi/items/17010" :
@@ -563,6 +485,7 @@ function moveTooltip(event) {
     const tooltipWidth = tooltip.offsetWidth || 240;
     const tooltipHeight = tooltip.offsetHeight || 160;
     
+    // Proteksi Batas Monitor Layar Browser
     if (x + tooltipWidth > window.innerWidth) {
         x = event.clientX - tooltipWidth - 15;
     }
@@ -574,10 +497,8 @@ function moveTooltip(event) {
     tooltip.style.top = y + 'px';
 }
 
-// MOUSE LEAVE SYSTEM REVERT ALIGNMENT
 function hideTooltip() {
     document.getElementById('floatingTooltip').style.display = 'none';
-    document.getElementById('nazvaniye').innerHTML = LANG[currentLang]['desc1'];
 }
 
 function copyShareLink() {
@@ -633,11 +554,11 @@ function handleItemClick(element) {
     let clickedVal = parseInt(element.value) || 1;
     if(clickedVal > 99) clickedVal = 99;
 	document.getElementById('mnojitel').value = clickedVal;
-	processTree(parseInt(element.getAttribute('data-id')), true);
+	processTree(parseInt(element.title), true);
 }
 
 function addDeduction(id) {
-    const btn = document.querySelector(`.branch button[data-id="${id}"]`);
+    const btn = document.querySelector(`.branch button[title="${id}"]`);
     activeModalItemId = id;
     
     let itemName = LANG[currentLang]['modalTitleAdd'];
@@ -699,7 +620,7 @@ function filterBooks(query) {
     document.querySelectorAll('#vyborDiv ul').forEach(ul => {
         let hasVisibleItem = false;
         ul.querySelectorAll('li').forEach(li => {
-            const id = li.querySelector('button').getAttribute('data-id');
+            const id = li.querySelector('button').title;
             const bookName = TOME_DB[id] ? TOME_DB[id][4].toLowerCase() : '';
             if (bookName.includes(q)) { li.style.display = 'inline-block'; hasVisibleItem = true; } 
             else li.style.display = 'none';
@@ -789,7 +710,7 @@ function getTreeItemHtml(id, isDeductionList = false) {
     let actionSpan = isDeductionList ? `<span onClick="removeDeduction(${id});" title="Hapus dari daftar ini"></span>` : `<span onClick="addDeduction(${id});" title="Kurangi dari total"></span>`;
     let clickAction = isDeductionList ? '' : 'onClick="handleItemClick(this)"';
     if (!isDeductionList && (id === 12 || id === 11 || id === 10)) clickAction = '';
-    return `<li>${actionSpan}<button style="${getSpritePosition(id)}" value="${count}" data-id="${id}" ${clickAction} onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button><b>×${count}</b></li>`;
+    return `<li>${actionSpan}<button style="${getSpritePosition(id)}" value="${count}" title="${id}" ${clickAction} onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button><b>×${count}</b></li>`;
 }
 
 function renderTree(isRightTree) {
@@ -831,7 +752,7 @@ function renderMenu() {
     let txt = '';
     for (let r = 6; r >= 1; r--) {
         let lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
-        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="${getSpritePosition(e)}" data-id="${e}" onClick="processTree(${e}, false)" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
+        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="${getSpritePosition(e)}" title="${e}" onClick="processTree(${e}, false)" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
         txt += `<h4>Tome ${LANG[currentLang]['lvl']} ${r}</h4><ul style="display: flex; flex-wrap: wrap; gap: 8px;"> ${lis}</ul>`;
     }
     document.getElementById('vyborDiv').innerHTML = txt;
@@ -897,13 +818,13 @@ function renderInventorySelection(query) {
     const baseMats = [ {id: 12, name: 'Tome Page'}, {id: 11, name: 'Tome Fragment'}, {id: 10, name: 'Token of Luck'} ];
     baseMats.forEach(mat => {
         if (mat.name.toLowerCase().includes(q)) {
-            html += `<li><button style="${getSpritePosition(mat.id)}" data-id="${mat.id}" onClick="selectItemForInventory(${mat.id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
+            html += `<li><button style="${getSpritePosition(mat.id)}" title="${mat.id}" onClick="selectItemForInventory(${mat.id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
         }
     });
 
 	TOME_DB.forEach((tome, id) => {
         if (tome && tome[4].toLowerCase().includes(q)) {
-            html += `<li><button style="${getSpritePosition(id)}" data-id="${id}" onClick="selectItemForInventory(${id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
+            html += `<li><button style="${getSpritePosition(id)}" title="${id}" onClick="selectItemForInventory(${id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
         }
     });
     
@@ -1069,6 +990,5 @@ window.onload = () => {
     document.getElementById('modalInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') confirmModal(); });
 };
 </script>
-
 </body>
 </html>
