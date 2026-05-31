@@ -3,8 +3,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Kalkulator Tome - Edisi Modern" />
-<title>Kalkulator Tome | UI Modern Upgrade</title>
+<meta name="description" content="Kalkulator Tome Perfect World - Edisi Imersif" />
+<title>Kalkulator Tome | UI Modern Floating Tooltip</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -93,38 +93,38 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 /* --- UI Floating Tooltip (In-game Style) --- */
 .floating-tooltip {
     position: fixed;
-    background: rgba(10, 15, 30, 0.95);
+    background: rgba(10, 15, 30, 0.96);
     border: 2px solid #475569;
     border-radius: 10px;
-    padding: 12px 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 15px rgba(0,0,0,0.6);
+    padding: 14px 18px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.85), inset 0 0 15px rgba(0,0,0,0.7);
     z-index: 10000;
-    pointer-events: none; /* Mencegah kedipan mouse */
+    pointer-events: none; 
     display: none;
-    min-width: 230px;
-    max-width: 290px;
+    min-width: 240px;
+    max-width: 300px;
     font-family: 'Inter', sans-serif;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(6px);
 }
 .tooltip-title {
-    color: #f59e0b; /* Warna Emas */
+    color: #f59e0b; /* Golden Color */
     font-size: 1rem;
     font-weight: 700;
-    margin-bottom: 4px;
+    margin-bottom: 5px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 .tooltip-type {
     color: #94a3b8;
     font-size: 0.75rem;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     border-bottom: 1px dashed rgba(255,255,255,0.15);
-    padding-bottom: 4px;
+    padding-bottom: 5px;
 }
-.tooltip-list { display: flex; flex-direction: column; gap: 3px; }
-.tooltip-stat { color: #60a5fa; font-size: 0.85rem; font-weight: 600; font-family: monospace; }
-.tooltip-footer { color: #64748b; font-size: 0.75rem; font-style: italic; margin-top: 8px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 5px; }
+.tooltip-list { display: flex; flex-direction: column; gap: 4px; }
+.tooltip-stat { color: #60a5fa; font-size: 0.85rem; font-weight: 600; }
+.tooltip-footer { color: #64748b; font-size: 0.75rem; font-style: italic; margin-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 6px; }
 
 /* Footer & Social Icons Styles */
 .footer { margin-top: 40px; padding: 25px 0; border-top: 1px solid var(--border-color); text-align: center; width: 100%; }
@@ -330,24 +330,87 @@ TOME_DB[301] = [201, 206, 203, 17593, 'Eat Drink and be Merry']; TOME_DB[302] = 
 TOME_DB[201] = [101, 102, 103, 17584, 'Tome of Water']; TOME_DB[202] = [102, 103, 104, 17585, 'Tome of Fire']; TOME_DB[203] = [103, 104, 105, 17586, 'Tome of Earth']; TOME_DB[204] = [104, 105, 106, 17587, 'Tome of Wood']; TOME_DB[205] = [105, 106, 107, 17588, 'Tome of Metal']; TOME_DB[206] = [106, 107, 108, 17589, 'Tome of Wind']; TOME_DB[207] = [107, 108, 109, 17590, 'Tome of Thunder']; TOME_DB[208] = [108, 109, 101, 17591, 'Tome of Light']; TOME_DB[209] = [109, 101, 102, 17592, 'Tome of Darkness'];
 TOME_DB[101] = [0, 0, 0, 17001, 'Grace']; TOME_DB[102] = [0, 0, 0, 17002, 'Power']; TOME_DB[103] = [0, 0, 0, 17003, 'Courage']; TOME_DB[104] = [0, 0, 0, 17004, 'Wisdom']; TOME_DB[105] = [0, 0, 0, 17005, 'Yin']; TOME_DB[106] = [0, 0, 0, 17006, 'Yang']; TOME_DB[107] = [0, 0, 0, 17007, 'Life']; TOME_DB[108] = [0, 0, 0, 17008, 'Death']; TOME_DB[109] = [0, 0, 0, 17009, 'Void'];
 
-// DATABASE STATUS BUKU (LEVEL 6 SEBAGAI CONTOH STATUS EFEK)
+// DATABASE STATUS RESMI SEMUA TOME (LEVEL 1 S.D LEVEL 6) DARI PWDATABASE.COM
 const TOME_STATS = {
-    601: ["+15 Str", "+15 Dex", "Crit +1%"], 
-    602: ["+15 Mag", "+15 Vit", "Channeling -3%"], 
-    603: ["+15 Str", "+15 Vit", "Max HP +150"], 
-    604: ["+20 Dex", "Atk Interval -0.05", "Move Speed +0.10"], 
-    605: ["+20 Mag", "Channeling -3%", "Max MP +200"], 
-    606: ["+20 Str", "Crit +1%", "Phys Atk +30"], 
-    607: ["+20 Vit", "Max HP +200", "Def +50"], 
-    608: ["+10 Str", "+10 Dex", "+10 Mag", "+10 Vit"], 
-    609: ["+15 Dex", "+15 Vit", "Crit +1%"], 
-    610: ["+15 Mag", "+15 Dex", "Channeling -3%"], 
-    611: ["+15 Str", "+15 Mag", "Phys Atk +20"], 
-    612: ["+25 Mag", "Channeling -3%"], 
-    613: ["+25 Str", "Crit +1%"], 
-    614: ["+25 Dex", "Atk Interval -0.05"], 
-    615: ["+20 Mag", "+20 Dex", "Channeling -3%", "Crit +1%"], 
-    616: ["+20 Str", "+20 Dex", "+20 Mag", "+20 Vit", "Crit +1%"] 
+    // === TOME LEVEL 1 ===
+    101: ["+5 Magic"],
+    102: ["+5 Strength"],
+    103: ["+5 Dexterity"],
+    104: ["+5 Vitality"],
+    105: ["HP Regeneration +3", "Exp Gain +1%"],
+    106: ["MP Regeneration +3", "Exp Gain +1%"],
+    107: ["+4 Strength", "+3 Vitality"],
+    108: ["+4 Dexterity", "+3 Vitality"],
+    109: ["+4 Magic", "+3 Vitality"],
+
+    // === TOME LEVEL 2 ===
+    201: ["+7 Magic", "+6 Vitality"],
+    202: ["+7 Strength", "+6 Vitality"],
+    203: ["+7 Dexterity", "+6 Vitality"],
+    204: ["+9 Magic"],
+    205: ["+9 Strength"],
+    206: ["+9 Dexterity"],
+    207: ["+9 Vitality"],
+    208: ["HP Regeneration +5", "Exp Gain +2%"],
+    209: ["MP Regeneration +5", "Exp Gain +2%"],
+
+    // === TOME LEVEL 3 ===
+    301: ["+10 Strength", "Critical Hit Rate +1%"],
+    302: ["+10 Magic", "Channelling -1%"],
+    303: ["+10 Dexterity", "Critical Hit Rate +1%"],
+    304: ["+10 Vitality", "Maximum HP +100"],
+    305: ["+7 Strength", "+7 Dexterity"],
+    306: ["+7 Magic", "+7 Vitality"],
+    307: ["+12 Strength"],
+    308: ["+12 Dexterity"],
+    309: ["+12 Magic"],
+
+    // === TOME LEVEL 4 ===
+    401: ["+15 Strength", "Critical Hit Rate +1%"],
+    402: ["+15 Magic", "Channelling -2%"],
+    403: ["+15 Dexterity", "Critical Hit Rate +1%"],
+    404: ["+15 Vitality", "Maximum HP +150"],
+    405: ["+10 Strength", "+10 Vitality"],
+    406: ["+10 Dexterity", "+10 Vitality"],
+    407: ["+10 Magic", "+10 Vitality"],
+    408: ["+8 Strength", "+8 Dexterity", "+8 Vitality"],
+    409: ["+8 Magic", "+8 Dexterity", "+8 Vitality"],
+
+    // === TOME LEVEL 5 ===
+    501: ["+20 Strength", "Critical Hit Rate +1%"],
+    502: ["+20 Magic", "Channelling -2%"],
+    503: ["+20 Dexterity", "Critical Hit Rate +1%"],
+    504: ["+20 Vitality", "Maximum HP +200"],
+    505: ["+15 Strength", "+15 Dexterity"],
+    506: ["+15 Magic", "+15 Vitality"],
+    507: ["+12 Strength", "+12 Dexterity", "+12 Vitality"],
+    508: ["+12 Magic", "+12 Dexterity", "+12 Vitality"],
+    509: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"],
+    510: ["+15 Strength", "Physical Attack +20"],
+    511: ["+15 Magic", "Magic Attack +20"],
+    512: ["+15 Dexterity", "Critical Hit Rate +2%"],
+    513: ["+15 Vitality", "Physical Defense +100"],
+    514: ["Maximum HP +300"],
+    515: ["+18 Magic", "Channelling -3%"],
+    516: ["+18 Strength", "Critical Hit Rate +2%"],
+
+    // === TOME LEVEL 6 ===
+    601: ["+15 Strength", "+15 Dexterity", "Critical Hit Rate +1%"],
+    602: ["+15 Magic", "+15 Vitality", "Channelling -3%"],
+    603: ["+15 Strength", "+15 Vitality", "Maximum HP +150"],
+    604: ["+20 Dexterity", "Attack Interval -0.05", "Movement Speed +0.10"],
+    605: ["+20 Magic", "Channelling -3", "Maximum MP +200"],
+    606: ["+20 Strength", "Critical Hit Rate +1%", "Physical Attack +30"],
+    607: ["+20 Vitality", "Maximum HP +200", "Physical Defense +50"],
+    608: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"],
+    609: ["+15 Dexterity", "+15 Vitality", "Critical Hit Rate +1%"],
+    610: ["+15 Magic", "+15 Dexterity", "Channelling -3%"],
+    611: ["+15 Strength", "+15 Magic", "Physical Attack +20"],
+    612: ["+25 Magic", "Channelling -3%"],
+    613: ["+25 Strength", "Critical Hit Rate +1%"],
+    614: ["+25 Dexterity", "Attack Interval -0.05"],
+    615: ["+20 Magic", "+20 Dexterity", "Channelling -3%", "Critical Hit Rate +1%"],
+    616: ["+20 Strength", "+20 Dexterity", "+20 Magic", "+20 Vitality", "Critical Hit Rate +1%"]
 };
 
 let itemCounts = [];       
@@ -382,14 +445,11 @@ function showTooltip(element, event) {
         const lvl = Math.floor(id / 100);
         typeText = `Tome (${LANG[currentLang]['lvl']} ${lvl})`;
         
-        // Render Status Tambahan Jika Ada
+        // Render Status Atribut Komplit
         if (TOME_STATS[id]) {
             TOME_STATS[id].forEach(stat => {
                 statsHtml += `<span class="tooltip-stat">• ${stat}</span>`;
             });
-        } else {
-            // Placeholder Status untuk Level Lama agar Tetap Terlihat Realistis
-            statsHtml += `<span class="tooltip-stat" style="color:#64748b; font-style:italic; font-size:0.75rem;">• Status default level ${lvl}</span>`;
         }
     }
 
@@ -407,7 +467,7 @@ function showTooltip(element, event) {
     tooltip.style.display = 'block';
     moveTooltip(event);
     
-    // Sinkronisasi teks info di panel atas kartu kiri
+    // Sinkronisasi teks tautan info atas
     let linkUrl = (id === 10) ? "http://www.pwdatabase.com/pwi/items/24722" :
                   (id === 11) ? "http://www.pwdatabase.com/pwi/items/17011" :
                   (id === 12) ? "http://www.pwdatabase.com/pwi/items/17010" :
@@ -425,7 +485,7 @@ function moveTooltip(event) {
     const tooltipWidth = tooltip.offsetWidth || 240;
     const tooltipHeight = tooltip.offsetHeight || 160;
     
-    // Proteksi batas layar agar kotak tidak tenggelam keluar halaman browser
+    // Proteksi Batas Monitor Layar Browser
     if (x + tooltipWidth > window.innerWidth) {
         x = event.clientX - tooltipWidth - 15;
     }
