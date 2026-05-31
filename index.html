@@ -12,9 +12,7 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
-/* =========================================
-   1. GLOBAL VARIABLES & RESET
-========================================= */
+/* --- CSS SAMA SEPERTI SEBELUMNYA --- */
 :root {
 	--bg-main: #0f172a;
 	--bg-card: #1e293b;
@@ -30,10 +28,7 @@
 	--border-color: rgba(255, 255, 255, 0.08);
 }
 
-* {
-	box-sizing: border-box;
-	margin: 0; padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
 	font-family: 'Inter', sans-serif;
@@ -52,493 +47,77 @@ ul { list-style: none; }
 a { color: var(--accent); text-decoration: none; transition: 0.3s; }
 a:hover { color: #60a5fa; text-decoration: underline; }
 
-/* ========================================= 
-   2. LAYOUT & CONTAINERS
-========================================= */
-.container { 
-    display: flex; 
-    flex-wrap: wrap; 
-    gap: 24px; 
-    justify-content: center; 
-    max-width: 1400px; 
-    margin: 0 auto;
-}
+.container { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; max-width: 1400px; margin: 0 auto; }
+.calc-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; width: 100%; max-width: 440px; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); position: relative; backdrop-filter: blur(10px); }
+#deductions { max-width: 1370px; margin: 24px auto 0; }
+#deductions .calc-card { max-width: 100%; }
 
-.calc-card { 
-    background: var(--bg-card); 
-    border: 1px solid var(--border-color); 
-    border-radius: 20px; 
-    padding: 25px; 
-    width: 100%; 
-    max-width: 440px; 
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); 
-    position: relative; 
-    backdrop-filter: blur(10px);
-}
+h1, h2 { font-size: 1.25rem; font-weight: 700; color: #e2e8f0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+h1::before, h2::before { content: ''; display: inline-block; width: 12px; height: 12px; background: var(--accent); border-radius: 3px; }
+.podzagolovok { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color); font-size: 0.9rem; color: var(--text-muted); min-height: 50px; }
 
-#deductions { 
-    max-width: 1370px; 
-    margin: 24px auto 0;
-}
-#deductions .calc-card { 
-    max-width: 100%;
-}
-
-/* =========================================
-   3. TYPOGRAPHY & HEADERS
-========================================= */
-h1, h2 {
-	font-size: 1.25rem;
-	font-weight: 700;
-	color: #e2e8f0;
-	margin-bottom: 20px;
-	display: flex;
-	align-items: center;
-	gap: 10px;
-}
-h1::before, h2::before {
-	content: '';
-	display: inline-block;
-	width: 12px;
-	height: 12px;
-	background: var(--accent);
-	border-radius: 3px;
-}
-
-.podzagolovok {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-	margin-bottom: 20px;
-	background: rgba(0,0,0,0.2);
-	padding: 12px 16px;
-	border-radius: 12px;
-	border: 1px solid var(--border-color);
-	font-size: 0.9rem;
-	color: var(--text-muted);
-	min-height: 50px;
-}
-
-/* =========================================
-   4. FORM ELEMENTS
-========================================= */
-.podzagolovok input[type="number"] {
-	background: #0f172a;
-	border: 1px solid #475569;
-	color: white;
-	font-weight: 600;
-	border-radius: 8px;
-	padding: 8px 12px;
-	width: 80px;
-	text-align: center;
-	font-size: 1rem;
-	outline: none;
-	transition: border 0.3s;
-}
+.podzagolovok input[type="number"] { background: #0f172a; border: 1px solid #475569; color: white; font-weight: 600; border-radius: 8px; padding: 8px 12px; width: 80px; text-align: center; font-size: 1rem; outline: none; transition: border 0.3s; }
 .podzagolovok input:focus { border-color: var(--accent); }
+.btn-calc { background: var(--accent); color: white; border: none; padding: 9px 18px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4); }
+.btn-calc:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 6px 12px -2px rgba(59, 130, 246, 0.5); }
 
-.btn-calc {
-	background: var(--accent);
-	color: white;
-	border: none;
-	padding: 9px 18px;
-	border-radius: 8px;
-	font-weight: 600;
-	font-size: 0.9rem;
-	cursor: pointer;
-	transition: all 0.2s ease;
-	box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4);
-}
-.btn-calc:hover {
-	background: var(--accent-hover);
-	transform: translateY(-2px);
-	box-shadow: 0 6px 12px -2px rgba(59, 130, 246, 0.5);
-}
+.progress-container { margin-bottom: 20px; background: rgba(0, 0, 0, 0.15); padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); }
+.progress-text { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+.progress-text #progressPercentText { color: var(--success); }
+.progress-bar-bg { background: #0f172a; border-radius: 50px; height: 10px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05); }
+.progress-bar { background: linear-gradient(90deg, var(--accent), var(--success)); width: 0%; height: 100%; border-radius: 50px; transition: width 0.4s ease-in-out; }
 
-/* =========================================
-   5. PROGRESS BAR VISUAL
-========================================= */
-.progress-container {
-    margin-bottom: 20px;
-    background: rgba(0, 0, 0, 0.15);
-    padding: 12px;
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-}
-.progress-text {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    margin-bottom: 6px;
-}
-.progress-text #progressPercentText {
-    color: var(--success);
-}
-.progress-bar-bg {
-    background: #0f172a;
-    border-radius: 50px;
-    height: 10px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-.progress-bar {
-    background: linear-gradient(90deg, var(--accent), var(--success));
-    width: 0%;
-    height: 100%;
-    border-radius: 50px;
-    transition: width 0.4s ease-in-out;
-}
-
-/* =========================================
-   6. MARKET COST ESTIMATOR UI
-========================================= */
-.cost-input-group {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-    background: rgba(0,0,0,0.15);
-    padding: 8px 12px;
-    border-radius: 10px;
-    border: 1px solid var(--border-color);
-}
-.cost-input-group label {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.cost-input-group label span {
-    display: inline-block;
-    width: 32px; height: 32px;
-    background-image: url('znachki.png');
-    transform: scale(0.85);
-}
-.cost-input-group input {
-    background: #0f172a;
-    border: 1px solid #475569;
-    color: var(--success);
-    font-weight: 600;
-    border-radius: 6px;
-    padding: 6px 10px;
-    width: 140px;
-    text-align: right;
-    outline: none;
-    font-family: 'Inter', sans-serif;
-}
+.cost-input-group { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; background: rgba(0,0,0,0.15); padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border-color); }
+.cost-input-group label { font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+.cost-input-group label span { display: inline-block; width: 32px; height: 32px; background-image: url('znachki.png'); transform: scale(0.85); }
+.cost-input-group input { background: #0f172a; border: 1px solid #475569; color: var(--success); font-weight: 600; border-radius: 6px; padding: 6px 10px; width: 140px; text-align: right; outline: none; font-family: 'Inter', sans-serif; }
 .cost-input-group input:focus { border-color: var(--accent); }
+.total-cost-box { margin-top: 20px; background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.2); padding: 15px; border-radius: 12px; text-align: center; }
+.total-cost-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 5px; }
+.total-cost-value { font-size: 1.4rem; font-weight: 700; color: var(--success); text-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
 
-.total-cost-box {
-    margin-top: 20px;
-    background: rgba(16, 185, 129, 0.06);
-    border: 1px solid rgba(16, 185, 129, 0.2);
-    padding: 15px;
-    border-radius: 12px;
-    text-align: center;
-}
-.total-cost-label {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-muted);
-    margin-bottom: 5px;
-}
-.total-cost-value {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--success);
-    text-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
-}
-
-/* =========================================
-   7. TREE LIST (ICONS & BADGES)
-========================================= */
-.branch ul { 
-    display: flex; 
-    flex-wrap: wrap; 
-    gap: 15px; 
-    background: rgba(255, 255, 255, 0.02); 
-    border: 1px solid var(--border-color); 
-    border-radius: 16px; 
-    padding: 16px; 
-    margin-bottom: 16px; 
-    align-items: center;
-}
-
-.branch ul li:first-child {
-	width: 100%;
-	font-size: 0.75rem;
-	font-weight: 700;
-	color: var(--text-muted);
-	text-transform: uppercase;
-	letter-spacing: 1.5px;
-	border-bottom: 1px dashed var(--border-color);
-	padding-bottom: 8px;
-	margin-bottom: 5px;
-}
-
-.branch ul li {
-	position: relative;
-	display: inline-flex;
-	flex-direction: column;
-	align-items: center;
-}
-
-.branch li button {
-	display: block;
-	width: 32px; height: 32px;
-	transform: scale(1.2);
-	margin: 6px;
-	background-image: url('znachki.png');
-	border: none;
-	border-radius: 6px;
-	cursor: pointer;
-	box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-	transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.branch li button:hover {
-	transform: scale(1.35) translateY(-2px);
-	box-shadow: 0 8px 15px rgba(0,0,0,0.5);
-}
-
-.branch li b {
-	position: absolute;
-	bottom: -8px;
-	right: -5px;
-	background: var(--accent);
-	color: #fff;
-	font-size: 0.7rem;
-	font-weight: 700;
-	padding: 2px 6px;
-	border-radius: 12px;
-	border: 2px solid var(--bg-card);
-	pointer-events: none;
-	z-index: 2;
-}
-
-.branch li span {
-	position: absolute;
-	top: -5px;
-	left: -5px;
-	width: 20px;
-	height: 20px;
-	background: var(--danger);
-	color: white;
-	font-size: 14px;
-	line-height: 14px;
-	text-align: center;
-	border-radius: 50%;
-	cursor: pointer;
-	opacity: 0;
-	visibility: hidden;
-	transition: all 0.2s ease;
-	z-index: 3;
-	border: 2px solid var(--bg-card);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
+.branch ul { display: flex; flex-wrap: wrap; gap: 15px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; margin-bottom: 16px; align-items: center; }
+.branch ul li:first-child { width: 100%; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px; margin-bottom: 5px; }
+.branch ul li { position: relative; display: inline-flex; flex-direction: column; align-items: center; }
+.branch li button { display: block; width: 32px; height: 32px; transform: scale(1.2); margin: 6px; background-image: url('znachki.png'); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.branch li button:hover { transform: scale(1.35) translateY(-2px); box-shadow: 0 8px 15px rgba(0,0,0,0.5); }
+.branch li b { position: absolute; bottom: -8px; right: -5px; background: var(--accent); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 12px; border: 2px solid var(--bg-card); pointer-events: none; z-index: 2; }
+.branch li span { position: absolute; top: -5px; left: -5px; width: 20px; height: 20px; background: var(--danger); color: white; font-size: 14px; line-height: 14px; text-align: center; border-radius: 50%; cursor: pointer; opacity: 0; visibility: hidden; transition: all 0.2s ease; z-index: 3; border: 2px solid var(--bg-card); display: flex; align-items: center; justify-content: center; }
 .branch li span::before { content: "-"; font-weight: bold; }
 .branch li:hover span { opacity: 1; visibility: visible; }
-
 #strelki { color: var(--accent); font-weight: bold; letter-spacing: 2px; }
 #niz li:first-child { display: none; } 
 
-/* =========================================
-   8. FLOATING SELECTION PANEL & NAV
-========================================= */
-.menu-toggle-btn {
-	position: fixed;
-	top: 25px;
-	right: 25px;
-	background: var(--accent);
-	color: white;
-	border: none;
-	padding: 10px 18px;
-	border-radius: 8px;
-	font-weight: 600;
-	font-family: 'Inter', sans-serif;
-	cursor: pointer;
-	z-index: 1001;
-	box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-	transition: 0.2s ease;
-}
-.menu-toggle-btn:hover {
-	background: var(--accent-hover);
-	transform: translateY(-2px);
-}
-
-.vybor {
-	position: fixed;
-	right: 25px;
-	top: 75px; 
-	background: rgba(15, 23, 42, 0.95);
-	backdrop-filter: blur(10px);
-	border: 1px solid var(--accent);
-	padding: 20px;
-	border-radius: 16px;
-	box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-	z-index: 1000;
-	width: 320px;
-	max-height: 80vh;
-	overflow-y: auto;
-}
-
-.floating-nav {
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-	margin-bottom: 20px;
-	padding-bottom: 15px;
-	border-bottom: 1px dashed var(--border-color);
-}
-
-.floating-nav a {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-	padding: 10px 15px;
-	border-radius: 8px;
-	background: rgba(255, 255, 255, 0.03);
-	color: var(--text-muted);
-	font-weight: 500;
-	font-size: 0.95rem;
-	transition: all 0.2s;
-}
-
-.floating-nav a:hover, .floating-nav a.active {
-	background: var(--accent);
-	color: white;
-	text-decoration: none;
-}
-
-.panel-actions {
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-	margin-bottom: 15px;
-}
-
-.panel-actions > button {
-	width: 100%;
-	border: none;
-	color: white;
-	padding: 10px;
-	border-radius: 8px;
-	font-weight: 600;
-	cursor: pointer;
-	transition: 0.2s;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 8px;
-}
-.btn-primary { background: var(--accent); }
-.btn-primary:hover { background: var(--accent-hover); }
-.btn-success { background: var(--success); }
-.btn-success:hover { background: var(--success-hover); }
-.btn-purple { background: #8b5cf6; }
-.btn-purple:hover { background: #7c3aed; }
-.btn-danger { background: var(--danger); }
-.btn-danger:hover { background: var(--danger-hover); }
-
-.search-box {
-	width: 100%;
-	padding: 10px 14px;
-	background: #0f172a;
-	border: 1px solid var(--border-color);
-	border-radius: 8px;
-	color: white;
-	font-family: 'Inter', sans-serif;
-	font-size: 0.9rem;
-	margin-top: 10px;
-	margin-bottom: 5px;
-	outline: none;
-	transition: 0.2s;
-}
+.menu-toggle-btn { position: fixed; top: 25px; right: 25px; background: var(--accent); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; z-index: 1001; box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: 0.2s ease; }
+.menu-toggle-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
+.vybor { position: fixed; right: 25px; top: 75px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--accent); padding: 20px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); z-index: 1000; width: 320px; max-height: 80vh; overflow-y: auto; }
+.floating-nav { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed var(--border-color); }
+.floating-nav a { display: flex; align-items: center; gap: 12px; padding: 10px 15px; border-radius: 8px; background: rgba(255, 255, 255, 0.03); color: var(--text-muted); font-weight: 500; font-size: 0.95rem; transition: all 0.2s; }
+.floating-nav a:hover, .floating-nav a.active { background: var(--accent); color: white; text-decoration: none; }
+.panel-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+.panel-actions > button { width: 100%; border: none; color: white; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-primary { background: var(--accent); } .btn-primary:hover { background: var(--accent-hover); }
+.btn-success { background: var(--success); } .btn-success:hover { background: var(--success-hover); }
+.btn-purple { background: #8b5cf6; } .btn-purple:hover { background: #7c3aed; }
+.btn-danger { background: var(--danger); } .btn-danger:hover { background: var(--danger-hover); }
+.search-box { width: 100%; padding: 10px 14px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: white; font-family: 'Inter', sans-serif; font-size: 0.9rem; margin-top: 10px; margin-bottom: 5px; outline: none; transition: 0.2s; }
 .search-box:focus { border-color: var(--accent); }
-
-#vyborDiv h4 {
-	font-size: 0.8rem;
-	color: var(--text-muted);
-	border-bottom: 1px solid var(--border-color);
-	margin-bottom: 10px;
-	padding-bottom: 5px;
-	margin-top: 15px;
-}
+#vyborDiv h4 { font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); margin-bottom: 10px; padding-bottom: 5px; margin-top: 15px; }
 #vyborDiv ul { display: flex; flex-wrap: wrap; gap: 8px; }
 #vyborDiv li { display: inline-block; }
+.vybor::-webkit-scrollbar { width: 6px; } .vybor::-webkit-scrollbar-track { background: transparent; } .vybor::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 
-.vybor::-webkit-scrollbar { width: 6px; }
-.vybor::-webkit-scrollbar-track { background: transparent; }
-.vybor::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
-
-/* =========================================
-   9. CUSTOM DIALOG MODAL SYSTEM
-========================================= */
-.modal-backdrop {
-	position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-	background: rgba(0, 0, 0, 0.6);
-	backdrop-filter: blur(5px);
-	z-index: 2000;
-	display: flex; align-items: center; justify-content: center;
-	opacity: 1; transition: opacity 0.2s ease;
-}
-
-.modal-content {
-	background: var(--bg-card);
-	border: 1px solid var(--accent);
-	padding: 25px;
-	border-radius: 16px;
-	width: 90%;
-	max-width: 380px;
-	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-	text-align: center;
-	animation: modalSlide 0.3s ease;
-}
-
-@keyframes modalSlide {
-	from { transform: translateY(-20px); opacity: 0; }
-	to { transform: translateY(0); opacity: 1; }
-}
-
+.modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 1; transition: opacity 0.2s ease; }
+.modal-content { background: var(--bg-card); border: 1px solid var(--accent); padding: 25px; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6); text-align: center; animation: modalSlide 0.3s ease; }
+@keyframes modalSlide { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 .modal-content h3 { margin-bottom: 10px; color: #e2e8f0; font-size: 1.1rem; }
 .modal-content p { margin-bottom: 18px; color: var(--text-muted); font-size: 0.9rem; }
-
-.modal-content input {
-	background: #0f172a;
-	border: 1px solid #475569;
-	color: white;
-	padding: 10px;
-	border-radius: 8px;
-	width: 100%;
-	text-align: center;
-	font-size: 1.2rem;
-	font-weight: 600;
-	margin-bottom: 20px;
-	outline: none;
-}
+.modal-content input { background: #0f172a; border: 1px solid #475569; color: white; padding: 10px; border-radius: 8px; width: 100%; text-align: center; font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; outline: none; }
 .modal-content input:focus { border-color: var(--accent); }
-
 .modal-buttons { display: flex; gap: 12px; }
-.modal-buttons button {
-	flex: 1;
-	padding: 10px;
-	font-weight: 600;
-	border-radius: 8px;
-	border: none;
-	cursor: pointer;
-	font-size: 0.9rem;
-	transition: 0.2s;
-}
-.modal-btn-confirm { background: var(--accent); color: white; }
-.modal-btn-confirm:hover { background: var(--accent-hover); }
-.modal-btn-cancel { background: #334155; color: #cbd5e1; }
-.modal-btn-cancel:hover { background: #475569; }
+.modal-buttons button { flex: 1; padding: 10px; font-weight: 600; border-radius: 8px; border: none; cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
+.modal-btn-confirm { background: var(--accent); color: white; } .modal-btn-confirm:hover { background: var(--accent-hover); }
+.modal-btn-cancel { background: #334155; color: #cbd5e1; } .modal-btn-cancel:hover { background: #475569; }
 </style>
 </head>
 <body>
@@ -556,7 +135,6 @@ h1::before, h2::before {
 			<input type="number" id="mnojitel" value="1" min="1" max="99">
 			<button class="btn-calc" data-i18n="btnCalc" onClick="processTree(rightTreeId, true)">Hitung Kuantitas</button>
 		</div>
-
         <div class="progress-container">
             <div class="progress-text">
                 <span data-i18n="progText">Progres Pengumpulan:</span>
@@ -566,14 +144,12 @@ h1::before, h2::before {
                 <div id="progressBar" class="progress-bar"></div>
             </div>
         </div>
-
 		<div id="rightTree" class="branch"></div>
 	</div>
 
     <div class="calc-card">
         <h1 data-i18n="title3">Estimasi Biaya Pasar</h1>
         <div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
-        
         <div class="cost-input-group">
             <label><span style="background-position:32px -32px;"></span> Token of Luck:</label>
             <input type="number" id="price10" value="0" oninput="updateCostAndProgress()" placeholder="0">
@@ -586,7 +162,6 @@ h1::before, h2::before {
             <label><span style="background-position:32px 0px;"></span> Tome Page:</label>
             <input type="number" id="price12" value="0" oninput="updateCostAndProgress()" placeholder="0">
         </div>
-
         <div class="total-cost-box">
             <div class="total-cost-label" data-i18n="totalCostLabel">Total Sisa Biaya:</div>
             <div id="totalCostDisplay" class="total-cost-value">0 Gold</div>
@@ -602,9 +177,7 @@ h1::before, h2::before {
 	</div>
 </div>
 
-<button class="menu-toggle-btn" id="menuToggleBtn" onclick="var panel = document.getElementById('mainMenuPanel'); panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';">
-	⚙️ Buka Menu
-</button>
+<button class="menu-toggle-btn" id="menuToggleBtn" onclick="var panel = document.getElementById('mainMenuPanel'); panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';">⚙️ Buka Menu</button>
 
 <div class="vybor" id="mainMenuPanel" style="display:none;">
     <div class="floating-nav">
@@ -612,27 +185,14 @@ h1::before, h2::before {
         <a href="#"><span data-i18n="nav2">✨ Simulasi Refine</span></a>
         <a href="#"><span data-i18n="nav3">🤖 Bot Perfect World</span></a>
     </div>
-
 	<div class="panel-actions">
-		<button class="btn-primary" onClick="toggleBookPanel();">
-			<span data-i18n="btnTarget">📚 Pilihan Buku Target</span>
-		</button>
-		<button class="btn-success" onClick="copyShareLink()">
-			<span data-i18n="btnShare">🔗 Bagikan Build (Copy Link)</span>
-		</button>
-		<button class="btn-primary" style="background: #ea580c;" onClick="exportToImage(event)">
-			<span data-i18n="btnExport">📸 Download Gambar Build</span>
-		</button>
-		<button class="btn-purple" onClick="toggleLanguage()" id="langBtn">
-			🌐 Switch to English
-		</button>
-		<button class="btn-danger" onClick="resetCalculator()">
-			<span data-i18n="btnReset">🔄 Reset Kalkulator</span>
-		</button>
+		<button class="btn-primary" onClick="toggleBookPanel();"><span data-i18n="btnTarget">📚 Pilihan Buku Target</span></button>
+		<button class="btn-success" onClick="copyShareLink()"><span data-i18n="btnShare">🔗 Bagikan Build (Copy Link)</span></button>
+		<button class="btn-primary" style="background: #ea580c;" onClick="exportToImage(event)"><span data-i18n="btnExport">📸 Download Gambar Build</span></button>
+		<button class="btn-purple" onClick="toggleLanguage()" id="langBtn">🌐 Switch to English</button>
+		<button class="btn-danger" onClick="resetCalculator()"><span data-i18n="btnReset">🔄 Reset Kalkulator</span></button>
 	</div>
-
 	<input type="text" id="bookSearch" class="search-box" data-i18n="searchPlaceholder" placeholder="🔍 Cari nama buku target..." oninput="filterBooks(this.value)" style="display:none;">
-
 	<div id="vyborDiv" class="branch" style="display:none"></div>
 </div>
 
@@ -649,89 +209,28 @@ h1::before, h2::before {
 </div>
 
 <script>
-// --- DICTIONARY MULTI-BAHASA ---
 const LANG = {
-    id: {
-        title1: "Kebutuhan Total",
-        title2: "Cabang Terpilih",
-        title3: "Estimasi Biaya Pasar",
-        title4: "Buku & Bahan yang Sudah Dimiliki",
-        desc1: "Arahkan kursor ke ikon untuk melihat nama buku.",
-        desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.",
-        desc4: "Bahan yang Anda klik (tombol minus) pada daftar di atas akan masuk ke sini dan dikurangi dari total.",
-        progText: "Progres Pengumpulan:",
-        btnCalc: "Hitung Kuantitas",
-        totalCostLabel: "Total Sisa Biaya:",
-        menuBtnText: "⚙️ Buka Menu",
-        nav1: "📖 Kalkulator Tome",
-        nav2: "✨ Simulasi Refine",
-        nav3: "🤖 Bot Perfect World",
-        btnTarget: "📚 Pilihan Buku Target",
-        btnShare: "🔗 Bagikan Build (Copy)",
-        btnExport: "📸 Download Gambar Build",
-        btnReset: "🔄 Reset Kalkulator",
-        searchPlaceholder: "🔍 Cari nama buku target...",
-        modalTitleAdd: "Tambah Buku/Bahan",
-        modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?",
-        btnSave: "Simpan",
-        btnCancel: "Batal",
-        baseMat: "Bahan Dasar",
-        lvl: "Level",
-        alertCopy: "Link Build berhasil disalin ke clipboard!",
-        alertReset: "Hapus semua perhitungan dan mulai dari awal?",
-        promptCopy: "Salin tautan di bawah ini:"
-    },
-    en: {
-        title1: "Total Requirements",
-        title2: "Selected Branch",
-        title3: "Market Cost Estimator",
-        title4: "Owned Books & Materials",
-        desc1: "Hover over the icons to see the book names.",
-        desc3: "Enter the market price per item to estimate required Gold.",
-        desc4: "Materials you click (minus button) on the list above will appear here and be deducted.",
-        progText: "Collection Progress:",
-        btnCalc: "Calculate Qty",
-        totalCostLabel: "Total Remaining Cost:",
-        menuBtnText: "⚙️ Open Menu",
-        nav1: "📖 Tome Calculator",
-        nav2: "✨ Refine Simulator",
-        nav3: "🤖 Perfect World Bot",
-        btnTarget: "📚 Target Book Selection",
-        btnShare: "🔗 Share Build (Copy)",
-        btnExport: "📸 Download Build Image",
-        btnReset: "🔄 Reset Calculator",
-        searchPlaceholder: "🔍 Search target book name...",
-        modalTitleAdd: "Add Book/Material",
-        modalDesc: "How many of this item do you currently own?",
-        btnSave: "Save",
-        btnCancel: "Cancel",
-        baseMat: "Base Materials",
-        lvl: "Level",
-        alertCopy: "Build Link successfully copied to clipboard!",
-        alertReset: "Clear all calculations and start over?",
-        promptCopy: "Copy the link below:"
-    }
+    id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "Buku & Bahan yang Sudah Dimiliki", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Bahan yang Anda klik (tombol minus) pada daftar di atas akan masuk ke sini dan dikurangi dari total.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", nav1: "📖 Kalkulator Tome", nav2: "✨ Simulasi Refine", nav3: "🤖 Bot Perfect World", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:" },
+    en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "Owned Books & Materials", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Materials you click (minus button) on the list above will appear here and be deducted.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", nav1: "📖 Tome Calculator", nav2: "✨ Refine Simulator", nav3: "🤖 Perfect World Bot", btnTarget: "📚 Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations and start over?", promptCopy: "Copy the link below:" }
 };
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
 
+// [BUGFIX 1] Pemanggilan renderTree dipisah agar memori Cabang Kiri dan Kanan tidak tertukar
 function applyLanguage() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (LANG[currentLang][key]) {
-            if (el.tagName === 'INPUT') {
-                el.placeholder = LANG[currentLang][key];
-            } else {
-                el.innerText = LANG[currentLang][key];
-            }
+            if (el.tagName === 'INPUT') el.placeholder = LANG[currentLang][key];
+            else el.innerText = LANG[currentLang][key];
         }
     });
     
     document.getElementById('langBtn').innerText = currentLang === 'id' ? '🌐 Switch to English' : '🌐 Ganti ke Indonesia';
     document.getElementById('menuToggleBtn').innerText = LANG[currentLang]['menuBtnText'];
     
-    renderTree(false);
-    renderTree(true);
+    processTree(leftTreeId, false);
+    processTree(rightTreeId, true);
     renderDeductions();
     renderMenu();
 }
@@ -742,85 +241,14 @@ function toggleLanguage() {
     applyLanguage();
 }
 
-// --- DATABASE TOME FULL 100% ---
 const TOME_DB = [];
-// Level 6
-TOME_DB[601] = [501, 502, 509, 17615, 'The Calm of Ice'];
-TOME_DB[602] = [502, 503, 505, 17622, 'The Khatru'];
-TOME_DB[603] = [504, 503, 508, 17628, 'A Carmine Tear'];
-TOME_DB[604] = [503, 508, 501, 17630, 'The Fruit of Intense Labor'];
-TOME_DB[605] = [505, 512, 509, 17634, 'Tomorrows Phoenix'];
-TOME_DB[606] = [505, 506, 507, 17636, 'Riding the Scree'];
-TOME_DB[607] = [513, 514, 507, 17642, 'Turning the Tide'];
-TOME_DB[608] = [508, 506, 514, 17649, 'Existential Woe'];
-TOME_DB[609] = [510, 501, 505, 17655, 'Book of Fragrances'];
-TOME_DB[610] = [510, 506, 501, 17657, 'Bouquet of Regrets'];
-TOME_DB[611] = [511, 509, 505, 17661, 'The Union'];
-TOME_DB[612] = [511, 513, 503, 17663, 'Oblivious Enlightenment'];
-TOME_DB[613] = [513, 507, 514, 17669, 'As the Universe Fades'];
-TOME_DB[614] = [514, 512, 513, 17676, 'The Concubines Laugh'];
-TOME_DB[615] = [515, 501, 507, 17679, 'The Academy of the East'];
-TOME_DB[616] = [516, 515, 514, 17683, 'Pan Gu Creator'];
-// Level 5
-TOME_DB[501] = [401, 408, 405, 17618, 'A Heart like Still Water'];
-TOME_DB[502] = [409, 405, 403, 17621, 'The Tsunamis of Yore'];
-TOME_DB[503] = [404, 408, 401, 17624, 'Laughing Mad'];
-TOME_DB[504] = [408, 404, 401, 17627, 'The Book of Congratulations'];
-TOME_DB[505] = [403, 409, 404, 17633, 'The Wrath of Heaven'];
-TOME_DB[506] = [409, 403, 402, 17639, 'A Strange Kindness'];
-TOME_DB[507] = [402, 404, 409, 17645, 'Flesh of the Lamia'];
-TOME_DB[508] = [404, 408, 402, 17648, 'Everything is Emptiness'];
-TOME_DB[509] = [403, 401, 405, 17651, 'The Oasis Remembered'];
-TOME_DB[510] = [401, 405, 407, 17654, 'The Heavenly Scent'];
-TOME_DB[511] = [403, 409, 404, 17660, 'Debt and Tombstones'];
-TOME_DB[512] = [409, 403, 404, 17666, 'Endless Waves'];
-TOME_DB[513] = [408, 402, 404, 17672, 'Parting Grief'];
-TOME_DB[514] = [408, 402, 404, 17675, 'Rouge and Red Lips'];
-TOME_DB[515] = [406, 407, 401, 17678, 'Gang of Hooligans'];
-TOME_DB[516] = [406, 407, 401, 17682, 'The Voidlands'];
-// Level 4
-TOME_DB[401] = [303, 307, 304, 17602, 'Burning Desire'];
-TOME_DB[402] = [304, 301, 305, 17603, 'Tome of Predestination'];
-TOME_DB[403] = [302, 305, 303, 17604, 'The Roses Thorn'];
-TOME_DB[404] = [306, 307, 301, 17605, 'Letters of Social Unrest'];
-TOME_DB[405] = [303, 307, 306, 17606, 'The Appetites of Spring'];
-TOME_DB[406] = [308, 205, 207, 17610, 'The Rivers Edge'];
-TOME_DB[407] = [309, 302, 306, 17614, 'The Weak Stream of Many Miles'];
-TOME_DB[408] = [301, 304, 302, 17600, 'Battle Tactics'];
-TOME_DB[409] = [302, 305, 303, 17601, 'A Bewitching Proposal'];
-// Level 3
-TOME_DB[301] = [201, 206, 203, 17593, 'Eat Drink and be Merry'];
-TOME_DB[302] = [202, 205, 206, 17594, 'Sunset Tales'];
-TOME_DB[303] = [207, 203, 202, 17595, 'Adventures and Mishaps'];
-TOME_DB[304] = [204, 201, 203, 17596, 'The Sunny Pass'];
-TOME_DB[305] = [205, 202, 201, 17597, 'Tales of Beauty'];
-TOME_DB[306] = [206, 203, 201, 17598, 'The Bards Wanderlust'];
-TOME_DB[307] = [207, 205, 204, 17599, 'A Poets Musings'];
-TOME_DB[308] = [208, 202, 204, 17609, 'Decaying Tome'];
-TOME_DB[309] = [209, 203, 202, 17613, 'Scene of Carnage'];
-// Level 2
-TOME_DB[201] = [101, 102, 103, 17584, 'Tome of Water'];
-TOME_DB[202] = [102, 103, 104, 17585, 'Tome of Fire'];
-TOME_DB[203] = [103, 104, 105, 17586, 'Tome of Earth'];
-TOME_DB[204] = [104, 105, 106, 17587, 'Tome of Wood'];
-TOME_DB[205] = [105, 106, 107, 17588, 'Tome of Metal'];
-TOME_DB[206] = [106, 107, 108, 17589, 'Tome of Wind'];
-TOME_DB[207] = [107, 108, 109, 17590, 'Tome of Thunder'];
-TOME_DB[208] = [108, 109, 101, 17591, 'Tome of Light'];
-TOME_DB[209] = [109, 101, 102, 17592, 'Tome of Darkness'];
-// Level 1
-TOME_DB[101] = [0, 0, 0, 17001, 'Grace'];
-TOME_DB[102] = [0, 0, 0, 17002, 'Power'];
-TOME_DB[103] = [0, 0, 0, 17003, 'Courage'];
-TOME_DB[104] = [0, 0, 0, 17004, 'Wisdom'];
-TOME_DB[105] = [0, 0, 0, 17005, 'Yin'];
-TOME_DB[106] = [0, 0, 0, 17006, 'Yang'];
-TOME_DB[107] = [0, 0, 0, 17007, 'Life'];
-TOME_DB[108] = [0, 0, 0, 17008, 'Death'];
-TOME_DB[109] = [0, 0, 0, 17009, 'Void'];
+TOME_DB[601] = [501, 502, 509, 17615, 'The Calm of Ice']; TOME_DB[602] = [502, 503, 505, 17622, 'The Khatru']; TOME_DB[603] = [504, 503, 508, 17628, 'A Carmine Tear']; TOME_DB[604] = [503, 508, 501, 17630, 'The Fruit of Intense Labor']; TOME_DB[605] = [505, 512, 509, 17634, 'Tomorrows Phoenix']; TOME_DB[606] = [505, 506, 507, 17636, 'Riding the Scree']; TOME_DB[607] = [513, 514, 507, 17642, 'Turning the Tide']; TOME_DB[608] = [508, 506, 514, 17649, 'Existential Woe']; TOME_DB[609] = [510, 501, 505, 17655, 'Book of Fragrances']; TOME_DB[610] = [510, 506, 501, 17657, 'Bouquet of Regrets']; TOME_DB[611] = [511, 509, 505, 17661, 'The Union']; TOME_DB[612] = [511, 513, 503, 17663, 'Oblivious Enlightenment']; TOME_DB[613] = [513, 507, 514, 17669, 'As the Universe Fades']; TOME_DB[614] = [514, 512, 513, 17676, 'The Concubines Laugh']; TOME_DB[615] = [515, 501, 507, 17679, 'The Academy of the East']; TOME_DB[616] = [516, 515, 514, 17683, 'Pan Gu Creator'];
+TOME_DB[501] = [401, 408, 405, 17618, 'A Heart like Still Water']; TOME_DB[502] = [409, 405, 403, 17621, 'The Tsunamis of Yore']; TOME_DB[503] = [404, 408, 401, 17624, 'Laughing Mad']; TOME_DB[504] = [408, 404, 401, 17627, 'The Book of Congratulations']; TOME_DB[505] = [403, 409, 404, 17633, 'The Wrath of Heaven']; TOME_DB[506] = [409, 403, 402, 17639, 'A Strange Kindness']; TOME_DB[507] = [402, 404, 409, 17645, 'Flesh of the Lamia']; TOME_DB[508] = [404, 408, 402, 17648, 'Everything is Emptiness']; TOME_DB[509] = [403, 401, 405, 17651, 'The Oasis Remembered']; TOME_DB[510] = [401, 405, 407, 17654, 'The Heavenly Scent']; TOME_DB[511] = [403, 409, 404, 17660, 'Debt and Tombstones']; TOME_DB[512] = [409, 403, 404, 17666, 'Endless Waves']; TOME_DB[513] = [408, 402, 404, 17672, 'Parting Grief']; TOME_DB[514] = [408, 402, 404, 17675, 'Rouge and Red Lips']; TOME_DB[515] = [406, 407, 401, 17678, 'Gang of Hooligans']; TOME_DB[516] = [406, 407, 401, 17682, 'The Voidlands'];
+TOME_DB[401] = [303, 307, 304, 17602, 'Burning Desire']; TOME_DB[402] = [304, 301, 305, 17603, 'Tome of Predestination']; TOME_DB[403] = [302, 305, 303, 17604, 'The Roses Thorn']; TOME_DB[404] = [306, 307, 301, 17605, 'Letters of Social Unrest']; TOME_DB[405] = [303, 307, 306, 17606, 'The Appetites of Spring']; TOME_DB[406] = [308, 205, 207, 17610, 'The Rivers Edge']; TOME_DB[407] = [309, 302, 306, 17614, 'The Weak Stream of Many Miles']; TOME_DB[408] = [301, 304, 302, 17600, 'Battle Tactics']; TOME_DB[409] = [302, 305, 303, 17601, 'A Bewitching Proposal'];
+TOME_DB[301] = [201, 206, 203, 17593, 'Eat Drink and be Merry']; TOME_DB[302] = [202, 205, 206, 17594, 'Sunset Tales']; TOME_DB[303] = [207, 203, 202, 17595, 'Adventures and Mishaps']; TOME_DB[304] = [204, 201, 203, 17596, 'The Sunny Pass']; TOME_DB[305] = [205, 202, 201, 17597, 'Tales of Beauty']; TOME_DB[306] = [206, 203, 201, 17598, 'The Bards Wanderlust']; TOME_DB[307] = [207, 205, 204, 17599, 'A Poets Musings']; TOME_DB[308] = [208, 202, 204, 17609, 'Decaying Tome']; TOME_DB[309] = [209, 203, 202, 17613, 'Scene of Carnage'];
+TOME_DB[201] = [101, 102, 103, 17584, 'Tome of Water']; TOME_DB[202] = [102, 103, 104, 17585, 'Tome of Fire']; TOME_DB[203] = [103, 104, 105, 17586, 'Tome of Earth']; TOME_DB[204] = [104, 105, 106, 17587, 'Tome of Wood']; TOME_DB[205] = [105, 106, 107, 17588, 'Tome of Metal']; TOME_DB[206] = [106, 107, 108, 17589, 'Tome of Wind']; TOME_DB[207] = [107, 108, 109, 17590, 'Tome of Thunder']; TOME_DB[208] = [108, 109, 101, 17591, 'Tome of Light']; TOME_DB[209] = [109, 101, 102, 17592, 'Tome of Darkness'];
+TOME_DB[101] = [0, 0, 0, 17001, 'Grace']; TOME_DB[102] = [0, 0, 0, 17002, 'Power']; TOME_DB[103] = [0, 0, 0, 17003, 'Courage']; TOME_DB[104] = [0, 0, 0, 17004, 'Wisdom']; TOME_DB[105] = [0, 0, 0, 17005, 'Yin']; TOME_DB[106] = [0, 0, 0, 17006, 'Yang']; TOME_DB[107] = [0, 0, 0, 17007, 'Life']; TOME_DB[108] = [0, 0, 0, 17008, 'Death']; TOME_DB[109] = [0, 0, 0, 17009, 'Void'];
 
-
-// --- STATE MANAGEMENT ---
 let itemCounts = [];       
 let deductions = [];       
 let deductionsCopy = [];   
@@ -828,26 +256,15 @@ let leftTreeId = 616;
 let rightTreeId = 515;
 let activeModalItemId = null;
 
-// --- LINK SHARING & PARSING ---
 function copyShareLink() {
     const compD = {};
     deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
-    const finalState = { 
-        l: leftTreeId, 
-        r: rightTreeId, 
-        m: document.getElementById('mnojitel').value, 
-        d: compD 
-    };
-    
+    const finalState = { l: leftTreeId, r: rightTreeId, m: document.getElementById('mnojitel').value, d: compD };
     const hash = btoa(JSON.stringify(finalState));
     const url = window.location.origin + window.location.pathname + "#" + hash;
     
     if (navigator.clipboard) {
-        navigator.clipboard.writeText(url).then(() => {
-            alert(LANG[currentLang]['alertCopy']);
-        }).catch(err => {
-            prompt(LANG[currentLang]['promptCopy'], url);
-        });
+        navigator.clipboard.writeText(url).then(() => alert(LANG[currentLang]['alertCopy'])).catch(() => prompt(LANG[currentLang]['promptCopy'], url));
     } else {
         prompt(LANG[currentLang]['promptCopy'], url);
     }
@@ -862,34 +279,22 @@ function loadFromHash() {
             if (state.m) document.getElementById('mnojitel').value = state.m;
             if (state.d) {
                 deductions = [];
-                for (let k in state.d) {
-                    deductions[parseInt(k)] = state.d[k];
-                }
+                for (let k in state.d) deductions[parseInt(k)] = state.d[k];
                 saveDeductions(); 
             }
             history.replaceState(null, null, ' ');
-        } catch(e) {
-            console.error("Invalid share link format", e);
-        }
+        } catch(e) {}
     }
 }
 
-// --- LOCAL STORAGE WITH PROTECTION ---
 function loadDeductions() {
     try {
         const saved = localStorage.getItem('tomeDeductions');
         if (saved) deductions = JSON.parse(saved);
-        if (!Array.isArray(deductions) && typeof deductions !== 'object') {
-            deductions = [];
-        }
-    } catch (e) {
-        deductions = [];
-        localStorage.removeItem('tomeDeductions');
-    }
+        if (!Array.isArray(deductions) && typeof deductions !== 'object') deductions = [];
+    } catch (e) { deductions = []; localStorage.removeItem('tomeDeductions'); }
 }
-function saveDeductions() {
-    localStorage.setItem('tomeDeductions', JSON.stringify(deductions));
-}
+function saveDeductions() { localStorage.setItem('tomeDeductions', JSON.stringify(deductions)); }
 function resetCalculator() {
     if (confirm(LANG[currentLang]['alertReset'])) {
         localStorage.removeItem('tomeDeductions');
@@ -901,12 +306,10 @@ function resetCalculator() {
     }
 }
 
-// --- UI INTERACTIONS ---
 function showNameTooltip(element) {
 	const id = parseInt(element.title);
     if (!TOME_DB[id]) return;
-	const txt = `<a href="http://www.pwdatabase.com/pwi/items/${TOME_DB[id][3]}" target="_blank">► ${TOME_DB[id][4]}</a>`;
-	document.getElementById('nazvaniye').innerHTML = txt;
+	document.getElementById('nazvaniye').innerHTML = `<a href="http://www.pwdatabase.com/pwi/items/${TOME_DB[id][3]}" target="_blank">► ${TOME_DB[id][4]}</a>`;
 }
 
 function handleItemClick(element) {
@@ -916,22 +319,16 @@ function handleItemClick(element) {
 	processTree(parseInt(element.title), true);
 }
 
-// --- SYSTEM MODAL FUNCTIONS ---
 function addDeduction(id) {
     const btn = document.querySelector(`.branch button[title="${id}"]`);
-    const val = btn ? btn.value : 1;
     activeModalItemId = id;
-    
     document.getElementById('modalTitle').innerText = TOME_DB[id] ? `${TOME_DB[id][4]}` : LANG[currentLang]['modalTitleAdd'];
-    document.getElementById('modalInput').value = val;
+    document.getElementById('modalInput').value = btn ? btn.value : 1;
     document.getElementById('customModal').style.display = 'flex';
     document.getElementById('modalInput').focus();
 }
 
-function closeModal() {
-    document.getElementById('customModal').style.display = 'none';
-    activeModalItemId = null;
-}
+function closeModal() { document.getElementById('customModal').style.display = 'none'; activeModalItemId = null; }
 
 function confirmModal() {
     const amount = parseInt(document.getElementById('modalInput').value);
@@ -939,7 +336,6 @@ function confirmModal() {
         if (!deductions[activeModalItemId]) deductions[activeModalItemId] = 0;
         deductions[activeModalItemId] += amount;
         saveDeductions();
-        
         processTree(leftTreeId, false);
         processTree(rightTreeId, true);
         renderDeductions();
@@ -950,7 +346,6 @@ function confirmModal() {
 function removeDeduction(id) {
     deductions[id] = 0;
     saveDeductions();
-    
     processTree(leftTreeId, false);
     processTree(rightTreeId, true);
     renderDeductions();
@@ -961,18 +356,15 @@ function getSpritePosition(id) {
     if (parsedId === 10) return 'background-position:32px -32px';
     if (parsedId === 11) return 'background-position:64px 0px';
     if (parsedId === 12) return 'background-position:32px 0px';
-    
     let row = Math.floor(parsedId / 100);
     let num = parsedId - (row * 100);
     return `background-position:-${32 * (num - 1)}px -${32 * (row - 1)}px`;
 }
 
-// --- PANEL & LIVE SEARCH ---
 function toggleBookPanel() {
     const panel = document.getElementById('vyborDiv');
     const search = document.getElementById('bookSearch');
     const isHidden = panel.style.display === 'none';
-    
     panel.style.display = isHidden ? 'block' : 'none';
     search.style.display = isHidden ? 'block' : 'none';
     if(isHidden) search.focus();
@@ -980,34 +372,21 @@ function toggleBookPanel() {
 
 function filterBooks(query) {
     const q = query.toLowerCase();
-    const sections = document.querySelectorAll('#vyborDiv ul');
-    
-    sections.forEach(ul => {
+    document.querySelectorAll('#vyborDiv ul').forEach(ul => {
         let hasVisibleItem = false;
-        const lis = ul.querySelectorAll('li');
-        
-        lis.forEach(li => {
-            const btn = li.querySelector('button');
-            const id = btn.title;
+        ul.querySelectorAll('li').forEach(li => {
+            const id = li.querySelector('button').title;
             const bookName = TOME_DB[id] ? TOME_DB[id][4].toLowerCase() : '';
-            
-            if (bookName.includes(q)) {
-                li.style.display = 'inline-block';
-                hasVisibleItem = true;
-            } else {
-                li.style.display = 'none';
-            }
+            if (bookName.includes(q)) { li.style.display = 'inline-block'; hasVisibleItem = true; } 
+            else li.style.display = 'none';
         });
-        
         const header = ul.previousElementSibling;
-        if (header && header.tagName === 'H4') {
-            header.style.display = hasVisibleItem ? 'block' : 'none';
-        }
+        if (header && header.tagName === 'H4') header.style.display = hasVisibleItem ? 'block' : 'none';
         ul.style.display = hasVisibleItem ? 'flex' : 'none';
     });
 }
 
-// --- LOGIKA PROGRESS & COST REALTIME ---
+// [BUGFIX 2] Menghapus penambahan Target vs Owned (Multiplier Logic) di fungsi Cost
 function updateCostAndProgress() {
     let price10 = parseInt(document.getElementById('price10').value) || 0;
     let price11 = parseInt(document.getElementById('price11').value) || 0;
@@ -1019,11 +398,8 @@ function updateCostAndProgress() {
 
     let netCounts = [];
     let dedCopy = [...deductions];
-    let inputVal = parseInt(document.getElementById('mnojitel').value) || 1;
-    if (inputVal < 1) inputVal = 1;
-    if (inputVal > 99) inputVal = 99;
-    let multiplier = inputVal;
-    if (deductions[rightTreeId]) multiplier += deductions[rightTreeId];
+    let multiplier = parseInt(document.getElementById('mnojitel').value) || 1;
+    if (multiplier < 1) multiplier = 1; if (multiplier > 99) multiplier = 99;
 
     function calcNetNode(nodeId) {
         if (!netCounts[nodeId]) netCounts[nodeId] = 0;
@@ -1031,131 +407,64 @@ function updateCostAndProgress() {
             dedCopy[nodeId]--;
         } else {
             netCounts[nodeId]++;
-            if (nodeId > 200) {
-                calcNetNode(TOME_DB[nodeId][0]);
-                calcNetNode(TOME_DB[nodeId][1]);
-                calcNetNode(TOME_DB[nodeId][2]);
-            }
+            if (nodeId > 200) { calcNetNode(TOME_DB[nodeId][0]); calcNetNode(TOME_DB[nodeId][1]); calcNetNode(TOME_DB[nodeId][2]); }
         }
     }
 
-    for (let z = 0; z < multiplier; z++) {
-        calcNetNode(rightTreeId);
-    }
+    for (let z = 0; z < multiplier; z++) calcNetNode(rightTreeId);
 
     let netBaseMats = 0;
-    for (let z = 101; z <= 109; z++) {
-        if (netCounts[z]) netBaseMats += netCounts[z] * 3;
-    }
+    for (let z = 101; z <= 109; z++) if (netCounts[z]) netBaseMats += netCounts[z] * 3;
     
-    netCounts[12] = netBaseMats;
-    if (deductions[12]) netCounts[12] -= deductions[12];
-    if (netCounts[12] < 0) netCounts[12] = 0;
-
-    netCounts[11] = netBaseMats;
-    if (deductions[11]) netCounts[11] -= deductions[11];
-    if (netCounts[11] < 0) netCounts[11] = 0;
-
-    netCounts[10] = netCounts[12] * 80;
-    if (deductions[10]) netCounts[10] -= deductions[10];
-    if (netCounts[10] < 0) netCounts[10] = 0;
+    netCounts[12] = netBaseMats; if (deductions[12]) netCounts[12] -= deductions[12]; if (netCounts[12] < 0) netCounts[12] = 0;
+    netCounts[11] = netBaseMats; if (deductions[11]) netCounts[11] -= deductions[11]; if (netCounts[11] < 0) netCounts[11] = 0;
+    netCounts[10] = netCounts[12] * 80; if (deductions[10]) netCounts[10] -= deductions[10]; if (netCounts[10] < 0) netCounts[10] = 0;
 
     let grossCounts = [];
     function calcGrossNode(nodeId) {
         if (!grossCounts[nodeId]) grossCounts[nodeId] = 0;
         grossCounts[nodeId]++;
-        if (nodeId > 200) {
-            calcGrossNode(TOME_DB[nodeId][0]);
-            calcGrossNode(TOME_DB[nodeId][1]);
-            calcGrossNode(TOME_DB[nodeId][2]);
-        }
+        if (nodeId > 200) { calcGrossNode(TOME_DB[nodeId][0]); calcGrossNode(TOME_DB[nodeId][1]); calcGrossNode(TOME_DB[nodeId][2]); }
     }
-    for (let z = 0; z < multiplier; z++) {
-        calcGrossNode(rightTreeId);
-    }
-    let grossBaseMats = 0;
-    for (let z = 101; z <= 109; z++) {
-        if (grossCounts[z]) grossBaseMats += grossCounts[z] * 3;
-    }
-    grossCounts[11] = grossBaseMats;
-    grossCounts[12] = grossBaseMats;
-    grossCounts[10] = grossBaseMats * 80;
-
-    let totalCost = (netCounts[10] || 0) * price10 + 
-                    (netCounts[11] || 0) * price11 + 
-                    (netCounts[12] || 0) * price12;
+    for (let z = 0; z < multiplier; z++) calcGrossNode(rightTreeId);
     
+    let grossBaseMats = 0;
+    for (let z = 101; z <= 109; z++) if (grossCounts[z]) grossBaseMats += grossCounts[z] * 3;
+    grossCounts[11] = grossBaseMats; grossCounts[12] = grossBaseMats; grossCounts[10] = grossBaseMats * 80;
+
+    let totalCost = (netCounts[10] || 0) * price10 + (netCounts[11] || 0) * price11 + (netCounts[12] || 0) * price12;
     document.getElementById('totalCostDisplay').innerText = totalCost.toLocaleString('id-ID') + " Gold";
 
     let grossVal = (grossCounts[10] || 0) + (grossCounts[12] || 0) * 80 + (grossCounts[11] || 0) * 80;
     let netVal = (netCounts[10] || 0) + (netCounts[12] || 0) * 80 + (netCounts[11] || 0) * 80;
     
-    let pct = 0;
-    if (grossVal > 0) {
-        pct = ((grossVal - netVal) / grossVal) * 100;
-    }
-    if (pct < 0) pct = 0;
-    if (pct > 100) pct = 100;
+    let pct = grossVal > 0 ? ((grossVal - netVal) / grossVal) * 100 : 0;
+    if (pct < 0) pct = 0; if (pct > 100) pct = 100;
 
     document.getElementById('progressBar').style.width = pct.toFixed(1) + '%';
     document.getElementById('progressPercentText').innerText = pct.toFixed(1) + '%';
 
-    // --- TAHAP 3: ANIMASI CONFETTI JIKA 100% ---
     if (pct === 100 && !window.confettiFired) {
-        confetti({
-            particleCount: 150,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#3b82f6', '#10b981', '#f59e0b']
-        });
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#3b82f6', '#10b981', '#f59e0b'] });
         window.confettiFired = true; 
-    } else if (pct < 100) {
-        window.confettiFired = false; 
-    }
+    } else if (pct < 100) window.confettiFired = false; 
 }
 
-// --- TAHAP 3: FITUR EXPORT IMAGE ---
 function exportToImage(e) {
-    const targetElement = document.querySelector('.container'); 
     const btn = e.currentTarget || document.querySelector('button[onClick*="exportToImage"]');
     const originalText = btn.innerHTML;
-    
     btn.innerHTML = "⏳ Memproses...";
-    
-    html2canvas(targetElement, {
-        backgroundColor: "#0f172a", 
-        scale: 2, 
-        logging: false,
-        useCORS: true
-    }).then(canvas => {
-        const link = document.createElement('a');
-        link.download = 'Tome-Build-Export.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-        
-        btn.innerHTML = originalText;
-    }).catch(err => {
-        console.error("Gagal membuat gambar:", err);
-        btn.innerHTML = "❌ Gagal!";
-        setTimeout(() => btn.innerHTML = originalText, 2000);
-    });
+    html2canvas(document.querySelector('.container'), { backgroundColor: "#0f172a", scale: 2, logging: false, useCORS: true }).then(canvas => {
+        const link = document.createElement('a'); link.download = 'Tome-Build-Export.png'; link.href = canvas.toDataURL('image/png'); link.click(); btn.innerHTML = originalText;
+    }).catch(() => { btn.innerHTML = "❌ Gagal!"; setTimeout(() => btn.innerHTML = originalText, 2000); });
 }
 
-// --- HTML RENDERING ---
 function getTreeItemHtml(id, isDeductionList = false) {
     const count = isDeductionList ? deductions[id] : itemCounts[id];
-    let actionSpan = isDeductionList 
-        ? `<span onClick="removeDeduction(${id});" title="Hapus dari daftar ini"></span>`
-        : `<span onClick="addDeduction(${id});" title="Kurangi dari total"></span>`;
-    
+    let actionSpan = isDeductionList ? `<span onClick="removeDeduction(${id});" title="Hapus dari daftar ini"></span>` : `<span onClick="addDeduction(${id});" title="Kurangi dari total"></span>`;
     let clickAction = isDeductionList ? '' : 'onClick="handleItemClick(this)"';
     if (!isDeductionList && (id === 12 || id === 11 || id === 10)) clickAction = '';
-
-    return `<li>
-        ${actionSpan}
-        <button style="${getSpritePosition(id)}" value="${count}" title="${id}" ${clickAction} onMouseOver="showNameTooltip(this);"></button>
-        <b>×${count}</b>
-    </li>`;
+    return `<li>${actionSpan}<button style="${getSpritePosition(id)}" value="${count}" title="${id}" ${clickAction} onMouseOver="showNameTooltip(this);"></button><b>×${count}</b></li>`;
 }
 
 function renderTree(isRightTree) {
@@ -1164,15 +473,10 @@ function renderTree(isRightTree) {
     const txtBase = LANG[currentLang]['baseMat'];
 
 	for (let r = 6; r >= 1; r--) {
-		let start = r * 100 + 1;
-		let end = r * 100 + 16;
-		let hasItem = false;
+		let start = r * 100 + 1; let end = r * 100 + 16; let hasItem = false;
 		let tempTxt = `<ul><li>${txtLvl} ${r}</li> `;
 		for (let e = start; e <= end; e++) {
-			if (itemCounts[e]) {
-				tempTxt += getTreeItemHtml(e);
-				hasItem = true;
-			}
+			if (itemCounts[e]) { tempTxt += getTreeItemHtml(e); hasItem = true; }
 		}
 		tempTxt += '</ul>';
 		if (hasItem) txt += tempTxt;
@@ -1183,32 +487,17 @@ function renderTree(isRightTree) {
 	if (itemCounts[12]) txt += getTreeItemHtml(12);
 	if (itemCounts[10]) txt += `<li id="strelki" style="margin: 0 10px;">→</li>${getTreeItemHtml(10)}`;
 	txt += `</ul>`;
-	
 	document.getElementById(isRightTree ? 'rightTree' : 'leftTree').innerHTML = txt;
 }
 
 function renderDeductions() {
-    let txt = '';
-    let lis = '';
-    const deductionsDiv = document.getElementById('deductionsList');
-    const txtLvl = LANG[currentLang]['lvl'];
-    const txtBase = LANG[currentLang]['baseMat'];
-
-    if (deductions[11]) lis += getTreeItemHtml(11, true);
-    if (deductions[12]) lis += getTreeItemHtml(12, true);
-    if (deductions[10]) lis += getTreeItemHtml(10, true);
-    if (lis !== '') txt += `<ul><li>${txtBase}</li> ${lis}</ul>`;
-
+    let txt = ''; let lis = ''; const deductionsDiv = document.getElementById('deductionsList');
+    if (deductions[11]) lis += getTreeItemHtml(11, true); if (deductions[12]) lis += getTreeItemHtml(12, true); if (deductions[10]) lis += getTreeItemHtml(10, true);
+    if (lis !== '') txt += `<ul><li>${LANG[currentLang]['baseMat']}</li> ${lis}</ul>`;
     for (let r = 1; r <= 6; r++) {
-        lis = '';
-        let start = r * 100 + 1;
-        let end = r * 100 + 16;
-        for (let e = start; e <= end; e++) {
-            if (deductions[e]) {
-                lis += getTreeItemHtml(e, true);
-            }
-        }
-        if (lis !== '') txt += `<ul><li>${txtLvl} ${r}</li> ${lis}</ul>`;
+        lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
+        for (let e = start; e <= end; e++) if (deductions[e]) lis += getTreeItemHtml(e, true);
+        if (lis !== '') txt += `<ul><li>${LANG[currentLang]['lvl']} ${r}</li> ${lis}</ul>`;
     }
     deductionsDiv.innerHTML = txt;
 }
@@ -1216,37 +505,24 @@ function renderDeductions() {
 function renderMenu() {
     let txt = '';
     for (let r = 6; r >= 1; r--) {
-        let lis = '';
-        let start = r * 100 + 1;
-        let end = r * 100 + 16;
-        for (let e = start; e <= end; e++) {
-            if (TOME_DB[e]) { 
-                lis += `<li>
-                    <button style="${getSpritePosition(e)}" title="${e}" onClick="processTree(${e}, false)" onMouseOver="showNameTooltip(this);"></button>
-                </li>`;
-            }
-        }
+        let lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
+        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="${getSpritePosition(e)}" title="${e}" onClick="processTree(${e}, false)" onMouseOver="showNameTooltip(this);"></button></li>`;
         txt += `<h4>Tome ${LANG[currentLang]['lvl']} ${r}</h4><ul style="display: flex; flex-wrap: wrap; gap: 8px;"> ${lis}</ul>`;
     }
     document.getElementById('vyborDiv').innerHTML = txt;
 }
 
-// --- CORE CALCULATION LOGIC ---
 function calculateNode(id) {
 	if (!itemCounts[id]) itemCounts[id] = 0;
-	
 	if (deductionsCopy[id] && deductionsCopy[id] > 0) {
 		deductionsCopy[id]--;
 	} else {
 		itemCounts[id]++;
-		if (id > 200) {
-			calculateNode(TOME_DB[id][0]);
-			calculateNode(TOME_DB[id][1]);
-			calculateNode(TOME_DB[id][2]);
-		}
+		if (id > 200) { calculateNode(TOME_DB[id][0]); calculateNode(TOME_DB[id][1]); calculateNode(TOME_DB[id][2]); }
 	}
 }
 
+// [BUGFIX 2] Menghapus penambahan Target vs Owned (Multiplier Logic) di fungsi Tree
 function processTree(id, isRightTree = false) {
     itemCounts = [];
     deductionsCopy = [...deductions];
@@ -1259,29 +535,16 @@ function processTree(id, isRightTree = false) {
         if (isNaN(inputVal) || inputVal < 1) inputVal = 1;
         if (inputVal > 99) inputVal = 99;
         inputField.value = inputVal; 
-
         multiplier = inputVal;
-        if (deductions[id]) multiplier += deductions[id];
-    } else {
-        leftTreeId = id;
-    }
+    } else leftTreeId = id;
 
-    for (let z = 0; z < multiplier; z++) {
-        calculateNode(id);
-    }
+    for (let z = 0; z < multiplier; z++) calculateNode(id);
 
     let baseMats = 0;
-    for (let z = 101; z <= 109; z++) {
-        if (itemCounts[z]) baseMats += itemCounts[z] * 3;
-    }
+    for (let z = 101; z <= 109; z++) if (itemCounts[z]) baseMats += itemCounts[z] * 3;
 
     for (let z = 12; z >= 10; z--) {
-        if (z === 10) {
-            itemCounts[10] = (itemCounts[12] || 0) * 80;
-        } else {
-            itemCounts[z] = baseMats;
-        }
-        
+        itemCounts[z] = z === 10 ? (itemCounts[12] || 0) * 80 : baseMats;
         if (deductions[z]) itemCounts[z] -= deductions[z];
         if (itemCounts[z] < 0) itemCounts[z] = 0;
     }
@@ -1290,24 +553,14 @@ function processTree(id, isRightTree = false) {
     updateCostAndProgress(); 
 }
 
-// --- INIT ---
 window.onload = () => {
-    loadDeductions();
-    loadFromHash(); 
-    
+    loadDeductions(); loadFromHash(); 
     document.getElementById('price10').value = localStorage.getItem('tomePrice10') || 0;
     document.getElementById('price11').value = localStorage.getItem('tomePrice11') || 0;
     document.getElementById('price12').value = localStorage.getItem('tomePrice12') || 0;
 
     applyLanguage(); 
-    processTree(leftTreeId, false); 
-    processTree(rightTreeId, true);  
-    renderDeductions();
-    updateCostAndProgress();
-
-    document.getElementById('modalInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') confirmModal();
-    });
+    document.getElementById('modalInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') confirmModal(); });
 };
 </script>
 </body>
