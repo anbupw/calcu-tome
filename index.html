@@ -186,7 +186,9 @@ h1::before, h2::before {
 
 .branch li button {
 	display: block;
-	width: 44px; height: 44px; /* Touch target dioptimalkan */
+	width: 32px; height: 32px; /* Kembalikan ke ukuran asli grid gambar */
+	transform: scale(1.2); /* Perbesar sedikit tombolnya (120%) secara aman */
+	margin: 6px; /* Tambahkan ruang antar tombol untuk layar sentuh (HP) */
 	background-image: url('znachki.png');
 	border: none;
 	border-radius: 6px;
@@ -194,8 +196,10 @@ h1::before, h2::before {
 	box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 	transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
+/* Karena scale dasar sudah 1.2, efek saat mouse diarahkan (hover) kita naikkan sedikit */
 .branch li button:hover {
-	transform: scale(1.15) translateY(-2px);
+	transform: scale(1.35) translateY(-2px);
 	box-shadow: 0 8px 15px rgba(0,0,0,0.5);
 }
 
@@ -474,8 +478,8 @@ body { top: 0px !important; }
 <script type="text/javascript">
 function googleTranslateElementInit() {
   new google.translate.TranslateElement({
-      pageLanguage: 'en', 
-      includedLanguages: 'id,en,ru', 
+      pageLanguage: 'id',
+      includedLanguages: 'en,ru',
       layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
       autoDisplay: false
   }, 'google_translate_element');
