@@ -100,9 +100,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 .menu-toggle-btn { position: fixed; top: 25px; right: 25px; background: var(--accent); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; z-index: 1001; box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: 0.2s ease; }
 .menu-toggle-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
 .vybor { position: fixed; right: 25px; top: 75px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--accent); padding: 20px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); z-index: 1000; width: 340px; max-height: 80vh; overflow-y: auto; }
-.floating-nav { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed var(--border-color); }
-.floating-nav a { display: flex; align-items: center; gap: 12px; padding: 10px 15px; border-radius: 8px; background: rgba(255, 255, 255, 0.03); color: var(--text-muted); font-weight: 500; font-size: 0.95rem; transition: all 0.2s; }
-.floating-nav a:hover, .floating-nav a.active { background: var(--accent); color: white; text-decoration: none; }
+
 .panel-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
 .panel-actions > button { width: 100%; border: none; color: white; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
 .btn-primary { background: var(--accent); } .btn-primary:hover { background: var(--accent-hover); }
@@ -209,11 +207,6 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 <button class="menu-toggle-btn" id="menuToggleBtn" onclick="var panel = document.getElementById('mainMenuPanel'); panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';">⚙️ Buka Menu</button>
 
 <div class="vybor" id="mainMenuPanel" style="display:none;">
-    <div class="floating-nav">
-        <a href="#" class="active"><span data-i18n="nav1">📖 Kalkulator Tome</span></a>
-        <a href="#"><span data-i18n="nav2">✨ Simulasi Refine</span></a>
-        <a href="#"><span data-i18n="nav3">🤖 Bot Perfect World</span></a>
-    </div>
 
     <h4 style="margin-top: 0; font-size: 0.85rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px;">📁 Kelola Profil Build</h4>
     <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
@@ -266,8 +259,8 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 <script>
 const LANG = {
-    id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", nav1: "📖 Kalkulator Tome", nav2: "✨ Simulasi Refine", nav3: "🤖 Bot Perfect World", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>[Nama Author]</strong>" },
-    en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", nav1: "📖 Tome Calculator", nav2: "✨ Refine Simulator", nav3: "🤖 Perfect World Bot", btnTarget: "📚 Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations, profiles, and start over?", promptCopy: "Copy the link below:", footerText: "Tome Calculator © 2026 | Created by <strong>[Author Name]</strong>" }
+    id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>[Nama Author]</strong>" },
+    en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "📚 Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations, profiles, and start over?", promptCopy: "Copy the link below:", footerText: "Tome Calculator © 2026 | Created by <strong>[Author Name]</strong>" }
 };
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
@@ -468,7 +461,7 @@ function updateCostAndProgress() {
     localStorage.setItem('tomePrice11', price11);
     localStorage.setItem('tomePrice12', price12);
     
-    saveActiveProfile(); // Auto-save ke profil aktif saat harga diubah
+    saveActiveProfile(); 
 
     let netCounts = [];
     let dedCopy = [...deductions];
@@ -586,13 +579,18 @@ function renderMenu() {
     document.getElementById('vyborDiv').innerHTML = txt;
 }
 
+// === FIX BUG DITERAPKAN DI SINI ===
 function calculateNode(id) {
 	if (!itemCounts[id]) itemCounts[id] = 0;
 	if (deductionsCopy[id] && deductionsCopy[id] > 0) {
 		deductionsCopy[id]--;
 	} else {
 		itemCounts[id]++;
-		if (id > 200) { calculateNode(TOME_DB[nodeId = id][0]); calculateNode(TOME_DB[id][1]); calculateNode(TOME_DB[id][2]); }
+		if (id > 200) { 
+            calculateNode(TOME_DB[id][0]); 
+            calculateNode(TOME_DB[id][1]); 
+            calculateNode(TOME_DB[id][2]); 
+        }
 	}
 }
 
