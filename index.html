@@ -127,6 +127,11 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 .modal-buttons button { flex: 1; padding: 10px; font-weight: 600; border-radius: 8px; border: none; cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
 .modal-btn-confirm { background: var(--accent); color: white; } .modal-btn-confirm:hover { background: var(--accent-hover); }
 .modal-btn-cancel { background: #334155; color: #cbd5e1; } .modal-btn-cancel:hover { background: #475569; }
+
+/* Custom scrollbar untuk inventory list */
+#invItemList::-webkit-scrollbar { width: 6px; }
+#invItemList::-webkit-scrollbar-track { background: transparent; }
+#invItemList::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 </style>
 </head>
 <body>
@@ -179,8 +184,11 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
     
     <div id="deductions">
         <div class="calc-card">
-            <h2 data-i18n="title4">Buku & Bahan yang Sudah Dimiliki</h2>
-            <div class="podzagolovok" id="nazvaniye_vychet" data-i18n="desc4">Bahan yang Anda klik (tombol minus) pada daftar di atas akan masuk ke sini dan dikurangi dari total.</div>
+            <h2 data-i18n="title4">📦 Inventory (Bahan Dimiliki)</h2>
+            <div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center;">
+                <span data-i18n="desc4" style="flex:1;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
+                <button class="btn-success" onClick="openInventoryModal()" style="white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600;">➕ Tambah Item</button>
+            </div>
             <div id="deductionsList" class="branch"></div>
         </div>
     </div>
@@ -229,10 +237,20 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 	</div>
 </div>
 
+<div id="inventoryModal" class="modal-backdrop" style="display:none; z-index: 2001;">
+    <div class="modal-content" style="max-width: 450px;">
+        <h3>Pilih Item untuk Inventory</h3>
+        <input type="text" id="invSearch" class="search-box" placeholder="🔍 Cari nama buku/bahan..." onkeyup="filterInventorySearch(this.value)">
+        <div id="invItemList" class="branch" style="max-height: 250px; overflow-y: auto; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
+            </div>
+        <button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onClick="closeInventoryModal()">Tutup Jendela</button>
+    </div>
+</div>
+
 <script>
 const LANG = {
-    id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "Buku & Bahan yang Sudah Dimiliki", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Bahan yang Anda klik (tombol minus) pada daftar di atas akan masuk ke sini dan dikurangi dari total.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", nav1: "📖 Kalkulator Tome", nav2: "✨ Simulasi Refine", nav3: "🤖 Bot Perfect World", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>[Nama Author]</strong>" },
-    en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "Owned Books & Materials", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Materials you click (minus button) on the list above will appear here and be deducted.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", nav1: "📖 Tome Calculator", nav2: "✨ Refine Simulator", nav3: "🤖 Perfect World Bot", btnTarget: "📚 Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations and start over?", promptCopy: "Copy the link below:", footerText: "Tome Calculator © 2026 | Created by <strong>[Author Name]</strong>" }
+    id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", nav1: "📖 Kalkulator Tome", nav2: "✨ Simulasi Refine", nav3: "🤖 Bot Perfect World", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>[Nama Author]</strong>" },
+    en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", nav1: "📖 Tome Calculator", nav2: "✨ Refine Simulator", nav3: "🤖 Perfect World Bot", btnTarget: "📚 Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations and start over?", promptCopy: "Copy the link below:", footerText: "Tome Calculator © 2026 | Created by <strong>[Author Name]</strong>" }
 };
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
@@ -328,8 +346,16 @@ function resetCalculator() {
 
 function showNameTooltip(element) {
 	const id = parseInt(element.title);
-    if (!TOME_DB[id]) return;
-	document.getElementById('nazvaniye').innerHTML = `<a href="http://www.pwdatabase.com/pwi/items/${TOME_DB[id][3]}" target="_blank">► ${TOME_DB[id][4]}</a>`;
+    if (!TOME_DB[id] && id !== 10 && id !== 11 && id !== 12) return;
+    
+    let linkUrl = "";
+    let nameText = "";
+    if (id === 10) { nameText = "Token of Luck"; linkUrl = "http://www.pwdatabase.com/pwi/items/24722"; }
+    else if (id === 11) { nameText = "Tome Fragment"; linkUrl = "http://www.pwdatabase.com/pwi/items/17011"; }
+    else if (id === 12) { nameText = "Tome Page"; linkUrl = "http://www.pwdatabase.com/pwi/items/17010"; }
+    else { nameText = TOME_DB[id][4]; linkUrl = `http://www.pwdatabase.com/pwi/items/${TOME_DB[id][3]}`; }
+
+	document.getElementById('nazvaniye').innerHTML = `<a href="${linkUrl}" target="_blank">► ${nameText}</a>`;
 }
 
 function handleItemClick(element) {
@@ -342,7 +368,14 @@ function handleItemClick(element) {
 function addDeduction(id) {
     const btn = document.querySelector(`.branch button[title="${id}"]`);
     activeModalItemId = id;
-    document.getElementById('modalTitle').innerText = TOME_DB[id] ? `${TOME_DB[id][4]}` : LANG[currentLang]['modalTitleAdd'];
+    
+    let itemName = LANG[currentLang]['modalTitleAdd'];
+    if (id === 10) itemName = "Token of Luck";
+    else if (id === 11) itemName = "Tome Fragment";
+    else if (id === 12) itemName = "Tome Page";
+    else if (TOME_DB[id]) itemName = TOME_DB[id][4];
+
+    document.getElementById('modalTitle').innerText = itemName;
     document.getElementById('modalInput').value = btn ? btn.value : 1;
     document.getElementById('customModal').style.display = 'flex';
     document.getElementById('modalInput').focus();
@@ -569,6 +602,44 @@ function processTree(id, isRightTree = false) {
         
     renderTree(isRightTree);
     updateCostAndProgress(); 
+}
+
+/* JAVASCRIPT INVENTORY BARU */
+function openInventoryModal() {
+    document.getElementById('inventoryModal').style.display = 'flex';
+    document.getElementById('invSearch').value = '';
+    renderInventorySelection('');
+    document.getElementById('invSearch').focus();
+}
+
+function closeInventoryModal() { document.getElementById('inventoryModal').style.display = 'none'; }
+
+function renderInventorySelection(query) {
+    let html = '<ul style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">';
+    const q = query.toLowerCase();
+    
+    const baseMats = [ {id: 12, name: 'Tome Page'}, {id: 11, name: 'Tome Fragment'}, {id: 10, name: 'Token of Luck'} ];
+    baseMats.forEach(mat => {
+        if (mat.name.toLowerCase().includes(q)) {
+            html += `<li><button style="${getSpritePosition(mat.id)}" title="${mat.id}" onClick="selectItemForInventory(${mat.id})" onMouseOver="showNameTooltip(this);"></button></li>`;
+        }
+    });
+
+    TOME_DB.forEach((tome, id) => {
+        if (tome && tome[4].toLowerCase().includes(q)) {
+            html += `<li><button style="${getSpritePosition(id)}" title="${id}" onClick="selectItemForInventory(${id})" onMouseOver="showNameTooltip(this);"></button></li>`;
+        }
+    });
+    
+    html += '</ul>';
+    document.getElementById('invItemList').innerHTML = html;
+}
+
+function filterInventorySearch(val) { renderInventorySelection(val); }
+
+function selectItemForInventory(id) {
+    closeInventoryModal();
+    addDeduction(id); 
 }
 
 window.onload = () => {
