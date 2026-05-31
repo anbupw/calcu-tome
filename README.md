@@ -1,4 +1,4 @@
-# Perfect World PanGu
+# Perfect World SKYNET
 Crafting resource calculator for Perfect World Tomes
 
 # Online version
