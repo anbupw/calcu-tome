@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Kalkulator Tome - Edisi Modern" />
-<title>Kalkulator Tome | UI Modern</title>
+<title>Kalkulator Tome | UI Modern Upgrade</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -124,7 +124,7 @@ h1::before, h2::before {
 	font-weight: 600;
 	border-radius: 8px;
 	padding: 8px 12px;
-	width: 70px;
+	width: 80px;
 	text-align: center;
 	font-size: 1rem;
 	outline: none;
@@ -340,7 +340,24 @@ h1::before, h2::before {
 .btn-danger { background: var(--danger); }
 .btn-danger:hover { background: var(--danger-hover); }
 
-#vybor h4 {
+/* FITUR SEARCH BAR BARU */
+.search-box {
+	width: 100%;
+	padding: 10px 14px;
+	background: #0f172a;
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+	color: white;
+	font-family: 'Inter', sans-serif;
+	font-size: 0.9rem;
+	margin-top: 10px;
+	margin-bottom: 5px;
+	outline: none;
+	transition: 0.2s;
+}
+.search-box:focus { border-color: var(--accent); }
+
+#vyborDiv h4 {
 	font-size: 0.8rem;
 	color: var(--text-muted);
 	border-bottom: 1px solid var(--border-color);
@@ -348,15 +365,15 @@ h1::before, h2::before {
 	padding-bottom: 5px;
 	margin-top: 15px;
 }
-#vybor ul { display: flex; flex-wrap: wrap; gap: 8px; }
-#vybor li { display: inline-block; }
+#vyborDiv ul { display: flex; flex-wrap: wrap; gap: 8px; }
+#vyborDiv li { display: inline-block; }
 
 .vybor::-webkit-scrollbar { width: 6px; }
 .vybor::-webkit-scrollbar-track { background: transparent; }
 .vybor::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 
 /* =========================================
-   7. AUTHOR SOCIAL CONTAINER (NEW)
+   7. AUTHOR SOCIAL CONTAINER
 ========================================= */
 .author-social-container {
 	display: flex;
@@ -460,6 +477,69 @@ h1::before, h2::before {
 .author-badge:hover svg {
 	transform: scale(1.1) rotate(-10deg);
 }
+
+/* =========================================
+   9. CUSTOM DIALOG MODAL SYSTEM (NEW)
+========================================= */
+.modal-backdrop {
+	position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+	background: rgba(0, 0, 0, 0.6);
+	backdrop-filter: blur(5px);
+	z-index: 2000;
+	display: flex; align-items: center; justify-content: center;
+	opacity: 1; transition: opacity 0.2s ease;
+}
+
+.modal-content {
+	background: var(--bg-card);
+	border: 1px solid var(--accent);
+	padding: 25px;
+	border-radius: 16px;
+	width: 90%;
+	max-width: 380px;
+	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+	text-align: center;
+	animation: modalSlide 0.3s ease;
+}
+
+@keyframes modalSlide {
+	from { transform: translateY(-20px); opacity: 0; }
+	to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-content h3 { margin-bottom: 10px; color: #e2e8f0; font-size: 1.1rem; }
+.modal-content p { margin-bottom: 18px; color: var(--text-muted); font-size: 0.9rem; }
+
+.modal-content input {
+	background: #0f172a;
+	border: 1px solid #475569;
+	color: white;
+	padding: 10px;
+	border-radius: 8px;
+	width: 100%;
+	text-align: center;
+	font-size: 1.2rem;
+	font-weight: 600;
+	margin-bottom: 20px;
+	outline: none;
+}
+.modal-content input:focus { border-color: var(--accent); }
+
+.modal-buttons { display: flex; gap: 12px; }
+.modal-buttons button {
+	flex: 1;
+	padding: 10px;
+	font-weight: 600;
+	border-radius: 8px;
+	border: none;
+	cursor: pointer;
+	font-size: 0.9rem;
+	transition: 0.2s;
+}
+.modal-btn-confirm { background: var(--accent); color: white; }
+.modal-btn-confirm:hover { background: var(--accent-hover); }
+.modal-btn-cancel { background: #334155; color: #cbd5e1; }
+.modal-btn-cancel:hover { background: #475569; }
 </style>
 </head>
 <body>
@@ -474,7 +554,7 @@ h1::before, h2::before {
 	<div class="calc-card">
 		<h2>Cabang Terpilih</h2>
 		<div class="podzagolovok">
-			<input type="text" id="mnojitel" value="1">
+			<input type="number" id="mnojitel" value="1" min="1" max="99">
 			<button class="btn-calc" onClick="processTree(rightTreeId, true)">Hitung Kuantitas</button>
 		</div>
 		<div id="rightTree" class="branch"></div>
@@ -501,13 +581,15 @@ h1::before, h2::before {
     </div>
 
 	<div class="panel-actions">
-		<button class="btn-primary" onClick="var zu = document.getElementById('vyborDiv').style.display; document.getElementById('vyborDiv').style.display = (zu == 'none') ? 'block' : 'none';" title="Tampilkan/Sembunyikan buku">
+		<button class="btn-primary" onClick="toggleBookPanel();" title="Tampilkan/Sembunyikan buku">
 			📚 Pilihan Buku Target
 		</button>
 		<button class="btn-danger" onClick="resetCalculator()" title="Reset Kalkulator">
 			🔄 Reset Kalkulator
 		</button>
 	</div>
+
+	<input type="text" id="bookSearch" class="search-box" placeholder="🔍 Cari nama buku target..." oninput="filterBooks(this.value)" style="display:none;">
 
 	<div id="vyborDiv" class="branch" style="display:none"></div>
     
@@ -529,6 +611,18 @@ h1::before, h2::before {
 					<path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
 				</svg>
 			</a>
+		</div>
+	</div>
+</div>
+
+<div id="customModal" class="modal-backdrop" style="display:none;">
+	<div class="modal-content">
+		<h3 id="modalTitle">Tambah Buku/Bahan</h3>
+		<p>Berapa banyak item ini yang sudah Anda miliki saat ini?</p>
+		<input type="number" id="modalInput" min="1" max="999" value="1">
+		<div class="modal-buttons">
+			<button class="modal-btn-confirm" onClick="confirmModal()">Simpan</button>
+			<button class="modal-btn-cancel" onClick="closeModal()">Batal</button>
 		</div>
 	</div>
 </div>
@@ -614,11 +708,21 @@ let deductions = [];
 let deductionsCopy = [];   
 let leftTreeId = 616;
 let rightTreeId = 515;
+let activeModalItemId = null; // Menyimpan ID item yang sedang diproses modal
 
-// --- LOCAL STORAGE ---
+// --- LOCAL STORAGE WITH PROTECTION ---
 function loadDeductions() {
-    const saved = localStorage.getItem('tomeDeductions');
-    if (saved) deductions = JSON.parse(saved);
+    try {
+        const saved = localStorage.getItem('tomeDeductions');
+        if (saved) deductions = JSON.parse(saved);
+        if (!Array.isArray(deductions) && typeof deductions !== 'object') {
+            deductions = [];
+        }
+    } catch (e) {
+        console.error("Data Storage Corrupted. Resetting local variables.", e);
+        deductions = [];
+        localStorage.removeItem('tomeDeductions');
+    }
 }
 function saveDeductions() {
     localStorage.setItem('tomeDeductions', JSON.stringify(deductions));
@@ -639,27 +743,42 @@ function showNameTooltip(element) {
 }
 
 function handleItemClick(element) {
-	document.getElementById('mnojitel').value = parseInt(element.value) || 1;
+    let clickedVal = parseInt(element.value) || 1;
+    if(clickedVal > 99) clickedVal = 99; // Proteksi visual input wajar
+	document.getElementById('mnojitel').value = clickedVal;
 	processTree(parseInt(element.title), true);
 }
 
+// --- SYSTEM MODAL FUNCTIONS BARU ---
 function addDeduction(id) {
-    const btn = document.querySelector(`button[title="${id}"]`);
+    const btn = document.querySelector(`.branch button[title="${id}"]`);
     const val = btn ? btn.value : 1;
-	const inputPrompt = prompt('Berapa banyak bahan/buku ini yang sudah Anda miliki?', val);
+    activeModalItemId = id;
     
-	if (inputPrompt !== null) {
-        const amount = parseInt(inputPrompt);
-        if (!isNaN(amount) && amount > 0) {
-            if (!deductions[id]) deductions[id] = 0;
-            deductions[id] += amount;
-            saveDeductions();
-            
-            processTree(leftTreeId, false);
-            processTree(rightTreeId, true);
-            renderDeductions();
-        }
+    // Tampilkan Nama Item di Judul Modal
+    document.getElementById('modalTitle').innerText = TOME_DB[id] ? `Bahan: ${TOME_DB[id][4]}` : 'Tambah Bahan';
+    document.getElementById('modalInput').value = val;
+    document.getElementById('customModal').style.display = 'flex';
+    document.getElementById('modalInput').focus();
+}
+
+function closeModal() {
+    document.getElementById('customModal').style.display = 'none';
+    activeModalItemId = null;
+}
+
+function confirmModal() {
+    const amount = parseInt(document.getElementById('modalInput').value);
+    if (!isNaN(amount) && amount > 0 && activeModalItemId) {
+        if (!deductions[activeModalItemId]) deductions[activeModalItemId] = 0;
+        deductions[activeModalItemId] += amount;
+        saveDeductions();
+        
+        processTree(leftTreeId, false);
+        processTree(rightTreeId, true);
+        renderDeductions();
     }
+    closeModal();
 }
 
 function removeDeduction(id) {
@@ -680,6 +799,47 @@ function getSpritePosition(id) {
     let row = Math.floor(parsedId / 100);
     let num = parsedId - (row * 100);
     return `background-position:-${32 * (num - 1)}px -${32 * (row - 1)}px`;
+}
+
+// --- FITUR PANEL & LIVE SEARCH BARU ---
+function toggleBookPanel() {
+    const panel = document.getElementById('vyborDiv');
+    const search = document.getElementById('bookSearch');
+    const isHidden = panel.style.display === 'none';
+    
+    panel.style.display = isHidden ? 'block' : 'none';
+    search.style.display = isHidden ? 'block' : 'none';
+    if(isHidden) search.focus();
+}
+
+function filterBooks(query) {
+    const q = query.toLowerCase();
+    const sections = document.querySelectorAll('#vyborDiv ul');
+    
+    sections.forEach(ul => {
+        let hasVisibleItem = false;
+        const lis = ul.querySelectorAll('li');
+        
+        lis.forEach(li => {
+            const btn = li.querySelector('button');
+            const id = btn.title;
+            const bookName = TOME_DB[id] ? TOME_DB[id][4].toLowerCase() : '';
+            
+            if (bookName.includes(q)) {
+                li.style.display = 'inline-block';
+                hasVisibleItem = true;
+            } else {
+                li.style.display = 'none';
+            }
+        });
+        
+        // Sembunyikan Header Kategori Level jika tidak ada buku yang cocok
+        const header = ul.previousElementSibling;
+        if (header && header.tagName === 'H4') {
+            header.style.display = hasVisibleItem ? 'block' : 'none';
+        }
+        ul.style.display = hasVisibleItem ? 'flex' : 'none';
+    });
 }
 
 // --- HTML RENDERING ---
@@ -763,12 +923,12 @@ function renderMenu() {
                 </li>`;
             }
         }
-        txt += `<h4>Tome Level ${r}</h4><ul> ${lis}</ul>`;
+        txt += `<h4>Tome Level ${r}</h4><ul style="display: flex; flex-wrap: wrap; gap: 8px;"> ${lis}</ul>`;
     }
     document.getElementById('vyborDiv').innerHTML = txt;
 }
 
-// --- CORE CALCULATION LOGIC ---
+// --- CORE CALCULATION LOGIC WITH VALIDATION ANTI-CRASH ---
 function calculateNode(id) {
 	if (!itemCounts[id]) itemCounts[id] = 0;
 	
@@ -791,7 +951,15 @@ function processTree(id, isRightTree = false) {
 
     if (isRightTree) {
         rightTreeId = id;
-        multiplier = parseInt(document.getElementById('mnojitel').value) || 1;
+        
+        // PENGAMAN CRASH: Memastikan input aman (tidak kosong, tidak negatif, tidak over-stack)
+        let inputField = document.getElementById('mnojitel');
+        let inputVal = parseInt(inputField.value);
+        if (isNaN(inputVal) || inputVal < 1) inputVal = 1;
+        if (inputVal > 99) inputVal = 99; // Batas aman rekursif front-end browser
+        inputField.value = inputVal; 
+
+        multiplier = inputVal;
         if (deductions[id]) multiplier += deductions[id];
     } else {
         leftTreeId = id;
@@ -827,6 +995,11 @@ window.onload = () => {
     processTree(616, false); // Kiri (Kebutuhan Total)
     processTree(515, true);  // Kanan (Cabang Terpilih)
     renderDeductions();
+    
+    // Trigger tombol ENTER di dalam modal agar eksekusi cepat
+    document.getElementById('modalInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') confirmModal();
+    });
 };
 </script>
 
