@@ -673,17 +673,22 @@ function handleItemClick(element) {
 function addDeduction(id) {
     const btn = document.querySelector(`button[title="${id}"]`);
     const val = btn ? btn.value : 1;
-	const amount = parseInt(prompt('Berapa banyak bahan/buku ini yang sudah Anda miliki?', val));
-	if (amount && amount > 0) {
-		if (!deductions[id]) deductions[id] = 0;
-		deductions[id] += amount;
-		saveDeductions();
-        
-        // Refresh perhitungan kedua pohon
-		processTree(leftTreeId, false);
-		processTree(rightTreeId, true);
-        renderDeductions();
-	}
+	const inputPrompt = prompt('Berapa banyak bahan/buku ini yang sudah Anda miliki?', val);
+    
+    // Pastikan user tidak menekan 'cancel' dan inputannya adalah angka valid
+	if (inputPrompt !== null) {
+        const amount = parseInt(inputPrompt);
+        if (!isNaN(amount) && amount > 0) {
+            if (!deductions[id]) deductions[id] = 0;
+            deductions[id] += amount;
+            saveDeductions();
+            
+            // Refresh perhitungan kedua pohon
+            processTree(leftTreeId, false);
+            processTree(rightTreeId, true);
+            renderDeductions();
+        }
+    }
 }
 
 function removeDeduction(id) {
