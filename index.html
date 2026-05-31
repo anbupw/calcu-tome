@@ -99,7 +99,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 .menu-toggle-btn { position: fixed; top: 25px; right: 25px; background: var(--accent); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; z-index: 1001; box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: 0.2s ease; }
 .menu-toggle-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
-.vybor { position: fixed; right: 25px; top: 75px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--accent); padding: 20px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); z-index: 1000; width: 320px; max-height: 80vh; overflow-y: auto; }
+.vybor { position: fixed; right: 25px; top: 75px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--accent); padding: 20px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); z-index: 1000; width: 340px; max-height: 80vh; overflow-y: auto; }
 .floating-nav { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed var(--border-color); }
 .floating-nav a { display: flex; align-items: center; gap: 12px; padding: 10px 15px; border-radius: 8px; background: rgba(255, 255, 255, 0.03); color: var(--text-muted); font-weight: 500; font-size: 0.95rem; transition: all 0.2s; }
 .floating-nav a:hover, .floating-nav a.active { background: var(--accent); color: white; text-decoration: none; }
@@ -218,9 +218,16 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
     <h4 style="margin-top: 0; font-size: 0.85rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px;">📁 Kelola Profil Build</h4>
     <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
         <select id="profileSelect" onchange="handleProfileChange(this.value)" style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid var(--border-color); color: white; border-radius: 6px; outline: none; font-family: 'Inter', sans-serif; font-size: 0.85rem; cursor: pointer;"></select>
+        
         <div style="display: flex; gap: 8px;">
             <button class="btn-success" onClick="createNewProfile()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: 600;">💾 Baru</button>
             <button class="btn-danger" onClick="removeCurrentProfile()" style="padding: 6px 10px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-trash"></i></button>
+        </div>
+        
+        <div style="display: flex; gap: 8px; margin-top: 4px;">
+            <button class="btn-primary" onClick="exportProfilesData()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-export"></i> Ekspor</button>
+            <button class="btn-purple" onClick="document.getElementById('importFileInput').click()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-import"></i> Impor</button>
+            <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importProfilesData(event)">
         </div>
     </div>
     
@@ -337,14 +344,6 @@ function loadFromHash() {
             history.replaceState(null, null, ' ');
         } catch(e) {}
     }
-}
-
-function loadDeductions() {
-    try {
-        const saved = localStorage.getItem('tomeDeductions');
-        if (saved) deductions = JSON.parse(saved);
-        if (!Array.isArray(deductions) && typeof deductions !== 'object') deductions = [];
-    } catch (e) { deductions = []; localStorage.removeItem('tomeDeductions'); }
 }
 
 function saveDeductions() { 
@@ -664,7 +663,7 @@ function selectItemForInventory(id) {
     addDeduction(id); 
 }
 
-// LOGIKA JAVASCRIPT PROFIL BUILD (BARU)
+// LOGIKA JAVASCRIPT PROFIL BUILD
 function initProfiles() {
     try {
         const saved = localStorage.getItem('tomeProfiles');
@@ -767,8 +766,53 @@ function removeCurrentProfile() {
     }
 }
 
+// FITUR EXPORT / IMPORT PROFIL
+function exportProfilesData() {
+    const dataStr = JSON.stringify(profiles, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "Tome-Profiles-Backup.json"; 
+    document.body.appendChild(a);
+    a.click();
+    
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function importProfilesData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+            
+            if (typeof importedData === 'object' && importedData !== null) {
+                profiles = { ...profiles, ...importedData };
+                localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
+                
+                renderProfileDropdown();
+                loadProfileData(currentProfile);
+                applyLanguage();
+                
+                alert(currentLang === 'id' ? "Data profil berhasil diimpor!" : "Profile data imported successfully!");
+            } else {
+                alert(currentLang === 'id' ? "Format file tidak valid!" : "Invalid file format!");
+            }
+        } catch (err) {
+            alert(currentLang === 'id' ? "Gagal membaca file JSON!" : "Failed to read JSON file!");
+        }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+}
+
 window.onload = () => {
-    initProfiles(); // Memuat profil aktif terlebih dahulu
+    initProfiles(); 
     loadFromHash(); 
     applyLanguage(); 
     document.getElementById('modalInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') confirmModal(); });
