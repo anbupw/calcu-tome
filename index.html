@@ -90,32 +90,41 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 #strelki { color: var(--accent); font-weight: bold; letter-spacing: 2px; }
 #niz li:first-child { display: none; } 
 
-/* --- UI Pratinjau Status (In-game Style Tooltip) --- */
-.stats-box {
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 15px;
-    margin-bottom: 20px;
-    box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+/* --- UI Floating Tooltip (In-game Style) --- */
+.floating-tooltip {
+    position: fixed;
+    background: rgba(10, 15, 30, 0.95);
+    border: 2px solid #475569;
+    border-radius: 10px;
+    padding: 12px 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 15px rgba(0,0,0,0.6);
+    z-index: 10000;
+    pointer-events: none; /* Mencegah kedipan mouse */
     display: none;
-    animation: fadeIn 0.3s ease;
+    min-width: 230px;
+    max-width: 290px;
+    font-family: 'Inter', sans-serif;
+    backdrop-filter: blur(5px);
 }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-.stats-title {
-    color: #f59e0b;
-    font-size: 1.05rem;
+.tooltip-title {
+    color: #f59e0b; /* Warna Emas */
+    font-size: 1rem;
     font-weight: 700;
-    margin-bottom: 10px;
-    border-bottom: 1px dashed var(--border-color);
-    padding-bottom: 6px;
+    margin-bottom: 4px;
     display: flex;
     align-items: center;
     gap: 8px;
 }
-.stats-list { display: flex; flex-direction: column; gap: 4px; }
-.stat-item { color: #60a5fa; font-size: 0.85rem; font-weight: 600; font-family: monospace; }
-.stat-item-white { color: var(--text-muted); font-size: 0.8rem; font-style: italic; margin-top: 6px; border-top: 1px dashed rgba(255,255,255,0.05); padding-top: 4px; }
+.tooltip-type {
+    color: #94a3b8;
+    font-size: 0.75rem;
+    margin-bottom: 8px;
+    border-bottom: 1px dashed rgba(255,255,255,0.15);
+    padding-bottom: 4px;
+}
+.tooltip-list { display: flex; flex-direction: column; gap: 3px; }
+.tooltip-stat { color: #60a5fa; font-size: 0.85rem; font-weight: 600; font-family: monospace; }
+.tooltip-footer { color: #64748b; font-size: 0.75rem; font-style: italic; margin-top: 8px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 5px; }
 
 /* Footer & Social Icons Styles */
 .footer { margin-top: 40px; padding: 25px 0; border-top: 1px solid var(--border-color); text-align: center; width: 100%; }
@@ -182,9 +191,6 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
                 <div id="progressBar" class="progress-bar"></div>
             </div>
         </div>
-        
-        <div id="targetStatsPanel" class="stats-box"></div>
-        
 		<div id="rightTree" class="branch"></div>
 	</div>
 
@@ -282,10 +288,12 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
     </div>
 </div>
 
+<div id="floatingTooltip" class="floating-tooltip"></div>
+
 <script>
 const LANG = {
-    id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>[Nama Author]</strong>" },
-    en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "📚 Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations, profiles, and start over?", promptCopy: "Copy the link below:", statEquipDesc: "* Bind on Equip.", footerText: "Tome Calculator © 2026 | Created by <strong>[Author Name]</strong>" }
+    id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>[Nama Author]</strong>", matDesc: "Bahan Crafting" },
+    en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations, profiles, and start over?", promptCopy: "Copy the link below:", statEquipDesc: "* Bind on Equip.", footerText: "Tome Calculator © 2026 | Created by <strong>[Author Name]</strong>", matDesc: "Crafting Material" }
 };
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
@@ -322,7 +330,7 @@ TOME_DB[301] = [201, 206, 203, 17593, 'Eat Drink and be Merry']; TOME_DB[302] = 
 TOME_DB[201] = [101, 102, 103, 17584, 'Tome of Water']; TOME_DB[202] = [102, 103, 104, 17585, 'Tome of Fire']; TOME_DB[203] = [103, 104, 105, 17586, 'Tome of Earth']; TOME_DB[204] = [104, 105, 106, 17587, 'Tome of Wood']; TOME_DB[205] = [105, 106, 107, 17588, 'Tome of Metal']; TOME_DB[206] = [106, 107, 108, 17589, 'Tome of Wind']; TOME_DB[207] = [107, 108, 109, 17590, 'Tome of Thunder']; TOME_DB[208] = [108, 109, 101, 17591, 'Tome of Light']; TOME_DB[209] = [109, 101, 102, 17592, 'Tome of Darkness'];
 TOME_DB[101] = [0, 0, 0, 17001, 'Grace']; TOME_DB[102] = [0, 0, 0, 17002, 'Power']; TOME_DB[103] = [0, 0, 0, 17003, 'Courage']; TOME_DB[104] = [0, 0, 0, 17004, 'Wisdom']; TOME_DB[105] = [0, 0, 0, 17005, 'Yin']; TOME_DB[106] = [0, 0, 0, 17006, 'Yang']; TOME_DB[107] = [0, 0, 0, 17007, 'Life']; TOME_DB[108] = [0, 0, 0, 17008, 'Death']; TOME_DB[109] = [0, 0, 0, 17009, 'Void'];
 
-// DATABASE STATS PREVIEW
+// DATABASE STATUS BUKU (LEVEL 6 SEBAGAI CONTOH STATUS EFEK)
 const TOME_STATS = {
     601: ["+15 Str", "+15 Dex", "Crit +1%"], 
     602: ["+15 Mag", "+15 Vit", "Channeling -3%"], 
@@ -351,6 +359,87 @@ let activeModalItemId = null;
 
 let profiles = {};
 let currentProfile = 'Default';
+
+// LOGIKA MANAJEMEN FLOATING TOOLTIP
+function showTooltip(element, event) {
+    const id = parseInt(element.title);
+    if (!TOME_DB[id] && id !== 10 && id !== 11 && id !== 12) return;
+    
+    const tooltip = document.getElementById('floatingTooltip');
+    let nameText = "";
+    let typeText = LANG[currentLang]['matDesc'];
+    let statsHtml = "";
+    
+    if (id === 10) { 
+        nameText = "Token of Luck"; 
+        typeText = currentLang === 'id' ? "Mata Uang Kegiatan" : "Event Currency";
+    } else if (id === 11) { 
+        nameText = "Tome Fragment"; 
+    } else if (id === 12) { 
+        nameText = "Tome Page"; 
+    } else { 
+        nameText = TOME_DB[id][4]; 
+        const lvl = Math.floor(id / 100);
+        typeText = `Tome (${LANG[currentLang]['lvl']} ${lvl})`;
+        
+        // Render Status Tambahan Jika Ada
+        if (TOME_STATS[id]) {
+            TOME_STATS[id].forEach(stat => {
+                statsHtml += `<span class="tooltip-stat">• ${stat}</span>`;
+            });
+        } else {
+            // Placeholder Status untuk Level Lama agar Tetap Terlihat Realistis
+            statsHtml += `<span class="tooltip-stat" style="color:#64748b; font-style:italic; font-size:0.75rem;">• Status default level ${lvl}</span>`;
+        }
+    }
+
+    let html = `
+        <div class="tooltip-title">
+            <span style="display:inline-block; width:32px; height:32px; background-image:url('znachki.png'); ${getSpritePosition(id)}; transform: scale(0.8); pointer-events:none;"></span>
+            ${nameText}
+        </div>
+        <div class="tooltip-type">${typeText}</div>
+        <div class="tooltip-list">${statsHtml}</div>
+        <div class="tooltip-footer">${LANG[currentLang]['statEquipDesc']}</div>
+    `;
+    
+    tooltip.innerHTML = html;
+    tooltip.style.display = 'block';
+    moveTooltip(event);
+    
+    // Sinkronisasi teks info di panel atas kartu kiri
+    let linkUrl = (id === 10) ? "http://www.pwdatabase.com/pwi/items/24722" :
+                  (id === 11) ? "http://www.pwdatabase.com/pwi/items/17011" :
+                  (id === 12) ? "http://www.pwdatabase.com/pwi/items/17010" :
+                  `http://www.pwdatabase.com/pwi/items/${TOME_DB[id][3]}`;
+    document.getElementById('nazvaniye').innerHTML = `<a href="${linkUrl}" target="_blank">► ${nameText}</a>`;
+}
+
+function moveTooltip(event) {
+    const tooltip = document.getElementById('floatingTooltip');
+    if (tooltip.style.display !== 'block') return;
+    
+    let x = event.clientX + 15;
+    let y = event.clientY + 15;
+    
+    const tooltipWidth = tooltip.offsetWidth || 240;
+    const tooltipHeight = tooltip.offsetHeight || 160;
+    
+    // Proteksi batas layar agar kotak tidak tenggelam keluar halaman browser
+    if (x + tooltipWidth > window.innerWidth) {
+        x = event.clientX - tooltipWidth - 15;
+    }
+    if (y + tooltipHeight > window.innerHeight) {
+        y = event.clientY - tooltipHeight - 15;
+    }
+    
+    tooltip.style.left = x + 'px';
+    tooltip.style.top = y + 'px';
+}
+
+function hideTooltip() {
+    document.getElementById('floatingTooltip').style.display = 'none';
+}
 
 function copyShareLink() {
     const compD = {};
@@ -399,20 +488,6 @@ function resetCalculator() {
         history.replaceState(null, null, ' ');
         location.reload();
     }
-}
-
-function showNameTooltip(element) {
-	const id = parseInt(element.title);
-    if (!TOME_DB[id] && id !== 10 && id !== 11 && id !== 12) return;
-    
-    let linkUrl = "";
-    let nameText = "";
-    if (id === 10) { nameText = "Token of Luck"; linkUrl = "http://www.pwdatabase.com/pwi/items/24722"; }
-    else if (id === 11) { nameText = "Tome Fragment"; linkUrl = "http://www.pwdatabase.com/pwi/items/17011"; }
-    else if (id === 12) { nameText = "Tome Page"; linkUrl = "http://www.pwdatabase.com/pwi/items/17010"; }
-    else { nameText = TOME_DB[id][4]; linkUrl = `http://www.pwdatabase.com/pwi/items/${TOME_DB[id][3]}`; }
-
-	document.getElementById('nazvaniye').innerHTML = `<a href="${linkUrl}" target="_blank">► ${nameText}</a>`;
 }
 
 function handleItemClick(element) {
@@ -496,32 +571,6 @@ function filterBooks(query) {
     });
 }
 
-function renderTargetStats(bookId) {
-    const statsPanel = document.getElementById('targetStatsPanel');
-    const statsData = TOME_STATS[bookId];
-    
-    if (!statsData || !TOME_DB[bookId]) {
-        statsPanel.style.display = 'none';
-        return;
-    }
-    
-    const bookName = TOME_DB[bookId][4];
-    const bookLevel = Math.floor(bookId / 100);
-    
-    let html = `<div class="stats-title"><span style="display:inline-block; width:32px; height:32px; background-image:url('znachki.png'); ${getSpritePosition(bookId)}; transform: scale(0.8); pointer-events:none;"></span> ${bookName} (Lv. ${bookLevel})</div>`;
-    html += `<div class="stats-list">`;
-    
-    statsData.forEach(stat => {
-        html += `<span class="stat-item">• ${stat}</span>`;
-    });
-    
-    html += `<span class="stat-item-white">${LANG[currentLang]['statEquipDesc']}</span>`;
-    html += `</div>`;
-    
-    statsPanel.innerHTML = html;
-    statsPanel.style.display = 'block';
-}
-
 function updateCostAndProgress() {
     let price10 = parseInt(document.getElementById('price10').value) || 0;
     let price11 = parseInt(document.getElementById('price11').value) || 0;
@@ -601,7 +650,7 @@ function getTreeItemHtml(id, isDeductionList = false) {
     let actionSpan = isDeductionList ? `<span onClick="removeDeduction(${id});" title="Hapus dari daftar ini"></span>` : `<span onClick="addDeduction(${id});" title="Kurangi dari total"></span>`;
     let clickAction = isDeductionList ? '' : 'onClick="handleItemClick(this)"';
     if (!isDeductionList && (id === 12 || id === 11 || id === 10)) clickAction = '';
-    return `<li>${actionSpan}<button style="${getSpritePosition(id)}" value="${count}" title="${id}" ${clickAction} onMouseOver="showNameTooltip(this);"></button><b>×${count}</b></li>`;
+    return `<li>${actionSpan}<button style="${getSpritePosition(id)}" value="${count}" title="${id}" ${clickAction} onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button><b>×${count}</b></li>`;
 }
 
 function renderTree(isRightTree) {
@@ -643,7 +692,7 @@ function renderMenu() {
     let txt = '';
     for (let r = 6; r >= 1; r--) {
         let lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
-        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="${getSpritePosition(e)}" title="${e}" onClick="processTree(${e}, false)" onMouseOver="showNameTooltip(this);"></button></li>`;
+        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="${getSpritePosition(e)}" title="${e}" onClick="processTree(${e}, false)" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
         txt += `<h4>Tome ${LANG[currentLang]['lvl']} ${r}</h4><ul style="display: flex; flex-wrap: wrap; gap: 8px;"> ${lis}</ul>`;
     }
     document.getElementById('vyborDiv').innerHTML = txt;
@@ -691,10 +740,6 @@ function processTree(id, isRightTree = false) {
         
     renderTree(isRightTree);
     updateCostAndProgress(); 
-    
-    if (isRightTree || id === rightTreeId) {
-        renderTargetStats(rightTreeId);
-    }
 }
 
 function openInventoryModal() {
@@ -713,13 +758,13 @@ function renderInventorySelection(query) {
     const baseMats = [ {id: 12, name: 'Tome Page'}, {id: 11, name: 'Tome Fragment'}, {id: 10, name: 'Token of Luck'} ];
     baseMats.forEach(mat => {
         if (mat.name.toLowerCase().includes(q)) {
-            html += `<li><button style="${getSpritePosition(mat.id)}" title="${mat.id}" onClick="selectItemForInventory(${mat.id})" onMouseOver="showNameTooltip(this);"></button></li>`;
+            html += `<li><button style="${getSpritePosition(mat.id)}" title="${mat.id}" onClick="selectItemForInventory(${mat.id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
         }
     });
 
-    TOME_DB.forEach((tome, id) => {
+	TOME_DB.forEach((tome, id) => {
         if (tome && tome[4].toLowerCase().includes(q)) {
-            html += `<li><button style="${getSpritePosition(id)}" title="${id}" onClick="selectItemForInventory(${id})" onMouseOver="showNameTooltip(this);"></button></li>`;
+            html += `<li><button style="${getSpritePosition(id)}" title="${id}" onClick="selectItemForInventory(${id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
         }
     });
     
