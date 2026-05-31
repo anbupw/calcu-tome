@@ -214,6 +214,16 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
         <a href="#"><span data-i18n="nav2">✨ Simulasi Refine</span></a>
         <a href="#"><span data-i18n="nav3">🤖 Bot Perfect World</span></a>
     </div>
+
+    <h4 style="margin-top: 0; font-size: 0.85rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px;">📁 Kelola Profil Build</h4>
+    <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
+        <select id="profileSelect" onchange="handleProfileChange(this.value)" style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid var(--border-color); color: white; border-radius: 6px; outline: none; font-family: 'Inter', sans-serif; font-size: 0.85rem; cursor: pointer;"></select>
+        <div style="display: flex; gap: 8px;">
+            <button class="btn-success" onClick="createNewProfile()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: 600;">💾 Baru</button>
+            <button class="btn-danger" onClick="removeCurrentProfile()" style="padding: 6px 10px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-trash"></i></button>
+        </div>
+    </div>
+    
 	<div class="panel-actions">
 		<button class="btn-primary" onClick="toggleBookPanel();"><span data-i18n="btnTarget">📚 Pilihan Buku Target</span></button>
 		<button class="btn-success" onClick="copyShareLink()"><span data-i18n="btnShare">🔗 Bagikan Build (Copy Link)</span></button>
@@ -249,8 +259,8 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 <script>
 const LANG = {
-    id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", nav1: "📖 Kalkulator Tome", nav2: "✨ Simulasi Refine", nav3: "🤖 Bot Perfect World", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>[Nama Author]</strong>" },
-    en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", nav1: "📖 Tome Calculator", nav2: "✨ Refine Simulator", nav3: "🤖 Perfect World Bot", btnTarget: "📚 Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations and start over?", promptCopy: "Copy the link below:", footerText: "Tome Calculator © 2026 | Created by <strong>[Author Name]</strong>" }
+    id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", nav1: "📖 Kalkulator Tome", nav2: "✨ Simulasi Refine", nav3: "🤖 Bot Perfect World", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>[Nama Author]</strong>" },
+    en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", nav1: "📖 Tome Calculator", nav2: "✨ Refine Simulator", nav3: "🤖 Perfect World Bot", btnTarget: "📚 Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations, profiles, and start over?", promptCopy: "Copy the link below:", footerText: "Tome Calculator © 2026 | Created by <strong>[Author Name]</strong>" }
 };
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
@@ -294,6 +304,10 @@ let leftTreeId = 616;
 let rightTreeId = 515;
 let activeModalItemId = null;
 
+// Variabel Baru Manajemen Profil
+let profiles = {};
+let currentProfile = 'Default';
+
 function copyShareLink() {
     const compD = {};
     deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
@@ -332,9 +346,16 @@ function loadDeductions() {
         if (!Array.isArray(deductions) && typeof deductions !== 'object') deductions = [];
     } catch (e) { deductions = []; localStorage.removeItem('tomeDeductions'); }
 }
-function saveDeductions() { localStorage.setItem('tomeDeductions', JSON.stringify(deductions)); }
+
+function saveDeductions() { 
+    localStorage.setItem('tomeDeductions', JSON.stringify(deductions)); 
+    saveActiveProfile(); // Simpan ke Profil Aktif
+}
+
 function resetCalculator() {
     if (confirm(LANG[currentLang]['alertReset'])) {
+        localStorage.removeItem('tomeProfiles');
+        localStorage.removeItem('tomeCurrentProfile');
         localStorage.removeItem('tomeDeductions');
         localStorage.removeItem('tomePrice10');
         localStorage.removeItem('tomePrice11');
@@ -447,6 +468,8 @@ function updateCostAndProgress() {
     localStorage.setItem('tomePrice10', price10);
     localStorage.setItem('tomePrice11', price11);
     localStorage.setItem('tomePrice12', price12);
+    
+    saveActiveProfile(); // Auto-save ke profil aktif saat harga diubah
 
     let netCounts = [];
     let dedCopy = [...deductions];
@@ -570,7 +593,7 @@ function calculateNode(id) {
 		deductionsCopy[id]--;
 	} else {
 		itemCounts[id]++;
-		if (id > 200) { calculateNode(TOME_DB[id][0]); calculateNode(TOME_DB[id][1]); calculateNode(TOME_DB[id][2]); }
+		if (id > 200) { calculateNode(TOME_DB[nodeId = id][0]); calculateNode(TOME_DB[id][1]); calculateNode(TOME_DB[id][2]); }
 	}
 }
 
@@ -604,7 +627,6 @@ function processTree(id, isRightTree = false) {
     updateCostAndProgress(); 
 }
 
-/* JAVASCRIPT INVENTORY BARU */
 function openInventoryModal() {
     document.getElementById('inventoryModal').style.display = 'flex';
     document.getElementById('invSearch').value = '';
@@ -642,12 +664,112 @@ function selectItemForInventory(id) {
     addDeduction(id); 
 }
 
-window.onload = () => {
-    loadDeductions(); loadFromHash(); 
-    document.getElementById('price10').value = localStorage.getItem('tomePrice10') || 0;
-    document.getElementById('price11').value = localStorage.getItem('tomePrice11') || 0;
-    document.getElementById('price12').value = localStorage.getItem('tomePrice12') || 0;
+// LOGIKA JAVASCRIPT PROFIL BUILD (BARU)
+function initProfiles() {
+    try {
+        const saved = localStorage.getItem('tomeProfiles');
+        if (saved) profiles = JSON.parse(saved);
+    } catch (e) { profiles = {}; }
+    
+    if (!profiles['Default']) {
+        profiles['Default'] = { l: 616, r: 515, m: 1, d: [], p10: 0, p11: 0, p12: 0 };
+    }
+    
+    currentProfile = localStorage.getItem('tomeCurrentProfile') || 'Default';
+    if (!profiles[currentProfile]) currentProfile = 'Default';
+    
+    loadProfileData(currentProfile);
+    renderProfileDropdown();
+}
 
+function renderProfileDropdown() {
+    const select = document.getElementById('profileSelect');
+    if (!select) return;
+    select.innerHTML = '';
+    for (let name in profiles) {
+        let opt = document.createElement('option');
+        opt.value = name;
+        opt.innerText = name;
+        if (name === currentProfile) opt.selected = true;
+        select.appendChild(opt);
+    }
+}
+
+function loadProfileData(name) {
+    currentProfile = name;
+    localStorage.setItem('tomeCurrentProfile', name);
+    
+    const data = profiles[name];
+    leftTreeId = data.l || 616;
+    rightTreeId = data.r || 515;
+    document.getElementById('mnojitel').value = data.m || 1;
+    deductions = data.d || [];
+    
+    document.getElementById('price10').value = data.p10 || 0;
+    document.getElementById('price11').value = data.p11 || 0;
+    document.getElementById('price12').value = data.p12 || 0;
+    
+    localStorage.setItem('tomeDeductions', JSON.stringify(deductions));
+    localStorage.setItem('tomePrice10', data.p10 || 0);
+    localStorage.setItem('tomePrice11', data.p11 || 0);
+    localStorage.setItem('tomePrice12', data.p12 || 0);
+}
+
+function handleProfileChange(name) {
+    loadProfileData(name);
+    applyLanguage();
+}
+
+function saveActiveProfile() {
+    let p10 = parseInt(document.getElementById('price10').value) || 0;
+    let p11 = parseInt(document.getElementById('price11').value) || 0;
+    let p12 = parseInt(document.getElementById('price12').value) || 0;
+    let m = parseInt(document.getElementById('mnojitel').value) || 1;
+
+    profiles[currentProfile] = {
+        l: leftTreeId,
+        r: rightTreeId,
+        m: m,
+        d: deductions,
+        p10: p10,
+        p11: p11,
+        p12: p12
+    };
+    localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
+}
+
+function createNewProfile() {
+    let name = prompt("Masukkan nama profil baru (misal: Mage DPS, Alt Cleric):");
+    if (!name) return;
+    name = name.trim();
+    if (name === "") return;
+    if (profiles[name]) { alert("Nama profil tersebut sudah ada!"); return; }
+    
+    currentProfile = name;
+    saveActiveProfile();
+    renderProfileDropdown();
+    loadProfileData(name);
+    applyLanguage();
+}
+
+function removeCurrentProfile() {
+    if (currentProfile === 'Default') {
+        alert("Profil 'Default' sistem tidak dapat dihapus.");
+        return;
+    }
+    if (confirm(`Apakah Anda yakin ingin menghapus profil "${currentProfile}" beserta seluruh data di dalamnya?`)) {
+        delete profiles[currentProfile];
+        localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
+        currentProfile = 'Default';
+        loadProfileData('Default');
+        renderProfileDropdown();
+        applyLanguage();
+    }
+}
+
+window.onload = () => {
+    initProfiles(); // Memuat profil aktif terlebih dahulu
+    loadFromHash(); 
     applyLanguage(); 
     document.getElementById('modalInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') confirmModal(); });
 };
