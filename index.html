@@ -96,37 +96,9 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 #niz li:first-child { display: none; } 
 
 /* --- UI Floating Tooltip (In-game Style) --- */
-.floating-tooltip {
-    position: fixed;
-    background: rgba(10, 15, 30, 0.96);
-    border: 2px solid #475569;
-    border-radius: 10px;
-    padding: 14px 18px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.85), inset 0 0 15px rgba(0,0,0,0.7);
-    z-index: 10000;
-    pointer-events: none; 
-    display: none;
-    min-width: 240px;
-    max-width: 300px;
-    font-family: 'Inter', sans-serif;
-    backdrop-filter: blur(6px);
-}
-.tooltip-title {
-    color: #f59e0b; 
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 5px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.tooltip-type {
-    color: #94a3b8;
-    font-size: 0.75rem;
-    margin-bottom: 10px;
-    border-bottom: 1px dashed rgba(255,255,255,0.15);
-    padding-bottom: 5px;
-}
+.floating-tooltip { position: fixed; background: rgba(10, 15, 30, 0.96); border: 2px solid #475569; border-radius: 10px; padding: 14px 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.85), inset 0 0 15px rgba(0,0,0,0.7); z-index: 10000; pointer-events: none; display: none; min-width: 240px; max-width: 300px; font-family: 'Inter', sans-serif; backdrop-filter: blur(6px); }
+.tooltip-title { color: #f59e0b; font-size: 1rem; font-weight: 700; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
+.tooltip-type { color: #94a3b8; font-size: 0.75rem; margin-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.15); padding-bottom: 5px; }
 .tooltip-list { display: flex; flex-direction: column; gap: 4px; }
 .tooltip-stat { color: #60a5fa; font-size: 0.85rem; font-weight: 600; }
 .tooltip-footer { color: #64748b; font-size: 0.75rem; font-style: italic; margin-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 6px; }
@@ -328,13 +300,14 @@ function toggleLanguage() {
     applyLanguage();
 }
 
+/* Format Array: [Req1, Req2, Req3, PW_Item_ID, Nama_English, Nama_Indonesia] */
 const TOME_DB = [];
-TOME_DB[601] = [501, 502, 509, 17615, 'The Calm of Ice']; TOME_DB[602] = [502, 503, 505, 17622, 'The Khatru']; TOME_DB[603] = [504, 503, 508, 17628, 'A Carmine Tear']; TOME_DB[604] = [503, 508, 501, 17630, 'The Fruit of Intense Labor']; TOME_DB[605] = [505, 512, 509, 17634, 'Tomorrows Phoenix']; TOME_DB[606] = [505, 506, 507, 17636, 'Riding the Scree']; TOME_DB[607] = [513, 514, 507, 17642, 'Turning the Tide']; TOME_DB[608] = [508, 506, 514, 17649, 'Existential Woe']; TOME_DB[609] = [510, 501, 505, 17655, 'Book of Fragrances']; TOME_DB[610] = [510, 506, 501, 17657, 'Bouquet of Regrets']; TOME_DB[611] = [511, 509, 505, 17661, 'The Union']; TOME_DB[612] = [511, 513, 503, 17663, 'Oblivious Enlightenment']; TOME_DB[613] = [513, 07, 514, 17669, 'As the Universe Fades']; TOME_DB[614] = [514, 512, 513, 17676, 'The Concubines Laugh']; TOME_DB[615] = [515, 501, 507, 17679, 'The Academy of the East']; TOME_DB[616] = [516, 515, 514, 17683, 'Pan Gu Creator'];
-TOME_DB[501] = [401, 408, 405, 17618, 'A Heart like Still Water']; TOME_DB[502] = [409, 405, 403, 17621, 'The Tsunamis of Yore']; TOME_DB[503] = [404, 408, 401, 17624, 'Laughing Mad']; TOME_DB[504] = [408, 404, 401, 17627, 'The Book of Congratulations']; TOME_DB[505] = [403, 409, 404, 17633, 'The Wrath of Heaven']; TOME_DB[506] = [409, 403, 402, 17639, 'A Strange Kindness']; TOME_DB[507] = [402, 404, 409, 17645, 'Flesh of the Lamia']; TOME_DB[508] = [404, 408, 402, 17648, 'Everything is Emptiness']; TOME_DB[509] = [403, 401, 405, 17651, 'The Oasis Remembered']; TOME_DB[510] = [401, 405, 407, 17654, 'The Heavenly Scent']; TOME_DB[511] = [403, 409, 404, 17660, 'Debt and Tombstones']; TOME_DB[512] = [409, 403, 404, 17666, 'Endless Waves']; TOME_DB[513] = [408, 402, 404, 17672, 'Parting Grief']; TOME_DB[514] = [408, 402, 404, 17675, 'Rouge and Red Lips']; TOME_DB[515] = [406, 407, 401, 17678, 'Gang of Hooligans']; TOME_DB[516] = [406, 407, 401, 17682, 'The Voidlands'];
-TOME_DB[401] = [303, 307, 304, 17602, 'Burning Desire']; TOME_DB[402] = [304, 301, 305, 17603, 'Tome of Predestination']; TOME_DB[403] = [302, 305, 303, 17604, 'The Roses Thorn']; TOME_DB[404] = [306, 307, 301, 17605, 'Letters of Social Unrest']; TOME_DB[405] = [303, 307, 306, 17606, 'The Appetites of Spring']; TOME_DB[406] = [308, 205, 207, 17610, 'The Rivers Edge']; TOME_DB[407] = [309, 302, 306, 17614, 'The Weak Stream of Many Miles']; TOME_DB[408] = [301, 304, 302, 17600, 'Battle Tactics']; TOME_DB[409] = [302, 305, 303, 17601, 'A Bewitching Proposal'];
-TOME_DB[301] = [201, 206, 203, 17593, 'Eat Drink and be Merry']; TOME_DB[302] = [202, 205, 206, 17594, 'Sunset Tales']; TOME_DB[303] = [207, 203, 202, 17595, 'Adventures and Mishaps']; TOME_DB[304] = [204, 201, 203, 17596, 'The Sunny Pass']; TOME_DB[305] = [205, 202, 201, 17597, 'Tales of Beauty']; TOME_DB[306] = [206, 203, 201, 17598, 'The Bards Wanderlust']; TOME_DB[307] = [207, 205, 204, 17599, 'A Poets Musings']; TOME_DB[308] = [208, 202, 204, 17609, 'Decaying Tome']; TOME_DB[309] = [209, 203, 202, 17613, 'Scene of Carnage'];
-TOME_DB[201] = [101, 102, 103, 17584, 'Tome of Water']; TOME_DB[202] = [102, 103, 104, 17585, 'Tome of Fire']; TOME_DB[203] = [103, 104, 105, 17586, 'Tome of Earth']; TOME_DB[204] = [104, 105, 106, 17587, 'Tome of Wood']; TOME_DB[205] = [105, 106, 107, 17588, 'Tome of Metal']; TOME_DB[206] = [106, 107, 108, 17589, 'Tome of Wind']; TOME_DB[207] = [107, 108, 109, 17590, 'Tome of Thunder']; TOME_DB[208] = [108, 109, 101, 17591, 'Tome of Light']; TOME_DB[209] = [109, 101, 102, 17592, 'Tome of Darkness'];
-TOME_DB[101] = [0, 0, 0, 17001, 'Grace']; TOME_DB[102] = [0, 0, 0, 17002, 'Power']; TOME_DB[103] = [0, 0, 0, 17003, 'Courage']; TOME_DB[104] = [0, 0, 0, 17004, 'Wisdom']; TOME_DB[105] = [0, 0, 0, 17005, 'Yin']; TOME_DB[106] = [0, 0, 0, 17006, 'Yang']; TOME_DB[107] = [0, 0, 0, 17007, 'Life']; TOME_DB[108] = [0, 0, 0, 17008, 'Death']; TOME_DB[109] = [0, 0, 0, 17009, 'Void'];
+TOME_DB[601] = [501, 502, 509, 17615, 'The Calm of Ice', 'Ketenangan Es']; TOME_DB[602] = [502, 503, 505, 17622, 'The Khatru', 'Khatru']; TOME_DB[603] = [504, 503, 508, 17628, 'A Carmine Tear', 'Air Mata Carmine']; TOME_DB[604] = [503, 508, 501, 17630, 'The Fruit of Intense Labor', 'Buah Kerja Keras']; TOME_DB[605] = [505, 512, 509, 17634, 'Tomorrows Phoenix', 'Phoenix Esok']; TOME_DB[606] = [505, 506, 507, 17636, 'Riding the Scree', 'Menunggangi Scree']; TOME_DB[607] = [513, 514, 507, 17642, 'Turning the Tide', 'Membalikkan Keadaan']; TOME_DB[608] = [508, 506, 514, 17649, 'Existential Woe', 'Penderitaan Eksistensial']; TOME_DB[609] = [510, 501, 505, 17655, 'Book of Fragrances', 'Buku Wewangian']; TOME_DB[610] = [510, 506, 501, 17657, 'Bouquet of Regrets', 'Buket Penyesalan']; TOME_DB[611] = [511, 509, 505, 17661, 'The Union', 'Persatuan']; TOME_DB[612] = [511, 513, 503, 17663, 'Oblivious Enlightenment', 'Pencerahan Tanpa Sadar']; TOME_DB[613] = [513, 507, 514, 17669, 'As the Universe Fades', 'Seiring Pudar Semesta']; TOME_DB[614] = [514, 512, 513, 17676, 'The Concubines Laugh', 'Tawa Selir']; TOME_DB[615] = [515, 501, 507, 17679, 'The Academy of the East', 'Akademi Timur']; TOME_DB[616] = [516, 515, 514, 17683, 'Pan Gu Creator', 'Pencipta Pan Gu'];
+TOME_DB[501] = [401, 408, 405, 17618, 'A Heart like Still Water', 'Hati Setenang Air']; TOME_DB[502] = [409, 405, 403, 17621, 'The Tsunamis of Yore', 'Tsunami Masa Lalu']; TOME_DB[503] = [404, 408, 401, 17624, 'Laughing Mad', 'Tertawa Gila']; TOME_DB[504] = [408, 404, 401, 17627, 'The Book of Congratulations', 'Buku Ucapan Selamat']; TOME_DB[505] = [403, 409, 404, 17633, 'The Wrath of Heaven', 'Kemurkaan Surga']; TOME_DB[506] = [409, 403, 402, 17639, 'A Strange Kindness', 'Kebaikan Aneh']; TOME_DB[507] = [402, 404, 409, 17645, 'Flesh of the Lamia', 'Daging Lamia']; TOME_DB[508] = [404, 408, 402, 17648, 'Everything is Emptiness', 'Segalanya Kosong']; TOME_DB[509] = [403, 401, 405, 17651, 'The Oasis Remembered', 'Oasis yang Dikenang']; TOME_DB[510] = [401, 405, 407, 17654, 'The Heavenly Scent', 'Aroma Surgawi']; TOME_DB[511] = [403, 409, 404, 17660, 'Debt and Tombstones', 'Hutang dan Batu Nisan']; TOME_DB[512] = [409, 403, 404, 17666, 'Endless Waves', 'Gelombang Tak Berujung']; TOME_DB[513] = [408, 402, 404, 17672, 'Parting Grief', 'Kesedihan Perpisahan']; TOME_DB[514] = [408, 402, 404, 17675, 'Rouge and Red Lips', 'Pemerah dan Bibir Merah']; TOME_DB[515] = [406, 407, 401, 17678, 'Gang of Hooligans', 'Kawanan Preman']; TOME_DB[516] = [406, 407, 401, 17682, 'The Voidlands', 'Tanah Kehampaan'];
+TOME_DB[401] = [303, 307, 304, 17602, 'Burning Desire', 'Hasrat Membara']; TOME_DB[402] = [304, 301, 305, 17603, 'Tome of Predestination', 'Buku Takdir']; TOME_DB[403] = [302, 305, 303, 17604, 'The Roses Thorn', 'Duri Mawar']; TOME_DB[404] = [306, 307, 301, 17605, 'Letters of Social Unrest', 'Surat Keresahan Sosial']; TOME_DB[405] = [303, 307, 306, 17606, 'The Appetites of Spring', 'Nafsu Musim Semi']; TOME_DB[406] = [308, 205, 207, 17610, 'The Rivers Edge', 'Tepi Sungai']; TOME_DB[407] = [309, 302, 306, 17614, 'The Weak Stream of Many Miles', 'Aliran Lemah Berjuta Mil']; TOME_DB[408] = [301, 304, 302, 17600, 'Battle Tactics', 'Taktik Pertempuran']; TOME_DB[409] = [302, 305, 303, 17601, 'A Bewitching Proposal', 'Proposal Mempesona'];
+TOME_DB[301] = [201, 206, 203, 17593, 'Eat Drink and be Merry', 'Makan, Minum, Bersenang-senang']; TOME_DB[302] = [202, 205, 206, 17594, 'Sunset Tales', 'Kisah Senja']; TOME_DB[303] = [207, 203, 202, 17595, 'Adventures and Mishaps', 'Petualangan dan Kesialan']; TOME_DB[304] = [204, 201, 203, 17596, 'The Sunny Pass', 'Celah Cerah']; TOME_DB[305] = [205, 202, 201, 17597, 'Tales of Beauty', 'Kisah Kecantikan']; TOME_DB[306] = [206, 203, 201, 17598, 'The Bards Wanderlust', 'Hasrat Mengembara Penyair']; TOME_DB[307] = [207, 205, 204, 17599, 'A Poets Musings', 'Renungan Penyair']; TOME_DB[308] = [208, 202, 204, 17609, 'Decaying Tome', 'Buku Membusuk']; TOME_DB[309] = [209, 203, 202, 17613, 'Scene of Carnage', 'Pemandangan Pembantaian'];
+TOME_DB[201] = [101, 102, 103, 17584, 'Tome of Water', 'Buku Air']; TOME_DB[202] = [102, 103, 104, 17585, 'Tome of Fire', 'Buku Api']; TOME_DB[203] = [103, 104, 105, 17586, 'Tome of Earth', 'Buku Tanah']; TOME_DB[204] = [104, 105, 106, 17587, 'Tome of Wood', 'Buku Kayu']; TOME_DB[205] = [105, 106, 107, 17588, 'Tome of Metal', 'Buku Logam']; TOME_DB[206] = [106, 107, 108, 17589, 'Tome of Wind', 'Buku Angin']; TOME_DB[207] = [107, 108, 109, 17590, 'Tome of Thunder', 'Buku Petir']; TOME_DB[208] = [108, 109, 101, 17591, 'Tome of Light', 'Buku Cahaya']; TOME_DB[209] = [109, 101, 102, 17592, 'Tome of Darkness', 'Buku Kegelapan'];
+TOME_DB[101] = [0, 0, 0, 17001, 'Grace', 'Karunia']; TOME_DB[102] = [0, 0, 0, 17002, 'Power', 'Kekuatan']; TOME_DB[103] = [0, 0, 0, 17003, 'Courage', 'Keberanian']; TOME_DB[104] = [0, 0, 0, 17004, 'Wisdom', 'Kebijaksanaan']; TOME_DB[105] = [0, 0, 0, 17005, 'Yin', 'Yin']; TOME_DB[106] = [0, 0, 0, 17006, 'Yang', 'Yang']; TOME_DB[107] = [0, 0, 0, 17007, 'Life', 'Kehidupan']; TOME_DB[108] = [0, 0, 0, 17008, 'Death', 'Kematian']; TOME_DB[109] = [0, 0, 0, 17009, 'Void', 'Kekosongan'];
 
 const TOME_STATS = {
     101: ["+5 Magic"], 102: ["+5 Strength"], 103: ["+5 Dexterity"], 104: ["+5 Vitality"], 105: ["HP Regeneration +3", "Exp Gain +1%"], 106: ["MP Regeneration +3", "Exp Gain +1%"], 107: ["+4 Strength", "+3 Vitality"], 108: ["+4 Dexterity", "+3 Vitality"], 109: ["+4 Magic", "+3 Vitality"],
@@ -345,15 +318,21 @@ const TOME_STATS = {
     601: ["+15 Strength", "+15 Dexterity", "Critical Hit Rate +1%"], 602: ["+15 Magic", "+15 Vitality", "Channelling -3%"], 603: ["+15 Strength", "+15 Vitality", "Maximum HP +150"], 604: ["+20 Dexterity", "Attack Interval -0.05", "Movement Speed +0.10"], 605: ["+20 Magic", "Channelling -3", "Maximum MP +200"], 606: ["+20 Strength", "Critical Hit Rate +1%", "Physical Attack +30"], 607: ["+20 Vitality", "Maximum HP +200", "Physical Defense +50"], 608: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"], 609: ["+15 Dexterity", "+15 Vitality", "Critical Hit Rate +1%"], 610: ["+15 Magic", "+15 Dexterity", "Channelling -3%"], 611: ["+15 Strength", "+15 Magic", "Physical Attack +20"], 612: ["+25 Magic", "Channelling -3%"], 613: ["+25 Strength", "Critical Hit Rate +1%"], 614: ["+25 Dexterity", "Attack Interval -0.05"], 615: ["+20 Magic", "+20 Dexterity", "Channelling -3%", "Critical Hit Rate +1%"], 616: ["+20 Strength", "+20 Dexterity", "+20 Magic", "+20 Vitality", "Critical Hit Rate +1%"]
 };
 
-let itemCounts = [];       
+// State Manager
+let leftCounts = [];       
+let rightCounts = [];      
 let deductions = [];       
-let deductionsCopy = [];   
 let leftTreeId = 616;
 let rightTreeId = 515;
 let activeModalItemId = null;
-
 let profiles = {};
 let currentProfile = 'Default';
+
+// Helper Ambil Nama Multi-Bahasa
+function getTomeName(id) {
+    if (!TOME_DB[id]) return '';
+    return currentLang === 'id' ? TOME_DB[id][5] : TOME_DB[id][4];
+}
 
 function showTooltip(element, event) {
     const id = parseInt(element.title);
@@ -372,7 +351,7 @@ function showTooltip(element, event) {
     } else if (id === 12) { 
         nameText = "Tome Page"; 
     } else { 
-        nameText = TOME_DB[id][4]; 
+        nameText = getTomeName(id); 
         const lvl = Math.floor(id / 100);
         typeText = `Tome (${LANG[currentLang]['lvl']} ${lvl})`;
         
@@ -407,27 +386,13 @@ function showTooltip(element, event) {
 function moveTooltip(event) {
     const tooltip = document.getElementById('floatingTooltip');
     if (tooltip.style.display !== 'block') return;
-    
-    let x = event.clientX + 15;
-    let y = event.clientY + 15;
-    
-    const tooltipWidth = tooltip.offsetWidth || 240;
-    const tooltipHeight = tooltip.offsetHeight || 160;
-    
-    if (x + tooltipWidth > window.innerWidth) {
-        x = event.clientX - tooltipWidth - 15;
-    }
-    if (y + tooltipHeight > window.innerHeight) {
-        y = event.clientY - tooltipHeight - 15;
-    }
-    
-    tooltip.style.left = x + 'px';
-    tooltip.style.top = y + 'px';
+    let x = event.clientX + 15; let y = event.clientY + 15;
+    const tooltipWidth = tooltip.offsetWidth || 240; const tooltipHeight = tooltip.offsetHeight || 160;
+    if (x + tooltipWidth > window.innerWidth) x = event.clientX - tooltipWidth - 15;
+    if (y + tooltipHeight > window.innerHeight) y = event.clientY - tooltipHeight - 15;
+    tooltip.style.left = x + 'px'; tooltip.style.top = y + 'px';
 }
-
-function hideTooltip() {
-    document.getElementById('floatingTooltip').style.display = 'none';
-}
+function hideTooltip() { document.getElementById('floatingTooltip').style.display = 'none'; }
 
 function copyShareLink() {
     const compD = {};
@@ -460,21 +425,12 @@ function loadFromHash() {
     }
 }
 
-function saveDeductions() { 
-    localStorage.setItem('tomeDeductions', JSON.stringify(deductions)); 
-    saveActiveProfile(); 
-}
+function saveDeductions() { localStorage.setItem('tomeDeductions', JSON.stringify(deductions)); saveActiveProfile(); }
 
 function resetCalculator() {
     if (confirm(LANG[currentLang]['alertReset'])) {
-        localStorage.removeItem('tomeProfiles');
-        localStorage.removeItem('tomeCurrentProfile');
-        localStorage.removeItem('tomeDeductions');
-        localStorage.removeItem('tomePrice10');
-        localStorage.removeItem('tomePrice11');
-        localStorage.removeItem('tomePrice12');
-        history.replaceState(null, null, ' ');
-        location.reload();
+        localStorage.removeItem('tomeProfiles'); localStorage.removeItem('tomeCurrentProfile'); localStorage.removeItem('tomeDeductions'); localStorage.removeItem('tomePrice10'); localStorage.removeItem('tomePrice11'); localStorage.removeItem('tomePrice12');
+        history.replaceState(null, null, ' '); location.reload();
     }
 }
 
@@ -482,21 +438,19 @@ function handleItemClick(element) {
     let clickedId = parseInt(element.title);
     if (!TOME_DB[clickedId]) return;
 
-	document.getElementById('mnojitel').value = 1;
-	
+    document.getElementById('mnojitel').value = 1;
+    // Update Right Tree dan Trigger render ulang keduanya
     processTree(clickedId, true);
+    processTree(leftTreeId, false);
     updateRightTreeHeader();
 }
 
 function updateRightTreeHeader() {
     const header = document.getElementById('rightTreeHeader');
     if (!header) return;
-    
     if (TOME_DB[rightTreeId]) {
-        header.innerHTML = `${LANG[currentLang]['title2']} <span style="color:#f59e0b; font-size:0.95rem; font-weight:600;">(🔍 ${TOME_DB[rightTreeId][4]})</span>`;
-    } else {
-        header.innerHTML = LANG[currentLang]['title2'];
-    }
+        header.innerHTML = `${LANG[currentLang]['title2']} <span style="color:#f59e0b; font-size:0.95rem; font-weight:600;">(🔍 ${getTomeName(rightTreeId)})</span>`;
+    } else header.innerHTML = LANG[currentLang]['title2'];
 }
 
 function addDeduction(id) {
@@ -507,7 +461,7 @@ function addDeduction(id) {
     if (id === 10) itemName = "Token of Luck";
     else if (id === 11) itemName = "Tome Fragment";
     else if (id === 12) itemName = "Tome Page";
-    else if (TOME_DB[id]) itemName = TOME_DB[id][4];
+    else if (TOME_DB[id]) itemName = getTomeName(id);
 
     document.getElementById('modalTitle').innerText = itemName;
     document.getElementById('modalInput').value = btn ? btn.value : 1;
@@ -531,11 +485,7 @@ function confirmModal() {
 }
 
 function removeDeduction(id) {
-    deductions[id] = 0;
-    saveDeductions();
-    processTree(leftTreeId, false);
-    processTree(rightTreeId, true);
-    renderDeductions();
+    deductions[id] = 0; saveDeductions(); processTree(leftTreeId, false); processTree(rightTreeId, true); renderDeductions();
 }
 
 function getSpritePosition(id) { 
@@ -549,11 +499,9 @@ function getSpritePosition(id) {
 }
 
 function toggleBookPanel() {
-    const panel = document.getElementById('vyborDiv');
-    const search = document.getElementById('bookSearch');
+    const panel = document.getElementById('vyborDiv'); const search = document.getElementById('bookSearch');
     const isHidden = panel.style.display === 'none';
-    panel.style.display = isHidden ? 'block' : 'none';
-    search.style.display = isHidden ? 'block' : 'none';
+    panel.style.display = isHidden ? 'block' : 'none'; search.style.display = isHidden ? 'block' : 'none';
     if(isHidden) search.focus();
 }
 
@@ -563,7 +511,7 @@ function filterBooks(query) {
         let hasVisibleItem = false;
         ul.querySelectorAll('li').forEach(li => {
             const id = li.querySelector('button').title;
-            const bookName = TOME_DB[id] ? TOME_DB[id][4].toLowerCase() : '';
+            const bookName = TOME_DB[id] ? getTomeName(id).toLowerCase() : '';
             if (bookName.includes(q)) { li.style.display = 'inline-block'; hasVisibleItem = true; } 
             else li.style.display = 'none';
         });
@@ -578,14 +526,8 @@ function updateCostAndProgress() {
     let price11 = Math.max(0, parseInt(document.getElementById('price11').value) || 0);
     let price12 = Math.max(0, parseInt(document.getElementById('price12').value) || 0);
     
-    document.getElementById('price10').value = price10;
-    document.getElementById('price11').value = price11;
-    document.getElementById('price12').value = price12;
-    
-    localStorage.setItem('tomePrice10', price10);
-    localStorage.setItem('tomePrice11', price11);
-    localStorage.setItem('tomePrice12', price12);
-    
+    document.getElementById('price10').value = price10; document.getElementById('price11').value = price11; document.getElementById('price12').value = price12;
+    localStorage.setItem('tomePrice10', price10); localStorage.setItem('tomePrice11', price11); localStorage.setItem('tomePrice12', price12);
     saveActiveProfile(); 
 
     let netCounts = [];
@@ -594,9 +536,9 @@ function updateCostAndProgress() {
 
     function calcNetNode(nodeId) {
         if (!netCounts[nodeId]) netCounts[nodeId] = 0;
+        // Kurangi node ini jika ada di inventory tanpa mengurai ke bahan bakunya
         if (dedCopy[nodeId] && dedCopy[nodeId] > 0) {
-            dedCopy[nodeId]--;
-            return; 
+            dedCopy[nodeId]--; return; 
         }
         netCounts[nodeId]++;
         if (nodeId > 200) { 
@@ -608,11 +550,12 @@ function updateCostAndProgress() {
 
     for (let z = 0; z < multiplier; z++) calcNetNode(rightTreeId);
 
-    let netBaseMats = 0;
-    for (let z = 101; z <= 109; z++) if (netCounts[z]) netBaseMats += netCounts[z] * 3;
+    let netBaseMatsCount = 0; // Total Buku Level 1 yang perlu dicraft
+    for (let z = 101; z <= 109; z++) if (netCounts[z]) netBaseMatsCount += netCounts[z];
     
-    netCounts[12] = netBaseMats; if (deductions[12]) netCounts[12] -= deductions[12]; if (netCounts[12] < 0) netCounts[12] = 0;
-    netCounts[11] = netBaseMats; if (deductions[11]) netCounts[11] -= deductions[11]; if (netCounts[11] < 0) netCounts[11] = 0;
+    // Perhitungan Recipe Asli PW: 1 Tome Lv1 = 4 Pages + 3 Fragments
+    netCounts[11] = netBaseMatsCount * 3; if (deductions[11]) netCounts[11] -= deductions[11]; if (netCounts[11] < 0) netCounts[11] = 0;
+    netCounts[12] = netBaseMatsCount * 4; if (deductions[12]) netCounts[12] -= deductions[12]; if (netCounts[12] < 0) netCounts[12] = 0;
     netCounts[10] = netCounts[12] * 80; if (deductions[10]) netCounts[10] -= deductions[10]; if (netCounts[10] < 0) netCounts[10] = 0;
 
     let grossCounts = [];
@@ -624,8 +567,11 @@ function updateCostAndProgress() {
     for (let z = 0; z < multiplier; z++) calcGrossNode(rightTreeId);
     
     let grossBaseMats = 0;
-    for (let z = 101; z <= 109; z++) if (grossCounts[z]) grossBaseMats += grossCounts[z] * 3;
-    grossCounts[11] = grossBaseMats; grossCounts[12] = grossBaseMats; grossCounts[10] = grossBaseMats * 80;
+    for (let z = 101; z <= 109; z++) if (grossCounts[z]) grossBaseMats += grossCounts[z];
+    
+    grossCounts[11] = grossBaseMats * 3; 
+    grossCounts[12] = grossBaseMats * 4; 
+    grossCounts[10] = grossCounts[12] * 80;
 
     let totalCost = (netCounts[10] || 0) * price10 + (netCounts[11] || 0) * price11 + (netCounts[12] || 0) * price12;
     document.getElementById('totalCostDisplay').innerText = totalCost.toLocaleString('id-ID') + " Gold";
@@ -647,17 +593,20 @@ function updateCostAndProgress() {
 
 function exportToImage(e) {
     const btn = e.currentTarget || document.querySelector('button[onClick*="exportToImage"]');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = "⏳ Memproses...";
+    const originalText = btn.innerHTML; btn.innerHTML = "⏳ Memproses...";
     html2canvas(document.querySelector('.container'), { backgroundColor: "#0f172a", scale: 2, logging: false, useCORS: true }).then(canvas => {
         const link = document.createElement('a'); link.download = 'Tome-Build-Export.png'; link.href = canvas.toDataURL('image/png'); link.click(); btn.innerHTML = originalText;
     }).catch(() => { btn.innerHTML = "❌ Gagal!"; setTimeout(() => btn.innerHTML = originalText, 2000); });
 }
 
-function getTreeItemHtml(id, isDeductionList = false) {
-    const count = isDeductionList ? deductions[id] : itemCounts[id];
-    let actionSpan = isDeductionList ? `<span onClick="removeDeduction(${id});" title="Hapus dari daftar ini"></span>` : `<span onClick="addDeduction(${id});" title="Kurangi dari total"></span>`;
+function getTreeItemHtml(id, isDeductionList = false, isRightTree = false) {
+    let count = 0;
+    if (isDeductionList) count = deductions[id];
+    else count = isRightTree ? rightCounts[id] : leftCounts[id];
     
+    if (!count) return ''; // Lewati yang kosong
+    
+    let actionSpan = isDeductionList ? `<span onClick="removeDeduction(${id});" title="Hapus dari daftar ini"></span>` : `<span onClick="addDeduction(${id});" title="Kurangi dari total"></span>`;
     let clickAction = 'onClick="handleItemClick(this)"';
     if (isDeductionList || id === 12 || id === 11 || id === 10) clickAction = '';
     
@@ -668,32 +617,33 @@ function renderTree(isRightTree) {
 	let txt = '';
     const txtLvl = LANG[currentLang]['lvl'];
     const txtBase = LANG[currentLang]['baseMat'];
+    let arrCounts = isRightTree ? rightCounts : leftCounts;
 
 	for (let r = 6; r >= 1; r--) {
 		let start = r * 100 + 1; let end = r * 100 + 16; let hasItem = false;
 		let tempTxt = `<ul><li>${txtLvl} ${r}</li> `;
 		for (let e = start; e <= end; e++) {
-			if (itemCounts[e]) { tempTxt += getTreeItemHtml(e, isRightTree ? false : false); hasItem = true; }
+			if (arrCounts[e]) { tempTxt += getTreeItemHtml(e, false, isRightTree); hasItem = true; }
 		}
 		tempTxt += '</ul>';
 		if (hasItem) txt += tempTxt;
 	}
 	
 	txt += `<ul id="niz"><li>${txtBase}</li> `;
-	if (itemCounts[11]) txt += getTreeItemHtml(11);
-	if (itemCounts[12]) txt += getTreeItemHtml(12);
-	if (itemCounts[10]) txt += `<li id="strelki" style="margin: 0 10px;">→</li>${getTreeItemHtml(10)}`;
+	if (arrCounts[11]) txt += getTreeItemHtml(11, false, isRightTree);
+	if (arrCounts[12]) txt += getTreeItemHtml(12, false, isRightTree);
+	if (arrCounts[10]) txt += `<li id="strelki" style="margin: 0 10px;">→</li>${getTreeItemHtml(10, false, isRightTree)}`;
 	txt += `</ul>`;
 	document.getElementById(isRightTree ? 'rightTree' : 'leftTree').innerHTML = txt;
 }
 
 function renderDeductions() {
     let txt = ''; let lis = ''; const deductionsDiv = document.getElementById('deductionsList');
-    if (deductions[11]) lis += getTreeItemHtml(11, true); if (deductions[12]) lis += getTreeItemHtml(12, true); if (deductions[10]) lis += getTreeItemHtml(10, true);
+    if (deductions[11]) lis += getTreeItemHtml(11, true, false); if (deductions[12]) lis += getTreeItemHtml(12, true, false); if (deductions[10]) lis += getTreeItemHtml(10, true, false);
     if (lis !== '') txt += `<ul><li>${LANG[currentLang]['baseMat']}</li> ${lis}</ul>`;
     for (let r = 1; r <= 6; r++) {
         lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
-        for (let e = start; e <= end; e++) if (deductions[e]) lis += getTreeItemHtml(e, true);
+        for (let e = start; e <= end; e++) if (deductions[e]) lis += getTreeItemHtml(e, true, false);
         if (lis !== '') txt += `<ul><li>${LANG[currentLang]['lvl']} ${r}</li> ${lis}</ul>`;
     }
     deductionsDiv.innerHTML = txt;
@@ -709,23 +659,9 @@ function renderMenu() {
     document.getElementById('vyborDiv').innerHTML = txt;
 }
 
-function calculateNode(id) {
-	if (!itemCounts[id]) itemCounts[id] = 0;
-	if (deductionsCopy[id] && deductionsCopy[id] > 0) {
-		deductionsCopy[id]--;
-        return; 
-	}
-	itemCounts[id]++;
-	if (id > 200) { 
-        calculateNode(TOME_DB[id][0]); 
-        calculateNode(TOME_DB[id][1]); 
-        calculateNode(TOME_DB[id][2]); 
-    }
-}
-
 function processTree(id, isRightTree = false) {
-    itemCounts = [];
-    deductionsCopy = Object.assign([], deductions);
+    let currentCounts = [];
+    let deductionsCopy = Object.assign([], deductions);
     let multiplier = 1;
 
     if (isRightTree) {
@@ -738,26 +674,41 @@ function processTree(id, isRightTree = false) {
         multiplier = inputVal;
     } else leftTreeId = id;
 
+    function calculateNode(nodeId) {
+        if (!currentCounts[nodeId]) currentCounts[nodeId] = 0;
+        if (deductionsCopy[nodeId] && deductionsCopy[nodeId] > 0) {
+            deductionsCopy[nodeId]--; return; 
+        }
+        currentCounts[nodeId]++;
+        if (nodeId > 200) { 
+            calculateNode(TOME_DB[nodeId][0]); 
+            calculateNode(TOME_DB[nodeId][1]); 
+            calculateNode(TOME_DB[nodeId][2]); 
+        }
+    }
+
     for (let z = 0; z < multiplier; z++) calculateNode(id);
 
-    let baseMats = 0;
-    for (let z = 101; z <= 109; z++) if (itemCounts[z]) baseMats += itemCounts[z] * 3;
+    let baseMatsCount = 0;
+    for (let z = 101; z <= 109; z++) if (currentCounts[z]) baseMatsCount += currentCounts[z];
 
-    for (let z = 12; z >= 10; z--) {
-        itemCounts[z] = z === 10 ? (itemCounts[12] || 0) * 80 : baseMats;
-        if (deductions[z]) itemCounts[z] -= deductions[z];
-        if (itemCounts[z] < 0) itemCounts[z] = 0;
-    }
-        
+    // Mengubah perhitungan agar 1 Buku Lvl 1 butuh 3 Fragments + 4 Pages
+    currentCounts[11] = baseMatsCount * 3; if (deductions[11]) currentCounts[11] -= deductions[11]; if (currentCounts[11] < 0) currentCounts[11] = 0;
+    currentCounts[12] = baseMatsCount * 4; if (deductions[12]) currentCounts[12] -= deductions[12]; if (currentCounts[12] < 0) currentCounts[12] = 0;
+    currentCounts[10] = (currentCounts[12] || 0) * 80; if (deductions[10]) currentCounts[10] -= deductions[10]; if (currentCounts[10] < 0) currentCounts[10] = 0;
+
+    // Simpan ke array yang benar supaya Left Tree / Right Tree independen
+    if (isRightTree) rightCounts = currentCounts;
+    else leftCounts = currentCounts;
+
     renderTree(isRightTree);
-    updateCostAndProgress(); 
+    if (isRightTree) updateCostAndProgress(); 
 }
 
 function openInventoryModal() {
     document.getElementById('inventoryModal').style.display = 'flex';
     document.getElementById('invSearch').value = '';
-    renderInventorySelection('');
-    document.getElementById('invSearch').focus();
+    renderInventorySelection(''); document.getElementById('invSearch').focus();
 }
 
 function closeInventoryModal() { document.getElementById('inventoryModal').style.display = 'none'; }
@@ -774,7 +725,7 @@ function renderInventorySelection(query) {
     });
 
 	TOME_DB.forEach((tome, id) => {
-        if (tome && tome[4].toLowerCase().includes(q)) {
+        if (tome && getTomeName(id).toLowerCase().includes(q)) {
             html += `<li><button style="${getSpritePosition(id)}" title="${id}" onClick="selectItemForInventory(${id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
         }
     });
@@ -785,10 +736,7 @@ function renderInventorySelection(query) {
 
 function filterInventorySearch(val) { renderInventorySelection(val); }
 
-function selectItemForInventory(id) {
-    closeInventoryModal();
-    addDeduction(id); 
-}
+function selectItemForInventory(id) { closeInventoryModal(); addDeduction(id); }
 
 function initProfiles() {
     try {
@@ -796,15 +744,11 @@ function initProfiles() {
         if (saved) profiles = JSON.parse(saved);
     } catch (e) { profiles = {}; }
     
-    if (!profiles['Default']) {
-        profiles['Default'] = { l: 616, r: 515, m: 1, d: [], p10: 0, p11: 0, p12: 0 };
-    }
-    
+    if (!profiles['Default']) profiles['Default'] = { l: 616, r: 515, m: 1, d: [], p10: 0, p11: 0, p12: 0 };
     currentProfile = localStorage.getItem('tomeCurrentProfile') || 'Default';
     if (!profiles[currentProfile]) currentProfile = 'Default';
     
-    loadProfileData(currentProfile);
-    renderProfileDropdown();
+    loadProfileData(currentProfile); renderProfileDropdown();
 }
 
 function renderProfileDropdown() {
@@ -813,134 +757,66 @@ function renderProfileDropdown() {
     select.innerHTML = '';
     for (let name in profiles) {
         let opt = document.createElement('option');
-        opt.value = name;
-        opt.innerText = name;
+        opt.value = name; opt.innerText = name;
         if (name === currentProfile) opt.selected = true;
         select.appendChild(opt);
     }
 }
 
 function loadProfileData(name) {
-    currentProfile = name;
-    localStorage.setItem('tomeCurrentProfile', name);
-    
+    currentProfile = name; localStorage.setItem('tomeCurrentProfile', name);
     const data = profiles[name];
-    leftTreeId = data.l || 616;
-    rightTreeId = data.r || 515;
+    leftTreeId = data.l || 616; rightTreeId = data.r || 515;
     document.getElementById('mnojitel').value = data.m || 1;
     deductions = data.d || [];
-    
-    document.getElementById('price10').value = data.p10 || 0;
-    document.getElementById('price11').value = data.p11 || 0;
-    document.getElementById('price12').value = data.p12 || 0;
-    
-    localStorage.setItem('tomeDeductions', JSON.stringify(deductions));
-    localStorage.setItem('tomePrice10', data.p10 || 0);
-    localStorage.setItem('tomePrice11', data.p11 || 0);
-    localStorage.setItem('tomePrice12', data.p12 || 0);
+    document.getElementById('price10').value = data.p10 || 0; document.getElementById('price11').value = data.p11 || 0; document.getElementById('price12').value = data.p12 || 0;
+    localStorage.setItem('tomeDeductions', JSON.stringify(deductions)); localStorage.setItem('tomePrice10', data.p10 || 0); localStorage.setItem('tomePrice11', data.p11 || 0); localStorage.setItem('tomePrice12', data.p12 || 0);
 }
 
-function handleProfileChange(name) {
-    loadProfileData(name);
-    applyLanguage();
-}
+function handleProfileChange(name) { loadProfileData(name); applyLanguage(); }
 
 function saveActiveProfile() {
-    let p10 = parseInt(document.getElementById('price10').value) || 0;
-    let p11 = parseInt(document.getElementById('price11').value) || 0;
-    let p12 = parseInt(document.getElementById('price12').value) || 0;
+    let p10 = parseInt(document.getElementById('price10').value) || 0; let p11 = parseInt(document.getElementById('price11').value) || 0; let p12 = parseInt(document.getElementById('price12').value) || 0;
     let m = parseInt(document.getElementById('mnojitel').value) || 1;
-
-    profiles[currentProfile] = {
-        l: leftTreeId,
-        r: rightTreeId,
-        m: m,
-        d: deductions,
-        p10: p10,
-        p11: p11,
-        p12: p12
-    };
+    profiles[currentProfile] = { l: leftTreeId, r: rightTreeId, m: m, d: deductions, p10: p10, p11: p11, p12: p12 };
     localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
 }
 
 function createNewProfile() {
     let name = prompt("Masukkan nama profil baru (misal: Mage DPS, Alt Cleric):");
-    if (!name) return;
-    name = name.trim();
-    if (name === "") return;
+    if (!name) return; name = name.trim(); if (name === "") return;
     if (profiles[name]) { alert("Nama profil tersebut sudah ada!"); return; }
-    
-    currentProfile = name;
-    saveActiveProfile();
-    renderProfileDropdown();
-    loadProfileData(name);
-    applyLanguage();
+    currentProfile = name; saveActiveProfile(); renderProfileDropdown(); loadProfileData(name); applyLanguage();
 }
 
 function removeCurrentProfile() {
-    if (currentProfile === 'Default') {
-        alert("Profil 'Default' sistem tidak dapat dihapus.");
-        return;
-    }
+    if (currentProfile === 'Default') { alert("Profil 'Default' sistem tidak dapat dihapus."); return; }
     if (confirm(`Apakah Anda yakin ingin menghapus profil "${currentProfile}" beserta seluruh data di dalamnya?`)) {
-        delete profiles[currentProfile];
-        localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
-        localStorage.setItem('tomeCurrentProfile', 'Default'); 
-        currentProfile = 'Default';
-        loadProfileData('Default');
-        renderProfileDropdown();
-        applyLanguage();
+        delete profiles[currentProfile]; localStorage.setItem('tomeProfiles', JSON.stringify(profiles)); localStorage.setItem('tomeCurrentProfile', 'Default'); 
+        currentProfile = 'Default'; loadProfileData('Default'); renderProfileDropdown(); applyLanguage();
     }
 }
 
 function exportProfilesData() {
-    const dataStr = JSON.stringify(profiles, null, 2);
-    const blob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = "Tome-Profiles-Backup.json"; 
-    document.body.appendChild(a);
-    a.click();
-    
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    const dataStr = JSON.stringify(profiles, null, 2); const blob = new Blob([dataStr], { type: "application/json" }); const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = "Tome-Profiles-Backup.json"; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
 function importProfilesData(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    
+    const file = event.target.files[0]; if (!file) return;
     const reader = new FileReader();
     reader.onload = function(e) {
         try {
             const importedData = JSON.parse(e.target.result);
             if (typeof importedData === 'object' && importedData !== null) {
-                profiles = { ...profiles, ...importedData };
-                localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
-                
-                renderProfileDropdown();
-                loadProfileData(currentProfile);
-                applyLanguage();
-                alert(currentLang === 'id' ? "Data profil berhasil diimpor!" : "Profile data imported successfully!");
-            } else {
-                alert(currentLang === 'id' ? "Format file tidak valid!" : "Invalid file format!");
-            }
-        } catch (err) {
-            alert(currentLang === 'id' ? "Gagal membaca file JSON!" : "Failed to read JSON file!");
-        }
+                profiles = { ...profiles, ...importedData }; localStorage.setItem('tomeProfiles', JSON.stringify(profiles)); renderProfileDropdown(); loadProfileData(currentProfile); applyLanguage(); alert(currentLang === 'id' ? "Data profil berhasil diimpor!" : "Profile data imported successfully!");
+            } else alert(currentLang === 'id' ? "Format file tidak valid!" : "Invalid file format!");
+        } catch (err) { alert(currentLang === 'id' ? "Gagal membaca file JSON!" : "Failed to read JSON file!"); }
     };
-    reader.readAsText(file);
-    event.target.value = '';
+    reader.readAsText(file); event.target.value = '';
 }
 
-window.onload = () => {
-    initProfiles(); 
-    loadFromHash(); 
-    applyLanguage(); 
-    document.getElementById('modalInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') confirmModal(); });
-};
+window.onload = () => { initProfiles(); loadFromHash(); applyLanguage(); document.getElementById('modalInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') confirmModal(); }); };
 </script>
 </body>
 </html>
