@@ -7,6 +7,7 @@
 <title>Kalkulator Tome | UI Modern Upgrade</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -35,20 +36,22 @@ body {
 	color: var(--text-main);
 	line-height: 1.6;
 	min-height: 100vh;
-	padding: 30px; 
+	padding: 30px 30px 10px 30px; 
 	background-image: 
 		radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
 		radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
 	background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
 }
 
 ul { list-style: none; }
 a { color: var(--accent); text-decoration: none; transition: 0.3s; }
 a:hover { color: #60a5fa; text-decoration: underline; }
 
-.container { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; max-width: 1400px; margin: 0 auto; }
+.container { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; max-width: 1400px; margin: 0 auto; flex: 1; }
 .calc-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; width: 100%; max-width: 440px; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); position: relative; backdrop-filter: blur(10px); }
-#deductions { max-width: 1370px; margin: 24px auto 0; }
+#deductions { max-width: 1370px; margin: 24px auto 0; width: 100%; }
 #deductions .calc-card { max-width: 100%; }
 
 h1, h2 { font-size: 1.25rem; font-weight: 700; color: #e2e8f0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
@@ -86,6 +89,13 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 .branch li:hover span { opacity: 1; visibility: visible; }
 #strelki { color: var(--accent); font-weight: bold; letter-spacing: 2px; }
 #niz li:first-child { display: none; } 
+
+/* Footer & Social Icons Styles */
+.footer { margin-top: 40px; padding: 25px 0; border-top: 1px solid var(--border-color); text-align: center; width: 100%; }
+.footer-text { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; }
+.social-icons { display: flex; justify-content: center; gap: 18px; }
+.social-icons a { color: var(--text-muted); font-size: 1.4rem; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.05); transition: all 0.3s ease; }
+.social-icons a:hover { color: white; background: var(--accent); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4); }
 
 .menu-toggle-btn { position: fixed; top: 25px; right: 25px; background: var(--accent); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; z-index: 1001; box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: 0.2s ease; }
 .menu-toggle-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
@@ -166,15 +176,27 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
             <div id="totalCostDisplay" class="total-cost-value">0 Gold</div>
         </div>
     </div>
+    
+    <div id="deductions">
+        <div class="calc-card">
+            <h2 data-i18n="title4">Buku & Bahan yang Sudah Dimiliki</h2>
+            <div class="podzagolovok" id="nazvaniye_vychet" data-i18n="desc4">Bahan yang Anda klik (tombol minus) pada daftar di atas akan masuk ke sini dan dikurangi dari total.</div>
+            <div id="deductionsList" class="branch"></div>
+        </div>
+    </div>
 </div>
 
-<div id="deductions">
-	<div class="calc-card">
-		<h2 data-i18n="title4">Buku & Bahan yang Sudah Dimiliki</h2>
-		<div class="podzagolovok" id="nazvaniye_vychet" data-i18n="desc4">Bahan yang Anda klik (tombol minus) pada daftar di atas akan masuk ke sini dan dikurangi dari total.</div>
-		<div id="deductionsList" class="branch"></div>
-	</div>
-</div>
+<footer class="footer">
+    <div class="footer-text" data-i18n="footerText">
+        Kalkulator Tome &copy; 2026 | Dibuat oleh <strong>[Nama Author/Komunitas]</strong>
+    </div>
+    <div class="social-icons">
+        <a href="#" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" target="_blank" title="Discord"><i class="fab fa-discord"></i></a>
+        <a href="#" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="#" target="_blank" title="Website"><i class="fas fa-globe"></i></a>
+    </div>
+</footer>
 
 <button class="menu-toggle-btn" id="menuToggleBtn" onclick="var panel = document.getElementById('mainMenuPanel'); panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';">⚙️ Buka Menu</button>
 
@@ -209,8 +231,8 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 <script>
 const LANG = {
-    id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "Buku & Bahan yang Sudah Dimiliki", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Bahan yang Anda klik (tombol minus) pada daftar di atas akan masuk ke sini dan dikurangi dari total.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", nav1: "📖 Kalkulator Tome", nav2: "✨ Simulasi Refine", nav3: "🤖 Bot Perfect World", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:" },
-    en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "Owned Books & Materials", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Materials you click (minus button) on the list above will appear here and be deducted.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", nav1: "📖 Tome Calculator", nav2: "✨ Refine Simulator", nav3: "🤖 Perfect World Bot", btnTarget: "📚 Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations and start over?", promptCopy: "Copy the link below:" }
+    id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "Buku & Bahan yang Sudah Dimiliki", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Bahan yang Anda klik (tombol minus) pada daftar di atas akan masuk ke sini dan dikurangi dari total.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", nav1: "📖 Kalkulator Tome", nav2: "✨ Simulasi Refine", nav3: "🤖 Bot Perfect World", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>[Nama Author]</strong>" },
+    en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "Owned Books & Materials", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Materials you click (minus button) on the list above will appear here and be deducted.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", nav1: "📖 Tome Calculator", nav2: "✨ Refine Simulator", nav3: "🤖 Perfect World Bot", btnTarget: "📚 Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations and start over?", promptCopy: "Copy the link below:", footerText: "Tome Calculator © 2026 | Created by <strong>[Author Name]</strong>" }
 };
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
@@ -220,7 +242,7 @@ function applyLanguage() {
         const key = el.getAttribute('data-i18n');
         if (LANG[currentLang][key]) {
             if (el.tagName === 'INPUT') el.placeholder = LANG[currentLang][key];
-            else el.innerText = LANG[currentLang][key];
+            else el.innerHTML = LANG[currentLang][key]; 
         }
     });
     
