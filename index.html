@@ -152,7 +152,7 @@ h1::before, h2::before {
 }
 
 /* =========================================
-   5. PROGRESS BAR VISUAL (NEW)
+   5. PROGRESS BAR VISUAL
 ========================================= */
 .progress-container {
     margin-bottom: 20px;
@@ -188,7 +188,7 @@ h1::before, h2::before {
 }
 
 /* =========================================
-   6. MARKET COST ESTIMATOR UI (NEW)
+   6. MARKET COST ESTIMATOR UI
 ========================================= */
 .cost-input-group {
     display: flex;
@@ -670,7 +670,7 @@ h1::before, h2::before {
 
     <div class="calc-card">
         <h1>Estimasi Biaya Pasar</h1>
-        <div class="podzagolovok">Masukkan harga pasar per item untuk mengestimasi koin yang dibutuhkan.</div>
+        <div class="podzagolovok">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
         
         <div class="cost-input-group">
             <label><span style="background-position:32px -32px;"></span> Token of Luck:</label>
@@ -687,7 +687,7 @@ h1::before, h2::before {
 
         <div class="total-cost-box">
             <div class="total-cost-label">Total Sisa Biaya:</div>
-            <div id="totalCostDisplay" class="total-cost-value">0 Coin</div>
+            <div id="totalCostDisplay" class="total-cost-value">0 Gold</div>
         </div>
     </div>
 </div>
@@ -974,7 +974,7 @@ function filterBooks(query) {
     });
 }
 
-// --- FITUR LOGIKA BARU: PROGRESS & COST REALTIME (NEW) ---
+// --- LOGIKA PROGRESS & COST REALTIME (SISTEM GOLD) ---
 function updateCostAndProgress() {
     let price10 = parseInt(document.getElementById('price10').value) || 0;
     let price11 = parseInt(document.getElementById('price11').value) || 0;
@@ -1052,7 +1052,8 @@ function updateCostAndProgress() {
                     (netCounts[11] || 0) * price11 + 
                     (netCounts[12] || 0) * price12;
     
-    document.getElementById('totalCostDisplay').innerText = totalCost.toLocaleString('id-ID') + " Coin";
+    // OUTPUT MENGGUNAKAN SATUAN GOLD
+    document.getElementById('totalCostDisplay').innerText = totalCost.toLocaleString('id-ID') + " Gold";
 
     let grossVal = (grossCounts[10] || 0) + (grossCounts[12] || 0) * 80 + (grossCounts[11] || 0) * 80;
     let netVal = (netCounts[10] || 0) + (netCounts[12] || 0) * 80 + (netCounts[11] || 0) * 80;
@@ -1209,21 +1210,20 @@ function processTree(id, isRightTree = false) {
     }
         
     renderTree(isRightTree);
-    updateCostAndProgress(); // Otomatis picu update progres dan biaya
+    updateCostAndProgress(); 
 }
 
 // --- INIT ---
 window.onload = () => {
     loadDeductions();
     
-    // Memuat harga dari penyimpanan lokal
     document.getElementById('price10').value = localStorage.getItem('tomePrice10') || 0;
     document.getElementById('price11').value = localStorage.getItem('tomePrice11') || 0;
     document.getElementById('price12').value = localStorage.getItem('tomePrice12') || 0;
 
     renderMenu();
-    processTree(616, false); // Kiri (Kebutuhan Total)
-    processTree(515, true);  // Kanan (Cabang Terpilih)
+    processTree(616, false); 
+    processTree(515, true);  
     renderDeductions();
     
     updateCostAndProgress();
