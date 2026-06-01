@@ -343,6 +343,7 @@ function toggleLanguage() {
 }
 
 const TOME_DB = [];
+// Level 6 (Membutuhkan 3 Buku Level 5)
 TOME_DB[601] = [501, 502, 509, 17615, 'The Calm of Ice']; 
 TOME_DB[602] = [502, 503, 505, 17622, 'The Khatru']; 
 TOME_DB[603] = [504, 503, 508, 17628, 'A Carmine Tear']; 
@@ -360,6 +361,7 @@ TOME_DB[614] = [514, 512, 513, 17676, 'The Concubines Laugh'];
 TOME_DB[615] = [515, 501, 507, 17679, 'The Academy of the East']; 
 TOME_DB[616] = [516, 515, 514, 17683, 'Pan Gu Creator'];
 
+// Level 5 (Membutuhkan 3 Buku Level 4)
 TOME_DB[501] = [401, 408, 405, 17618, 'A Heart like Still Water']; 
 TOME_DB[502] = [409, 405, 403, 17621, 'The Tsunamis of Yore']; 
 TOME_DB[503] = [404, 408, 401, 17624, 'Laughing Mad']; 
@@ -377,16 +379,18 @@ TOME_DB[514] = [408, 402, 404, 17675, 'Rouge and Red Lips'];
 TOME_DB[515] = [406, 407, 401, 17678, 'Gang of Hooligans']; 
 TOME_DB[516] = [406, 407, 402, 17682, 'The Voidlands']; 
 
+// Level 4 (Membutuhkan 3 Buku Level 3) -> FIXED BUGS DI 406
 TOME_DB[401] = [303, 307, 304, 17602, 'Burning Desire']; 
 TOME_DB[402] = [304, 301, 305, 17603, 'Tome of Predestination']; 
 TOME_DB[403] = [302, 305, 303, 17604, 'The Roses Thorn']; 
 TOME_DB[404] = [306, 307, 301, 17605, 'Letters of Social Unrest']; 
 TOME_DB[405] = [303, 307, 306, 17606, 'The Appetites of Spring']; 
-TOME_DB[406] = [308, 205, 207, 17610, 'The Rivers Edge']; 
+TOME_DB[406] = [308, 305, 307, 17610, 'The Rivers Edge']; // Fix: 205->305, 207->307
 TOME_DB[407] = [309, 302, 306, 17614, 'The Weak Stream of Many Miles']; 
 TOME_DB[408] = [301, 304, 302, 17600, 'Battle Tactics']; 
 TOME_DB[409] = [302, 305, 303, 17601, 'A Bewitching Proposal'];
 
+// Level 3 (Membutuhkan 3 Buku Level 2)
 TOME_DB[301] = [201, 206, 203, 17593, 'Eat Drink and be Merry']; 
 TOME_DB[302] = [202, 205, 206, 17594, 'Sunset Tales']; 
 TOME_DB[303] = [207, 203, 202, 17595, 'Adventures and Mishaps']; 
@@ -397,6 +401,7 @@ TOME_DB[307] = [207, 205, 204, 17599, 'A Poets Musings'];
 TOME_DB[308] = [208, 202, 204, 17609, 'Decaying Tome']; 
 TOME_DB[309] = [209, 203, 202, 17613, 'Scene of Carnage'];
 
+// Level 2 (Membutuhkan 3 Buku Level 1)
 TOME_DB[201] = [101, 104, 106, 17586, 'Tome of Iron Will']; 
 TOME_DB[202] = [102, 105, 106, 17587, 'Misty Peach Blossoms']; 
 TOME_DB[203] = [107, 103, 102, 17588, 'Tale of the Red Lotus']; 
@@ -407,6 +412,7 @@ TOME_DB[207] = [107, 103, 104, 17592, 'Mediations Flame'];
 TOME_DB[208] = [108, 103, 101, 17608, 'Guide to Wolf Hunting']; 
 TOME_DB[209] = [109, 103, 107, 17612, 'Fire Dance'];
 
+// Level 1 (Bahan Dasar)
 TOME_DB[101] = [0, 0, 0, 17579, 'Underestimated Resolve']; 
 TOME_DB[102] = [0, 0, 0, 17580, 'Soaring Heart']; 
 TOME_DB[103] = [0, 0, 0, 17581, 'Retributions Flame']; 
