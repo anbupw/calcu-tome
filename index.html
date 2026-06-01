@@ -51,12 +51,14 @@ a { color: var(--accent); text-decoration: none; transition: 0.3s; }
 a:hover { color: #60a5fa; text-decoration: underline; }
 
 .container { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; max-width: 1400px; margin: 0 auto; flex: 1; align-items: flex-start; }
-.calc-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; width: 100%; max-width: 440px; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); position: relative; backdrop-filter: blur(10px); }
+.calc-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; width: 100%; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); position: relative; backdrop-filter: blur(10px); }
 
-/* Layout Bawah untuk Biaya dan Inventory */
-.bottom-wrapper { width: 100%; display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; align-items: flex-start; }
-.cost-card { flex: 1 1 350px; max-width: 440px; }
-.inv-card { flex: 2 1 500px; max-width: 935px; }
+/* Struktur Grid Pembagi Baris Atas & Bawah */
+.top-wrapper, .bottom-wrapper { width: 100%; display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; align-items: flex-start; }
+
+/* Pembagian Ukuran Card secara Konsisten */
+.narrow-card { flex: 1 1 350px; max-width: 440px; }
+.wide-card { flex: 2 1 500px; max-width: 935px; }
 
 h1, h2 { font-size: 1.25rem; font-weight: 700; color: #e2e8f0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
 h1::before, h2::before { content: ''; display: inline-block; width: 12px; height: 12px; background: var(--accent); border-radius: 3px; }
@@ -120,7 +122,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 .search-box { width: 100%; padding: 10px 14px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: white; font-family: 'Inter', sans-serif; font-size: 0.9rem; margin-top: 10px; margin-bottom: 15px; outline: none; transition: 0.2s; }
 .search-box:focus { border-color: var(--accent); }
-#vyborDiv { max-height: 480px; overflow-y: auto; padding-right: 5px; }
+#vyborDiv { max-height: 500px; overflow-y: auto; padding-right: 5px; }
 #vyborDiv::-webkit-scrollbar { width: 6px; }
 #vyborDiv tribe-track { background: transparent; }
 #vyborDiv::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
@@ -151,7 +153,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 	body { padding: 15px 10px 10px 10px; }
 	.container { gap: 16px; }
 	.calc-card { padding: 15px; border-radius: 14px; }
-	.bottom-wrapper { gap: 16px; }
+	.top-wrapper, .bottom-wrapper { gap: 16px; }
 }
 </style>
 </head>
@@ -159,33 +161,44 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 <div class="container">
 	
-	<div class="calc-card">
-		<h1 data-i18n="btnTarget">📚 Pilihan Buku Target</h1>
-		<div class="podzagolovok" id="nazvaniye" data-i18n="desc1">Arahkan kursor ke ikon untuk melihat nama buku.</div>
-		<input type="text" id="bookSearch" class="search-box" data-i18n="searchPlaceholder" placeholder="🔍 Cari nama buku target..." oninput="filterBooks(this.value)">
-		<div id="vyborDiv" class="branch"></div>
-	</div>
-	
-	<div class="calc-card">
-		<h2 data-i18n="title2">Cabang Terpilih</h2>
-		<div class="podzagolovok">
-			<input type="number" id="mnojitel" value="1" min="1" max="99">
-			<button class="btn-calc" data-i18n="btnCalc" onClick="processTree(rightTreeId)">Hitung Kuantitas</button>
+	<div class="top-wrapper">
+		<div class="calc-card wide-card">
+			<h1 data-i18n="btnTarget">📚 Pilihan Buku Target</h1>
+			<div class="podzagolovok" id="nazvaniye" data-i18n="desc1">Arahkan kursor ke ikon untuk melihat nama buku.</div>
+			<input type="text" id="bookSearch" class="search-box" data-i18n="searchPlaceholder" placeholder="🔍 Cari nama buku target..." oninput="filterBooks(this.value)">
+			<div id="vyborDiv" class="branch"></div>
 		</div>
-		<div class="progress-container">
-			<div class="progress-text">
-				<span data-i18n="progText">Progres Pengumpulan:</span>
-				<span id="progressPercentText">0.0%</span>
+		
+		<div class="calc-card narrow-card">
+			<h2 data-i18n="title2">Cabang Terpilih</h2>
+			<div class="podzagolovok">
+				<input type="number" id="mnojitel" value="1" min="1" max="99">
+				<button class="btn-calc" data-i18n="btnCalc" onClick="processTree(rightTreeId)">Hitung Kuantitas</button>
 			</div>
-			<div class="progress-bar-bg">
-				<div id="progressBar" class="progress-bar"></div>
+			<div class="progress-container">
+				<div class="progress-text">
+					<span data-i18n="progText">Progres Pengumpulan:</span>
+					<span id="progressPercentText">0.0%</span>
+				</div>
+				<div class="progress-bar-bg">
+					<div id="progressBar" class="progress-bar"></div>
+				</div>
 			</div>
+			<div id="rightTree" class="branch"></div>
 		</div>
-		<div id="rightTree" class="branch"></div>
 	</div>
 
     <div class="bottom-wrapper">
-        <div class="calc-card cost-card">
+        <div class="calc-card wide-card">
+            <h2 data-i18n="title4">📦 Inventory (Bahan Dimiliki)</h2>
+            <div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <span data-i18n="desc4" style="flex:1; min-width: 180px;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
+                <button class="btn-success" onClick="openInventoryModal()" style="white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600;">➕ Tambah Item</button>
+            </div>
+            <div id="deductionsList" class="branch"></div>
+        </div>
+
+        <div class="calc-card narrow-card">
             <h1 data-i18n="title3">Estimasi Biaya Pasar</h1>
             <div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
             <div class="cost-input-group">
@@ -204,15 +217,6 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
                 <div class="total-cost-label" data-i18n="totalCostLabel">Total Sisa Biaya:</div>
                 <div id="totalCostDisplay" class="total-cost-value">0 Gold</div>
             </div>
-        </div>
-        
-        <div class="calc-card inv-card">
-            <h2 data-i18n="title4">📦 Inventory (Bahan Dimiliki)</h2>
-            <div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                <span data-i18n="desc4" style="flex:1; min-width: 180px;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
-                <button class="btn-success" onClick="openInventoryModal()" style="white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600;">➕ Tambah Item</button>
-            </div>
-            <div id="deductionsList" class="branch"></div>
         </div>
     </div>
 </div>
@@ -551,7 +555,7 @@ function updateCostAndProgress() {
     saveActiveProfile();
     
     let netCounts = [];
-    let deductionsCopy = [...deductions]; // Ditambahkan let (Scope Fix)
+    let deductionsCopy = [...deductions];
     function calcNetNode(nodeId) {
         if (!netCounts[nodeId]) netCounts[nodeId] = 0;
         if (deductionsCopy[nodeId] && deductionsCopy[nodeId] > 0) { deductionsCopy[nodeId]--; return; }
@@ -596,7 +600,7 @@ function processTree(id) {
     itemCounts = [];
     for (let z = 0; z < multiplier; z++) calculateNode(id);
     
-    let deductionsCopy = []; // Ditambahkan let (Scope Fix)
+    let deductionsCopy = [];
     for (let z = 616; z >= 101; z--) {
         if (itemCounts[z] && deductions[z]) {
             itemCounts[z] -= deductions[z];
