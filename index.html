@@ -86,8 +86,13 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 .podzagolovok input[type="number"] { background: #0f172a; border: 1px solid #475569; color: white; font-weight: 600; border-radius: 8px; padding: 8px 12px; width: 80px; text-align: center; font-size: 1rem; outline: none; transition: border 0.3s; }
 .podzagolovok input:focus { border-color: var(--accent); }
+
+/* Buttons Styling */
 .btn-calc { background: var(--accent); color: white; border: none; padding: 9px 18px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4); }
 .btn-calc:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 6px 12px -2px rgba(59, 130, 246, 0.5); }
+
+.btn-success { background: var(--success); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; white-space: nowrap; transition: all 0.2s ease; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3); }
+.btn-success:hover { background: var(--success-hover); transform: translateY(-2px); box-shadow: 0 6px 12px -2px rgba(16, 185, 129, 0.4); }
 
 .progress-container { margin-bottom: 20px; background: rgba(0, 0, 0, 0.15); padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); }
 .progress-text { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
@@ -141,7 +146,6 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 .social-icons a { color: var(--text-muted); font-size: 1.4rem; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.05); transition: all 0.3s ease; }
 .social-icons a:hover { color: white; background: var(--accent); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4); }
 
-/* Minimalist Floating Action Button (FAB) */
 .menu-toggle-btn { 
 	position: fixed; 
 	bottom: 25px; 
@@ -259,7 +263,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 			<h2 data-i18n="title4">📦 Inventory</h2>
 			<div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
 				<span data-i18n="desc4" style="flex:1; min-width: 180px;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
-				<button class="btn-success" onclick="openInventoryModal()" style="white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600;"><span data-i18n="btnAddItem">➕ Tambah Item</span></button>
+				<button class="btn-success" onclick="openInventoryModal()"><span data-i18n="btnAddItem">➕ Tambah Item</span></button>
 			</div>
 			<div id="deductionsList" class="branch"></div>
 		</div>
@@ -520,7 +524,6 @@ TOME_DB[207] = [107, 103, 104, 17592, 'Mediations Flame'];
 TOME_DB[208] = [108, 103, 101, 17608, 'Guide to Wolf Hunting']; 
 TOME_DB[209] = [109, 103, 107, 17612, 'Fire Dance'];
 
-// Level 1 Tomes
 TOME_DB[101] = [0, 0, 0, 17579, 'Underestimated Resolve']; 
 TOME_DB[102] = [0, 0, 0, 17580, 'Soaring Heart']; 
 TOME_DB[103] = [0, 0, 0, 17581, 'Retributions Flame']; 
@@ -768,30 +771,16 @@ function processTree(id) {
     
     function walkAndCount(nodeId) {
         if (!nodeId || !TOME_DB[nodeId]) return;
-        
-        if (deductionsCopy[nodeId] > 0) {
-            deductionsCopy[nodeId]--;
-            return;
-        }
-        
+        if (deductionsCopy[nodeId] > 0) { deductionsCopy[nodeId]--; return; }
         if (!itemCounts[nodeId]) itemCounts[nodeId] = 0;
         itemCounts[nodeId]++;
-        
-        if (nodeId > 200) {
-            walkAndCount(TOME_DB[nodeId][0]);
-            walkAndCount(TOME_DB[nodeId][1]);
-            walkAndCount(TOME_DB[nodeId][2]);
-        }
+        if (nodeId > 200) { walkAndCount(TOME_DB[nodeId][0]); walkAndCount(TOME_DB[nodeId][1]); walkAndCount(TOME_DB[nodeId][2]); }
     }
     
-    for (let z = 0; z < multiplier; z++) {
-        walkAndCount(id);
-    }
+    for (let z = 0; z < multiplier; z++) { walkAndCount(id); }
     
     let totalLv1Tomes = 0;
-    for (let z = 101; z <= 109; z++) {
-        totalLv1Tomes += (itemCounts[z] || 0);
-    }
+    for (let z = 101; z <= 109; z++) { totalLv1Tomes += (itemCounts[z] || 0); }
     
     itemCounts[11] = totalLv1Tomes * 3; 
     itemCounts[12] = totalLv1Tomes * 4; 
@@ -810,28 +799,34 @@ function selectTargetBook(id) { rightTreeId = id; processTree(rightTreeId); }
 function openInventoryModal() {
     hideTooltip();
     document.getElementById('inventoryModal').style.display = 'flex';
-    document.getElementById('invSearch').value = ''; renderInventorySelection(''); document.getElementById('invSearch').focus();
+    document.getElementById('invSearch').value = ''; 
+    renderInventorySelection(''); 
+    setTimeout(() => { document.getElementById('invSearch').focus(); }, 50);
 }
 
 function closeInventoryModal() { document.getElementById('inventoryModal').style.display = 'none'; }
 
 function renderInventorySelection(query) {
     let html = '<ul style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">';
-    const q = query.toLowerCase(); let activeIds = getActiveTreeIds();
+    const q = query.toLowerCase(); 
+    let activeIds = getActiveTreeIds();
+    let showAll = (q === ''); 
+
     const baseMats = [ {id: 12, name: 'Tome Page'}, {id: 11, name: 'Tome Fragment'}, {id: 10, name: 'Token of Luck'} ];
     
     baseMats.forEach(mat => {
-        if (mat.name.toLowerCase().includes(q) && activeIds.has(mat.id)) { 
+        if (mat.name.toLowerCase().includes(q) && (showAll || activeIds.has(mat.id))) { 
             html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onclick="selectItemForInventory(${mat.id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
         }
     });
     
     TOME_DB.forEach((tome, id) => {
-        if (tome && tome[4].toLowerCase().includes(q) && activeIds.has(id)) { 
+        if (tome && tome[4].toLowerCase().includes(q) && (showAll || activeIds.has(id))) { 
             html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" onclick="selectItemForInventory(${id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
         }
     });
-    html += '</ul>'; document.getElementById('invItemList').innerHTML = html;
+    html += '</ul>'; 
+    document.getElementById('invItemList').innerHTML = html;
 }
 
 function filterInventorySearch(val) { renderInventorySelection(val); }
