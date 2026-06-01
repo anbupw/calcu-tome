@@ -42,8 +42,8 @@ body {
 		radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
 		radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
 	background-attachment: fixed;
-	display: flex;
-	flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 ul { list-style: none; }
@@ -91,29 +91,43 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 #strelki { color: var(--accent); font-weight: bold; letter-spacing: 2px; }
 #niz li:first-child { display: none; } 
 
-/* --- UI Floating Tooltip --- */
+/* --- UI Floating Tooltip (In-game Style) --- */
 .floating-tooltip {
-	position: fixed;
-	background: rgba(10, 15, 30, 0.96);
-	border: 2px solid #475569;
-	border-radius: 10px;
-	padding: 14px 18px;
-	box-shadow: 0 15px 35px rgba(0,0,0,0.85), inset 0 0 15px rgba(0,0,0,0.7);
-	z-index: 10000;
-	pointer-events: none; 
-	display: none;
-	min-width: 240px;
-	max-width: 300px;
-	font-family: 'Inter', sans-serif;
-	backdrop-filter: blur(6px);
+    position: fixed;
+    background: rgba(10, 15, 30, 0.96);
+    border: 2px solid #475569;
+    border-radius: 10px;
+    padding: 14px 18px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.85), inset 0 0 15px rgba(0,0,0,0.7);
+    z-index: 10000;
+    pointer-events: none; 
+    display: none;
+    min-width: 240px;
+    max-width: 300px;
+    font-family: 'Inter', sans-serif;
+    backdrop-filter: blur(6px);
 }
-.tooltip-title { color: #f59e0b; font-size: 1rem; font-weight: 700; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
-.tooltip-type { color: #94a3b8; font-size: 0.75rem; margin-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.15); padding-bottom: 5px; }
+.tooltip-title {
+    color: #f59e0b; /* Golden Color */
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.tooltip-type {
+    color: #94a3b8;
+    font-size: 0.75rem;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed rgba(255,255,255,0.15);
+    padding-bottom: 5px;
+}
 .tooltip-list { display: flex; flex-direction: column; gap: 4px; }
 .tooltip-stat { color: #60a5fa; font-size: 0.85rem; font-weight: 600; }
 .tooltip-footer { color: #64748b; font-size: 0.75rem; font-style: italic; margin-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 6px; }
 
-/* Footer & Social Icons */
+/* Footer & Social Icons Styles */
 .footer { margin-top: 40px; padding: 25px 0; border-top: 1px solid var(--border-color); text-align: center; width: 100%; }
 .footer-text { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; }
 .social-icons { display: flex; justify-content: center; gap: 18px; }
@@ -169,80 +183,80 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 			<input type="number" id="mnojitel" value="1" min="1" max="99">
 			<button class="btn-calc" data-i18n="btnCalc" onClick="processTree(rightTreeId, true)">Hitung Kuantitas</button>
 		</div>
-		<div class="progress-container">
-			<div class="progress-text">
-				<span data-i18n="progText">Progres Pengumpulan:</span>
-				<span id="progressPercentText">0.0%</span>
-			</div>
-			<div class="progress-bar-bg">
-				<div id="progressBar" class="progress-bar"></div>
-			</div>
-		</div>
+        <div class="progress-container">
+            <div class="progress-text">
+                <span data-i18n="progText">Progres Pengumpulan:</span>
+                <span id="progressPercentText">0.0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
+        </div>
 		<div id="rightTree" class="branch"></div>
 	</div>
 
-	<div class="calc-card">
-		<h1 data-i18n="title3">Estimasi Biaya Pasar</h1>
-		<div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
-		<div class="cost-input-group">
-			<label><span style="background-position: -32px -32px;"></span> Token of Luck:</label>
-			<input type="number" id="price10" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
-		</div>
-		<div class="cost-input-group">
-			<label><span style="background-position: -64px 0px;"></span> Tome Fragment:</label>
-			<input type="number" id="price11" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
-		</div>
-		<div class="cost-input-group">
-			<label><span style="background-position: -32px 0px;"></span> Tome Page:</label>
-			<input type="number" id="price12" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
-		</div>
-		<div class="total-cost-box">
-			<div class="total-cost-label" data-i18n="totalCostLabel">Total Sisa Biaya:</div>
-			<div id="totalCostDisplay" class="total-cost-value">0 Gold</div>
-		</div>
-	</div>
-	
-	<div id="deductions">
-		<div class="calc-card">
-			<h2 data-i18n="title4">📦 Inventory (Bahan Dimiliki)</h2>
-			<div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center;">
-				<span data-i18n="desc4" style="flex:1;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
-				<button class="btn-success" onClick="openInventoryModal()" style="white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600;">➕ Tambah Item</button>
-			</div>
-			<div id="deductionsList" class="branch"></div>
-		</div>
-	</div>
+    <div class="calc-card">
+        <h1 data-i18n="title3">Estimasi Biaya Pasar</h1>
+        <div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
+        <div class="cost-input-group">
+            <label><span style="background-position:32px -32px;"></span> Token of Luck:</label>
+            <input type="number" id="price10" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
+        </div>
+        <div class="cost-input-group">
+            <label><span style="background-position:64px 0px;"></span> Tome Fragment:</label>
+            <input type="number" id="price11" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
+        </div>
+        <div class="cost-input-group">
+            <label><span style="background-position:32px 0px;"></span> Tome Page:</label>
+            <input type="number" id="price12" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
+        </div>
+        <div class="total-cost-box">
+            <div class="total-cost-label" data-i18n="totalCostLabel">Total Sisa Biaya:</div>
+            <div id="totalCostDisplay" class="total-cost-value">0 Gold</div>
+        </div>
+    </div>
+    
+    <div id="deductions">
+        <div class="calc-card">
+            <h2 data-i18n="title4">📦 Inventory (Bahan Dimiliki)</h2>
+            <div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center;">
+                <span data-i18n="desc4" style="flex:1;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
+                <button class="btn-success" onClick="openInventoryModal()" style="white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600;">➕ Tambah Item</button>
+            </div>
+            <div id="deductionsList" class="branch"></div>
+        </div>
+    </div>
 </div>
 
 <footer class="footer">
-	<div class="footer-text" data-i18n="footerText">
-		Kalkulator Tome &copy; 2026 | Dibuat oleh <strong>Sulfikar</strong>
-	</div>
-	<div class="social-icons">
-		<a href="https://www.facebook.com/zullQQ/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-		<a href="https://discord.gg/npyUAZuV" target="_blank" title="Discord"><i class="fab fa-discord"></i></a>
-		<a href="https://www.youtube.com/@idSkynet" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
-		<a href="https://www.zull.com/" target="_blank" title="Website"><i class="fas fa-globe"></i></a>
-	</div>
+    <div class="footer-text" data-i18n="footerText">
+        Kalkulator Tome &copy; 2026 | Dibuat oleh <strong>Sulfikar</strong>
+    </div>
+    <div class="social-icons">
+        <a href="https://www.facebook.com/zullQQ/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://discord.gg/npyUAZuV" target="_blank" title="Discord"><i class="fab fa-discord"></i></a>
+        <a href="https://www.youtube.com/@idSkynet" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://www.zull.com/" target="_blank" title="Website"><i class="fas fa-globe"></i></a>
+    </div>
 </footer>
 
 <button class="menu-toggle-btn" id="menuToggleBtn" onclick="var panel = document.getElementById('mainMenuPanel'); panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';">⚙️ Buka Menu</button>
 
 <div class="vybor" id="mainMenuPanel" style="display:none;">
-	<h4 style="margin-top: 0; font-size: 0.85rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px;">📁 Kelola Profil Build</h4>
-	<div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
-		<select id="profileSelect" onchange="handleProfileChange(this.value)" style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid var(--border-color); color: white; border-radius: 6px; outline: none; font-family: 'Inter', sans-serif; font-size: 0.85rem; cursor: pointer;"></select>
-		<div style="display: flex; gap: 8px;">
-			<button class="btn-success" onClick="createNewProfile()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: 600;">💾 Baru</button>
-			<button class="btn-danger" onClick="removeCurrentProfile()" style="padding: 6px 10px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-trash"></i></button>
-		</div>
-		<div style="display: flex; gap: 8px; margin-top: 4px;">
-			<button class="btn-primary" onClick="exportProfilesData()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-export"></i> Ekspor</button>
-			<button class="btn-purple" onClick="document.getElementById('importFileInput').click()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-import"></i> Impor</button>
-			<input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importProfilesData(event)">
-		</div>
-	</div>
-	
+    <h4 style="margin-top: 0; font-size: 0.85rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px;">📁 Kelola Profil Build</h4>
+    <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
+        <select id="profileSelect" onchange="handleProfileChange(this.value)" style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid var(--border-color); color: white; border-radius: 6px; outline: none; font-family: 'Inter', sans-serif; font-size: 0.85rem; cursor: pointer;"></select>
+        <div style="display: flex; gap: 8px;">
+            <button class="btn-success" onClick="createNewProfile()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: 600;">💾 Baru</button>
+            <button class="btn-danger" onClick="removeCurrentProfile()" style="padding: 6px 10px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-trash"></i></button>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 4px;">
+            <button class="btn-primary" onClick="exportProfilesData()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-export"></i> Ekspor</button>
+            <button class="btn-purple" onClick="document.getElementById('importFileInput').click()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-import"></i> Impor</button>
+            <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importProfilesData(event)">
+        </div>
+    </div>
+    
 	<div class="panel-actions">
 		<button class="btn-primary" onClick="toggleBookPanel();"><span data-i18n="btnTarget">📚 Pilihan Buku Target</span></button>
 		<button class="btn-success" onClick="copyShareLink()"><span data-i18n="btnShare">🔗 Bagikan Build (Copy Link)</span></button>
@@ -267,51 +281,48 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 </div>
 
 <div id="inventoryModal" class="modal-backdrop" style="display:none; z-index: 2001;">
-	<div class="modal-content" style="max-width: 450px;">
-		<h3>Pilih Item untuk Inventory</h3>
-		<input type="text" id="invSearch" class="search-box" placeholder="🔍 Cari nama buku/bahan..." onkeyup="filterInventorySearch(this.value)">
-		<div id="invItemList" class="branch" style="max-height: 250px; overflow-y: auto; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);"></div>
-		<button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onClick="closeInventoryModal()">Tutup Jendela</button>
-	</div>
+    <div class="modal-content" style="max-width: 450px;">
+        <h3>Pilih Item untuk Inventory</h3>
+        <input type="text" id="invSearch" class="search-box" placeholder="🔍 Cari nama buku/bahan..." onkeyup="filterInventorySearch(this.value)">
+        <div id="invItemList" class="branch" style="max-height: 250px; overflow-y: auto; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);"></div>
+        <button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onClick="closeInventoryModal()">Tutup Jendela</button>
+    </div>
 </div>
 
 <div id="floatingTooltip" class="floating-tooltip"></div>
 
 <script>
 const LANG = {
-	id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", matDesc: "Bahan Crafting" },
-	en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations, profiles, and start over?", promptCopy: "Copy the link below:", statEquipDesc: "* Bind on Equip.", footerText: "Tome Calculator © 2026 | Created by <strong>Sulfikar</strong>", matDesc: "Crafting Material" }
+    id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", matDesc: "Bahan Crafting" },
+    en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations, profiles, and start over?", promptCopy: "Copy the link below:", statEquipDesc: "* Bind on Equip.", footerText: "Tome Calculator © 2026 | Created by <strong>Sulfikar</strong>", matDesc: "Crafting Material" }
 };
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
 
 function applyLanguage() {
-	document.querySelectorAll('[data-i18n]').forEach(el => {
-		const key = el.getAttribute('data-i18n');
-		if (LANG[currentLang][key]) {
-			if (el.tagName === 'INPUT') el.placeholder = LANG[currentLang][key];
-			else el.innerHTML = LANG[currentLang][key]; 
-		}
-	});
-	
-	document.getElementById('langBtn').innerText = currentLang === 'id' ? '🌐 Switch to English' : '🌐 Ganti ke Indonesia';
-	document.getElementById('menuToggleBtn').innerText = LANG[currentLang]['menuBtnText'] || "⚙️ Buka Menu";
-	
-	processTree(leftTreeId, false);
-	processTree(rightTreeId, true);
-	renderDeductions();
-	renderMenu();
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (LANG[currentLang][key]) {
+            if (el.tagName === 'INPUT') el.placeholder = LANG[currentLang][key];
+            else el.innerHTML = LANG[currentLang][key]; 
+        }
+    });
+    
+    document.getElementById('langBtn').innerText = currentLang === 'id' ? '🌐 Switch to English' : '🌐 Ganti ke Indonesia';
+    document.getElementById('menuToggleBtn').innerText = LANG[currentLang]['menuBtnText'];
+    
+    processTree(leftTreeId, false);
+    processTree(rightTreeId, true);
+    renderDeductions();
+    renderMenu();
 }
 
 function toggleLanguage() {
-	currentLang = currentLang === 'id' ? 'en' : 'id';
-	localStorage.setItem('tomeLang', currentLang);
-	applyLanguage();
+    currentLang = currentLang === 'id' ? 'en' : 'id';
+    localStorage.setItem('tomeLang', currentLang);
+    applyLanguage();
 }
 
-// ==========================================
-// DATABASE RESEP CRAFTING (TOME_DB)
-// ==========================================
 const TOME_DB = [];
 TOME_DB[601] = [501, 502, 509, 17615, 'The Calm of Ice']; 
 TOME_DB[602] = [502, 503, 505, 17622, 'The Khatru']; 
@@ -387,418 +398,674 @@ TOME_DB[107] = [0, 0, 0, 17585, 'Tome of Grace'];
 TOME_DB[108] = [0, 0, 0, 17607, 'A Flowerless Plant']; 
 TOME_DB[109] = [0, 0, 0, 17611, 'Eternitys Moon'];
 
-// ==========================================
-// DATABASE STATS (TOME_STATS)
-// ==========================================
 const TOME_STATS = {
-	101: ["Strength +4"], 102: ["Dexterity +4"], 103: ["Magic +4"], 104: ["Vitality +4"], 105: ["Critical Hit Rate +1%"], 106: ["Maximum HP +30"], 107: ["Maximum MP +50"], 108: ["HP Recovery Rate +3", "EXP Gain +1%"], 109: ["MP Recovery Rate +3", "EXP Gain +1%"],
-	201: ["Strength +5", "Vitality +4"], 202: ["Dexterity +5", "Vitality +4"], 203: ["Magic +5", "Vitality +4"], 204: ["Strength +9"], 205: ["Dexterity +9"], 206: ["Vitality +9"], 207: ["Magic +9"], 208: ["HP Recovery Rate +5", "EXP Gain +2%"], 209: ["MP Recovery Rate +5", "EXP Gain +2%"],
-	301: ["Strength +9", "Vitality +8"], 302: ["Dexterity +9", "Vitality +8"], 303: ["Magic +9", "Vitality +8"], 304: ["Strength +15"], 305: ["Dexterity +15"], 306: ["Vitality +15"], 307: ["Magic +15"], 308: ["Critical Hit Rate +1%"], 309: ["Maximum HP +60"],
-	401: ["Magic +13", "Vitality +12"], 402: ["Strength +20"], 403: ["Dexterity +20"], 404: ["Vitality +20"], 405: ["Magic +20"], 406: ["Strength +13", "Vitality +12"], 407: ["Dexterity +13", "Vitality +12"], 408: ["Critical Hit Rate +1%", "Maximum HP +50"], 409: ["Maximum HP +120"],
-	501: ["Magic +20", "Channeling Time -3%"], 502: ["Magic +20", "Critical Hit Rate +1%"], 503: ["Vitality +25"], 504: ["Vitality +20", "Maximum HP +200"], 505: ["Strength +15", "Dexterity +15"], 506: ["Magic +15", "Vitality +15"], 507: ["Strength +12", "Dexterity +12", "Vitality +12"], 508: ["Magic +12", "Dexterity +12", "Vitality +12"], 509: ["Strength +10", "Dexterity +10", "Magic +10", "Vitality +10"], 510: ["Strength +15", "Physical Attack +20"], 511: ["Magic +15", "Magic Attack +20"], 512: ["Dexterity +15", "Interval Between Hits -0.05 seconds"], 513: ["Vitality +15", "Physical Defense +100"], 514: ["Maximum HP +300"], 515: ["Strength +9", "Dexterity +9", "Magic +9", "Vitality +8", "Maximum HP +70"], 516: ["Strength +9", "Dexterity +9", "Magic +9", "Vitality +8", "Critical Hit Rate +1%"],
-	601: ["Strength +15", "Dexterity +15", "Critical Hit Rate +1%"], 602: ["Magic +15", "Vitality +15", "Channeling Time -3%"], 603: ["Strength +15", "Vitality +15", "Maximum HP +150"], 604: ["Dexterity +20", "Movement Speed +0.10 meters/second", "Interval Between Hits -0.05 seconds"], 605: ["Magic +20", "Maximum MP +200", "Channeling Time -3%"], 606: ["Strength +20", "Physical Attack +30", "Critical Hit Rate +1%"], 607: ["Vitality +20", "Maximum HP +200", "Physical Defense +50"], 608: ["Strength +15", "Dexterity +15", "Magic +15", "Vitality +15"], 609: ["Dexterity +15", "Vitality +15", "Critical Hit Rate +1%"], 610: ["Magic +15", "Dexterity +15", "Channeling Time -3%"], 611: ["Strength +15", "Magic +15", "Physical Attack +20"], 612: ["Magic +25", "Channeling Time -3%"], 613: ["Strength +25", "Critical Hit Rate +1%"], 614: ["Dexterity +25", "Interval Between Hits -0.05 seconds"], 615: ["Dexterity +20", "Magic +20", "Critical Hit Rate +1%", "Channeling Time -3%"], 616: ["Strength +15", "Dexterity +15", "Magic +15", "Vitality +15", "Critical Hit Rate +1%", "Channeling Time -1%", "Interval Between Hits -0.05 seconds"] 
+	// LEVEL 1 TOMES
+	101: ["Strength +4", "Vitality +3"],                             // Underestimated Resolve
+	102: ["Dexterity +4", "Vitality +3"],                            // Soaring Heart
+	103: ["Magic +4", "Vitality +3"],                                // Retribution's Flame
+	104: ["Strength +5"],                                            // Tome of the River Spirits
+	105: ["Dexterity +5"],                                  		// Flanker's Tome
+	106: ["Vitality +5"],                                      	  	 // Tome of Hyperbolic Boasts
+	107: ["Magic +5"],                                        		 // Tome of Grace
+	108: ["HP Recovery +3", "EXP +1%"],                   			 // A Flowerless Plant
+	109: ["MP Recovery +3", "EXP +1%"],                    			// Eternity's Moon
+
+	// LEVEL 2 TOMES
+	201: ["Strength +5", "Vitality +4"],                             // The Claws of the Tiger
+	202: ["Dexterity +5", "Vitality +4"],                            // The Shadow of the Fox
+	203: ["Magic +5", "Vitality +4"],                                // The Plume of the Phoenix
+	204: ["Strength +9"],                                            // The Weight of the Mountain
+	205: ["Dexterity +9"],                                           // The Swiftness of the Wind
+	206: ["Vitality +9"],                                            // The Power of the Sea
+	207: ["Magic +9"],                                               // The Calm of the Forest
+	208: ["HP Recovery +5", "EXP +2%"],                    			// Hymn of Meditation
+	209: ["MP Recovery +5", "EXP +2%"],                    			// Chant of Rebirth
+
+	// LEVEL 3 TOMES
+	301: ["Strength +9", "Vitality +8"],                             // Eat Drink and be Merry
+	302: ["Dexterity +9", "Vitality +8"],                            // Sunset Tales
+	303: ["Magic +9", "Vitality +8"],                                // Adventures and Mishaps
+	304: ["Strength +15"],                                           // The Sunny Pass
+	305: ["Dexterity +15"],                                          // Tales of Beauty
+	306: ["Vitality +15"],                                           // The Bards Wanderlust
+	307: ["Magic +15"],                                              // A Poets Musings
+	308: ["HP Recovery +9", "EXP +3%"],                              // The Fisherman's Pride
+	309: ["MP Recovery +9", "EXP +3%"],                              // The Scribe's Privilege
+	
+	// LEVEL 4 TOMES
+	401: ["Magic +13", "Vitality +12"],                              // Burning Desire
+	402: ["Strength +20"],                                           // Tome of Predestination
+	403: ["Dexterity +20"],                                          // The Roses Thorn
+	404: ["Vitality +20"],                                           // Letters of Social Unrest
+	405: ["Magic +20"],                                              // The Appetites of Spring
+	406: ["HP Recovery +9", "EXP +4%"],                           	// The Rivers Edge
+	407: ["MP Recovery +12", "EXP +4%"],                        	  // The Weak Stream of Many Miles
+	408: ["Strength +13", "Vitality +12"],   			             // Battle Tactics
+	409: ["Dexterity +13", "Vitality +12"],                          // A Bewitching Proposal
+
+	// LEVEL 5 TOMES
+	501: ["Magic +20", "Critical Hit Rate +1%"],                       // A Heart like Still Water
+	502: ["Magic +20", "Movement Speed +0.10 meters/second"],         // The Tsunamis of Yore
+	503: ["Vitality +25"],                                            // Laughing Mad
+	504: ["Vitality +20", "Reduce Physical damage taken +3%"],        // The Book of Congratulations
+	505: ["Dexterity +25"],                           				  // The Wrath of Heaven
+	506: ["Dexterity +20", "Critical Hit Rate +1%"],                               // A Strange Kindness
+	507: ["Strength +20", "Speed +0.1 meters/second"],           		// Flesh of the Lamia
+	508: ["Strength +20", "Critical Hit Rate +1%"],             		 // Everything is Emptiness
+	509: ["Magic +13", "Vitality +12", "Speed +0.1 meters/second"], 	// The Oasis Remembered
+	510: ["Magic +13", "Vitality +12", "Channeling Time -1%"],         // The Heavenly Scent
+	511: ["Dexterity +13", "Vitality +12", "Speed +0.1 meters/second"],  // Debt and Tombstones
+	512: ["Dexterity +13", "Vitality +12", "Critical Hit Rate +1%"],      // Endless Waves
+	513: ["Strength +13", "Vitality +12", "Max  HP +70"],                    // Parting Grief
+	514: ["Strength +13", "Vitality +12", "Critical Hit Rate +1%"],                     // Rouge and Red Lips
+	515: ["Strength +9", "Dexterity +9", "Vitality +8", "Magic +9", "Max HP +70"],     // Gang of Hooligans
+	516: ["Strength +9", "Dexterity +9", "Vitality +8", "Magic +9", "Critical Hit Rate +1%"], // The Voidlands
+
+	// LEVEL 6 TOMES
+	601: ["Magic +35"], 											// The Calm of Ice
+	602: ["Magic +20", "Speed +0.2 meters/second"],        			// The Khatru
+	603: ["Vitality +6", "Reduce Physical damage taken +6%"],        // A Carmine Tear
+	604: ["Vitality +20", "Critical Hit Rate +2%"], 				// The Fruit of Intense Labor
+	605: ["Dexterity +35"],     									// Tomorrows Phoenix
+	606: ["Dexterity +20", "Speed +0.2 meters/second"], 			// Riding the Scree
+	607: ["Strength +35"], 											// Turning the Tide
+	608: ["Strength +20", "Critical Hit Rate +2%"], 				// Existential Woe
+	609: ["Magic +13", "Vitality +12", "Channeling -2%"], 			// Book of Fragrances
+	610: ["Magic +13", "Vitality +12", "Critical Hit Rate +2%"],       // Bouquet of Regrets
+	611: ["Dexterity +13", "Vitality +12", "Speed +0.2 meters/second"],       // The Union
+	612: ["Dexterity +13", "Vitality +12", "Max HP +140"],                        // Oblivious Enlightenment
+	613: ["Strength +13", "Vitality +12", "Reduce Physical damage taken +6%"],    // As the Universe Fades
+	614: ["Strength +13", "Vitality +12", "Critical Hit Rate +2%"],    // The Concubines Laugh
+	615: ["Strength +9", "Dexterity +9", "Vitality +8", "Magic +9", "Max HP +70", "Max MP +80"], // The Academy of the East
+	616: ["Strength +9", "Dexterity +9", "Vitality +8", "Magic +9", "Critical Hit Rate +1%", "Channeling Time -1%", "Interval Between Hits -0.05 seconds"] // Pan Gu Creator
 };
 
-// ==========================================
-// LOGIKA UTAMA SCRIPT KENDALI PROFILE & RENDER
-// ==========================================
+let itemCounts = [];       
+let deductions = [];       
+let deductionsCopy = [];   
 let leftTreeId = 616;
-let rightTreeId = 616;
-let inventoryData = {};
-let profiles = { "Default Build": { target: 616, inventory: {}, prices: [0, 0, 0] } };
-let currentProfile = "Default Build";
+let rightTreeId = 515;
+let activeModalItemId = null;
+
+let profiles = {};
+let currentProfile = 'Default';
+
+function showTooltip(element, event) {
+    const id = parseInt(element.title);
+    if (!TOME_DB[id] && id !== 10 && id !== 11 && id !== 12) return;
+    
+    const tooltip = document.getElementById('floatingTooltip');
+    let nameText = "";
+    let typeText = LANG[currentLang]['matDesc'];
+    let statsHtml = "";
+    
+    if (id === 10) { 
+        nameText = "Token of Luck"; 
+        typeText = currentLang === 'id' ? "Mata Uang Kegiatan" : "Event Currency";
+    } else if (id === 11) { 
+        nameText = "Tome Fragment"; 
+    } else if (id === 12) { 
+        nameText = "Tome Page"; 
+    } else { 
+        nameText = TOME_DB[id][4]; 
+        const lvl = Math.floor(id / 100);
+        typeText = `Tome (${LANG[currentLang]['lvl']} ${lvl})`;
+        
+        if (TOME_STATS[id]) {
+            TOME_STATS[id].forEach(stat => {
+                statsHtml += `<span class="tooltip-stat">• ${stat}</span>`;
+            });
+        }
+    }
+
+    let html = `
+        <div class="tooltip-title">
+            <span style="display:inline-block; width:32px; height:32px; background-image:url('znachki.png'); ${getSpritePosition(id)}; transform: scale(0.8); pointer-events:none;"></span>
+            ${nameText}
+        </div>
+        <div class="tooltip-type">${typeText}</div>
+        <div class="tooltip-list">${statsHtml}</div>
+        <div class="tooltip-footer">${LANG[currentLang]['statEquipDesc']}</div>
+    `;
+    
+    tooltip.innerHTML = html;
+    tooltip.style.display = 'block';
+    moveTooltip(event);
+    
+    let linkUrl = (id === 10) ? "http://www.pwdatabase.com/pwi/items/24722" :
+                  (id === 11) ? "http://www.pwdatabase.com/pwi/items/17011" :
+                  (id === 12) ? "http://www.pwdatabase.com/pwi/items/17010" :
+                  `http://www.pwdatabase.com/pwi/items/${TOME_DB[id][3]}`;
+    document.getElementById('nazvaniye').innerHTML = `<a href="${linkUrl}" target="_blank">► ${nameText}</a>`;
+}
+
+function moveTooltip(event) {
+    const tooltip = document.getElementById('floatingTooltip');
+    if (tooltip.style.display !== 'block') return;
+    
+    let x = event.clientX + 15;
+    let y = event.clientY + 15;
+    
+    const tooltipWidth = tooltip.offsetWidth || 240;
+    const tooltipHeight = tooltip.offsetHeight || 160;
+    
+    if (x + tooltipWidth > window.innerWidth) {
+        x = event.clientX - tooltipWidth - 15;
+    }
+    if (y + tooltipHeight > window.innerHeight) {
+        y = event.clientY - tooltipHeight - 15;
+    }
+    
+    tooltip.style.left = x + 'px';
+    tooltip.style.top = y + 'px';
+}
+
+function hideTooltip() { document.getElementById('floatingTooltip').style.display = 'none'; }
+
+// --- TAMBAHKAN BLOK KODE INI UNTUK FIX BUG MOBILE ---
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('button[onMouseOver]')) { hideTooltip(); }
+});
+document.addEventListener('touchstart', function(e) {
+    if (!e.target.closest('button[onMouseOver]')) { hideTooltip(); }
+});
+// ----------------------------------------------------
+
+function copyShareLink() {
+    const compD = {};
+    deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
+    const finalState = { l: leftTreeId, r: rightTreeId, m: document.getElementById('mnojitel').value, d: compD };
+    const hash = btoa(JSON.stringify(finalState));
+    const url = window.location.origin + window.location.pathname + "#" + hash;
+    
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(() => alert(LANG[currentLang]['alertCopy'])).catch(() => prompt(LANG[currentLang]['promptCopy'], url));
+    } else {
+        prompt(LANG[currentLang]['promptCopy'], url);
+    }
+}
+
+function loadFromHash() {
+    if (window.location.hash) {
+        try {
+            const state = JSON.parse(atob(window.location.hash.substring(1)));
+            if (state.l) leftTreeId = state.l;
+            if (state.r) rightTreeId = state.r;
+            if (state.m) document.getElementById('mnojitel').value = state.m;
+            if (state.d) {
+                deductions = [];
+                for (let k in state.d) deductions[parseInt(k)] = state.d[k];
+                saveDeductions(); 
+            }
+            history.replaceState(null, null, ' ');
+        } catch(e) {}
+    }
+}
+
+function saveDeductions() { 
+    localStorage.setItem('tomeDeductions', JSON.stringify(deductions)); 
+    saveActiveProfile(); 
+}
+
+function resetCalculator() {
+    if (confirm(LANG[currentLang]['alertReset'])) {
+        localStorage.removeItem('tomeProfiles');
+        localStorage.removeItem('tomeCurrentProfile');
+        localStorage.removeItem('tomeDeductions');
+        localStorage.removeItem('tomePrice10');
+        localStorage.removeItem('tomePrice11');
+        localStorage.removeItem('tomePrice12');
+        history.replaceState(null, null, ' ');
+        location.reload();
+    }
+}
+
+function handleItemClick(element) {
+    let clickedVal = parseInt(element.value) || 1;
+    if(clickedVal > 99) clickedVal = 99;
+	document.getElementById('mnojitel').value = clickedVal;
+	processTree(parseInt(element.title), true);
+}
+
+function addDeduction(id) {
+    const btn = document.querySelector(`.branch button[title="${id}"]`);
+    activeModalItemId = id;
+    
+    let itemName = LANG[currentLang]['modalTitleAdd'];
+    if (id === 10) itemName = "Token of Luck";
+    else if (id === 11) itemName = "Tome Fragment";
+    else if (id === 12) itemName = "Tome Page";
+    else if (TOME_DB[id]) itemName = TOME_DB[id][4];
+
+    document.getElementById('modalTitle').innerText = itemName;
+    document.getElementById('modalInput').value = btn ? btn.value : 1;
+    document.getElementById('customModal').style.display = 'flex';
+    document.getElementById('modalInput').focus();
+}
+
+function closeModal() { document.getElementById('customModal').style.display = 'none'; activeModalItemId = null; }
+
+function confirmModal() {
+    const amount = parseInt(document.getElementById('modalInput').value);
+    if (!isNaN(amount) && amount > 0 && activeModalItemId) {
+        if (!deductions[activeModalItemId]) deductions[activeModalItemId] = 0;
+        deductions[activeModalItemId] += amount;
+        saveDeductions();
+        processTree(leftTreeId, false);
+        processTree(rightTreeId, true);
+        renderDeductions();
+    }
+    closeModal();
+}
+
+function removeDeduction(id) {
+    deductions[id] = 0;
+    saveDeductions();
+    processTree(leftTreeId, false);
+    processTree(rightTreeId, true);
+    renderDeductions();
+}
+
+function getSpritePosition(id) { 
+    const parsedId = parseInt(id);
+    if (parsedId === 10) return 'background-position:32px -32px';
+    if (parsedId === 11) return 'background-position:64px 0px';
+    if (parsedId === 12) return 'background-position:32px 0px';
+    let row = Math.floor(parsedId / 100);
+    let num = parsedId - (row * 100);
+    return `background-position:-${32 * (num - 1)}px -${32 * (row - 1)}px`;
+}
+
+function toggleBookPanel() {
+    const panel = document.getElementById('vyborDiv');
+    const search = document.getElementById('bookSearch');
+    const isHidden = panel.style.display === 'none';
+    panel.style.display = isHidden ? 'block' : 'none';
+    search.style.display = isHidden ? 'block' : 'none';
+    if(isHidden) search.focus();
+}
+
+function filterBooks(query) {
+    const q = query.toLowerCase();
+    document.querySelectorAll('#vyborDiv ul').forEach(ul => {
+        let hasVisibleItem = false;
+        ul.querySelectorAll('li').forEach(li => {
+            const id = li.querySelector('button').title;
+            const bookName = TOME_DB[id] ? TOME_DB[id][4].toLowerCase() : '';
+            if (bookName.includes(q)) { li.style.display = 'inline-block'; hasVisibleItem = true; } 
+            else li.style.display = 'none';
+        });
+        const header = ul.previousElementSibling;
+        if (header && header.tagName === 'H4') header.style.display = hasVisibleItem ? 'block' : 'none';
+        ul.style.display = hasVisibleItem ? 'flex' : 'none';
+    });
+}
+
+function updateCostAndProgress() {
+    let price10 = Math.max(0, parseInt(document.getElementById('price10').value) || 0);
+    let price11 = Math.max(0, parseInt(document.getElementById('price11').value) || 0);
+    let price12 = Math.max(0, parseInt(document.getElementById('price12').value) || 0);
+    
+    document.getElementById('price10').value = price10;
+    document.getElementById('price11').value = price11;
+    document.getElementById('price12').value = price12;
+    
+    localStorage.setItem('tomePrice10', price10);
+    localStorage.setItem('tomePrice11', price11);
+    localStorage.setItem('tomePrice12', price12);
+    
+    saveActiveProfile(); 
+
+    let netCounts = [];
+    let dedCopy = Object.assign([], deductions);
+    let multiplier = Math.max(1, Math.min(99, parseInt(document.getElementById('mnojitel').value) || 1));
+
+    function calcNetNode(nodeId) {
+        if (!netCounts[nodeId]) netCounts[nodeId] = 0;
+        if (dedCopy[nodeId] && dedCopy[nodeId] > 0) {
+            dedCopy[nodeId]--;
+            return; 
+        }
+        netCounts[nodeId]++;
+        if (nodeId > 200) { 
+            calcNetNode(TOME_DB[nodeId][0]); 
+            calcNetNode(TOME_DB[nodeId][1]); 
+            calcNetNode(TOME_DB[nodeId][2]); 
+        }
+    }
+
+    for (let z = 0; z < multiplier; z++) calcNetNode(rightTreeId);
+
+    let netBaseMats = 0;
+    for (let z = 101; z <= 109; z++) if (netCounts[z]) netBaseMats += netCounts[z] * 3;
+    
+    netCounts[12] = netBaseMats; if (deductions[12]) netCounts[12] -= deductions[12]; if (netCounts[12] < 0) netCounts[12] = 0;
+    netCounts[11] = netBaseMats; if (deductions[11]) netCounts[11] -= deductions[11]; if (netCounts[11] < 0) netCounts[11] = 0;
+    netCounts[10] = netCounts[12] * 80; if (deductions[10]) netCounts[10] -= deductions[10]; if (netCounts[10] < 0) netCounts[10] = 0;
+
+    let grossCounts = [];
+    function calcGrossNode(nodeId) {
+        if (!grossCounts[nodeId]) grossCounts[nodeId] = 0;
+        grossCounts[nodeId]++;
+        if (nodeId > 200) { calcGrossNode(TOME_DB[nodeId][0]); calcGrossNode(TOME_DB[nodeId][1]); calcGrossNode(TOME_DB[nodeId][2]); }
+    }
+    for (let z = 0; z < multiplier; z++) calcGrossNode(rightTreeId);
+    
+    let grossBaseMats = 0;
+    for (let z = 101; z <= 109; z++) if (grossCounts[z]) grossBaseMats += grossCounts[z] * 3;
+    grossCounts[11] = grossBaseMats; grossCounts[12] = grossBaseMats; grossCounts[10] = grossBaseMats * 80;
+
+    let totalCost = (netCounts[10] || 0) * price10 + (netCounts[11] || 0) * price11 + (netCounts[12] || 0) * price12;
+    document.getElementById('totalCostDisplay').innerText = totalCost.toLocaleString('id-ID') + " Gold";
+
+    let grossVal = (grossCounts[10] || 0) + (grossCounts[12] || 0) * 80 + (grossCounts[11] || 0) * 80;
+    let netVal = (netCounts[10] || 0) + (netCounts[12] || 0) * 80 + (netCounts[11] || 0) * 80;
+    
+    let pct = grossVal > 0 ? ((grossVal - netVal) / grossVal) * 100 : 0;
+    pct = Math.max(0, Math.min(100, pct));
+
+    document.getElementById('progressBar').style.width = pct.toFixed(1) + '%';
+    document.getElementById('progressPercentText').innerText = pct.toFixed(1) + '%';
+
+    if (pct === 100 && !window.confettiFired) {
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#3b82f6', '#10b981', '#f59e0b'] });
+        window.confettiFired = true; 
+    } else if (pct < 100) window.confettiFired = false; 
+}
+
+function exportToImage(e) {
+    const btn = e.currentTarget || document.querySelector('button[onClick*="exportToImage"]');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = "⏳ Memproses...";
+    html2canvas(document.querySelector('.container'), { backgroundColor: "#0f172a", scale: 2, logging: false, useCORS: true }).then(canvas => {
+        const link = document.createElement('a'); link.download = 'Tome-Build-Export.png'; link.href = canvas.toDataURL('image/png'); link.click(); btn.innerHTML = originalText;
+    }).catch(() => { btn.innerHTML = "❌ Gagal!"; setTimeout(() => btn.innerHTML = originalText, 2000); });
+}
+
+function getTreeItemHtml(id, isDeductionList = false) {
+    const count = isDeductionList ? deductions[id] : itemCounts[id];
+    let actionSpan = isDeductionList ? `<span onClick="removeDeduction(${id});" title="Hapus dari daftar ini"></span>` : `<span onClick="addDeduction(${id});" title="Kurangi dari total"></span>`;
+    let clickAction = isDeductionList ? '' : 'onClick="handleItemClick(this)"';
+    if (!isDeductionList && (id === 12 || id === 11 || id === 10)) clickAction = '';
+    return `<li>${actionSpan}<button style="${getSpritePosition(id)}" value="${count}" title="${id}" ${clickAction} onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button><b>×${count}</b></li>`;
+}
+
+function renderTree(isRightTree) {
+	let txt = '';
+    const txtLvl = LANG[currentLang]['lvl'];
+    const txtBase = LANG[currentLang]['baseMat'];
+
+	for (let r = 6; r >= 1; r--) {
+		let start = r * 100 + 1; let end = r * 100 + 16; let hasItem = false;
+		let tempTxt = `<ul><li>${txtLvl} ${r}</li> `;
+		for (let e = start; e <= end; e++) {
+			if (itemCounts[e]) { tempTxt += getTreeItemHtml(e); hasItem = true; }
+		}
+		tempTxt += '</ul>';
+		if (hasItem) txt += tempTxt;
+	}
+	
+	txt += `<ul id="niz"><li>${txtBase}</li> `;
+	if (itemCounts[11]) txt += getTreeItemHtml(11);
+	if (itemCounts[12]) txt += getTreeItemHtml(12);
+	if (itemCounts[10]) txt += `<li id="strelki" style="margin: 0 10px;">→</li>${getTreeItemHtml(10)}`;
+	txt += `</ul>`;
+	document.getElementById(isRightTree ? 'rightTree' : 'leftTree').innerHTML = txt;
+}
+
+function renderDeductions() {
+    let txt = ''; let lis = ''; const deductionsDiv = document.getElementById('deductionsList');
+    if (deductions[11]) lis += getTreeItemHtml(11, true); if (deductions[12]) lis += getTreeItemHtml(12, true); if (deductions[10]) lis += getTreeItemHtml(10, true);
+    if (lis !== '') txt += `<ul><li>${LANG[currentLang]['baseMat']}</li> ${lis}</ul>`;
+    for (let r = 1; r <= 6; r++) {
+        lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
+        for (let e = start; e <= end; e++) if (deductions[e]) lis += getTreeItemHtml(e, true);
+        if (lis !== '') txt += `<ul><li>${LANG[currentLang]['lvl']} ${r}</li> ${lis}</ul>`;
+    }
+    deductionsDiv.innerHTML = txt;
+}
+
+function renderMenu() {
+    let txt = '';
+    for (let r = 6; r >= 1; r--) {
+        let lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
+        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="${getSpritePosition(e)}" title="${e}" onClick="processTree(${e}, false)" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
+        txt += `<h4>Tome ${LANG[currentLang]['lvl']} ${r}</h4><ul style="display: flex; flex-wrap: wrap; gap: 8px;"> ${lis}</ul>`;
+    }
+    document.getElementById('vyborDiv').innerHTML = txt;
+}
+
+function calculateNode(id) {
+	if (!itemCounts[id]) itemCounts[id] = 0;
+	if (deductionsCopy[id] && deductionsCopy[id] > 0) {
+		deductionsCopy[id]--;
+        return; 
+	}
+	itemCounts[id]++;
+	if (id > 200) { 
+        calculateNode(TOME_DB[id][0]); 
+        calculateNode(TOME_DB[id][1]); 
+        calculateNode(TOME_DB[id][2]); 
+    }
+}
+
+function processTree(id, isRightTree = false) {
+    itemCounts = [];
+    deductionsCopy = Object.assign([], deductions);
+    let multiplier = 1;
+
+    if (isRightTree) {
+        rightTreeId = id;
+        let inputField = document.getElementById('mnojitel');
+        let inputVal = parseInt(inputField.value);
+        if (isNaN(inputVal) || inputVal < 1) inputVal = 1;
+        if (inputVal > 99) inputVal = 99;
+        inputField.value = inputVal; 
+        multiplier = inputVal;
+    } else leftTreeId = id;
+
+    for (let z = 0; z < multiplier; z++) calculateNode(id);
+
+    let baseMats = 0;
+    for (let z = 101; z <= 109; z++) if (itemCounts[z]) baseMats += itemCounts[z] * 3;
+
+    for (let z = 12; z >= 10; z--) {
+        itemCounts[z] = z === 10 ? (itemCounts[12] || 0) * 80 : baseMats;
+        if (deductions[z]) itemCounts[z] -= deductions[z];
+        if (itemCounts[z] < 0) itemCounts[z] = 0;
+    }
+        
+    renderTree(isRightTree);
+    updateCostAndProgress(); 
+}
+
+function openInventoryModal() {
+    document.getElementById('inventoryModal').style.display = 'flex';
+    document.getElementById('invSearch').value = '';
+    renderInventorySelection('');
+    document.getElementById('invSearch').focus();
+}
+
+function closeInventoryModal() { document.getElementById('inventoryModal').style.display = 'none'; }
+
+function renderInventorySelection(query) {
+    let html = '<ul style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">';
+    const q = query.toLowerCase();
+    
+    const baseMats = [ {id: 12, name: 'Tome Page'}, {id: 11, name: 'Tome Fragment'}, {id: 10, name: 'Token of Luck'} ];
+    baseMats.forEach(mat => {
+        if (mat.name.toLowerCase().includes(q)) {
+            html += `<li><button style="${getSpritePosition(mat.id)}" title="${mat.id}" onClick="selectItemForInventory(${mat.id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
+        }
+    });
+
+	TOME_DB.forEach((tome, id) => {
+        if (tome && tome[4].toLowerCase().includes(q)) {
+            html += `<li><button style="${getSpritePosition(id)}" title="${id}" onClick="selectItemForInventory(${id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
+        }
+    });
+    
+    html += '</ul>';
+    document.getElementById('invItemList').innerHTML = html;
+}
+
+function filterInventorySearch(val) { renderInventorySelection(val); }
+
+function selectItemForInventory(id) {
+    closeInventoryModal();
+    addDeduction(id); 
+}
 
 function initProfiles() {
-	const saved = localStorage.getItem('tomeProfiles');
-	if (saved) {
-		try { profiles = JSON.parse(saved); } catch(e) { console.error(e); }
-	}
-	currentProfile = localStorage.getItem('tomeCurrentProfile') || Object.keys(profiles)[0];
-	if (!profiles[currentProfile]) currentProfile = Object.keys(profiles)[0];
-	
-	loadProfileData(currentProfile);
-	renderProfileDropdown();
-}
-
-function loadProfileData(name) {
-	const p = profiles[name];
-	leftTreeId = p.target || 616;
-	rightTreeId = p.target || 616;
-	inventoryData = p.inventory || {};
-	
-	if (p.prices) {
-		document.getElementById('price10').value = p.prices[0] || 0;
-		document.getElementById('price11').value = p.prices[1] || 0;
-		document.getElementById('price12').value = p.prices[2] || 0;
-	}
-	processTree(leftTreeId, false);
-	processTree(rightTreeId, true);
-	renderDeductions();
-}
-
-function saveProfiles() {
-	profiles[currentProfile] = {
-		target: rightTreeId,
-		inventory: inventoryData,
-		prices: [
-			parseInt(document.getElementById('price10').value) || 0,
-			parseInt(document.getElementById('price11').value) || 0,
-			parseInt(document.getElementById('price12').value) || 0
-		]
-	};
-	localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
-	localStorage.setItem('tomeCurrentProfile', currentProfile);
+    try {
+        const saved = localStorage.getItem('tomeProfiles');
+        if (saved) profiles = JSON.parse(saved);
+    } catch (e) { profiles = {}; }
+    
+    if (!profiles['Default']) {
+        profiles['Default'] = { l: 616, r: 515, m: 1, d: [], p10: 0, p11: 0, p12: 0 };
+    }
+    
+    currentProfile = localStorage.getItem('tomeCurrentProfile') || 'Default';
+    if (!profiles[currentProfile]) currentProfile = 'Default';
+    
+    loadProfileData(currentProfile);
+    renderProfileDropdown();
 }
 
 function renderProfileDropdown() {
-	const select = document.getElementById('profileSelect');
-	if (!select) return;
-	select.innerHTML = '';
-	Object.keys(profiles).forEach(name => {
-		let opt = document.createElement('option');
-		opt.value = name;
-		opt.innerText = name;
-		if (name === currentProfile) opt.selected = true;
-		select.appendChild(opt);
-	});
+    const select = document.getElementById('profileSelect');
+    if (!select) return;
+    select.innerHTML = '';
+    for (let name in profiles) {
+        let opt = document.createElement('option');
+        opt.value = name;
+        opt.innerText = name;
+        if (name === currentProfile) opt.selected = true;
+        select.appendChild(opt);
+    }
 }
 
-function handleProfileChange(val) {
-	saveProfiles();
-	currentProfile = val;
-	loadProfileData(val);
+function loadProfileData(name) {
+    currentProfile = name;
+    localStorage.setItem('tomeCurrentProfile', name);
+    
+    const data = profiles[name];
+    leftTreeId = data.l || 616;
+    rightTreeId = data.r || 515;
+    document.getElementById('mnojitel').value = data.m || 1;
+    deductions = data.d || [];
+    
+    document.getElementById('price10').value = data.p10 || 0;
+    document.getElementById('price11').value = data.p11 || 0;
+    document.getElementById('price12').value = data.p12 || 0;
+    
+    localStorage.setItem('tomeDeductions', JSON.stringify(deductions));
+    localStorage.setItem('tomePrice10', data.p10 || 0);
+    localStorage.setItem('tomePrice11', data.p11 || 0);
+    localStorage.setItem('tomePrice12', data.p12 || 0);
+}
+
+function handleProfileChange(name) {
+    loadProfileData(name);
+    applyLanguage();
+}
+
+function saveActiveProfile() {
+    let p10 = parseInt(document.getElementById('price10').value) || 0;
+    let p11 = parseInt(document.getElementById('price11').value) || 0;
+    let p12 = parseInt(document.getElementById('price12').value) || 0;
+    let m = parseInt(document.getElementById('mnojitel').value) || 1;
+
+    profiles[currentProfile] = {
+        l: leftTreeId,
+        r: rightTreeId,
+        m: m,
+        d: deductions,
+        p10: p10,
+        p11: p11,
+        p12: p12
+    };
+    localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
 }
 
 function createNewProfile() {
-	let name = prompt("Masukkan nama profil build baru:");
-	if (!name) return;
-	name = name.trim();
-	if (profiles[name]) { alert("Nama profil sudah ada!"); return; }
-	profiles[name] = { target: 616, inventory: {}, prices: [0,0,0] };
-	currentProfile = name;
-	saveProfiles();
-	renderProfileDropdown();
-	loadProfileData(name);
+    let name = prompt("Masukkan nama profil baru (misal: Mage DPS, Alt Cleric):");
+    if (!name) return;
+    name = name.trim();
+    if (name === "") return;
+    if (profiles[name]) { alert("Nama profil tersebut sudah ada!"); return; }
+    
+    currentProfile = name;
+    saveActiveProfile();
+    renderProfileDropdown();
+    loadProfileData(name);
+    applyLanguage();
 }
 
 function removeCurrentProfile() {
-	if (Object.keys(profiles).length <= 1) {
-		alert("Anda tidak bisa menghapus satu-satunya profil yang tersisa.");
-		return;
-	}
-	if (!confirm(`Hapus profil "${currentProfile}"?`)) return;
-	delete profiles[currentProfile];
-	currentProfile = Object.keys(profiles)[0];
-	saveProfiles();
-	renderProfileDropdown();
-	loadProfileData(currentProfile);
+    if (currentProfile === 'Default') {
+        alert("Profil 'Default' sistem tidak dapat dihapus.");
+        return;
+    }
+    if (confirm(`Apakah Anda yakin ingin menghapus profil "${currentProfile}" beserta seluruh data di dalamnya?`)) {
+        delete profiles[currentProfile];
+        localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
+        localStorage.setItem('tomeCurrentProfile', 'Default'); 
+        currentProfile = 'Default';
+        loadProfileData('Default');
+        renderProfileDropdown();
+        applyLanguage();
+    }
 }
 
 function exportProfilesData() {
-    const blob = new Blob([JSON.stringify(profiles, null, 2)], { type: 'application/json' });
+    const dataStr = JSON.stringify(profiles, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(blob);
+    
     const a = document.createElement('a');
     a.href = url;
     a.download = "Tome-Profiles-Backup.json"; 
     document.body.appendChild(a);
     a.click();
+    
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 }
 
 function importProfilesData(event) {
-	const file = event.target.files[0];
-	if (!file) return;
-	const reader = new FileReader();
-	reader.onload = function(e) {
-		try {
-			const importedData = JSON.parse(e.target.result);
-			if (typeof importedData === 'object' && importedData !== null) {
-				profiles = { ...profiles, ...importedData };
-				localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
-				renderProfileDropdown();
-				loadProfileData(currentProfile);
-				applyLanguage();
-				alert(currentLang === 'id' ? "Data profil berhasil diimpor!" : "Profile data imported successfully!");
-			} else {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+            if (typeof importedData === 'object' && importedData !== null) {
+                profiles = { ...profiles, ...importedData };
+                localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
+                
+                renderProfileDropdown();
+                loadProfileData(currentProfile);
+                applyLanguage();
+                alert(currentLang === 'id' ? "Data profil berhasil diimpor!" : "Profile data imported successfully!");
+            } else {
                 alert(currentLang === 'id' ? "Format file tidak valid!" : "Invalid file format!");
             }
-		} catch (err) { alert(currentLang === 'id' ? "Gagal membaca file JSON!" : "Failed to read JSON file!"); }
-	};
-	reader.readAsText(file);
-	event.target.value = '';
+        } catch (err) {
+            alert(currentLang === 'id' ? "Gagal membaca file JSON!" : "Failed to read JSON file!");
+        }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
 }
 
-function generateRequirements(id, qty = 1, res = {}) {
-	if (!id || !TOME_DB[id]) return res;
-	if (!res[id]) res[id] = 0;
-	res[id] += qty;
-	const ingredients = TOME_DB[id].slice(0, 3);
-	ingredients.forEach(ingId => {
-		if (ingId > 0) { generateRequirements(ingId, qty, res); }
-	});
-	return res;
-}
-
-// 🛠️ DIKEMBALIKAN KE RUMUS ASLI: itemId%10 (Sesuai Struktur Grid Kolom Gambar Anda)
-function processTree(id, isRight = false) {
-	if (!id) id = 616;
-	if (isRight) rightTreeId = id; else leftTreeId = id;
-	const mnojitel = parseInt(document.getElementById('mnojitel').value) || 1;
-	const reqs = generateRequirements(id, isRight ? mnojitel : 1);
-	
-	let html = `<ul><li>${isRight ? LANG[currentLang].lvl + ' ' + Math.floor(id/100) : LANG[currentLang].title1}</li>`;
-	
-	Object.keys(reqs).sort((a,b) => b - a).forEach(itemId => {
-		let finalQty = reqs[itemId];
-		if (isRight && inventoryData[itemId]) {
-			finalQty = Math.max(0, finalQty - inventoryData[itemId]);
-		}
-		
-		if (finalQty > 0 || !isRight) {
-			// 🛠️ DIPULIHKAN: Ditambahkan kembali onClick="processTree(${itemId}, true)" agar bisa diklik kembali seperti semula
-			html += `<li>
-				<button style="background-image:url('znachki.png'); background-position: -${(itemId%10)*32}px -${Math.floor(itemId/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" 
-						onClick="processTree(${itemId}, true)" 
-						onmouseenter="showTooltip(event, ${itemId})" 
-						onmouseleave="hideTooltip()"></button>
-				<b>${finalQty}</b>
-			</li>`;
-		}
-	});
-	html += `</ul>`;
-	
-	document.getElementById(isRight ? 'rightTree' : 'leftTree').innerHTML = html;
-	if (isRight) updateCostAndProgress();
-}
-
-function updateCostAndProgress() {
-	const mnojitel = parseInt(document.getElementById('mnojitel').value) || 1;
-	const reqs = generateRequirements(rightTreeId, mnojitel);
-	
-	let totalNeeded = 0;
-	let totalOwned = 0;
-	
-	Object.keys(reqs).forEach(id => {
-		totalNeeded += reqs[id];
-		if (inventoryData[id]) { totalOwned += Math.min(reqs[id], inventoryData[id]); }
-	});
-	
-	let progress = totalNeeded > 0 ? (totalOwned / totalNeeded) * 100 : 0;
-	document.getElementById('progressBar').style.width = `${progress}%`;
-	document.getElementById('progressPercentText').innerText = `${progress.toFixed(1)}%`;
-	
-	let p10 = parseInt(document.getElementById('price10').value) || 0;
-	let p11 = parseInt(document.getElementById('price11').value) || 0;
-	let p12 = parseInt(document.getElementById('price12').value) || 0;
-	
-	let totalCost = 0;
-	Object.keys(reqs).forEach(id => {
-		if (id < 200) { 
-			let sisa = Math.max(0, reqs[id] - (inventoryData[id] || 0));
-			totalCost += sisa * (p10 + p11 + p12);
-		}
-	});
-	
-	document.getElementById('totalCostDisplay').innerText = `${totalCost.toLocaleString()} Gold`;
-	saveProfiles();
-}
-
-function renderDeductions() {
-	let html = `<ul><li>${LANG[currentLang].title4}</li>`;
-	let empty = true;
-	Object.keys(inventoryData).forEach(id => {
-		if (inventoryData[id] > 0) {
-			empty = false;
-			html += `<li style="margin: 10px;">
-				<button style="background-image:url('znachki.png'); background-position: -${(id%10)*32}px -${Math.floor(id/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" onClick="processTree(${id}, true)" onmouseenter="showTooltip(event, ${id})" onmouseleave="hideTooltip()"></button>
-				<b>${inventoryData[id]}</b>
-				<span onClick="removeInventory(${id})"></span>
-			</li>`;
-		}
-	});
-	if (empty) html += `<li style="padding: 10px; font-size: 0.85rem; color: var(--text-muted);">${LANG[currentLang].desc4}</li>`;
-	html += `</ul>`;
-	document.getElementById('deductionsList').innerHTML = html;
-}
-
-function removeInventory(id) {
-	delete inventoryData[id];
-	renderDeductions();
-	processTree(rightTreeId, true);
-}
-
-function openInventoryModal() {
-	document.getElementById('inventoryModal').style.display = 'flex';
-	let html = '<ul>';
-	TOME_DB.forEach((item, id) => {
-		if (item) {
-			html += `<li style="margin:5px; display:inline-block;">
-				<button style="background-image:url('znachki.png'); background-position: -${(id%10)*32}px -${Math.floor(id/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" onClick="selectInventoryItem(${id})" title="${item[4]}"></button>
-			</li>`;
-		}
-	});
-	html += '</ul>';
-	document.getElementById('invItemList').innerHTML = html;
-}
-
-let activeModalId = null;
-function selectInventoryItem(id) {
-	closeInventoryModal();
-	activeModalId = id;
-	document.getElementById('modalTitle').innerText = TOME_DB[id][4];
-	document.getElementById('modalInput').value = 1;
-	document.getElementById('customModal').style.display = 'flex';
-}
-
-function confirmModal() {
-	const val = parseInt(document.getElementById('modalInput').value) || 0;
-	if (val > 0 && activeModalId) {
-		inventoryData[activeModalId] = (inventoryData[activeModalId] || 0) + val;
-	}
-	closeModal();
-	renderDeductions();
-	processTree(rightTreeId, true);
-}
-
-function closeModal() { document.getElementById('customModal').style.display = 'none'; }
-function closeInventoryModal() { document.getElementById('inventoryModal').style.display = 'none'; }
-
-function filterInventorySearch(query) {
-	let html = '<ul>';
-	TOME_DB.forEach((item, id) => {
-		if (item && item[4].toLowerCase().includes(query.toLowerCase())) {
-			html += `<li style="margin:5px; display:inline-block;">
-				<button style="background-image:url('znachki.png'); background-position: -${(id%10)*32}px -${Math.floor(id/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" onClick="selectInventoryItem(${id})" title="${item[4]}"></button>
-			</li>`;
-		}
-	});
-	html += '</ul>';
-	document.getElementById('invItemList').innerHTML = html;
-}
-
-function showTooltip(e, id) {
-	const tooltip = document.getElementById('floatingTooltip');
-	if (!TOME_DB[id]) return;
-	
-	const name = TOME_DB[id][4];
-	const level = Math.floor(id/100);
-	const stats = TOME_STATS[id] || ["Tidak ada status"];
-	
-	let statHtml = '';
-	stats.forEach(s => { statHtml += `<span class="tooltip-stat">${s}</span>`; });
-	
-	tooltip.innerHTML = `
-		<div class="tooltip-title">📜 ${name}</div>
-		<div class="tooltip-type">${LANG[currentLang].lvl} ${level} Tome</div>
-		<div class="tooltip-list">${statHtml}</div>
-		<div class="tooltip-footer">${LANG[currentLang].statEquipDesc}</div>
-	`;
-	
-	tooltip.style.display = 'block';
-	tooltip.style.left = `${e.clientX + 15}px`;
-	tooltip.style.top = `${e.clientY + 15}px`;
-}
-
-function hideTooltip() { document.getElementById('floatingTooltip').style.display = 'none'; }
-
-function setupTooltipListeners() {
-	document.addEventListener('mousemove', function(e) {
-		const tooltip = document.getElementById('floatingTooltip');
-		if (tooltip.style.display === 'block') {
-			tooltip.style.left = `${e.clientX + 15}px`;
-			tooltip.style.top = `${e.clientY + 15}px`;
-		}
-	});
-	
-	document.addEventListener('click', function(e) { if (!e.target.closest('button[onmouseenter]')) { hideTooltip(); } });
-	document.addEventListener('touchstart', function(e) { if (!e.target.closest('button[onmouseenter]')) { hideTooltip(); } });
-}
-
-function renderMenu() {
-	let html = '<h4>Pilih Buku Target</h4><ul>';
-	TOME_DB.forEach((item, id) => {
-		if (id >= 500) { 
-			html += `<li style="margin:4px;">
-				<button style="background-image:url('znachki.png'); background-position: -${(id%10)*32}px -${Math.floor(id/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" onClick="setTarget(${id})" title="${item[4]}"></button>
-			</li>`;
-		}
-	});
-	html += '</ul>';
-	document.getElementById('vyborDiv').innerHTML = html;
-}
-
-function setTarget(id) {
-	leftTreeId = id;
-	rightTreeId = id;
-	processTree(leftTreeId, false);
-	processTree(rightTreeId, true);
-	saveProfiles();
-	document.getElementById('mainMenuPanel').style.display = 'none';
-	if (typeof confetti === 'function') confetti();
-}
-
-function toggleBookPanel() {
-	let div = document.getElementById('vyborDiv');
-	let search = document.getElementById('bookSearch');
-	let state = div.style.display === 'none' ? 'block' : 'none';
-	div.style.display = state;
-	search.style.display = state;
-}
-
-function filterBooks(query) {
-	let html = '<h4>Hasil Pencarian</h4><ul>';
-	TOME_DB.forEach((item, id) => {
-		if (item && item[4].toLowerCase().includes(query.toLowerCase())) {
-			html += `<li style="margin:4px;">
-				<button style="background-image:url('znachki.png'); background-position: -${(id%10)*32}px -${Math.floor(id/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" onClick="setTarget(${id})" title="${item[4]}"></button>
-			</li>`;
-		}
-	});
-	html += '</ul>';
-	document.getElementById('vyborDiv').innerHTML = html;
-}
-
-function resetCalculator() {
-	if (!confirm(LANG[currentLang].alertReset)) return;
-	localStorage.clear();
-	location.reload();
-}
-
-function copyShareLink() {
-	const b64 = btoa(JSON.stringify({target: rightTreeId, inv: inventoryData}));
-	const link = `${window.location.origin}${window.location.pathname}?build=${b64}`;
-	navigator.clipboard.writeText(link).then(() => { alert(LANG[currentLang].alertCopy); });
-}
-
-function loadFromHash() {
-	const urlParams = new URLSearchParams(window.location.search);
-	const build = urlParams.get('build');
-	if (build) {
-		try {
-			const data = JSON.parse(atob(build));
-			if (data.target) { leftTreeId = data.target; rightTreeId = data.target; }
-			if (data.inv) inventoryData = data.inv;
-		} catch(e) { console.error(e); }
-	}
-}
-
-function exportToImage(e) {
-	e.preventDefault();
-	html2canvas(document.querySelector(".container")).then(canvas => {
-		let link = document.createElement('a');
-		link.download = `${currentProfile}-tome-build.png`;
-		link.href = canvas.toDataURL();
-		link.click();
-	});
-}
-
-window.onload = function() {
-	initProfiles();
-	loadFromHash();
-	applyLanguage();
-	setupTooltipListeners();
-	document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); });
+window.onload = () => {
+    initProfiles(); 
+    loadFromHash(); 
+    applyLanguage(); 
+    document.getElementById('modalInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') confirmModal(); });
 };
 </script>
 </body>
