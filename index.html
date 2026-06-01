@@ -439,8 +439,8 @@ let rightTreeId = 616;
 let inventoryData = {};
 let profiles = { "Default Build": { target: 616, inventory: {}, prices: [0, 0, 0] } };
 let currentProfileName = "Default Build";
-
-// 🔥 KODE CONFIG FIREBASE PERMANEN MILIK ANDA 🔥 //
+	
+// ⚠️ TEMPELKAN KODE CONFIG FIREBASE ANDA DI SINI ⚠️ //
 const firebaseConfig = {
 	apiKey: "AIzaSyC1eCaQkeCf1IJQIDqveEKhHHFEYMd6bSs",
 	authDomain: "kalkulator-tome.firebaseapp.com",
@@ -489,7 +489,9 @@ function openAuthModal(mode) {
 	document.getElementById('authModal').style.display = 'flex';
 }
 
-function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
+function closeAuthModal() {
+	document.getElementById('authModal').style.display = 'none';
+}
 
 function toggleAuthMode(e) {
 	e.preventDefault();
@@ -636,7 +638,9 @@ function importProfilesData(event) {
 				applyLanguage();
 				alert(currentLang === 'id' ? "Data profil berhasil diimpor!" : "Profile data imported successfully!");
 			}
-		} catch (err) { alert("Gagal membaca file JSON!"); }
+		} catch (err) {
+			alert("Gagal membaca file JSON!");
+		}
 	};
 	reader.readAsText(file);
 	event.target.value = '';
@@ -668,9 +672,8 @@ function processTree(id, isRight = false) {
 		}
 		
 		if (finalQty > 0 || !isRight) {
-			/* PERBAIKAN: Menggunakan (itemId%100) bukan (itemId%10) agar posisi buku urutan 10 ke atas tidak bertumpuk */
 			html += `<li>
-				<button style="background-image:url('znachki.png'); background-position: -${(itemId%100)*32}px -${Math.floor(itemId/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" 
+				<button style="background-image:url('znachki.png'); background-position: -${(itemId%10)*32}px -${Math.floor(itemId/100)*32}px;" 
 						onmouseenter="showTooltip(event, ${itemId})" 
 						onmouseleave="hideTooltip()"></button>
 				<b>${finalQty}</b>
@@ -721,9 +724,8 @@ function renderDeductions() {
 	Object.keys(inventoryData).forEach(id => {
 		if (inventoryData[id] > 0) {
 			empty = false;
-			/* PERBAIKAN SAMA PADA INVENTORY */
 			html += `<li style="margin: 10px;">
-				<button style="background-image:url('znachki.png'); background-position: -${(id%100)*32}px -${Math.floor(id/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" onmouseenter="showTooltip(event, ${id})" onmouseleave="hideTooltip()"></button>
+				<button style="background-image:url('znachki.png'); background-position: -${(id%10)*32}px -${Math.floor(id/100)*32}px;" onmouseenter="showTooltip(event, ${id})" onmouseleave="hideTooltip()"></button>
 				<b>${inventoryData[id]}</b>
 				<span onClick="removeInventory(${id})"></span>
 			</li>`;
@@ -746,7 +748,7 @@ function openInventoryModal() {
 	TOME_DB.forEach((item, id) => {
 		if (item) {
 			html += `<li style="margin:5px; display:inline-block;">
-				<button style="background-image:url('znachki.png'); background-position: -${(id%100)*32}px -${Math.floor(id/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" onClick="selectInventoryItem(${id})" title="${item[4]}"></button>
+				<button style="background-image:url('znachki.png'); background-position: -${(id%10)*32}px -${Math.floor(id/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" onClick="selectInventoryItem(${id})" title="${item[4]}"></button>
 			</li>`;
 		}
 	});
@@ -781,7 +783,7 @@ function filterInventorySearch(query) {
 	TOME_DB.forEach((item, id) => {
 		if (item && item[4].toLowerCase().includes(query.toLowerCase())) {
 			html += `<li style="margin:5px; display:inline-block;">
-				<button style="background-image:url('znachki.png'); background-position: -${(id%100)*32}px -${Math.floor(id/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" onClick="selectInventoryItem(${id})" title="${item[4]}"></button>
+				<button style="background-image:url('znachki.png'); background-position: -${(id%10)*32}px -${Math.floor(id/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" onClick="selectInventoryItem(${id})" title="${item[4]}"></button>
 			</li>`;
 		}
 	});
@@ -832,7 +834,7 @@ function renderMenu() {
 	TOME_DB.forEach((item, id) => {
 		if (id >= 500) { 
 			html += `<li style="margin:4px;">
-				<button style="background-image:url('znachki.png'); background-position: -${(id%100)*32}px -${Math.floor(id/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" onClick="setTarget(${id})" title="${item[4]}"></button>
+				<button style="background-image:url('znachki.png'); background-position: -${(id%10)*32}px -${Math.floor(id/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" onClick="setTarget(${id})" title="${item[4]}"></button>
 			</li>`;
 		}
 	});
@@ -863,7 +865,7 @@ function filterBooks(query) {
 	TOME_DB.forEach((item, id) => {
 		if (item && item[4].toLowerCase().includes(query.toLowerCase())) {
 			html += `<li style="margin:4px;">
-				<button style="background-image:url('znachki.png'); background-position: -${(id%100)*32}px -${Math.floor(id/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" onClick="setTarget(${id})" title="${item[4]}"></button>
+				<button style="background-image:url('znachki.png'); background-position: -${(id%10)*32}px -${Math.floor(id/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" onClick="setTarget(${id})" title="${item[4]}"></button>
 			</li>`;
 		}
 	});
