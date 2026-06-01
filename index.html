@@ -196,17 +196,17 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 	
 	<div class="main-column">
 		<div class="calc-card">
-			<h1 data-i18n="btnTarget">📚 Pilihan Buku Target</h1>
-			<div class="podzagolovok" id="nazvaniye" data-i18n="desc1">Arahkan kursor ke ikon untuk melihat nama buku.</div>
+			<h1 data-i18n="btnTarget">📚 Target Pembuatan Tome</h1>
+			<div class="podzagolovok" id="nazvaniye">Arahkan kursor ke ikon untuk melihat nama buku.</div>
 			<input type="text" id="bookSearch" class="search-box" data-i18n="searchPlaceholder" placeholder="🔍 Cari nama buku target..." oninput="filterBooks(this.value)">
 			<div id="vyborDiv" class="branch"></div>
 		</div>
 		
 		<div class="calc-card">
-			<h2 data-i18n="title4">📦 Inventory (Bahan Dimiliki)</h2>
+			<h2 data-i18n="title4">📦 Inventory</h2>
 			<div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
 				<span data-i18n="desc4" style="flex:1; min-width: 180px;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
-				<button class="btn-success" onClick="openInventoryModal()" style="white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600;">➕ Tambah Item</button>
+				<button class="btn-success" onClick="openInventoryModal()" style="white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600;"><span data-i18n="btnAddItem">➕ Tambah Item</span></button>
 			</div>
 			<div id="deductionsList" class="branch"></div>
 		</div>
@@ -214,7 +214,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
     <div class="main-column">
 		<div class="calc-card">
-			<h2 data-i18n="title2">Cabang Terpilih</h2>
+			<h2 data-i18n="title2">📋 Rincian Crafting Tome</h2>
 			<div class="podzagolovok">
 				<input type="number" id="mnojitel" value="1" min="1" max="99">
 				<button class="btn-calc" data-i18n="btnCalc" onClick="processTree(rightTreeId)">Hitung Kuantitas</button>
@@ -232,7 +232,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 		</div>
 
 		<div class="calc-card">
-			<h1 data-i18n="title3">Estimasi Biaya Pasar</h1>
+			<h2 data-i18n="title3">Estimasi Biaya Pasar</h2>
 			<div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
 			<div class="cost-input-group">
 				<label><span style="background-position:32px -32px;"></span> Token of Luck:</label>
@@ -266,19 +266,19 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 	</div>
 </footer>
 
-<button class="menu-toggle-btn" id="menuToggleBtn" onclick="var panel = document.getElementById('mainMenuPanel'); panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';">⚙️ Buka Menu</button>
+<button class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleMenu()">⚙️ Buka Menu</button>
 
 <div class="vybor" id="mainMenuPanel" style="display:none;">
-	<h4 style="margin-top: 0; font-size: 0.85rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px;">📁 Kelola Profil Build</h4>
+	<h4 id="menuProfileTitle" data-i18n="menuProfileTitle" style="margin-top: 0; font-size: 0.85rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px;">📁 Kelola Profil Build</h4>
 	<div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
 		<select id="profileSelect" onchange="handleProfileChange(this.value)" style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid var(--border-color); color: white; border-radius: 6px; outline: none; font-family: 'Inter', sans-serif; font-size: 0.85rem; cursor: pointer;"></select>
 		<div style="display: flex; gap: 8px;">
-			<button class="btn-success" onClick="createNewProfile()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: 600;">💾 Baru</button>
+			<button class="btn-success" onClick="createNewProfile()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: 600;"><span data-i18n="btnNew">💾 Baru</span></button>
 			<button class="btn-danger" onClick="removeCurrentProfile()" style="padding: 6px 10px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-trash"></i></button>
 		</div>
 		<div style="display: flex; gap: 8px; margin-top: 4px;">
-			<button class="btn-primary" onClick="exportProfilesData()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-export"></i> Ekspor</button>
-			<button class="btn-purple" onClick="document.getElementById('importFileInput').click()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-import"></i> Impor</button>
+			<button class="btn-primary" onClick="exportProfilesData()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-export"></i> <span data-i18n="btnExport">Ekspor</span></button>
+			<button class="btn-purple" onClick="document.getElementById('importFileInput').click()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-import"></i> <span data-i18n="btnImport">Impor</span></button>
 			<input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importProfilesData(event)">
 		</div>
 	</div>
@@ -291,7 +291,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 <div id="customModal" class="modal-backdrop" style="display:none;">
 	<div class="modal-content">
-		<h3 id="modalTitle" data-i18n="modalTitleAdd">Tambah Buku/Bahan</h3>
+		<h3 id="modalTitle" data-i18n="modalTitleAdd">Masukkan ke Inventory</h3>
 		<p data-i18n="modalDesc">Berapa banyak item ini yang sudah Anda miliki saat ini?</p>
 		<input type="number" id="modalInput" min="1" max="999" value="1">
 		<div class="modal-buttons">
@@ -303,10 +303,10 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 <div id="inventoryModal" class="modal-backdrop" style="display:none; z-index: 2001;">
 	<div class="modal-content" style="max-width: 450px;">
-		<h3>Pilih Item untuk Inventory</h3>
-		<input type="text" id="invSearch" class="search-box" style="margin-bottom: 5px;" placeholder="🔍 Cari nama buku/bahan..." onkeyup="filterInventorySearch(this.value)">
+		<h3 data-i18n="modalInvTitle">Pilih Item untuk Inventory</h3>
+		<input type="text" id="invSearch" class="search-box" style="margin-bottom: 5px;" data-i18n="invSearchPlaceholder" placeholder="🔍 Cari nama buku/bahan..." onkeyup="filterInventorySearch(this.value)">
 		<div id="invItemList" class="branch" style="max-height: 250px; overflow-y: auto; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);"></div>
-		<button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onClick="closeInventoryModal()">Tutup Jendela</button>
+		<button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onClick="closeInventoryModal()" data-i18n="btnCloseWindow">Tutup Jendela</button>
 	</div>
 </div>
 
@@ -314,8 +314,68 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 <script>
 const LANG = {
-	id: { title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: window.innerWidth <= 768 ? "Sentuh ikon buku/bahan untuk melihat nama & stat." : "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", matDesc: "Bahan Crafting" },
-	en: { title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: window.innerWidth <= 768 ? "Tap book/material icons to view names & stats." : "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "Target Book Selection", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertReset: "Clear all calculations, profiles, and start over?", statEquipDesc: "* Bind on Equip.", footerText: "Tome Calculator © 2026 | Created by <strong>Sulfikar</strong>", matDesc: "Crafting Material" }
+	id: { 
+		btnTarget: "📚 Target Pembuatan Tome", 
+		title2: "📋 Rincian Crafting Tome", 
+		title3: "Estimasi Biaya Pasar", 
+		title4: "📦 Inventory", 
+		desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", 
+		desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", 
+		progText: "Progres Pengumpulan:", 
+		btnCalc: "Hitung Kuantitas", 
+		totalCostLabel: "Total Sisa Biaya:", 
+		btnReset: "🔄 Reset Kalkulator", 
+		searchPlaceholder: "🔍 Cari nama buku target...", 
+		modalTitleAdd: "Masukkan ke Inventory", 
+		modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", 
+		btnSave: "Simpan", 
+		btnCancel: "Batal", 
+		baseMat: "Bahan Dasar", 
+		lvl: "Level", 
+		alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", 
+		statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", 
+		footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", 
+		matDesc: "Bahan Crafting",
+		btnAddItem: "➕ Tambah Item",
+		menuProfileTitle: "📁 Kelola Profil Build",
+		btnNew: "💾 Baru",
+		btnExport: "Ekspor",
+		btnImport: "Impor",
+		modalInvTitle: "Pilih Item untuk Inventory",
+		invSearchPlaceholder: "🔍 Cari nama buku/bahan...",
+		btnCloseWindow: "Tutup Jendela"
+	},
+	en: { 
+		btnTarget: "📚 Target Tome Crafting", 
+		title2: "📋 Tome Crafting Details", 
+		title3: "Market Cost Estimator", 
+		title4: "📦 Inventory", 
+		desc3: "Enter the market price per item to estimate required Gold.", 
+		desc4: "Items here will automatically deduct from total requirements.", 
+		progText: "Collection Progress:", 
+		btnCalc: "Calculate Qty", 
+		totalCostLabel: "Total Remaining Cost:", 
+		btnReset: "🔄 Reset Calculator", 
+		searchPlaceholder: "🔍 Search target book name...", 
+		modalTitleAdd: "Add to Inventory", 
+		modalDesc: "How many of this item do you currently own?", 
+		btnSave: "Save", 
+		btnCancel: "Cancel", 
+		baseMat: "Base Materials", 
+		lvl: "Level", 
+		alertReset: "Clear all calculations, profiles, and start over?", 
+		statEquipDesc: "* Bind on Equip.", 
+		footerText: "Tome Calculator © 2026 | Created by <strong>Sulfikar</strong>", 
+		matDesc: "Crafting Material",
+		btnAddItem: "➕ Add Item",
+		menuProfileTitle: "📁 Manage Build Profiles",
+		btnNew: "💾 New",
+		btnExport: "Export",
+		btnImport: "Import",
+		modalInvTitle: "Select Item for Inventory",
+		invSearchPlaceholder: "🔍 Search book or material name...",
+		btnCloseWindow: "Close Window"
+	}
 };
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
@@ -329,8 +389,24 @@ function applyLanguage() {
 		}
 	});
 	
+	const descEl = document.getElementById('nazvaniye');
+	if (descEl) {
+		descEl.innerHTML = window.innerWidth <= 768 
+			? (currentLang === 'id' ? "Sentuh ikon buku/bahan untuk melihat nama & stat." : "Tap book/material icons to view names & stats.")
+			: (currentLang === 'id' ? "Arahkan kursor ke ikon untuk melihat nama buku." : "Hover over the icons to see the book names.");
+	}
+
 	document.getElementById('langBtn').innerText = currentLang === 'id' ? '🌐 Switch to English' : '🌐 Ganti ke Indonesia';
-	document.getElementById('menuToggleBtn').innerText = LANG[currentLang]['menuBtnText'];
+	
+	const panel = document.getElementById('mainMenuPanel');
+	const btn = document.getElementById('menuToggleBtn');
+	if (panel && btn) {
+		if (panel.style.display === 'block') {
+			btn.innerText = currentLang === 'id' ? '❌ Tutup Menu' : '❌ Close Menu';
+		} else {
+			btn.innerText = currentLang === 'id' ? '⚙️ Buka Menu' : '⚙️ Open Menu';
+		}
+	}
 	
 	renderBookSelection();
 	processTree(rightTreeId);
@@ -343,8 +419,21 @@ function toggleLanguage() {
 	applyLanguage();
 }
 
+function toggleMenu() {
+	const panel = document.getElementById('mainMenuPanel');
+	const btn = document.getElementById('menuToggleBtn');
+	if (!panel || !btn) return;
+	
+	if (panel.style.display === 'none' || panel.style.display === '') {
+		panel.style.display = 'block';
+		btn.innerText = currentLang === 'id' ? '❌ Tutup Menu' : '❌ Close Menu';
+	} else {
+		panel.style.display = 'none';
+		btn.innerText = currentLang === 'id' ? '⚙️ Buka Menu' : '⚙️ Open Menu';
+	}
+}
+
 const TOME_DB = [];
-// Level 6 (Membutuhkan 3 Buku Level 5)
 TOME_DB[601] = [501, 502, 509, 17615, 'The Calm of Ice']; 
 TOME_DB[602] = [502, 503, 505, 17622, 'The Khatru']; 
 TOME_DB[603] = [504, 503, 508, 17628, 'A Carmine Tear']; 
@@ -362,7 +451,6 @@ TOME_DB[614] = [514, 512, 513, 17676, 'The Concubines Laugh'];
 TOME_DB[615] = [515, 501, 507, 17679, 'The Academy of the East']; 
 TOME_DB[616] = [516, 515, 514, 17683, 'Pan Gu Creator'];
 
-// Level 5 (Membutuhkan 3 Buku Level 4)
 TOME_DB[501] = [401, 408, 405, 17618, 'A Heart like Still Water']; 
 TOME_DB[502] = [409, 405, 403, 17621, 'The Tsunamis of Yore']; 
 TOME_DB[503] = [404, 408, 401, 17624, 'Laughing Mad']; 
@@ -380,18 +468,16 @@ TOME_DB[514] = [408, 402, 404, 17675, 'Rouge and Red Lips'];
 TOME_DB[515] = [406, 407, 401, 17678, 'Gang of Hooligans']; 
 TOME_DB[516] = [406, 407, 402, 17682, 'The Voidlands']; 
 
-// Level 4 (Membutuhkan 3 Buku Level 3) -> FIXED BUGS DI 406
 TOME_DB[401] = [303, 307, 304, 17602, 'Burning Desire']; 
 TOME_DB[402] = [304, 301, 305, 17603, 'Tome of Predestination']; 
 TOME_DB[403] = [302, 305, 303, 17604, 'The Roses Thorn']; 
 TOME_DB[404] = [306, 307, 301, 17605, 'Letters of Social Unrest']; 
 TOME_DB[405] = [303, 307, 306, 17606, 'The Appetites of Spring']; 
-TOME_DB[406] = [308, 305, 307, 17610, 'The Rivers Edge']; // Fix: 205->305, 207->307
+TOME_DB[406] = [308, 305, 307, 17610, 'The Rivers Edge']; 
 TOME_DB[407] = [309, 302, 306, 17614, 'The Weak Stream of Many Miles']; 
 TOME_DB[408] = [301, 304, 302, 17600, 'Battle Tactics']; 
 TOME_DB[409] = [302, 305, 303, 17601, 'A Bewitching Proposal'];
 
-// Level 3 (Membutuhkan 3 Buku Level 2)
 TOME_DB[301] = [201, 206, 203, 17593, 'Eat Drink and be Merry']; 
 TOME_DB[302] = [202, 205, 206, 17594, 'Sunset Tales']; 
 TOME_DB[303] = [207, 203, 202, 17595, 'Adventures and Mishaps']; 
@@ -402,7 +488,6 @@ TOME_DB[307] = [207, 205, 204, 17599, 'A Poets Musings'];
 TOME_DB[308] = [208, 202, 204, 17609, 'Decaying Tome']; 
 TOME_DB[309] = [209, 203, 202, 17613, 'Scene of Carnage'];
 
-// Level 2 (Membutuhkan 3 Buku Level 1)
 TOME_DB[201] = [101, 104, 106, 17586, 'Tome of Iron Will']; 
 TOME_DB[202] = [102, 105, 106, 17587, 'Misty Peach Blossoms']; 
 TOME_DB[203] = [107, 103, 102, 17588, 'Tale of the Red Lotus']; 
@@ -413,7 +498,6 @@ TOME_DB[207] = [107, 103, 104, 17592, 'Mediations Flame'];
 TOME_DB[208] = [108, 103, 101, 17608, 'Guide to Wolf Hunting']; 
 TOME_DB[209] = [109, 103, 107, 17612, 'Fire Dance'];
 
-// Level 1 (Bahan Dasar)
 TOME_DB[101] = [0, 0, 0, 17579, 'Underestimated Resolve']; 
 TOME_DB[102] = [0, 0, 0, 17580, 'Soaring Heart']; 
 TOME_DB[103] = [0, 0, 0, 17581, 'Retributions Flame']; 
@@ -792,10 +876,10 @@ function createNewProfile() {
 }
 
 function removeCurrentProfile() {
-    if (Object.keys(profiles).length <= 1) { alert("Anda tidak bisa menghapus satu-satunya profil yang tersisa."); return; }
-    if (!confirm(`Hapus profil "${currentProfile}"?`)) return;
-    delete profiles[currentProfile]; currentProfile = Object.keys(profiles)[0];
-    saveActiveProfile(); renderProfileDropdown(); loadProfileData(currentProfile);
+	if (Object.keys(profiles).length <= 1) { alert(currentLang === 'id' ? "Anda tidak bisa menghapus satu-satunya profil yang tersisa." : "You cannot delete the only remaining profile."); return; }
+	if (!confirm(currentLang === 'id' ? `Hapus profil "${currentProfile}"?` : `Delete profile "${currentProfile}"?`)) return;
+	delete profiles[currentProfile]; currentProfile = Object.keys(profiles)[0];
+	saveActiveProfile(); renderProfileDropdown(); loadProfileData(currentProfile);
 }
 
 function exportProfilesData() {
