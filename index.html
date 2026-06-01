@@ -332,85 +332,85 @@ TOME_DB[201] = [101, 104, 106, 17586, 'Tome of Iron Will']; TOME_DB[202] = [102,
 TOME_DB[101] = [0, 0, 0, 17579, 'Underestimated Resolve']; TOME_DB[102] = [0, 0, 0, 17580, 'Soaring Heart']; TOME_DB[103] = [0, 0, 0, 17581, 'Retributions Flame']; TOME_DB[104] = [0, 0, 0, 17582, 'Tome of the River Spirits']; TOME_DB[105] = [0, 0, 0, 17583, 'Flankers Tome']; TOME_DB[106] = [0, 0, 0, 17584, 'Tome of Hyperbolic Boasts']; TOME_DB[107] = [0, 0, 0, 17585, 'Tome of Grace']; TOME_DB[108] = [0, 0, 0, 17607, 'A Flowerless Plant']; TOME_DB[109] = [0, 0, 0, 17611, 'Eternitys Moon'];
 
 const TOME_STATS = {
-    // Level 1
-    101: ["Strength +5"], 
-    102: ["Dexterity +5"], 
-    103: ["Magic +5"], 
-    104: ["Vitality +5"], 
-    105: ["Strength +4", "Vitality +3"], 
-    106: ["Dexterity +4", "Vitality +3"], 
-    107: ["Magic +4", "Vitality +3"], 
-    108: ["HP Recovery +3", "EXP Gain +1%"], 
-    109: ["MP Recovery +3", "EXP Gain +1%"],
-    
-    // Level 2
-    201: ["Strength +7", "Vitality +6"], 
-    202: ["Dexterity +7", "Vitality +6"], 
-    203: ["Magic +7", "Vitality +6"], 
-    204: ["Strength +9"], 
-    205: ["Dexterity +9"], 
-    206: ["Magic +9"], 
-    207: ["Vitality +9"], 
-    208: ["HP Recovery +5", "EXP Gain +2%"], 
-    209: ["MP Recovery +5", "EXP Gain +2%"],
-    
-    // Level 3
-    301: ["Strength +10", "Critical Hit Rate +1%"], 
-    302: ["Magic +10", "Channeling -1%"], 
-    303: ["Dexterity +10", "Critical Hit Rate +1%"], 
-    304: ["Vitality +10", "Maximum HP +100"], 
-    305: ["Strength +7", "Dexterity +7"], 
-    306: ["Magic +7", "Vitality +7"], 
-    307: ["Strength +12"], 
-    308: ["Dexterity +12"], 
-    309: ["Magic +12"],
-    
-    // Level 4
-    401: ["Strength +15", "Critical Hit Rate +1%"], 
-    402: ["Magic +15", "Channeling -2%"], 
-    403: ["Dexterity +15", "Critical Hit Rate +1%"], 
-    404: ["Vitality +15", "Maximum HP +150"], 
-    405: ["Strength +10", "Vitality +10"], 
-    406: ["Dexterity +10", "Vitality +10"], 
-    407: ["Magic +10", "Vitality +10"], 
-    408: ["Strength +8", "Dexterity +8", "Vitality +8"], 
-    409: ["Magic +8", "Dexterity +8", "Vitality +8"],
-    
-    // Level 5
-    501: ["Strength +20", "Critical Hit Rate +1%"], 
-    502: ["Magic +20", "Channeling -2%"], 
-    503: ["Dexterity +20", "Critical Hit Rate +1%"], 
-    504: ["Vitality +20", "Maximum HP +200"], 
-    505: ["Strength +15", "Dexterity +15"], 
-    506: ["Magic +15", "Vitality +15"], 
-    507: ["Strength +12", "Dexterity +12", "Vitality +12"], 
-    508: ["Magic +12", "Dexterity +12", "Vitality +12"], 
-    509: ["Strength +10", "Dexterity +10", "Magic +10", "Vitality +10"], 
-    510: ["Strength +15", "Physical Attack +20"], 
-    511: ["Magic +15", "Magic Attack +20"], 
-    512: ["Dexterity +15", "Critical Hit Rate +2%"], 
-    513: ["Vitality +15", "Physical Defense +100"], 
-    514: ["Maximum HP +300"], 
-    515: ["Magic +18", "Channeling -3%"], 
-    516: ["Strength +18", "Critical Hit Rate +2%"],
-    
-    // Level 6
-    601: ["Strength +15", "Dexterity +15", "Critical Hit Rate +1%"], 
-    602: ["Magic +15", "Vitality +15", "Channeling -3%"], 
-    603: ["Strength +15", "Vitality +15", "Maximum HP +150"], 
-    604: ["Dexterity +20", "Interval Between Hits -0.05 seconds", "Movement Speed +0.10 meters/second"], 
-    605: ["Magic +20", "Channeling -3%", "Maximum MP +200"], 
-    606: ["Strength +20", "Critical Hit Rate +1%", "Physical Attack +30"], 
-    607: ["Vitality +20", "Maximum HP +200", "Physical Defense +50"], 
-    608: ["Strength +10", "Dexterity +10", "Magic +10", "Vitality +10"], 
-    609: ["Dexterity +15", "Vitality +15", "Critical Hit Rate +1%"], 
-    610: ["Magic +15", "Dexterity +15", "Channeling -3%"], 
-    611: ["Strength +15", "Magic +15", "Physical Attack +20"], 
-    612: ["Magic +25", "Channeling -3%"], 
-    613: ["Strength +25", "Critical Hit Rate +1%"], 
-    614: ["Dexterity +25", "Interval Between Hits -0.05 seconds"], 
-    615: ["Magic +20", "Dexterity +20", "Channeling -3%", "Critical Hit Rate +1%"], 
-    616: ["Strength +9", "Dexterity +9", "Vitality +8", "Magic +9", "Critical Hit Rate +1%", "Channeling -1%", "Interval Between Hits -0.05 seconds"]
+	// LEVEL 1 TOMES
+    101: ["Strength +5"],                                            // Groundhog's Grounding
+    102: ["Dexterity +5"],                                           // Viper's Venom
+    103: ["Magic +5"],                                              // The Shaman's Incantation
+    104: ["Vitality +5"],                                           // The Tortoise's Shell
+    105: ["Strength +4", "Vitality +3"],                            // Wolf's Will
+    106: ["Dexterity +4", "Vitality +3"],                           // Falcon's Flight
+    107: ["Magic +4", "Vitality +3"],                               // Stallion's Steed
+    108: ["HP Recovery Rate +3", "EXP Gain +1%"],                   // Silent Ritual
+    109: ["MP Recovery Rate +3", "EXP Gain +1%"],                   // Chanting Monks
+
+	// LEVEL 2 TOMES
+    201: ["Strength +7", "Vitality +6"],                            // The Claws of the Tiger
+    202: ["Dexterity +7", "Vitality +6"],                           // The Shadow of the Fox
+    203: ["Magic +7", "Vitality +6"],                               // The Plume of the Phoenix
+    204: ["Strength +9"],                                           // The Weight of the Mountain
+    205: ["Dexterity +9"],                                           // The Swiftness of the Wind
+    206: ["Magic +9"],                                              // The Power of the Sea
+    207: ["Vitality +9"],                                           // The Calm of the Forest
+    208: ["HP Recovery Rate +5", "EXP Gain +2%"],                   // Hymn of Meditation
+    209: ["MP Recovery Rate +5", "EXP Gain +2%"]                    // Chant of Rebirth
+
+	// LEVEL 3 TOMES
+    301: ["Strength +10", "Critical Hit Rate +1%"],                 // Eat Drink and be Merry
+    302: ["Magic +10", "Channeling Time -1%"],                        // Sunset Tales
+    303: ["Dexterity +10", "Critical Hit Rate +1%"],                  // Adventures and Mishaps
+    304: ["Vitality +10", "Maximum HP +100"],                         // The Sunny Pass
+    305: ["Strength +7", "Dexterity +7"],                             // Tales of Beauty
+    306: ["Magic +7", "Vitality +7"],                                 // The Bards Wanderlust
+    307: ["Strength +12"],                                            // A Poets Musings
+    308: ["Dexterity +12"],                                           // The Fisherman's Pride
+    309: ["Magic +12"]                                                // The Scribe's Privilege
+	
+	// LEVEL 4 TOMES
+    401: ["Strength +15", "Critical Hit Rate +1%"],                 // Burning Desire
+    402: ["Magic +15", "Channeling Time -2%"],                        // Tome of Predestination
+    403: ["Dexterity +15", "Critical Hit Rate +1%"],                  // The Roses Thorn
+    404: ["Vitality +15", "Maximum HP +150"],                         // Letters of Social Unrest
+    405: ["Strength +10", "Vitality +10"],                            // The Appetites of Spring
+    406: ["Dexterity +10", "Vitality +10"],                           // The Rivers Edge
+    407: ["Magic +10", "Vitality +10"],                               // The Weak Stream of Many Miles
+    408: ["Strength +8", "Dexterity +8", "Vitality +8"]              // Battle Tactics
+    409: ["Magic +8", "Dexterity +8", "Vitality +8"],                 // A Bewitching Proposal
+
+    // LEVEL 5 TOMES
+    501: ["Magic +20", "Critical Hit Rate +1%"],                       // A Heart like Still Water
+    502: ["Magic +20", "Movement Speed +0.10 meters/second"],         // The Tsunamis of Yore
+    503: ["Vitality +25"],                                            // Laughing Mad
+    504: ["Vitality +20", "Maximum HP +200"],                         // The Book of Congratulations
+    505: ["Strength +15", "Dexterity +15"],                           // The Wrath of Heaven
+    506: ["Magic +15", "Vitality +15"],                               // A Strange Kindness
+    507: ["Strength +12", "Dexterity +12", "Vitality +12"],           // Flesh of the Lamia
+    508: ["Magic +12", "Dexterity +12", "Vitality +12"],           // Everything is Emptiness
+    509: ["Strength +10", "Dexterity +10", "Magic +10", "Vitality +10"], // The Oasis Remembered
+    510: ["Strength +15", "Physical Attack +20"],                     // The Heavenly Scent
+    511: ["Magic +15", "Magic Attack +20"],                           // Debt and Tombstones
+    512: ["Dexterity +15", "Critical Hit Rate +2%"],                  // Endless Waves
+    513: ["Vitality +15", "Physical Defense +100"],                   // Parting Grief
+    514: ["Maximum HP +300"],                                         // Rouge and Red Lips
+    515: ["Strength +9", "Dexterity +9", "Vitality +8", "Magic +9", "Maximum HP +70"],     // Gang of Hooligans
+    516: ["Strength +9", "Dexterity +9", "Vitality +8", "Magic +9", "Critical Hit Rate +1%"], // The Voidlands
+
+    // LEVEL 6 TOMES
+    601: ["Strength +15", "Dexterity +15", "Critical Hit Rate +1%"], // The Calm of Ice
+    602: ["Magic +15", "Vitality +15", "Channeling Time -3%"],        // The Khatru
+    603: ["Strength +15", "Vitality +15", "Maximum HP +150"],         // A Carmine Tear
+    604: ["Dexterity +20", "Interval Between Hits -0.05 seconds", "Movement Speed +0.10 meters/second"], // The Fruit of Intense Labor
+    605: ["Magic +20", "Channeling Time -3%", "Maximum MP +200"],     // Tomorrows Phoenix
+    606: ["Strength +20", "Critical Hit Rate +1%", "Physical Attack +30"], // Riding the Scree
+    607: ["Vitality +20", "Maximum HP +200", "Physical Defense +50"], // Turning the Tide
+    608: ["Strength +10", "Dexterity +10", "Magic +10", "Vitality +10"], // Existential Woe
+    609: ["Dexterity +15", "Vitality +15", "Critical Hit Rate +1%"], // Book of Fragrances
+    610: ["Magic +15", "Dexterity +15", "Channeling Time -3%"],       // Bouquet of Regrets
+    611: ["Strength +15", "Magic +15", "Physical Attack +20"],       // The Union
+    612: ["Magic +25", "Channeling Time -3%"],                        // Oblivious Enlightenment
+    613: ["Strength +25", "Critical Hit Rate +1%"],                   // As the Universe Fades
+    614: ["Dexterity +25", "Interval Between Hits -0.05 seconds"],    // The Concubines Laugh
+    615: ["Magic +20", "Dexterity +20", "Channeling Time -3%", "Critical Hit Rate +1%"], // The Academy of the East
+    616: ["Strength +9", "Dexterity +9", "Vitality +8", "Magic +9", "Critical Hit Rate +1%", "Channeling Time -1%", "Interval Between Hits -0.05 seconds"] // Pan Gu Creator
 };
 
 let itemCounts = [];       
