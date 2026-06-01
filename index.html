@@ -268,7 +268,10 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 			<h2 data-i18n="title4">📦 Inventory</h2>
 			<div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
 				<span data-i18n="desc4" style="flex:1; min-width: 180px;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
-				<button class="btn-success" onclick="openInventoryModal()"><span data-i18n="btnAddItem">➕ Tambah Item</span></button>
+				<div style="display:flex; gap:8px;">
+					<button class="btn-success" style="background:#8b5cf6; box-shadow:0 4px 6px -1px rgba(139,92,246,0.3);" onclick="openReverseCalcModal()"><span data-i18n="btnReverse">🔍 Analisis Potensi</span></button>
+					<button class="btn-success" onclick="openInventoryModal()"><span data-i18n="btnAddItem">➕ Tambah Item</span></button>
+				</div>
 			</div>
 			<div id="deductionsList" class="branch"></div>
 		</div>
@@ -364,6 +367,15 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 	</div>
 </div>
 
+<div id="reverseCalcModal" class="modal-backdrop" style="display:none; z-index: 2001;" onclick="if(event.target===this) closeReverseCalcModal()">
+	<div class="modal-content" style="max-width: 450px; max-height:85vh; overflow-y:auto;">
+		<h3 data-i18n="modalRevTitle">🔍 Analisis Potensi Crafting</h3>
+		<p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:15px;" data-i18n="modalRevDesc">Sistem mendeteksi isi Inventory Anda dan menghitung Tome terbaik yang bisa dibuat.</p>
+		<div id="reverseCalcResults" style="margin-bottom: 20px;"></div>
+		<button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onclick="closeReverseCalcModal()" data-i18n="btnCloseWindow">Tutup Jendela</button>
+	</div>
+</div>
+
 <div id="floatingTooltip" class="floating-tooltip"></div>
 
 <script>
@@ -402,7 +414,14 @@ const LANG = {
 		msgNoFav: "Belum ada favorit yang tersimpan.",
 		txtTarget: "Target",
 		txtMissing: "Sisa bahan dibutuhkan",
-		txtComplete: "Tidak ada (Sudah Lengkap)"
+		txtComplete: "Tidak ada (Sudah Lengkap)",
+		btnReverse: "🔍 Analisis Potensi",
+		modalRevTitle: "🔍 Analisis Potensi Crafting",
+		modalRevDesc: "Sistem mendeteksi isi Inventory Anda dan menghitung Tome terbaik yang bisa dibuat.",
+		txtReadyToCraft: "✅ SIAP DIRAKIT (100% LENGKAP)",
+		txtNearbyCraft: "⚡ HAMPIR SELESAI (TOP PROGRES)",
+		txtNoMats: "Inventory Anda kosong. Tambahkan beberapa bahan atau Tome terlebih dahulu!",
+		txtSelectTarget: "Jadikan Target"
 	},
 	en: { 
 		btnTarget: "📚 Target Tome Crafting", 
@@ -440,7 +459,14 @@ const LANG = {
 		msgNoFav: "No favorite saved yet.",
 		txtTarget: "Target",
 		txtMissing: "Remaining materials needed",
-		txtComplete: "None (Complete)"
+		txtComplete: "None (Complete)",
+		btnReverse: "🔍 Analyze Potential",
+		modalRevTitle: "🔍 Crafting Potential Analysis",
+		modalRevDesc: "The system scans your Inventory and calculates the best Tomes you can create.",
+		txtReadyToCraft: "✅ READY TO CRAFT (100% COMPLETE)",
+		txtNearbyCraft: "⚡ NEARBY COMPLETION (TOP PROGRESS)",
+		txtNoMats: "Your inventory is empty. Please add some materials or Tomes first!",
+		txtSelectTarget: "Set as Target"
 	}
 };
 
@@ -498,8 +524,6 @@ function toggleMenu() {
 		btn.innerHTML = '<i class="fas fa-gear"></i>';
 	}
 }
-
-// ---------------- NEW UX FUNCTIONS ---------------- //
 
 function copyShoppingList() {
 	let targetName = TOME_DB[rightTreeId][4];
@@ -569,7 +593,134 @@ function loadFavorite() {
 	}
 }
 
-// -------------------------------------------------- //
+// ---------------- REVERSE CALCULATOR CORE LOGIC ---------------- //
+
+function openReverseCalcModal() {
+    hideTooltip();
+    document.getElementById('reverseCalcModal').style.display = 'flex';
+    runReverseCalculator();
+}
+
+function closeReverseCalcModal() { 
+    document.getElementById('reverseCalcModal').style.display = 'none'; 
+}
+
+function testCraft(id, pool) {
+    if (pool[id] && pool[id] > 0) {
+        pool[id]--;
+        return 1;
+    }
+    if (id === 10 || id === 11 || id === 12) {
+        if (id === 12 && pool[10] >= 20) { pool[10] -= 20; return 1; }
+        return 0;
+    }
+    if (id >= 101 && id <= 109) {
+        let pCount = 0;
+        for(let i=0; i<4; i++) { 
+            if(pool[12] && pool[12]>0) { pool[12]--; pCount++; } 
+            else if(pool[10]>=20) { pool[10]-=20; pCount++; } 
+        }
+        let fCount = 0;
+        for(let i=0; i<3; i++) { if(pool[11] && pool[11]>0) { pool[11]--; fCount++; } }
+        return (pCount + fCount) / 7;
+    }
+    let recipe = TOME_DB[id];
+    if (!recipe) return 0;
+    let s0 = testCraft(recipe[0], pool);
+    let s1 = testCraft(recipe[1], pool);
+    let s2 = testCraft(recipe[2], pool);
+    return (s0 + s1 + s2) / 3;
+}
+
+function runReverseCalculator() {
+    let resultsDiv = document.getElementById('reverseCalcResults');
+    let hasItems = false;
+    for(let i=0; i<deductions.length; i++) {
+        if(deductions[i] > 0) { hasItems = true; break; }
+    }
+    
+    if(!hasItems) {
+        resultsDiv.innerHTML = `<div style="color:var(--text-muted); padding:20px; font-style:italic; text-align:center;">${LANG[currentLang]['txtNoMats']}</div>`;
+        return;
+    }
+    
+    let readyList = [];
+    let progressList = [];
+    
+    for (let id = 101; id <= 616; id++) {
+        if (!TOME_DB[id]) continue;
+        
+        let simulationPool = [];
+        for(let i=0; i<deductions.length; i++) { simulationPool[i] = deductions[i] || 0; }
+        
+        let score = testCraft(id, simulationPool);
+        let percentage = score * 100;
+        
+        if (percentage >= 99.99) {
+            readyList.push({ id: id, pct: 100 });
+        } else if (percentage > 0) {
+            progressList.push({ id: id, pct: percentage });
+        }
+    }
+    
+    progressList.sort((a, b) => b.pct - a.pct);
+    let topProgress = progressList.slice(0, 5);
+    let html = '';
+    
+    html += `<h4 style="color:var(--success); font-size:0.85rem; border-bottom:1px solid var(--border-color); margin-bottom:10px; padding-bottom:5px; text-transform:uppercase; letter-spacing:1px; text-align:left; margin-top:10px;">${LANG[currentLang]['txtReadyToCraft']}</h4>`;
+    if (readyList.length === 0) {
+        html += `<div style="color:var(--text-muted); font-size:0.85rem; text-align:left; margin-bottom:15px; font-style:italic;">-</div>`;
+    } else {
+        html += `<div style="display:flex; flex-direction:column; gap:8px; margin-bottom:20px;">`;
+        readyList.forEach(item => {
+            let name = TOME_DB[item.id][4];
+            let lvl = Math.floor(item.id / 100);
+            html += `
+                <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:10px; border-radius:10px; gap:10px;">
+                    <div style="width:32px; height:32px; flex-shrink:0; background-image:url('znachki.png'); ${getSpritePosition(item.id)}"></div>
+                    <div style="flex:1; text-align:left;">
+                        <div style="font-weight:600; font-size:0.9rem; color:white;">${name}</div>
+                        <div style="font-size:0.75rem; color:var(--text-muted);">${LANG[currentLang]['lvl']} ${lvl}</div>
+                    </div>
+                    <button class="btn-success" style="padding:4px 10px; font-size:0.75rem;" onclick="selectTargetBook(${item.id}); closeReverseCalcModal();">${LANG[currentLang]['txtSelectTarget']}</button>
+                </div>
+            `;
+        });
+        html += `</div>`;
+    }
+    
+    html += `<h4 style="color:#f59e0b; font-size:0.85rem; border-bottom:1px solid var(--border-color); margin-bottom:10px; padding-bottom:5px; text-transform:uppercase; letter-spacing:1px; text-align:left;">${LANG[currentLang]['txtNearbyCraft']}</h4>`;
+    if (topProgress.length === 0) {
+        html += `<div style="color:var(--text-muted); font-size:0.85rem; text-align:left; font-style:italic;">-</div>`;
+    } else {
+        html += `<div style="display:flex; flex-direction:column; gap:10px;">`;
+        topProgress.forEach(item => {
+            let name = TOME_DB[item.id][4];
+            let lvl = Math.floor(item.id / 100);
+            html += `
+                <div style="display:flex; flex-direction:column; background:rgba(255,255,255,0.02); border:1px solid var(--border-color); padding:10px; border-radius:10px; gap:6px;">
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+                        <div style="width:32px; height:32px; flex-shrink:0; background-image:url('znachki.png'); ${getSpritePosition(item.id)}"></div>
+                        <div style="flex:1; text-align:left;">
+                            <div style="font-weight:600; font-size:0.9rem; color:white;">${name}</div>
+                            <div style="font-size:0.75rem; color:var(--text-muted);">${LANG[currentLang]['lvl']} ${lvl}</div>
+                        </div>
+                        <div style="font-weight:700; color:#f59e0b; font-size:0.85rem;">${item.pct.toFixed(0)}%</div>
+                        <button class="btn-calc" style="padding:4px 10px; font-size:0.75rem; background:#475569;" onclick="selectTargetBook(${item.id}); closeReverseCalcModal();">${LANG[currentLang]['txtSelectTarget']}</button>
+                    </div>
+                    <div class="progress-bar-bg" style="height:6px;">
+                        <div class="progress-bar" style="width:${item.pct}%; background:linear-gradient(90deg, #f59e0b, var(--success));"></div>
+                    </div>
+                </div>
+            `;
+        });
+        html += `</div>`;
+    }
+    
+    resultsDiv.innerHTML = html;
+}
+
+// ------------------------------------------------------------------ //
 
 const TOME_DB = [];
 TOME_DB[601] = [501, 502, 509, 17615, 'The Calm of Ice']; 
