@@ -10,7 +10,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
@@ -108,7 +107,6 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 .branch ul { display: flex; flex-wrap: wrap; gap: 15px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; margin-bottom: 16px; align-items: center; }
 
-/* FIX: Judul List Hanya Berlaku untuk Cabang & Inventory, Tidak Merusak Buku Target */
 #rightTree ul li:first-child, #deductionsList ul li:first-child { 
 	width: 100%; 
 	font-size: 0.75rem; 
@@ -158,7 +156,6 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 .search-box { width: 100%; padding: 10px 14px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: white; font-family: 'Inter', sans-serif; font-size: 0.9rem; margin-top: 10px; margin-bottom: 15px; outline: none; transition: 0.2s; }
 .search-box:focus { border-color: var(--accent); }
 
-/* FIX: Desain Panel Buku Target Menjadi Rata Kiri & Presisi */
 #vyborDiv { padding-right: 5px; }
 #vyborDiv h4 { font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); margin-bottom: 10px; padding-bottom: 5px; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; }
 #vyborDiv ul { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start; margin-bottom: 15px; background: rgba(0, 0, 0, 0.15); padding: 10px; border-radius: 12px; }
@@ -288,8 +285,6 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 	</div>
 	
 	<div class="panel-actions">
-		<button class="btn-success" onClick="copyShareLink()"><span data-i18n="btnShare">🔗 Bagikan Build (Copy Link)</span></button>
-		<button class="btn-primary" style="background: #ea580c;" onClick="exportToImage(event)"><span data-i18n="btnExport">📸 Download Gambar Build</span></button>
 		<button class="btn-purple" onClick="toggleLanguage()" id="langBtn">🌐 Switch to English</button>
 		<button class="btn-danger" onClick="resetCalculator()"><span data-i18n="btnReset">🔄 Reset Kalkulator</span></button>
 	</div>
@@ -320,8 +315,8 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 <script>
 const LANG = {
-	id: { title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", matDesc: "Bahan Crafting" },
-	en: { title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations, profiles, and start over?", promptCopy: "Copy the link below:", statEquipDesc: "* Bind on Equip.", footerText: "Tome Calculator © 2026 | Created by <strong>Sulfikar</strong>", matDesc: "Crafting Material" }
+	id: { title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", matDesc: "Bahan Crafting" },
+	en: { title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "Target Book Selection", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertReset: "Clear all calculations, profiles, and start over?", statEquipDesc: "* Bind on Equip.", footerText: "Tome Calculator © 2026 | Created by <strong>Sulfikar</strong>", matDesc: "Crafting Material" }
 };
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
@@ -382,7 +377,7 @@ TOME_DB[512] = [409, 403, 404, 17666, 'Endless Waves'];
 TOME_DB[513] = [408, 402, 404, 17672, 'Parting Grief']; 
 TOME_DB[514] = [408, 402, 404, 17675, 'Rouge and Red Lips']; 
 TOME_DB[515] = [406, 407, 401, 17678, 'Gang of Hooligans']; 
-TOME_DB[516] = [406, 407, 401, 17682, 'The Voidlands'];
+TOME_DB[516] = [406, 407, 17682, 'The Voidlands'];
 
 TOME_DB[401] = [303, 307, 304, 17602, 'Burning Desire']; 
 TOME_DB[402] = [304, 301, 305, 17603, 'Tome of Predestination']; 
@@ -723,54 +718,6 @@ function filterBooks(query) {
     });
 }
 
-function copyShareLink() {
-    const compD = {}; deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
-    const finalState = { r: rightTreeId, m: document.getElementById('mnojitel').value, d: compD };
-    const hash = btoa(JSON.stringify(finalState)); const url = window.location.origin + window.location.pathname + "#" + hash;
-    if (navigator.clipboard) navigator.clipboard.writeText(url).then(() => alert(LANG[currentLang]['alertCopy'])).catch(() => prompt(LANG[currentLang]['promptCopy'], url));
-    else prompt(LANG[currentLang]['promptCopy'], url);
-}
-
-function loadFromHash() {
-    if (window.location.hash) {
-        try {
-            const state = JSON.parse(atob(window.location.hash.substring(1)));
-            if (state.r && TOME_DB[state.r]) rightTreeId = state.r;
-            if (state.m) document.getElementById('mnojitel').value = state.m;
-            if (state.d) { deductions = []; for (const k in state.d) deductions[parseInt(k)] = state.d[k]; }
-            window.location.hash = '';
-        } catch(e) {}
-    }
-}
-
-function resetCalculator() {
-    if (confirm(LANG[currentLang]['alertReset'])) {
-        deductions = []; 
-        profiles = { "Default Build": { r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 } };
-        currentProfile = "Default Build"; 
-        saveActiveProfile();
-        document.getElementById('price10').value = 0; document.getElementById('price11').value = 0; document.getElementById('price12').value = 0; document.getElementById('mnojitel').value = 1;
-        rightTreeId = 616;
-        renderProfileDropdown(); processTree(rightTreeId);
-    }
-}
-
-function exportToImage(event) {
-    event.preventDefault();
-    const btn = event.currentTarget; const oldTxt = btn.innerHTML;
-    btn.innerHTML = '📸 Generating...'; btn.disabled = true;
-    const menuPanel = document.getElementById('mainMenuPanel'); const oldMenuDisp = menuPanel.style.display; menuPanel.style.display = 'none';
-    const menuBtn = document.getElementById('menuToggleBtn'); const oldBtnDisp = menuBtn.style.display; menuBtn.style.display = 'none';
-    
-    html2canvas(document.body, { useCORS: true, allowTaint: true, backgroundColor: '#0f172a', scale: 2 }).then(canvas => {
-        const url = canvas.toDataURL('image/png'); const a = document.createElement('a');
-        a.href = url; a.download = `Tome_Build_${currentProfile}.png`; document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        menuPanel.style.display = oldMenuDisp; menuBtn.style.display = oldBtnDisp; btn.innerHTML = oldTxt; btn.disabled = false;
-    }).catch(() => {
-        menuPanel.style.display = oldMenuDisp; menuBtn.style.display = oldBtnDisp; btn.innerHTML = oldTxt; btn.disabled = false;
-    });
-}
-
 function initProfiles() {
     let saved = localStorage.getItem('tomeProfiles');
     if (saved) { try { profiles = JSON.parse(saved); } catch(e) { profiles = {}; } }
@@ -841,7 +788,19 @@ function importProfilesData(event) {
     reader.readAsText(file); event.target.value = '';
 }
 
-window.onload = () => { initProfiles(); loadFromHash(); applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
+function resetCalculator() {
+    if (confirm(LANG[currentLang]['alertReset'])) {
+        deductions = []; 
+        profiles = { "Default Build": { r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 } };
+        currentProfile = "Default Build"; 
+        saveActiveProfile();
+        document.getElementById('price10').value = 0; document.getElementById('price11').value = 0; document.getElementById('price12').value = 0; document.getElementById('mnojitel').value = 1;
+        rightTreeId = 616;
+        renderProfileDropdown(); processTree(rightTreeId);
+    }
+}
+
+window.onload = () => { initProfiles(); applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
 </script>
 </body>
 </html>
