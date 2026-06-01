@@ -13,6 +13,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
 <style>
 :root {
 	--bg-main: #0f172a;
@@ -91,7 +95,6 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 #strelki { color: var(--accent); font-weight: bold; letter-spacing: 2px; }
 #niz li:first-child { display: none; } 
 
-/* --- UI Floating Tooltip --- */
 .floating-tooltip { position: fixed; background: rgba(10, 15, 30, 0.96); border: 2px solid #475569; border-radius: 10px; padding: 14px 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.85), inset 0 0 15px rgba(0,0,0,0.7); z-index: 10000; pointer-events: none; display: none; min-width: 240px; max-width: 300px; font-family: 'Inter', sans-serif; backdrop-filter: blur(6px); }
 .tooltip-title { color: #f59e0b; font-size: 1rem; font-weight: 700; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
 .tooltip-type { color: #94a3b8; font-size: 0.75rem; margin-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.15); padding-bottom: 5px; }
@@ -120,7 +123,6 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 #vyborDiv h4 { font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); margin-bottom: 10px; padding-bottom: 5px; margin-top: 15px; }
 #vyborDiv ul { display: flex; flex-wrap: wrap; gap: 8px; }
 #vyborDiv li { display: inline-block; }
-.vybor::-webkit-scrollbar { width: 6px; } .vybor::-webkit-scrollbar-track { background: transparent; } .vybor::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 
 .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 1; transition: opacity 0.2s ease; }
 .modal-content { background: var(--bg-card); border: 1px solid var(--accent); padding: 25px; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6); text-align: center; animation: modalSlide 0.3s ease; }
@@ -133,10 +135,6 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 .modal-buttons button { flex: 1; padding: 10px; font-weight: 600; border-radius: 8px; border: none; cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
 .modal-btn-confirm { background: var(--accent); color: white; } .modal-btn-confirm:hover { background: var(--accent-hover); }
 .modal-btn-cancel { background: #334155; color: #cbd5e1; } .modal-btn-cancel:hover { background: #475569; }
-
-#invItemList::-webkit-scrollbar { width: 6px; }
-#invItemList::-webkit-scrollbar-track { background: transparent; }
-#invItemList::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 
 /* --- FIREBASE AUTH UI STYLES --- */
 #authGate {
@@ -179,7 +177,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 </head>
 <body>
 
-<div id="authGate">
+<div id="authGate" style="display: none;">
     <div class="auth-card">
         <div class="auth-brand">Kalkulator Tome</div>
         <div class="auth-subtitle" id="authSubtitle">Silakan masuk untuk mengakses data build cloud Anda</div>
@@ -441,10 +439,10 @@ let itemCounts = [];
 let deductions = [];
 let deductionsCopy = [];
 let leftTreeId = 616;
-let rightTreeId = 515;
+let rightTreeId = 616;
 let activeModalItemId = null;
-let profiles = {};
-let currentProfile = 'Default Build';
+let profiles = { "Default Build": { l: 616, r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 } };
+let currentProfile = "Default Build";
 
 function getSpritePosition(id) {
     const parsedId = parseInt(id);
@@ -461,31 +459,26 @@ function showTooltip(element, event) {
     if (!TOME_DB[id] && id !== 10 && id !== 11 && id !== 12) return;
     const tooltip = document.getElementById('floatingTooltip');
     let nameText = "";
-    let typeText = "";
+    let typeText = LANG[currentLang]['matDesc'];
     let statsHtml = "";
-    let footerText = LANG[currentLang]['statEquipDesc'];
     
-    if (id === 10) { nameText = "Token of Luck"; typeText = LANG[currentLang]['matDesc']; }
-    else if (id === 11) { nameText = "Tome Fragment"; typeText = LANG[currentLang]['matDesc']; }
-    else if (id === 12) { nameText = "Tome Page"; typeText = LANG[currentLang]['matDesc']; }
+    if (id === 10) nameText = "Token of Luck";
+    else if (id === 11) nameText = "Tome Fragment";
+    else if (id === 12) nameText = "Tome Page";
     else {
         nameText = TOME_DB[id][4];
         let row = Math.floor(id / 100);
         typeText = `${LANG[currentLang]['lvl']} ${row} Tome`;
         if (STATS_DB[id]) {
-            STATS_DB[id].forEach(stat => { statsHtml += `<div class="tooltip-stat">${stat}</div>`; });
+            STATS_DB[id].forEach(st => { statsHtml += `<div class="tooltip-stat">+ ${st}</div>`; });
         }
     }
     
-    tooltip.innerHTML = `
-        <div class="tooltip-title"><div style="width:32px; height:32px; display:inline-block; vertical-align:middle; ${getSpritePosition(id)}; transform:scale(0.85); border-radius:4px;"></div> ${nameText}</div>
-        <div class="tooltip-type">${typeText}</div>
-        <div class="tooltip-list">${statsHtml}</div>
-        <div class="tooltip-footer">${footerText}</div>
-    `;
-    tooltip.style.display = 'block';
-    moveTooltip(event);
+    let html = `<div class="tooltip-title"><div style="width:32px; height:32px; display:inline-block; vertical-align:middle; ${getSpritePosition(id)}; transform:scale(0.85); border-radius:4px;"></div> ${nameText}</div><div class="tooltip-type">${typeText}</div>`;
+    if (statsHtml !== "") html += `<div class="tooltip-list">${statsHtml}</div>`;
+    if (id > 100) html += `<div class="tooltip-footer">${LANG[currentLang]['statEquipDesc']}</div>`;
     
+    tooltip.innerHTML = html; tooltip.style.display = 'block'; moveTooltip(event);
     let linkUrl = (id === 10) ? "http://www.pwdatabase.com/pwi/items/24722" : (id === 11) ? "http://www.pwdatabase.com/pwi/items/17011" : (id === 12) ? "http://www.pwdatabase.com/pwi/items/17010" : `http://www.pwdatabase.com/pwi/items/${TOME_DB[id][3]}`;
     document.getElementById('nazvaniye').innerHTML = `<a href="${linkUrl}" target="_blank">► ${nameText}</a>`;
 }
@@ -493,63 +486,16 @@ function showTooltip(element, event) {
 function moveTooltip(event) {
     const tooltip = document.getElementById('floatingTooltip');
     if (tooltip.style.display !== 'block') return;
-    let x = event.clientX + 15;
-    let y = event.clientY + 15;
-    const tooltipWidth = tooltip.offsetWidth || 240;
-    const tooltipHeight = tooltip.offsetHeight || 160;
-    if (x + tooltipWidth > window.innerWidth) { x = event.clientX - tooltipWidth - 15; }
-    if (y + tooltipHeight > window.innerHeight) { y = event.clientY - tooltipHeight - 15; }
-    tooltip.style.left = x + 'px';
-    tooltip.style.top = y + 'px';
+    let x = event.clientX + 15; let y = event.clientY + 15;
+    const tooltipWidth = tooltip.offsetWidth || 240; const tooltipHeight = tooltip.offsetHeight || 160;
+    if (x + tooltipWidth > window.innerWidth) x = event.clientX - tooltipWidth - 15;
+    if (y + tooltipHeight > window.innerHeight) y = event.clientY - tooltipHeight - 15;
+    tooltip.style.left = x + 'px'; tooltip.style.top = y + 'px';
 }
+function hideTooltip() { document.getElementById('floatingTooltip').style.display = 'none'; }
+document.addEventListener('click', function(e) { if (!e.target.closest('button[onMouseOver]')) hideTooltip(); });
+document.addEventListener('touchstart', function(e) { if (!e.target.closest('button[onMouseOver]')) hideTooltip(); });
 
-function hideTooltip() {
-    document.getElementById('floatingTooltip').style.display = 'none';
-}
-
-document.addEventListener('click', function(e) { if (!e.target.closest('button[onMouseOver]')) { hideTooltip(); } });
-document.addEventListener('touchstart', function(e) { if (!e.target.closest('button[onMouseOver]')) { hideTooltip(); } });
-
-function copyShareLink() {
-    const compD = {};
-    deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
-    const finalState = { l: leftTreeId, r: rightTreeId, m: document.getElementById('mnojitel').value, d: compD };
-    const hash = btoa(JSON.stringify(finalState));
-    const url = window.location.origin + window.location.pathname + "#" + hash;
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(url).then(() => alert(LANG[currentLang]['alertCopy'])).catch(() => prompt(LANG[currentLang]['promptCopy'], url));
-    } else {
-        prompt(LANG[currentLang]['promptCopy'], url);
-    }
-}
-
-function loadFromHash() {
-    if (window.location.hash) {
-        try {
-            const state = JSON.parse(atob(window.location.hash.substring(1)));
-            if (state.l && TOME_DB[state.l]) leftTreeId = state.l;
-            if (state.r && TOME_DB[state.r]) rightTreeId = state.r;
-            if (state.m) document.getElementById('mnojitel').value = state.m;
-            if (state.d) {
-                deductions = [];
-                for (const k in state.d) deductions[parseInt(k)] = state.d[k];
-            }
-            window.location.hash = '';
-        } catch(e) {}
-    }
-}
-
-function calculateNode(id) {
-    if (!itemCounts[id]) itemCounts[id] = 0;
-    itemCounts[id]++;
-    if (id > 200) {
-        calculateNode(TOME_DB[id][0]);
-        calculateNode(TOME_DB[id][1]);
-        calculateNode(TOME_DB[id][2]);
-    }
-}
-
-// ⚠️ DI SINI RAHASIANYA! FUNGSI ASLI YANG MEMBUAT TOME BISA DIKLIK ⚠️
 function getTreeItemHtml(id, isDeductionsView = false) {
     let count = isDeductionsView ? deductions[id] : itemCounts[id];
     if (!count) return '';
@@ -558,53 +504,42 @@ function getTreeItemHtml(id, isDeductionsView = false) {
     return `<li><button style="${getSpritePosition(id)}" title="${id}" ${clickAttr} onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
 }
 
-function renderTree(isRightTree) {
-    let txt = '';
-    const txtLvl = LANG[currentLang]['lvl'];
-    const txtBase = LANG[currentLang]['baseMat'];
-    for (let r = 6; r >= 1; r--) {
-        let start = r * 100 + 1;
-        let end = r * 100 + 16;
-        let hasItem = false;
-        let tempTxt = `<ul><li>${txtLvl} ${r}</li> `;
-        for (let e = start; e <= end; e++) {
-            if (itemCounts[e]) { tempTxt += getTreeItemHtml(e); hasItem = true; }
+function processTree(id, isRightTree) {
+    if (!isRightTree) leftTreeId = id; else rightTreeId = id;
+    let multiplier = isRightTree ? (parseInt(document.getElementById('mnojitel').value) || 1) : 1;
+    itemCounts = [];
+    
+    function calculateNode(nodeId) {
+        if (!itemCounts[nodeId]) itemCounts[nodeId] = 0;
+        itemCounts[nodeId]++;
+        if (nodeId > 200) {
+            calculateNode(TOME_DB[nodeId][0]);
+            calculateNode(TOME_DB[nodeId][1]);
+            calculateNode(TOME_DB[nodeId][2]);
         }
-        tempTxt += '</ul>';
-        if (hasItem) txt += tempTxt;
     }
-    txt += `<ul id="niz"><li>${txtBase}</li> `;
-    if (itemCounts[11]) txt += getTreeItemHtml(11);
-    if (itemCounts[12]) txt += getTreeItemHtml(12);
-    if (itemCounts[10]) txt += `<li id="strelki" style="margin: 0 10px;">→</li>${getTreeItemHtml(10)}`;
-    txt += `</ul>`;
-    document.getElementById(isRightTree ? 'rightTree' : 'leftTree').innerHTML = txt;
-}
-
-function renderDeductions() {
-    let txt = ''; let lis = '';
-    const deductionsDiv = document.getElementById('deductionsList');
-    if (deductions[11]) lis += getTreeItemHtml(11, true);
-    if (deductions[12]) lis += getTreeItemHtml(12, true);
-    if (deductions[10]) lis += getTreeItemHtml(10, true);
-    if (lis !== '') txt += `<ul><li>${LANG[currentLang]['baseMat']}</li> ${lis}</ul>`;
-    for (let r = 1; r <= 6; r++) {
-        lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
-        for (let e = start; e <= end; e++) if (deductions[e]) lis += getTreeItemHtml(e, true);
-        if (lis !== '') txt += `<ul><li>${LANG[currentLang]['lvl']} ${r}</li> ${lis}</ul>`;
+    
+    for (let z = 0; z < multiplier; z++) calculateNode(id);
+    for (let z = 616; z >= 101; z--) {
+        if (itemCounts[z] && deductions[z]) {
+            itemCounts[z] -= deductions[z];
+            if (itemCounts[z] < 0) { deductionsCopy[z] = -itemCounts[z]; itemCounts[z] = 0; }
+            else deductionsCopy[z] = 0;
+        } else deductionsCopy[z] = deductions[z] || 0;
     }
-    deductionsDiv.innerHTML = txt;
-}
-
-// ⚠️ RENDER MENU ASLI ⚠️
-function renderMenu() {
-    let txt = '';
-    for (let r = 6; r >= 1; r--) {
-        let lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
-        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="${getSpritePosition(e)}" title="${e}" onClick="selectTargetBook(${e})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
-        if (lis !== '') txt += `<h4>${LANG[currentLang]['lvl']} ${r}</h4><ul style="justify-content:center;">${lis}</ul>`;
+    let baseMats = 0;
+    for (let z = 101; z <= 109; z++) {
+        let req = itemCounts[z] || 0;
+        if (deductionsCopy[z]) { req -= deductionsCopy[z]; if (req < 0) req = 0; }
+        baseMats += req * 3;
     }
-    document.getElementById('vyborDiv').innerHTML = txt;
+    for (let z = 12; z >= 10; z--) {
+        itemCounts[z] = z === 10 ? (itemCounts[12] || 0) * 80 : baseMats;
+        if (deductions[z]) itemCounts[z] -= deductions[z];
+        if (itemCounts[z] < 0) itemCounts[z] = 0;
+    }
+    renderTree(isRightTree);
+    if(isRightTree) updateCostAndProgress();
 }
 
 function updateCostAndProgress() {
@@ -612,7 +547,7 @@ function updateCostAndProgress() {
     let price11 = parseInt(document.getElementById('price11').value) || 0;
     let price12 = parseInt(document.getElementById('price12').value) || 0;
     let multiplier = parseInt(document.getElementById('mnojitel').value) || 1;
-    saveProfiles();
+    saveActiveProfile();
     
     let netCounts = [];
     deductionsCopy = [...deductions];
@@ -656,20 +591,57 @@ function updateCostAndProgress() {
     }
 }
 
-function processTree(id, isRightTree) {
-    if (!isRightTree) leftTreeId = id; else rightTreeId = id;
-    let multiplier = isRightTree ? (parseInt(document.getElementById('mnojitel').value) || 1) : 1;
-    itemCounts = [];
-    for (let z = 0; z < multiplier; z++) calculateNode(id);
-    let baseMats = 0;
-    for (let z = 101; z <= 109; z++) if (itemCounts[z]) baseMats += itemCounts[z] * 3;
-    for (let z = 12; z >= 10; z--) {
-        itemCounts[z] = z === 10 ? (itemCounts[12] || 0) * 80 : baseMats;
-        if (deductions[z]) itemCounts[z] -= deductions[z];
-        if (itemCounts[z] < 0) itemCounts[z] = 0;
+function renderTree(isRightTree) {
+    let txt = '';
+    const txtLvl = LANG[currentLang]['lvl'];
+    const txtBase = LANG[currentLang]['baseMat'];
+    for (let r = 6; r >= 1; r--) {
+        let start = r * 100 + 1; let end = r * 100 + 16;
+        let hasItem = false; let tempTxt = `<ul><li>${txtLvl} ${r}</li> `;
+        for (let e = start; e <= end; e++) {
+            if (itemCounts[e]) { tempTxt += getTreeItemHtml(e); hasItem = true; }
+        }
+        tempTxt += '</ul>';
+        if (hasItem) txt += tempTxt;
     }
-    renderTree(isRightTree);
-    updateCostAndProgress();
+    txt += `<ul id="niz"><li>${txtBase}</li> `;
+    if (itemCounts[11]) txt += getTreeItemHtml(11);
+    if (itemCounts[12]) txt += getTreeItemHtml(12);
+    if (itemCounts[10]) txt += `<li id="strelki" style="margin: 0 10px;">→</li>${getTreeItemHtml(10)}`;
+    txt += `</ul>`;
+    document.getElementById(isRightTree ? 'rightTree' : 'leftTree').innerHTML = txt;
+}
+
+function renderDeductions() {
+    let txt = ''; let lis = '';
+    const deductionsDiv = document.getElementById('deductionsList');
+    if (!deductionsDiv) return;
+    if (deductions[11]) lis += getTreeItemHtml(11, true);
+    if (deductions[12]) lis += getTreeItemHtml(12, true);
+    if (deductions[10]) lis += getTreeItemHtml(10, true);
+    if (lis !== '') txt += `<ul><li>${LANG[currentLang]['baseMat']}</li> ${lis}</ul>`;
+    for (let r = 1; r <= 6; r++) {
+        lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
+        for (let e = start; e <= end; e++) if (deductions[e]) lis += getTreeItemHtml(e, true);
+        if (lis !== '') txt += `<ul><li>${LANG[currentLang]['lvl']} ${r}</li> ${lis}</ul>`;
+    }
+    deductionsDiv.innerHTML = txt;
+}
+
+function renderMenu() {
+    let txt = '';
+    for (let r = 6; r >= 1; r--) {
+        let lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
+        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="${getSpritePosition(e)}" title="${e}" onClick="selectTargetBook(${e})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
+        if (lis !== '') txt += `<h4>${LANG[currentLang]['lvl']} ${r}</h4><ul style="justify-content:center;">${lis}</ul>`;
+    }
+    document.getElementById('vyborDiv').innerHTML = txt;
+}
+
+function selectTargetBook(id) {
+    rightTreeId = id; leftTreeId = id;
+    document.getElementById('mainMenuPanel').style.display = 'none';
+    processTree(leftTreeId, false); processTree(rightTreeId, true);
 }
 
 function openInventoryModal() {
@@ -696,46 +668,12 @@ function renderInventorySelection(query) {
 }
 
 function filterInventorySearch(val) { renderInventorySelection(val); }
-
 function selectItemForInventory(id) { closeInventoryModal(); openModal(id); }
-
-// ⚠️ FUNGSI ASLI PILIH TOME (MENYINKRONKAN KIRI DAN KANAN)
-function selectTargetBook(id) {
-    rightTreeId = id;
-    leftTreeId = id;
-    document.getElementById('mainMenuPanel').style.display = 'none';
-    processTree(leftTreeId, false);
-    processTree(rightTreeId, true);
-}
-
-function resetCalculator() {
-    if (confirm(LANG[currentLang]['alertReset'])) {
-        localStorage.clear();
-        sessionStorage.clear();
-        location.reload();
-    }
-}
-
-function exportToImage(event) {
-    event.preventDefault();
-    const btn = event.currentTarget; const oldTxt = btn.innerHTML;
-    btn.innerHTML = '📸 Generating...'; btn.disabled = true;
-    const menuPanel = document.getElementById('mainMenuPanel'); const oldMenuDisp = menuPanel.style.display; menuPanel.style.display = 'none';
-    const menuBtn = document.getElementById('menuToggleBtn'); const oldBtnDisp = menuBtn.style.display; menuBtn.style.display = 'none';
-    
-    html2canvas(document.body, { useCORS: true, allowTaint: true, backgroundColor: '#0f172a', scale: 2 }).then(canvas => {
-        const url = canvas.toDataURL('image/png'); const a = document.createElement('a');
-        a.href = url; a.download = `Tome_Build_${currentProfile}.png`; document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        menuPanel.style.display = oldMenuDisp; menuBtn.style.display = oldBtnDisp; btn.innerHTML = oldTxt; btn.disabled = false;
-    }).catch(() => {
-        menuPanel.style.display = oldMenuDisp; menuBtn.style.display = oldBtnDisp; btn.innerHTML = oldTxt; btn.disabled = false;
-    });
-}
 
 function openModal(id) {
     activeModalItemId = id;
     let nameText = (id === 10) ? "Token of Luck" : (id === 11) ? "Tome Fragment" : (id === 12) ? "Tome Page" : TOME_DB[id][4];
-    document.getElementById('modalTitle').innerText = `${LANG[currentLang]['modalTitleAdd']} - ${nameText}`;
+    document.getElementById('modalTitle').innerText = nameText;
     document.getElementById('modalInput').value = 1;
     document.getElementById('customModal').style.display = 'flex';
     document.getElementById('modalInput').focus();
@@ -748,20 +686,14 @@ function confirmModal() {
     if (!isNaN(amount) && amount > 0 && activeModalItemId) {
         if (!deductions[activeModalItemId]) deductions[activeModalItemId] = 0;
         deductions[activeModalItemId] += amount;
-        saveProfiles(); 
-        processTree(leftTreeId, false); 
-        processTree(rightTreeId, true); 
-        renderDeductions();
+        saveActiveProfile(); processTree(leftTreeId, false); processTree(rightTreeId, true); renderDeductions();
     }
     closeModal();
 }
 
-function removeDeduction(id) { 
-    deductions[id] = 0; 
-    saveProfiles(); 
-    processTree(leftTreeId, false); 
-    processTree(rightTreeId, true); 
-    renderDeductions(); 
+function removeDeduction(id) {
+    deductions[id] = 0;
+    saveActiveProfile(); processTree(leftTreeId, false); processTree(rightTreeId, true); renderDeductions();
 }
 
 function toggleBookPanel() {
@@ -782,282 +714,263 @@ function filterBooks(query) {
     });
 }
 
+function copyShareLink() {
+    const compD = {}; deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
+    const finalState = { l: leftTreeId, r: rightTreeId, m: document.getElementById('mnojitel').value, d: compD };
+    const hash = btoa(JSON.stringify(finalState)); const url = window.location.origin + window.location.pathname + "#" + hash;
+    if (navigator.clipboard) navigator.clipboard.writeText(url).then(() => alert(LANG[currentLang]['alertCopy'])).catch(() => prompt(LANG[currentLang]['promptCopy'], url));
+    else prompt(LANG[currentLang]['promptCopy'], url);
+}
+
+function loadFromHash() {
+    if (window.location.hash) {
+        try {
+            const state = JSON.parse(atob(window.location.hash.substring(1)));
+            if (state.l && TOME_DB[state.l]) leftTreeId = state.l;
+            if (state.r && TOME_DB[state.r]) rightTreeId = state.r;
+            if (state.m) document.getElementById('mnojitel').value = state.m;
+            if (state.d) { deductions = []; for (const k in state.d) deductions[parseInt(k)] = state.d[k]; }
+            window.location.hash = '';
+        } catch(e) {}
+    }
+}
+
+function resetCalculator() {
+    if (confirm(LANG[currentLang]['alertReset'])) {
+        deductions = []; 
+        profiles = { "Default Build": { l: 616, r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 } };
+        currentProfile = "Default Build"; 
+        saveActiveProfile();
+        document.getElementById('price10').value = 0; document.getElementById('price11').value = 0; document.getElementById('price12').value = 0; document.getElementById('mnojitel').value = 1;
+        leftTreeId = 616; rightTreeId = 616;
+        renderProfileDropdown(); processTree(leftTreeId, false); processTree(rightTreeId, true); renderDeductions();
+    }
+}
+
+function exportToImage(event) {
+    event.preventDefault();
+    const btn = event.currentTarget; const oldTxt = btn.innerHTML;
+    btn.innerHTML = '📸 Generating...'; btn.disabled = true;
+    const menuPanel = document.getElementById('mainMenuPanel'); const oldMenuDisp = menuPanel.style.display; menuPanel.style.display = 'none';
+    const menuBtn = document.getElementById('menuToggleBtn'); const oldBtnDisp = menuBtn.style.display; menuBtn.style.display = 'none';
+    html2canvas(document.body, { useCORS: true, allowTaint: true, backgroundColor: '#0f172a', scale: 2 }).then(canvas => {
+        const url = canvas.toDataURL('image/png'); const a = document.createElement('a');
+        a.href = url; a.download = `Tome_Build_${currentProfile}.png`; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        menuPanel.style.display = oldMenuDisp; menuBtn.style.display = oldBtnDisp; btn.innerHTML = oldTxt; btn.disabled = false;
+    }).catch(() => { menuPanel.style.display = oldMenuDisp; menuBtn.style.display = oldBtnDisp; btn.innerHTML = oldTxt; btn.disabled = false; });
+}
+
 function initProfiles() {
-    let saved = localStorage.getItem('tomeProfiles');
-    if (saved) {
-        try { profiles = JSON.parse(saved); } catch(e) { profiles = {}; }
-    }
-    if (!profiles || Object.keys(profiles).length === 0) {
-        profiles = { 'Default Build': { l: 616, r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 } };
-    }
-    currentProfile = localStorage.getItem('tomeCurrentProfile') || Object.keys(profiles)[0] || 'Default Build';
-    if (!profiles[currentProfile]) currentProfile = Object.keys(profiles)[0];
-    
-    loadProfileData(currentProfile);
-    renderProfileDropdown();
-}
-
-function renderProfileDropdown() {
-    const select = document.getElementById('profileSelect');
-    if (!select) return;
-    select.innerHTML = '';
-    Object.keys(profiles).forEach(name => {
-        let opt = document.createElement('option');
-        opt.value = name;
-        opt.innerText = name;
-        if (name === currentProfile) opt.selected = true;
-        select.appendChild(opt);
-    });
-}
-
-function handleProfileChange(val) {
-    saveProfiles();
-    currentProfile = val;
-    loadProfileData(val);
+    const saved = localStorage.getItem('tomeProfiles');
+    if (saved) { try { profiles = JSON.parse(saved); } catch(e) { console.error(e); } }
+    currentProfile = localStorage.getItem('tomeCurrentProfile') || Object.keys(profiles)[0];
+    if (!profiles[currentProfile]) currentProfile = Object.keys(profiles)[0] || "Default Build";
+    loadProfileData(currentProfile); renderProfileDropdown();
 }
 
 function loadProfileData(name) {
-    const p = profiles[name];
-    if(!p) return;
-    leftTreeId = p.l || 616;
-    rightTreeId = p.r || 616;
-    
+    const p = profiles[name]; if(!p) return;
+    leftTreeId = p.l || 616; rightTreeId = p.r || 616;
     document.getElementById('mnojitel').value = p.m || 1;
-    document.getElementById('price10').value = p.p10 || 0;
-    document.getElementById('price11').value = p.p11 || 0;
-    document.getElementById('price12').value = p.p12 || 0;
-    
-    deductions = [];
-    if (p.d) { 
-        for (const k in p.d) deductions[parseInt(k)] = p.d[k]; 
-    }
-    
-    processTree(leftTreeId, false);
-    processTree(rightTreeId, true);
-    renderDeductions();
+    document.getElementById('price10').value = p.p10 || 0; document.getElementById('price11').value = p.p11 || 0; document.getElementById('price12').value = p.p12 || 0;
+    deductions = []; if (p.d) { for (const k in p.d) deductions[parseInt(k)] = p.d[k]; }
+    processTree(leftTreeId, false); processTree(rightTreeId, true); renderDeductions();
 }
 
-function saveProfiles() {
+function saveActiveProfile() {
     let p10 = parseInt(document.getElementById('price10').value) || 0;
     let p11 = parseInt(document.getElementById('price11').value) || 0;
     let p12 = parseInt(document.getElementById('price12').value) || 0;
     let m = parseInt(document.getElementById('mnojitel').value) || 1;
-    
-    const compD = {}; 
-    deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
-
-    profiles[currentProfile] = { 
-        l: leftTreeId, 
-        r: rightTreeId, 
-        m: m, 
-        d: compD, 
-        p10: p10, 
-        p11: p11, 
-        p12: p12 
-    };
-    
+    const compD = {}; deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
+    profiles[currentProfile] = { l: leftTreeId, r: rightTreeId, m: m, d: compD, p10: p10, p11: p11, p12: p12 };
     localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
     localStorage.setItem('tomeCurrentProfile', currentProfile);
     
     if(window.syncToFirebase) window.syncToFirebase(profiles);
 }
 
+function renderProfileDropdown() {
+    const select = document.getElementById('profileSelect'); if (!select) return;
+    select.innerHTML = '';
+    Object.keys(profiles).forEach(name => {
+        let opt = document.createElement('option'); opt.value = name; opt.innerText = name;
+        if (name === currentProfile) opt.selected = true; select.appendChild(opt);
+    });
+}
+
+function handleProfileChange(val) { saveActiveProfile(); currentProfile = val; loadProfileData(val); }
+
 function createNewProfile() {
     let name = prompt("Masukkan nama profil build baru:");
-    if (!name) return;
-    name = name.trim();
-    if (profiles[name]) { alert("Nama profil sudah ada!"); return; }
+    if (!name) return; name = name.trim(); if (profiles[name]) { alert("Nama profil sudah ada!"); return; }
     profiles[name] = { l: 616, r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 };
-    currentProfile = name;
-    saveProfiles();
-    renderProfileDropdown();
-    loadProfileData(name);
+    currentProfile = name; saveActiveProfile(); renderProfileDropdown(); loadProfileData(name);
 }
 
 function removeCurrentProfile() {
-    if (Object.keys(profiles).length <= 1) {
-        alert("Anda tidak bisa menghapus satu-satunya profil yang tersisa.");
-        return;
-    }
+    if (Object.keys(profiles).length <= 1) { alert("Anda tidak bisa menghapus satu-satunya profil yang tersisa."); return; }
     if (!confirm(`Hapus profil "${currentProfile}"?`)) return;
-    delete profiles[currentProfile];
-    currentProfile = Object.keys(profiles)[0];
-    saveProfiles();
-    renderProfileDropdown();
-    loadProfileData(currentProfile);
+    delete profiles[currentProfile]; currentProfile = Object.keys(profiles)[0];
+    saveActiveProfile(); renderProfileDropdown(); loadProfileData(currentProfile);
 }
 
 function exportProfilesData() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(profiles));
-    const a = document.createElement('a');
-    a.href = dataStr;
-    a.download = "Tome-Profiles-Backup.json"; 
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    const a = document.createElement('a'); a.setAttribute("href", dataStr); a.setAttribute("download", "Tome-Profiles-Backup.json");
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
 }
 
 function importProfilesData(event) {
-    const file = event.target.files[0];
-    if (!file) return;
+    const file = event.target.files[0]; if (!file) return;
     const reader = new FileReader();
     reader.onload = function(e) {
         try {
             const importedData = JSON.parse(e.target.result);
             if (typeof importedData === 'object' && importedData !== null) {
                 profiles = { ...profiles, ...importedData };
-                localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
-                renderProfileDropdown();
-                loadProfileData(currentProfile);
-                applyLanguage();
+                saveActiveProfile(); renderProfileDropdown(); loadProfileData(currentProfile); applyLanguage();
                 alert(currentLang === 'id' ? "Data profil berhasil diimpor!" : "Profile data imported successfully!");
             }
-        } catch (err) {
-            alert(currentLang === 'id' ? "Gagal membaca file JSON!" : "Failed to read JSON file!");
-        }
+        } catch (err) { alert(currentLang === 'id' ? "Gagal membaca file JSON!" : "Failed to read JSON file!"); }
     };
-    reader.readAsText(file);
-    event.target.value = '';
+    reader.readAsText(file); event.target.value = '';
 }
 
-// Mengekspor fungsi utama ke window agar bisa dipanggil dari modul Firebase
+// Mengekspor fungsi ke global window
 window.initProfiles = initProfiles;
 window.loadFromHash = loadFromHash;
 window.applyLanguage = applyLanguage;
+
+// Pasang shortcut tombol Enter untuk Modal
+window.onload = () => {
+    document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); });
+}
 </script>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-  // Konfigurasi dengan tambahan databaseURL
-  const firebaseConfig = {
+<script>
+// ==========================================
+// 🌐 FIREBASE CLOUD SYNC & AUTHENTICATION
+// MENGGUNAKAN VERSI COMPAT (ANTI ERROR LOKAL)
+// ==========================================
+const firebaseConfig = {
     apiKey: "AIzaSyC1eCaQkeCf1IJQIDqveEKhHHFEYMd6bSs",
     authDomain: "kalkulator-tome.firebaseapp.com",
-    databaseURL: "https://kalkulator-tome-default-rtdb.firebaseio.com", // <-- INI YANG KURANG SEBELUMNYA
+    databaseURL: "https://kalkulator-tome-default-rtdb.firebaseio.com",
     projectId: "kalkulator-tome",
     storageBucket: "kalkulator-tome.firebasestorage.app",
     messagingSenderId: "794012581588",
     appId: "1:794012581588:web:021341eda428298daf0541"
-  };
+};
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  let database = null;
-  
-  // Pengaman agar kalkulator tidak blank jika database gagal/belum aktif
-  try {
-      database = getDatabase(app);
-  } catch (err) {
-      console.warn("Peringatan: Database gagal terhubung.", err);
-  }
+// Inisialisasi Firebase secara aman
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const auth = firebase.auth();
+const database = firebase.database();
 
-  let isSignUpMode = false;
-  let currentUserUid = null;
+let isSignUpMode = false;
+let currentUserUid = null;
 
-  window.toggleAuthMode = function() {
-      isSignUpMode = !isSignUpMode;
-      const title = document.getElementById('authSubtitle');
-      const btn = document.getElementById('authSubmitBtn');
-      const switchText = document.getElementById('authSwitchText');
-      if(isSignUpMode) {
-          title.innerText = "Buat akun baru untuk mengamankan data build secara permanen";
-          btn.innerText = "Daftar Akun Baru";
-          switchText.innerHTML = "Sudah memiliki akun? <span onclick='toggleAuthMode()'>Masuk di sini</span>";
-      } else {
-          title.innerText = "Silakan masuk untuk mengakses data build cloud Anda";
-          btn.innerText = "Masuk Aplikasi";
-          switchText.innerHTML = "Belum punya akun? <span onclick='toggleAuthMode()'>Daftar Sekarang</span>";
-      }
-  }
+function toggleAuthMode() {
+    isSignUpMode = !isSignUpMode;
+    const title = document.getElementById('authSubtitle');
+    const btn = document.getElementById('authSubmitBtn');
+    const switchText = document.getElementById('authSwitchText');
+    if(isSignUpMode) {
+        title.innerText = "Buat akun baru untuk mengamankan data build secara permanen";
+        btn.innerText = "Daftar Akun Baru";
+        switchText.innerHTML = "Sudah memiliki akun? <span onclick='toggleAuthMode()'>Masuk di sini</span>";
+    } else {
+        title.innerText = "Silakan masuk untuk mengakses data build cloud Anda";
+        btn.innerText = "Masuk Aplikasi";
+        switchText.innerHTML = "Belum punya akun? <span onclick='toggleAuthMode()'>Daftar Sekarang</span>";
+    }
+}
+window.toggleAuthMode = toggleAuthMode;
 
-  window.handleAuthAction = function() {
-      const email = document.getElementById('authEmail').value.trim();
-      const password = document.getElementById('authPassword').value;
-      const btn = document.getElementById('authSubmitBtn');
+function handleAuthAction() {
+    const email = document.getElementById('authEmail').value.trim();
+    const password = document.getElementById('authPassword').value;
+    const btn = document.getElementById('authSubmitBtn');
 
-      if(!email || !password) { alert("Harap isi email dan sandi!"); return; }
-      if(password.length < 6) { alert("Sandi minimal 6 karakter!"); return; }
+    if(!email || !password) { alert("Harap isi email dan sandi!"); return; }
+    if(password.length < 6) { alert("Sandi minimal 6 karakter!"); return; }
 
-      btn.disabled = true; btn.innerText = "Memproses...";
+    btn.disabled = true; btn.innerText = "Memproses...";
 
-      if(isSignUpMode) {
-          createUserWithEmailAndPassword(auth, email, password)
-              .then(() => { 
-                  alert("Akun berhasil dibuat! Silakan masuk."); 
-                  toggleAuthMode(); 
-                  btn.disabled = false; 
-                  btn.innerText = "Masuk Aplikasi"; 
-              })
-              .catch((error) => { 
-                  alert("Gagal mendaftar: " + error.message); 
-                  btn.disabled = false; 
-                  btn.innerText = "Daftar Akun Baru"; 
-              });
-      } else {
-          signInWithEmailAndPassword(auth, email, password)
-              .then(() => { /* Login Sukses ditangani otomatis oleh onAuthStateChanged */ })
-              .catch((error) => { 
-                  alert("Gagal masuk: Email atau Sandi salah."); 
-                  btn.disabled = false; 
-                  btn.innerText = "Masuk Aplikasi"; 
-              });
-      }
-  }
+    if(isSignUpMode) {
+        auth.createUserWithEmailAndPassword(email, password)
+            .then(() => { 
+                alert("Akun berhasil dibuat! Silakan masuk."); 
+                toggleAuthMode(); 
+                btn.disabled = false; btn.innerText = "Masuk Aplikasi"; 
+            })
+            .catch((error) => { 
+                alert("Gagal mendaftar: " + error.message); 
+                btn.disabled = false; btn.innerText = "Daftar Akun Baru"; 
+            });
+    } else {
+        auth.signInWithEmailAndPassword(email, password)
+            .then(() => { /* Sukses ditangani oleh onAuthStateChanged */ })
+            .catch((error) => { 
+                alert("Gagal masuk: Email atau Sandi salah."); 
+                btn.disabled = false; btn.innerText = "Masuk Aplikasi"; 
+            });
+    }
+}
+window.handleAuthAction = handleAuthAction;
 
-  window.logoutUser = function() {
-      if(confirm("Keluar dari sesi cloud ini?")) {
-          signOut(auth).then(() => { location.reload(); });
-      }
-  }
+function logoutUser() {
+    if(confirm("Keluar dari sesi cloud ini?")) {
+        auth.signOut().then(() => { location.reload(); });
+    }
+}
+window.logoutUser = logoutUser;
 
-  window.syncToFirebase = function(data) {
-      if (currentUserUid && database) {
-          set(ref(database, `users/${currentUserUid}/tomeProfiles`), data).catch(console.error);
-      }
-  }
+window.syncToFirebase = function(data) {
+    if (currentUserUid) {
+        database.ref('users/' + currentUserUid + '/tomeProfiles').set(data).catch(console.error);
+    }
+}
 
-  // Fungsi darurat untuk memuat kalkulator lokal secara paksa
-  function loadLocalCalculatorFallback() {
-      if(typeof window.initProfiles === 'function') {
-          window.initProfiles();
-          window.loadFromHash();
-          window.applyLanguage();
-      }
-  }
+function loadLocalCalculatorFallback() {
+    if(typeof window.initProfiles === 'function') {
+        window.initProfiles();
+        window.loadFromHash();
+        window.applyLanguage();
+    }
+}
 
-  onAuthStateChanged(auth, (user) => {
-      if (user) {
-          currentUserUid = user.uid;
-          document.getElementById('userEmailDisplay').innerText = user.email;
-          document.getElementById('authGate').style.display = 'none';
-          document.getElementById('appContainer').style.display = 'flex';
-          
-          if (database) {
-              const dbRef = ref(database);
-              get(child(dbRef, `users/${currentUserUid}/tomeProfiles`)).then((snapshot) => {
-                  if (snapshot.exists()) {
-                      let cloudData = snapshot.val();
-                      localStorage.setItem('tomeProfiles', JSON.stringify(cloudData));
-                  }
-                  loadLocalCalculatorFallback();
-              }).catch(() => {
-                  loadLocalCalculatorFallback(); // Tetap load Tome walau cloud error
-              });
-          } else {
-              loadLocalCalculatorFallback();
-          }
-      } else {
-          currentUserUid = null;
-          document.getElementById('authGate').style.display = 'flex';
-          document.getElementById('appContainer').style.display = 'none';
-      }
-  });
+// Memantau status Login pengguna
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        currentUserUid = user.uid;
+        document.getElementById('userEmailDisplay').innerText = user.email;
+        document.getElementById('authGate').style.display = 'none';
+        document.getElementById('appContainer').style.display = 'flex';
+        
+        database.ref('users/' + currentUserUid + '/tomeProfiles').once('value').then((snapshot) => {
+            if (snapshot.exists()) {
+                let cloudData = snapshot.val();
+                localStorage.setItem('tomeProfiles', JSON.stringify(cloudData));
+            }
+            loadLocalCalculatorFallback();
+        }).catch(() => {
+            loadLocalCalculatorFallback();
+        });
+    } else {
+        currentUserUid = null;
+        document.getElementById('authGate').style.display = 'flex';
+        document.getElementById('appContainer').style.display = 'none';
+    }
+});
 
-  // Shortcut Enter
-  document.getElementById('authPassword').addEventListener('keydown', function(e) { if(e.key === 'Enter') handleAuthAction(); });
-  document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); });
+// Fitur tombol Enter saat login
+document.getElementById('authPassword').addEventListener('keydown', function(e) { 
+    if(e.key === 'Enter') handleAuthAction(); 
+});
 </script>
 </body>
 </html>
