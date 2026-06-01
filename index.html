@@ -82,7 +82,7 @@ a:hover { color: #60a5fa; text-decoration: underline; }
 
 h1, h2 { font-size: 1.25rem; font-weight: 700; color: #e2e8f0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
 h1::before, h2::before { content: ''; display: inline-block; width: 12px; height: 12px; background: var(--accent); border-radius: 3px; }
-.podzagolovok { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color); font-size: 0.9rem; color: var(--text-muted); min-height: 50px; }
+.podzagolovok { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color); font-size: 0.9rem; color: var(--text-muted); min-height: 50px; flex-wrap: wrap; }
 
 .podzagolovok input[type="number"] { background: #0f172a; border: 1px solid #475569; color: white; font-weight: 600; border-radius: 8px; padding: 8px 12px; width: 80px; text-align: center; font-size: 1rem; outline: none; transition: border 0.3s; }
 .podzagolovok input:focus { border-color: var(--accent); }
@@ -90,6 +90,11 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 /* Buttons Styling */
 .btn-calc { background: var(--accent); color: white; border: none; padding: 9px 18px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4); }
 .btn-calc:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 6px 12px -2px rgba(59, 130, 246, 0.5); }
+
+.btn-icon { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-muted); width: 38px; height: 38px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+.btn-icon:hover { background: var(--accent); color: white; border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3); }
+.btn-icon.active { background: var(--success); color: white; border-color: var(--success); }
+.btn-icon .fav-active { color: #f59e0b; }
 
 .btn-success { background: var(--success); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; white-space: nowrap; transition: all 0.2s ease; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3); }
 .btn-success:hover { background: var(--success-hover); transform: translateY(-2px); box-shadow: 0 6px 12px -2px rgba(16, 185, 129, 0.4); }
@@ -272,10 +277,16 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
     <div class="main-column">
 		<div class="calc-card">
 			<h2 data-i18n="title2">📋 Rincian Crafting Tome</h2>
-			<div class="podzagolovok">
+			<div class="podzagolovok" style="gap: 8px;">
 				<input type="number" id="mnojitel" value="1" min="1" max="99" oninput="sanitizeMultiplier(this)">
 				<button class="btn-calc" data-i18n="btnCalc" onclick="processTree(rightTreeId)">Hitung Kuantitas</button>
+				
+				<button class="btn-icon" onclick="copyShoppingList()" data-i18n-title="btnCopy" title="Salin Daftar Belanja"><i class="fas fa-clipboard"></i></button>
+				<button class="btn-icon" id="btnCompact" onclick="toggleCompactMode()" data-i18n-title="btnCompact" title="Toggle Mode Ringkas"><i class="fas fa-eye"></i></button>
+				<button class="btn-icon" id="btnFavorite" onclick="saveFavorite()" data-i18n-title="btnFav" title="Simpan sebagai Favorit"><i class="far fa-star"></i></button>
+				<button class="btn-icon" onclick="loadFavorite()" data-i18n-title="btnLoadFav" title="Muat Favorit Tersimpan"><i class="fas fa-bookmark"></i></button>
 			</div>
+			
 			<div class="progress-container">
 				<div class="progress-text">
 					<span data-i18n="progText">Progres Pengumpulan:</span>
@@ -380,7 +391,18 @@ const LANG = {
 		btnAddItem: "➕ Tambah Item",
 		modalInvTitle: "Menambahkan Item",
 		invSearchPlaceholder: "🔍 Cari nama tome/bahan...",
-		btnCloseWindow: "Tutup Jendela"
+		btnCloseWindow: "Tutup Jendela",
+		btnCopy: "Salin Daftar Belanja",
+		btnCompact: "Toggle Mode Ringkas",
+		btnFav: "Simpan sebagai Favorit",
+		btnLoadFav: "Muat Favorit Tersimpan",
+		msgCopyOk: "Daftar belanja berhasil disalin ke clipboard!",
+		msgFavSave: "Target ini telah disimpan sebagai favorit!",
+		msgFavDel: "Favorit dihapus.",
+		msgNoFav: "Belum ada favorit yang tersimpan.",
+		txtTarget: "Target",
+		txtMissing: "Sisa bahan dibutuhkan",
+		txtComplete: "Tidak ada (Sudah Lengkap)"
 	},
 	en: { 
 		btnTarget: "📚 Target Tome Crafting", 
@@ -407,12 +429,25 @@ const LANG = {
 		btnAddItem: "➕ Add Item",
 		modalInvTitle: "Select Item for Inventory",
 		invSearchPlaceholder: "🔍 Search book or material name...",
-		btnCloseWindow: "Close Window"
+		btnCloseWindow: "Close Window",
+		btnCopy: "Copy Shopping List",
+		btnCompact: "Toggle Compact Mode",
+		btnFav: "Save as Favorite",
+		btnLoadFav: "Load Saved Favorite",
+		msgCopyOk: "Shopping list copied to clipboard!",
+		msgFavSave: "Target saved as favorite!",
+		msgFavDel: "Favorite removed.",
+		msgNoFav: "No favorite saved yet.",
+		txtTarget: "Target",
+		txtMissing: "Remaining materials needed",
+		txtComplete: "None (Complete)"
 	}
 };
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
 window.confettiLaunched = false;
+let isCompactMode = false;
+let favoriteTargetId = localStorage.getItem('tomeFavoriteId') || null;
 
 function applyLanguage() {
 	document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -421,6 +456,11 @@ function applyLanguage() {
 			if (el.tagName === 'INPUT') el.placeholder = LANG[currentLang][key];
 			else el.innerHTML = LANG[currentLang][key]; 
 		}
+	});
+
+	document.querySelectorAll('[data-i18n-title]').forEach(el => {
+		const key = el.getAttribute('data-i18n-title');
+		if (LANG[currentLang][key]) el.title = LANG[currentLang][key];
 	});
 	
 	const descEl = document.getElementById('nazvaniye');
@@ -458,6 +498,78 @@ function toggleMenu() {
 		btn.innerHTML = '<i class="fas fa-gear"></i>';
 	}
 }
+
+// ---------------- NEW UX FUNCTIONS ---------------- //
+
+function copyShoppingList() {
+	let targetName = TOME_DB[rightTreeId][4];
+	let multiplier = document.getElementById('mnojitel').value;
+	let cost = document.getElementById('totalCostDisplay').innerText;
+	
+	let n12 = Math.max(0, (itemCounts[12] || 0)); 
+	let n11 = Math.max(0, (itemCounts[11] || 0));
+	let n10 = Math.max(0, (itemCounts[10] || 0));
+	
+	let text = `${LANG[currentLang]['txtTarget']}: ${multiplier}x ${targetName}.\n`;
+	text += `${LANG[currentLang]['txtMissing']}: `;
+	
+	let mats = [];
+	if(n12 > 0) mats.push(`${n12}x Tome Page`);
+	if(n11 > 0) mats.push(`${n11}x Tome Fragment`);
+	if(n10 > 0) mats.push(`${n10}x Token of Luck`);
+	
+	text += mats.length > 0 ? mats.join(', ') : LANG[currentLang]['txtComplete'];
+	text += `.\n${LANG[currentLang]['totalCostLabel']} ${cost}`;
+	
+	navigator.clipboard.writeText(text).then(() => {
+		alert(LANG[currentLang]['msgCopyOk']);
+	});
+}
+
+function toggleCompactMode() {
+	isCompactMode = !isCompactMode;
+	const btn = document.getElementById('btnCompact');
+	if(isCompactMode) {
+		btn.classList.add('active');
+		btn.innerHTML = '<i class="fas fa-eye-slash"></i>';
+	} else {
+		btn.classList.remove('active');
+		btn.innerHTML = '<i class="fas fa-eye"></i>';
+	}
+	renderTree();
+}
+
+function updateFavoriteButton() {
+	const btn = document.getElementById('btnFavorite');
+	if(favoriteTargetId == rightTreeId) {
+		btn.innerHTML = '<i class="fas fa-star fav-active"></i>';
+	} else {
+		btn.innerHTML = '<i class="far fa-star"></i>';
+	}
+}
+
+function saveFavorite() {
+	if(favoriteTargetId == rightTreeId) {
+		favoriteTargetId = null;
+		localStorage.removeItem('tomeFavoriteId');
+		alert(LANG[currentLang]['msgFavDel']);
+	} else {
+		favoriteTargetId = rightTreeId;
+		localStorage.setItem('tomeFavoriteId', favoriteTargetId);
+		alert(LANG[currentLang]['msgFavSave']);
+	}
+	updateFavoriteButton();
+}
+
+function loadFavorite() {
+	if (favoriteTargetId && TOME_DB[favoriteTargetId]) {
+		selectTargetBook(favoriteTargetId);
+	} else {
+		alert(LANG[currentLang]['msgNoFav']);
+	}
+}
+
+// -------------------------------------------------- //
 
 const TOME_DB = [];
 TOME_DB[601] = [501, 502, 509, 17615, 'The Calm of Ice']; 
@@ -650,13 +762,17 @@ function renderTree() {
     let txt = '';
     const txtLvl = LANG[currentLang]['lvl'];
     const txtBase = LANG[currentLang]['baseMat'];
-    for (let r = 6; r >= 1; r--) {
-        let start = r * 100 + 1; let end = r * 100 + 16; let hasItem = false;
-        let tempTxt = `<ul><li>${txtLvl} ${r}</li> `;
-        for (let e = start; e <= end; e++) { if (itemCounts[e]) { tempTxt += getTreeItemHtml(e); hasItem = true; } }
-        tempTxt += '</ul>';
-        if (hasItem) txt += tempTxt;
+    
+    if (!isCompactMode) {
+        for (let r = 6; r >= 1; r--) {
+            let start = r * 100 + 1; let end = r * 100 + 16; let hasItem = false;
+            let tempTxt = `<ul><li>${txtLvl} ${r}</li> `;
+            for (let e = start; e <= end; e++) { if (itemCounts[e]) { tempTxt += getTreeItemHtml(e); hasItem = true; } }
+            tempTxt += '</ul>';
+            if (hasItem) txt += tempTxt;
+        }
     }
+    
     txt += `<ul id="niz"><li>${txtBase}</li> `;
     if (itemCounts[11]) txt += getTreeItemHtml(11);
     if (itemCounts[12]) txt += getTreeItemHtml(12);
@@ -763,6 +879,7 @@ function updateCostAndProgress() {
 function processTree(id) {
     if (!id || !TOME_DB[id]) return;
     rightTreeId = id;
+    updateFavoriteButton();
     let multiplier = Math.max(1, parseInt(document.getElementById('mnojitel').value) || 1);
     itemCounts = [];
     
@@ -900,7 +1017,7 @@ function resetCalculator() {
         deductions = []; 
         localStorage.removeItem('tomeCalculatorState');
         document.getElementById('price10').value = 0; document.getElementById('price11').value = 0; document.getElementById('price12').value = 0; document.getElementById('mnojitel').value = 1;
-        rightTreeId = 616;
+        rightTreeId = favoriteTargetId ? parseInt(favoriteTargetId) : 616;
         processTree(rightTreeId);
         toggleMenu();
     }
