@@ -27,7 +27,7 @@ ul { list-style: none; } a { color: var(--accent); text-decoration: none; transi
 h1, h2 { font-size: 1.25rem; font-weight: 700; color: #e2e8f0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
 h1::before, h2::before { content: ''; display: inline-block; width: 12px; height: 12px; background: var(--accent); border-radius: 3px; }
 .podzagolovok { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color); font-size: 0.9rem; color: var(--text-muted); min-height: 50px; }
-.podzagolovok input[type="number"] { background: #0f172a; border: 1px solid #475569; color: white; font-weight: 600; border-radius: 8px; padding: 8px 12px; width: 80px; text-align: center; outline: none; transition: border 0.3s; }
+.podzagolovok input[type="number"] { background: #0f172a; border: 1px solid #475569; color: white; font-weight: 600; border-radius: 8px; padding: 8px 12px; width: 80px; text-align: center; outline: none; transition: border 0.3s; font-size: 1rem; }
 .btn-calc { background: var(--accent); color: white; border: none; padding: 9px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4); }
 .btn-calc:hover { background: var(--accent-hover); transform: translateY(-2px); }
 .progress-container { margin-bottom: 20px; background: rgba(0, 0, 0, 0.15); padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); }
@@ -148,9 +148,9 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
         <div class="calc-card">
             <h1 data-i18n="title3">Estimasi Biaya Pasar</h1>
             <div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
-            <div class="cost-input-group"><label><span style="background-position:32px -32px;"></span> Token of Luck:</label><input type="number" id="price10" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0"></div>
-            <div class="cost-input-group"><label><span style="background-position:64px 0px;"></span> Tome Fragment:</label><input type="number" id="price11" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0"></div>
-            <div class="cost-input-group"><label><span style="background-position:32px 0px;"></span> Tome Page:</label><input type="number" id="price12" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0"></div>
+            <div class="cost-input-group"><label><span style="background-position:-32px -32px;"></span> Token of Luck:</label><input type="number" id="price10" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0"></div>
+            <div class="cost-input-group"><label><span style="background-position:-64px 0px;"></span> Tome Fragment:</label><input type="number" id="price11" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0"></div>
+            <div class="cost-input-group"><label><span style="background-position:-32px 0px;"></span> Tome Page:</label><input type="number" id="price12" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0"></div>
             <div class="total-cost-box"><div class="total-cost-label" data-i18n="totalCostLabel">Total Sisa Biaya:</div><div id="totalCostDisplay" class="total-cost-value">0 Gold</div></div>
         </div>
     </div>
@@ -256,20 +256,18 @@ const STATS_DB = {
 601:["Strength +15","Dexterity +15","Critical Hit Rate +1%"],602:["Magic +15","Vitality +15","Channeling Time -3%"],603:["Strength +15","Vitality +15","Maximum HP +150"],604:["Dexterity +20","Movement Speed +0.10 m/s","Interval Between Hits -0.05 s"],605:["Magic +20","Maximum MP +200","Channeling Time -3%"],606:["Strength +20","Physical Attack +30","Critical Hit Rate +1%"],607:["Vitality +20","Maximum HP +200","Physical Defense +50"],608:["Strength +15","Dexterity +15","Magic +15","Vitality +15"],609:["Dexterity +15","Vitality +15","Critical Hit Rate +1%"],610:["Magic +15","Dexterity +15","Channeling Time -3%"],611:["Strength +15","Magic +15","Physical Attack +20"],612:["Magic +25","Channeling Time -3%"],613:["Strength +25","Critical Hit Rate +1%"],614:["Dexterity +25","Interval Between Hits -0.05 seconds"],615:["Dexterity +20","Magic +20","Critical Hit Rate +1%","Channeling Time -3%"],616:["Strength +15","Dexterity +15","Magic +15","Vitality +15","Critical Hit Rate +1%","Channeling Time -1%","Interval Between Hits -0.05 s"] 
 };
 
-let itemCounts = [], deductions = [], deductionsCopy = [];
+let itemCounts = [], deductions = [];
 let leftTreeId = 616, rightTreeId = 616, activeModalItemId = null;
 let profiles = { "Default Build": { l: 616, r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 } };
 let currentProfile = "Default Build";
 
-// RUMUS POSISI GAMBAR AKURAT
+// ⚠️ FIX: RUMUS KOORDINAT GAMBAR DIKEMBALIKAN 100% KE ASLINYA ⚠️
 function getSpritePosition(id) {
     const pId = parseInt(id);
-    if (pId === 10) return 'background-position: 32px -32px;';
-    if (pId === 11) return 'background-position: 64px 0px;';
-    if (pId === 12) return 'background-position: 32px 0px;';
-    let row = Math.floor(pId / 100);
-    let num = pId - (row * 100);
-    return `background-position: -${32 * (num - 1)}px -${32 * (row - 1)}px;`;
+    if (pId === 10) return 'background-position: -32px -32px;';
+    if (pId === 11) return 'background-position: -64px 0px;';
+    if (pId === 12) return 'background-position: -32px 0px;';
+    return `background-position: -${(pId % 10) * 32}px -${Math.floor(pId / 100) * 32}px;`;
 }
 
 function showTooltip(element, event) {
@@ -303,50 +301,65 @@ function getTreeItemHtml(id, isDeductionsView = false) {
     if (!count) return '';
     let clickAttr = isDeductionsView ? `onClick="removeDeduction(${id})"` : `onClick="openModal(${id})"`;
     let spanTag = isDeductionsView ? `<span title="Hapus item dari inventory"></span>` : '';
-    return `<li><button style="${getSpritePosition(id)}" title="${id}" ${clickAttr} onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
+    return `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" ${clickAttr} onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
 }
 
 function processTree(id, isRightTree) {
     if (!isRightTree) leftTreeId = id; else rightTreeId = id;
     let multiplier = isRightTree ? (parseInt(document.getElementById('mnojitel').value) || 1) : 1;
     itemCounts = [];
+    
     function calculateNode(nodeId) {
         if (!itemCounts[nodeId]) itemCounts[nodeId] = 0; itemCounts[nodeId]++;
         if (nodeId > 200) { calculateNode(TOME_DB[nodeId][0]); calculateNode(TOME_DB[nodeId][1]); calculateNode(TOME_DB[nodeId][2]); }
     }
     for (let z = 0; z < multiplier; z++) calculateNode(id);
-    for (let z = 616; z >= 101; z--) {
-        if (itemCounts[z] && deductions[z]) {
-            itemCounts[z] -= deductions[z];
-            if (itemCounts[z] < 0) { deductionsCopy[z] = -itemCounts[z]; itemCounts[z] = 0; } else deductionsCopy[z] = 0;
-        } else deductionsCopy[z] = deductions[z] || 0;
+    
+    // Hitung pengurangan dari Inventory jika ini adalah sisi Target Kanan
+    if (isRightTree) {
+        let deductionsCopy = [...deductions];
+        for (let z = 616; z >= 101; z--) {
+            if (itemCounts[z] && deductionsCopy[z]) {
+                if (deductionsCopy[z] >= itemCounts[z]) { deductionsCopy[z] -= itemCounts[z]; itemCounts[z] = 0; }
+                else { itemCounts[z] -= deductionsCopy[z]; deductionsCopy[z] = 0; }
+            }
+            if (itemCounts[z] > 0 && z > 200) {
+                if(!itemCounts[TOME_DB[z][0]]) itemCounts[TOME_DB[z][0]] = 0; itemCounts[TOME_DB[z][0]] += itemCounts[z];
+                if(!itemCounts[TOME_DB[z][1]]) itemCounts[TOME_DB[z][1]] = 0; itemCounts[TOME_DB[z][1]] += itemCounts[z];
+                if(!itemCounts[TOME_DB[z][2]]) itemCounts[TOME_DB[z][2]] = 0; itemCounts[TOME_DB[z][2]] += itemCounts[z];
+                itemCounts[z] = 0;
+            }
+        }
+        let baseMats = 0;
+        for (let z = 101; z <= 109; z++) {
+            if (itemCounts[z]) {
+                if (deductionsCopy[z] >= itemCounts[z]) { deductionsCopy[z] -= itemCounts[z]; itemCounts[z] = 0; }
+                else { itemCounts[z] -= deductionsCopy[z]; deductionsCopy[z] = 0; }
+                baseMats += itemCounts[z] * 3;
+            }
+        }
+        itemCounts[11] = baseMats; itemCounts[12] = baseMats;
+        if (deductionsCopy[11] >= itemCounts[11]) { deductionsCopy[11] -= itemCounts[11]; itemCounts[11] = 0; } else { itemCounts[11] -= deductionsCopy[11]; }
+        if (deductionsCopy[12] >= itemCounts[12]) { deductionsCopy[12] -= itemCounts[12]; itemCounts[12] = 0; } else { itemCounts[12] -= deductionsCopy[12]; }
+        itemCounts[10] = itemCounts[12] * 80;
+        if (deductionsCopy[10] >= itemCounts[10]) { deductionsCopy[10] -= itemCounts[10]; itemCounts[10] = 0; } else { itemCounts[10] -= deductionsCopy[10]; }
+    } else {
+        // Jika sisi kiri (Kebutuhan Total), abaikan Inventory
+        let baseMats = 0;
+        for (let z = 101; z <= 109; z++) { if (itemCounts[z]) baseMats += itemCounts[z] * 3; }
+        itemCounts[11] = baseMats; itemCounts[12] = baseMats; itemCounts[10] = baseMats * 80;
     }
-    let baseMats = 0;
-    for (let z = 101; z <= 109; z++) { let req = itemCounts[z] || 0; if (deductionsCopy[z]) { req -= deductionsCopy[z]; if (req < 0) req = 0; } baseMats += req * 3; }
-    for (let z = 12; z >= 10; z--) { itemCounts[z] = z === 10 ? (itemCounts[12] || 0) * 80 : baseMats; if (deductions[z]) itemCounts[z] -= deductions[z]; if (itemCounts[z] < 0) itemCounts[z] = 0; }
-    renderTree(isRightTree); if(isRightTree) updateCostAndProgress();
+    
+    renderTree(isRightTree); 
+    if(isRightTree) updateCostAndProgress();
 }
 
 function updateCostAndProgress() {
     let p10 = parseInt(document.getElementById('price10').value) || 0, p11 = parseInt(document.getElementById('price11').value) || 0, p12 = parseInt(document.getElementById('price12').value) || 0;
     let multiplier = parseInt(document.getElementById('mnojitel').value) || 1;
     saveActiveProfile();
-    let netCounts = []; deductionsCopy = [...deductions];
-    function calcNetNode(nodeId) {
-        if (!netCounts[nodeId]) netCounts[nodeId] = 0;
-        if (deductionsCopy[nodeId] && deductionsCopy[nodeId] > 0) { deductionsCopy[nodeId]--; return; }
-        netCounts[nodeId]++;
-        if (nodeId > 200) { calcNetNode(TOME_DB[nodeId][0]); calcNetNode(TOME_DB[nodeId][1]); calcNetNode(TOME_DB[nodeId][2]); }
-    }
-    for (let z = 0; z < multiplier; z++) calcNetNode(rightTreeId);
-    let netBaseMats = 0;
-    for (let z = 101; z <= 109; z++) if (netCounts[z]) netBaseMats += netCounts[z] * 3;
-    netCounts[11] = netBaseMats; netCounts[12] = netBaseMats;
-    if (deductions[11]) netCounts[11] -= deductions[11]; if (netCounts[11] < 0) netCounts[11] = 0;
-    if (deductions[12]) netCounts[12] -= deductions[12]; if (netCounts[12] < 0) netCounts[12] = 0;
-    netCounts[10] = netCounts[12] * 80;
-    if (deductions[10]) netCounts[10] -= deductions[10]; if (netCounts[10] < 0) netCounts[10] = 0;
     
+    // Perhitungan Gross (Kotor) untuk mengukur panjang Progress Bar
     let grossCounts = [];
     function calcGrossNode(nodeId) {
         if (!grossCounts[nodeId]) grossCounts[nodeId] = 0; grossCounts[nodeId]++;
@@ -357,11 +370,11 @@ function updateCostAndProgress() {
     for (let z = 101; z <= 109; z++) if (grossCounts[z]) grossBaseMats += grossCounts[z] * 3;
     grossCounts[11] = grossBaseMats; grossCounts[12] = grossBaseMats; grossCounts[10] = grossBaseMats * 80;
     
-    let totalCost = (netCounts[10] || 0) * p10 + (netCounts[11] || 0) * p11 + (netCounts[12] || 0) * p12;
+    let totalCost = (itemCounts[10] || 0) * p10 + (itemCounts[11] || 0) * p11 + (itemCounts[12] || 0) * p12;
     document.getElementById('totalCostDisplay').innerText = totalCost.toLocaleString('id-ID') + " Gold";
     
     let grossVal = (grossCounts[10] || 0) + (grossCounts[12] || 0) * 80 + (grossCounts[11] || 0) * 80;
-    let netVal = (netCounts[10] || 0) + (netCounts[12] || 0) * 80 + (netCounts[11] || 0) * 80;
+    let netVal = (itemCounts[10] || 0) + (itemCounts[12] || 0) * 80 + (itemCounts[11] || 0) * 80;
     let pct = grossVal > 0 ? ((grossVal - netVal) / grossVal) * 100 : 0; pct = Math.max(0, Math.min(100, pct));
     document.getElementById('progressBar').style.width = pct.toFixed(1) + '%'; document.getElementById('progressPercentText').innerText = pct.toFixed(1) + '%';
 }
@@ -395,7 +408,7 @@ function renderMenu() {
     let txt = '';
     for (let r = 6; r >= 1; r--) {
         let lis = ''; let start = r * 100 + 1, end = r * 100 + 16;
-        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="${getSpritePosition(e)}" title="${e}" onClick="selectTargetBook(${e})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
+        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(e)}" title="${e}" onClick="selectTargetBook(${e})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
         if (lis !== '') txt += `<h4>${LANG[currentLang]['lvl']} ${r}</h4><ul style="justify-content:center;">${lis}</ul>`;
     }
     document.getElementById('vyborDiv').innerHTML = txt;
@@ -409,8 +422,8 @@ function renderInventorySelection(query) {
     let html = '<ul style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">';
     const q = query.toLowerCase();
     const baseMats = [ {id: 12, name: 'Tome Page'}, {id: 11, name: 'Tome Fragment'}, {id: 10, name: 'Token of Luck'} ];
-    baseMats.forEach(mat => { if (mat.name.toLowerCase().includes(q)) html += `<li><button style="${getSpritePosition(mat.id)}" title="${mat.id}" onClick="selectItemForInventory(${mat.id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`; });
-    for (let id in TOME_DB) { if (TOME_DB[id][4].toLowerCase().includes(q)) html += `<li><button style="${getSpritePosition(id)}" title="${id}" onClick="selectItemForInventory(${id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`; }
+    baseMats.forEach(mat => { if (mat.name.toLowerCase().includes(q)) html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onClick="selectItemForInventory(${mat.id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`; });
+    for (let id in TOME_DB) { if (TOME_DB[id][4].toLowerCase().includes(q)) html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" onClick="selectItemForInventory(${id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`; }
     html += '</ul>'; document.getElementById('invItemList').innerHTML = html;
 }
 
@@ -517,7 +530,6 @@ window.applyLanguage = applyLanguage;
 // Pasang event pendengar untuk Enter
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); });
-    document.getElementById('authPassword').addEventListener('keydown', function(e) { if(e.key === 'Enter') window.handleAuthAction(); });
 });
 </script>
 
@@ -606,6 +618,11 @@ document.addEventListener('DOMContentLoaded', () => {
           document.getElementById('authGate').style.display = 'flex';
           document.getElementById('appContainer').style.display = 'none';
       }
+  });
+
+  // Shortcut login Enter
+  document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('authPassword').addEventListener('keydown', function(e) { if(e.key === 'Enter') window.handleAuthAction(); });
   });
 </script>
 </body>
