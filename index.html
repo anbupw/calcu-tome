@@ -1,306 +1,306 @@
-!DOCTYPE html
-html lang=id
-head
-meta http-equiv=Content-Type content=texthtml; charset=utf-8 
-meta name=viewport content=width=device-width, initial-scale=1.0
-meta name=description content=Kalkulator Tome Perfect World - Edisi Imersif 
-titleKalkulator Tometitle
-link rel=icon type=imagex-icon href=favicon.ico
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Kalkulator Tome Perfect World - Edisi Imersif" />
+<title>Kalkulator Tome</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
 
-link href=httpsfonts.googleapis.comcss2family=Interwght@400;500;600;700&display=swap rel=stylesheet
-link rel=stylesheet href=httpscdnjs.cloudflare.comajaxlibsfont-awesome6.4.0cssall.min.css
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-script src=httpscdnjs.cloudflare.comajaxlibshtml2canvas1.4.1html2canvas.min.jsscript
-script src=httpscdn.jsdelivr.netnpmcanvas-confetti@1.6.0distconfetti.browser.min.jsscript
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-style
-root {
-	--bg-main #0f172a;
-	--bg-card #1e293b;
-	--bg-card-hover #334155;    
-	--text-main #f8fafc;
-	--text-muted #94a3b8;
-	--accent #3b82f6;
-	--accent-hover #2563eb;
-	--danger #ef4444;
-	--danger-hover #dc2626;
-	--success #10b981;
-	--success-hover #059669;
-	--border-color rgba(255, 255, 255, 0.08);
+<style>
+:root {
+	--bg-main: #0f172a;
+	--bg-card: #1e293b;
+	--bg-card-hover: #334155;    
+	--text-main: #f8fafc;
+	--text-muted: #94a3b8;
+	--accent: #3b82f6;
+	--accent-hover: #2563eb;
+	--danger: #ef4444;
+	--danger-hover: #dc2626;
+	--success: #10b981;
+	--success-hover: #059669;
+	--border-color: rgba(255, 255, 255, 0.08);
 }
 
- { box-sizing border-box; margin 0; padding 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-	font-family 'Inter', sans-serif;
-	background-color var(--bg-main);
-	color var(--text-main);
-	line-height 1.6;
-	min-height 100vh;
-	padding 30px 30px 10px 30px; 
-	background-image 
+	font-family: 'Inter', sans-serif;
+	background-color: var(--bg-main);
+	color: var(--text-main);
+	line-height: 1.6;
+	min-height: 100vh;
+	padding: 30px 30px 10px 30px; 
+	background-image: 
 		radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
 		radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
-	background-attachment fixed;
-    display flex;
-    flex-direction column;
+	background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
 }
 
-ul { list-style none; }
-a { color var(--accent); text-decoration none; transition 0.3s; }
-ahover { color #60a5fa; text-decoration underline; }
+ul { list-style: none; }
+a { color: var(--accent); text-decoration: none; transition: 0.3s; }
+a:hover { color: #60a5fa; text-decoration: underline; }
 
-.container { display flex; flex-wrap wrap; gap 24px; justify-content center; max-width 1400px; margin 0 auto; flex 1; }
-.calc-card { background var(--bg-card); border 1px solid var(--border-color); border-radius 20px; padding 25px; width 100%; max-width 440px; box-shadow 0 10px 30px -10px rgba(0, 0, 0, 0.5); position relative; backdrop-filter blur(10px); }
-#deductions { max-width 1370px; margin 24px auto 0; width 100%; }
-#deductions .calc-card { max-width 100%; }
+.container { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; max-width: 1400px; margin: 0 auto; flex: 1; }
+.calc-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; width: 100%; max-width: 440px; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); position: relative; backdrop-filter: blur(10px); }
+#deductions { max-width: 1370px; margin: 24px auto 0; width: 100%; }
+#deductions .calc-card { max-width: 100%; }
 
-h1, h2 { font-size 1.25rem; font-weight 700; color #e2e8f0; margin-bottom 20px; display flex; align-items center; gap 10px; }
-h1before, h2before { content ''; display inline-block; width 12px; height 12px; background var(--accent); border-radius 3px; }
-.podzagolovok { display flex; align-items center; gap 12px; margin-bottom 20px; background rgba(0,0,0,0.2); padding 12px 16px; border-radius 12px; border 1px solid var(--border-color); font-size 0.9rem; color var(--text-muted); min-height 50px; }
+h1, h2 { font-size: 1.25rem; font-weight: 700; color: #e2e8f0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+h1::before, h2::before { content: ''; display: inline-block; width: 12px; height: 12px; background: var(--accent); border-radius: 3px; }
+.podzagolovok { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color); font-size: 0.9rem; color: var(--text-muted); min-height: 50px; }
 
-.podzagolovok input[type=number] { background #0f172a; border 1px solid #475569; color white; font-weight 600; border-radius 8px; padding 8px 12px; width 80px; text-align center; font-size 1rem; outline none; transition border 0.3s; }
-.podzagolovok inputfocus { border-color var(--accent); }
-.btn-calc { background var(--accent); color white; border none; padding 9px 18px; border-radius 8px; font-weight 600; font-size 0.9rem; cursor pointer; transition all 0.2s ease; box-shadow 0 4px 6px -1px rgba(59, 130, 246, 0.4); }
-.btn-calchover { background var(--accent-hover); transform translateY(-2px); box-shadow 0 6px 12px -2px rgba(59, 130, 246, 0.5); }
+.podzagolovok input[type="number"] { background: #0f172a; border: 1px solid #475569; color: white; font-weight: 600; border-radius: 8px; padding: 8px 12px; width: 80px; text-align: center; font-size: 1rem; outline: none; transition: border 0.3s; }
+.podzagolovok input:focus { border-color: var(--accent); }
+.btn-calc { background: var(--accent); color: white; border: none; padding: 9px 18px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4); }
+.btn-calc:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 6px 12px -2px rgba(59, 130, 246, 0.5); }
 
-.progress-container { margin-bottom 20px; background rgba(0, 0, 0, 0.15); padding 12px; border-radius 12px; border 1px solid var(--border-color); }
-.progress-text { display flex; justify-content space-between; font-size 0.8rem; font-weight 600; color var(--text-muted); margin-bottom 6px; }
-.progress-text #progressPercentText { color var(--success); }
-.progress-bar-bg { background #0f172a; border-radius 50px; height 10px; overflow hidden; border 1px solid rgba(255, 255, 255, 0.05); }
-.progress-bar { background linear-gradient(90deg, var(--accent), var(--success)); width 0%; height 100%; border-radius 50px; transition width 0.4s ease-in-out; }
+.progress-container { margin-bottom: 20px; background: rgba(0, 0, 0, 0.15); padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); }
+.progress-text { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+.progress-text #progressPercentText { color: var(--success); }
+.progress-bar-bg { background: #0f172a; border-radius: 50px; height: 10px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05); }
+.progress-bar { background: linear-gradient(90deg, var(--accent), var(--success)); width: 0%; height: 100%; border-radius: 50px; transition: width 0.4s ease-in-out; }
 
-.cost-input-group { display flex; align-items center; justify-content space-between; margin-bottom 12px; background rgba(0,0,0,0.15); padding 8px 12px; border-radius 10px; border 1px solid var(--border-color); }
-.cost-input-group label { font-size 0.85rem; color var(--text-muted); display flex; align-items center; gap 8px; }
-.cost-input-group label span { display inline-block; width 32px; height 32px; background-image url('znachki.png'); transform scale(0.85); }
-.cost-input-group input { background #0f172a; border 1px solid #475569; color var(--success); font-weight 600; border-radius 6px; padding 6px 10px; width 140px; text-align right; outline none; font-family 'Inter', sans-serif; }
-.cost-input-group inputfocus { border-color var(--accent); }
-.total-cost-box { margin-top 20px; background rgba(16, 185, 129, 0.06); border 1px solid rgba(16, 185, 129, 0.2); padding 15px; border-radius 12px; text-align center; }
-.total-cost-label { font-size 0.8rem; text-transform uppercase; letter-spacing 1px; color var(--text-muted); margin-bottom 5px; }
-.total-cost-value { font-size 1.4rem; font-weight 700; color var(--success); text-shadow 0 0 10px rgba(16, 185, 129, 0.2); }
+.cost-input-group { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; background: rgba(0,0,0,0.15); padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border-color); }
+.cost-input-group label { font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+.cost-input-group label span { display: inline-block; width: 32px; height: 32px; background-image: url('znachki.png'); transform: scale(0.85); }
+.cost-input-group input { background: #0f172a; border: 1px solid #475569; color: var(--success); font-weight: 600; border-radius: 6px; padding: 6px 10px; width: 140px; text-align: right; outline: none; font-family: 'Inter', sans-serif; }
+.cost-input-group input:focus { border-color: var(--accent); }
+.total-cost-box { margin-top: 20px; background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.2); padding: 15px; border-radius: 12px; text-align: center; }
+.total-cost-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 5px; }
+.total-cost-value { font-size: 1.4rem; font-weight: 700; color: var(--success); text-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
 
-.branch ul { display flex; flex-wrap wrap; gap 15px; background rgba(255, 255, 255, 0.02); border 1px solid var(--border-color); border-radius 16px; padding 16px; margin-bottom 16px; align-items center; }
-.branch ul lifirst-child { width 100%; font-size 0.75rem; font-weight 700; color var(--text-muted); text-transform uppercase; letter-spacing 1.5px; border-bottom 1px dashed var(--border-color); padding-bottom 8px; margin-bottom 5px; }
-.branch ul li { position relative; display inline-flex; flex-direction column; align-items center; }
-.branch li button { display block; width 32px; height 32px; transform scale(1.2); margin 6px; background-image url('znachki.png'); border none; border-radius 6px; cursor pointer; box-shadow 0 4px 6px rgba(0,0,0,0.3); transition transform 0.2s ease, box-shadow 0.2s ease; }
-.branch li buttonhover { transform scale(1.35) translateY(-2px); box-shadow 0 8px 15px rgba(0,0,0,0.5); }
-.branch li b { position absolute; bottom -8px; right -5px; background var(--accent); color #fff; font-size 0.7rem; font-weight 700; padding 2px 6px; border-radius 12px; border 2px solid var(--bg-card); pointer-events none; z-index 2; }
-.branch li span { position absolute; top -5px; left -5px; width 20px; height 20px; background var(--danger); color white; font-size 14px; line-height 14px; text-align center; border-radius 50%; cursor pointer; opacity 0; visibility hidden; transition all 0.2s ease; z-index 3; border 2px solid var(--bg-card); display flex; align-items center; justify-content center; }
-.branch li spanbefore { content -; font-weight bold; }
-.branch lihover span { opacity 1; visibility visible; }
-#strelki { color var(--accent); font-weight bold; letter-spacing 2px; }
-#niz lifirst-child { display none; } 
+.branch ul { display: flex; flex-wrap: wrap; gap: 15px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; margin-bottom: 16px; align-items: center; }
+.branch ul li:first-child { width: 100%; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px; margin-bottom: 5px; }
+.branch ul li { position: relative; display: inline-flex; flex-direction: column; align-items: center; }
+.branch li button { display: block; width: 32px; height: 32px; transform: scale(1.2); margin: 6px; background-image: url('znachki.png'); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.branch li button:hover { transform: scale(1.35) translateY(-2px); box-shadow: 0 8px 15px rgba(0,0,0,0.5); }
+.branch li b { position: absolute; bottom: -8px; right: -5px; background: var(--accent); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 12px; border: 2px solid var(--bg-card); pointer-events: none; z-index: 2; }
+.branch li span { position: absolute; top: -5px; left: -5px; width: 20px; height: 20px; background: var(--danger); color: white; font-size: 14px; line-height: 14px; text-align: center; border-radius: 50%; cursor: pointer; opacity: 0; visibility: hidden; transition: all 0.2s ease; z-index: 3; border: 2px solid var(--bg-card); display: flex; align-items: center; justify-content: center; }
+.branch li span::before { content: "-"; font-weight: bold; }
+.branch li:hover span { opacity: 1; visibility: visible; }
+#strelki { color: var(--accent); font-weight: bold; letter-spacing: 2px; }
+#niz li:first-child { display: none; } 
 
- --- UI Floating Tooltip (In-game Style) --- 
+/* --- UI Floating Tooltip (In-game Style) --- */
 .floating-tooltip {
-    position fixed;
-    background rgba(10, 15, 30, 0.96);
-    border 2px solid #475569;
-    border-radius 10px;
-    padding 14px 18px;
-    box-shadow 0 15px 35px rgba(0,0,0,0.85), inset 0 0 15px rgba(0,0,0,0.7);
-    z-index 10000;
-    pointer-events none; 
-    display none;
-    min-width 240px;
-    max-width 300px;
-    font-family 'Inter', sans-serif;
-    backdrop-filter blur(6px);
+    position: fixed;
+    background: rgba(10, 15, 30, 0.96);
+    border: 2px solid #475569;
+    border-radius: 10px;
+    padding: 14px 18px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.85), inset 0 0 15px rgba(0,0,0,0.7);
+    z-index: 10000;
+    pointer-events: none; 
+    display: none;
+    min-width: 240px;
+    max-width: 300px;
+    font-family: 'Inter', sans-serif;
+    backdrop-filter: blur(6px);
 }
 .tooltip-title {
-    color #f59e0b;  Golden Color 
-    font-size 1rem;
-    font-weight 700;
-    margin-bottom 5px;
-    display flex;
-    align-items center;
-    gap 10px;
+    color: #f59e0b; /* Golden Color */
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 .tooltip-type {
-    color #94a3b8;
-    font-size 0.75rem;
-    margin-bottom 10px;
-    border-bottom 1px dashed rgba(255,255,255,0.15);
-    padding-bottom 5px;
+    color: #94a3b8;
+    font-size: 0.75rem;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed rgba(255,255,255,0.15);
+    padding-bottom: 5px;
 }
-.tooltip-list { display flex; flex-direction column; gap 4px; }
-.tooltip-stat { color #60a5fa; font-size 0.85rem; font-weight 600; }
-.tooltip-footer { color #64748b; font-size 0.75rem; font-style italic; margin-top 10px; border-top 1px dashed rgba(255,255,255,0.1); padding-top 6px; }
+.tooltip-list { display: flex; flex-direction: column; gap: 4px; }
+.tooltip-stat { color: #60a5fa; font-size: 0.85rem; font-weight: 600; }
+.tooltip-footer { color: #64748b; font-size: 0.75rem; font-style: italic; margin-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 6px; }
 
- Footer & Social Icons Styles 
-.footer { margin-top 40px; padding 25px 0; border-top 1px solid var(--border-color); text-align center; width 100%; }
-.footer-text { color var(--text-muted); font-size 0.9rem; margin-bottom 15px; }
-.social-icons { display flex; justify-content center; gap 18px; }
-.social-icons a { color var(--text-muted); font-size 1.4rem; display inline-flex; align-items center; justify-content center; width 40px; height 40px; border-radius 50%; background rgba(255,255,255,0.05); transition all 0.3s ease; }
-.social-icons ahover { color white; background var(--accent); transform translateY(-3px); box-shadow 0 5px 15px rgba(59, 130, 246, 0.4); }
+/* Footer & Social Icons Styles */
+.footer { margin-top: 40px; padding: 25px 0; border-top: 1px solid var(--border-color); text-align: center; width: 100%; }
+.footer-text { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; }
+.social-icons { display: flex; justify-content: center; gap: 18px; }
+.social-icons a { color: var(--text-muted); font-size: 1.4rem; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.05); transition: all 0.3s ease; }
+.social-icons a:hover { color: white; background: var(--accent); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4); }
 
-.menu-toggle-btn { position fixed; top 25px; right 25px; background var(--accent); color white; border none; padding 10px 18px; border-radius 8px; font-weight 600; font-family 'Inter', sans-serif; cursor pointer; z-index 1001; box-shadow 0 4px 10px rgba(0,0,0,0.5); transition 0.2s ease; }
-.menu-toggle-btnhover { background var(--accent-hover); transform translateY(-2px); }
-.vybor { position fixed; right 25px; top 75px; background rgba(15, 23, 42, 0.95); backdrop-filter blur(10px); border 1px solid var(--accent); padding 20px; border-radius 16px; box-shadow 0 20px 40px rgba(0,0,0,0.6); z-index 1000; width 340px; max-height 80vh; overflow-y auto; }
+.menu-toggle-btn { position: fixed; top: 25px; right: 25px; background: var(--accent); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; z-index: 1001; box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: 0.2s ease; }
+.menu-toggle-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
+.vybor { position: fixed; right: 25px; top: 75px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--accent); padding: 20px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); z-index: 1000; width: 340px; max-height: 80vh; overflow-y: auto; }
 
-.panel-actions { display flex; flex-direction column; gap 10px; margin-bottom 15px; }
-.panel-actions  button { width 100%; border none; color white; padding 10px; border-radius 8px; font-weight 600; cursor pointer; transition 0.2s; display flex; align-items center; justify-content center; gap 8px; }
-.btn-primary { background var(--accent); } .btn-primaryhover { background var(--accent-hover); }
-.btn-success { background var(--success); } .btn-successhover { background var(--success-hover); }
-.btn-purple { background #8b5cf6; } .btn-purplehover { background #7c3aed; }
-.btn-danger { background var(--danger); } .btn-dangerhover { background var(--danger-hover); }
-.search-box { width 100%; padding 10px 14px; background #0f172a; border 1px solid var(--border-color); border-radius 8px; color white; font-family 'Inter', sans-serif; font-size 0.9rem; margin-top 10px; margin-bottom 5px; outline none; transition 0.2s; }
-.search-boxfocus { border-color var(--accent); }
-#vyborDiv h4 { font-size 0.8rem; color var(--text-muted); border-bottom 1px solid var(--border-color); margin-bottom 10px; padding-bottom 5px; margin-top 15px; }
-#vyborDiv ul { display flex; flex-wrap wrap; gap 8px; }
-#vyborDiv li { display inline-block; }
-.vybor-webkit-scrollbar { width 6px; } .vybor-webkit-scrollbar-track { background transparent; } .vybor-webkit-scrollbar-thumb { background var(--accent); border-radius 10px; }
+.panel-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+.panel-actions > button { width: 100%; border: none; color: white; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-primary { background: var(--accent); } .btn-primary:hover { background: var(--accent-hover); }
+.btn-success { background: var(--success); } .btn-success:hover { background: var(--success-hover); }
+.btn-purple { background: #8b5cf6; } .btn-purple:hover { background: #7c3aed; }
+.btn-danger { background: var(--danger); } .btn-danger:hover { background: var(--danger-hover); }
+.search-box { width: 100%; padding: 10px 14px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: white; font-family: 'Inter', sans-serif; font-size: 0.9rem; margin-top: 10px; margin-bottom: 5px; outline: none; transition: 0.2s; }
+.search-box:focus { border-color: var(--accent); }
+#vyborDiv h4 { font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); margin-bottom: 10px; padding-bottom: 5px; margin-top: 15px; }
+#vyborDiv ul { display: flex; flex-wrap: wrap; gap: 8px; }
+#vyborDiv li { display: inline-block; }
+.vybor::-webkit-scrollbar { width: 6px; } .vybor::-webkit-scrollbar-track { background: transparent; } .vybor::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 
-.modal-backdrop { position fixed; top 0; left 0; width 100%; height 100%; background rgba(0, 0, 0, 0.6); backdrop-filter blur(5px); z-index 2000; display flex; align-items center; justify-content center; opacity 1; transition opacity 0.2s ease; }
-.modal-content { background var(--bg-card); border 1px solid var(--accent); padding 25px; border-radius 16px; width 90%; max-width 380px; box-shadow 0 20px 50px rgba(0, 0, 0, 0.6); text-align center; animation modalSlide 0.3s ease; }
-@keyframes modalSlide { from { transform translateY(-20px); opacity 0; } to { transform translateY(0); opacity 1; } }
-.modal-content h3 { margin-bottom 10px; color #e2e8f0; font-size 1.1rem; }
-.modal-content p { margin-bottom 18px; color var(--text-muted); font-size 0.9rem; }
-.modal-content input { background #0f172a; border 1px solid #475569; color white; padding 10px; border-radius 8px; width 100%; text-align center; font-size 1.2rem; font-weight 600; margin-bottom 20px; outline none; }
-.modal-content inputfocus { border-color var(--accent); }
-.modal-buttons { display flex; gap 12px; }
-.modal-buttons button { flex 1; padding 10px; font-weight 600; border-radius 8px; border none; cursor pointer; font-size 0.9rem; transition 0.2s; }
-.modal-btn-confirm { background var(--accent); color white; } .modal-btn-confirmhover { background var(--accent-hover); }
-.modal-btn-cancel { background #334155; color #cbd5e1; } .modal-btn-cancelhover { background #475569; }
+.modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 1; transition: opacity 0.2s ease; }
+.modal-content { background: var(--bg-card); border: 1px solid var(--accent); padding: 25px; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6); text-align: center; animation: modalSlide 0.3s ease; }
+@keyframes modalSlide { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-content h3 { margin-bottom: 10px; color: #e2e8f0; font-size: 1.1rem; }
+.modal-content p { margin-bottom: 18px; color: var(--text-muted); font-size: 0.9rem; }
+.modal-content input { background: #0f172a; border: 1px solid #475569; color: white; padding: 10px; border-radius: 8px; width: 100%; text-align: center; font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; outline: none; }
+.modal-content input:focus { border-color: var(--accent); }
+.modal-buttons { display: flex; gap: 12px; }
+.modal-buttons button { flex: 1; padding: 10px; font-weight: 600; border-radius: 8px; border: none; cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
+.modal-btn-confirm { background: var(--accent); color: white; } .modal-btn-confirm:hover { background: var(--accent-hover); }
+.modal-btn-cancel { background: #334155; color: #cbd5e1; } .modal-btn-cancel:hover { background: #475569; }
 
-#invItemList-webkit-scrollbar { width 6px; }
-#invItemList-webkit-scrollbar-track { background transparent; }
-#invItemList-webkit-scrollbar-thumb { background var(--accent); border-radius 10px; }
-style
-head
-body
+#invItemList::-webkit-scrollbar { width: 6px; }
+#invItemList::-webkit-scrollbar-track { background: transparent; }
+#invItemList::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+</style>
+</head>
+<body>
 
-div class=container
-	div class=calc-card
-		h1 data-i18n=title1Kebutuhan Totalh1
-		div class=podzagolovok id=nazvaniye data-i18n=desc1Arahkan kursor ke ikon untuk melihat nama buku.div
-		div id=leftTree class=branchdiv
-	div
+<div class="container">
+	<div class="calc-card">
+		<h1 data-i18n="title1">Kebutuhan Total</h1>
+		<div class="podzagolovok" id="nazvaniye" data-i18n="desc1">Arahkan kursor ke ikon untuk melihat nama buku.</div>
+		<div id="leftTree" class="branch"></div>
+	</div>
 	
-	div class=calc-card
-		h2 data-i18n=title2Cabang Terpilihh2
-		div class=podzagolovok
-			input type=number id=mnojitel value=1 min=1 max=99
-			button class=btn-calc data-i18n=btnCalc onClick=processTree(rightTreeId, true)Hitung Kuantitasbutton
-		div
-        div class=progress-container
-            div class=progress-text
-                span data-i18n=progTextProgres Pengumpulanspan
-                span id=progressPercentText0.0%span
-            div
-            div class=progress-bar-bg
-                div id=progressBar class=progress-bardiv
-            div
-        div
-		div id=rightTree class=branchdiv
-	div
+	<div class="calc-card">
+		<h2 data-i18n="title2">Cabang Terpilih</h2>
+		<div class="podzagolovok">
+			<input type="number" id="mnojitel" value="1" min="1" max="99">
+			<button class="btn-calc" data-i18n="btnCalc" onClick="processTree(rightTreeId, true)">Hitung Kuantitas</button>
+		</div>
+        <div class="progress-container">
+            <div class="progress-text">
+                <span data-i18n="progText">Progres Pengumpulan:</span>
+                <span id="progressPercentText">0.0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
+        </div>
+		<div id="rightTree" class="branch"></div>
+	</div>
 
-    div class=calc-card
-        h1 data-i18n=title3Estimasi Biaya Pasarh1
-        div class=podzagolovok data-i18n=desc3Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.div
-        div class=cost-input-group
-            labelspan style=background-position32px -32px;span Token of Lucklabel
-            input type=number id=price10 value=0 min=0 oninput=updateCostAndProgress() placeholder=0
-        div
-        div class=cost-input-group
-            labelspan style=background-position64px 0px;span Tome Fragmentlabel
-            input type=number id=price11 value=0 min=0 oninput=updateCostAndProgress() placeholder=0
-        div
-        div class=cost-input-group
-            labelspan style=background-position32px 0px;span Tome Pagelabel
-            input type=number id=price12 value=0 min=0 oninput=updateCostAndProgress() placeholder=0
-        div
-        div class=total-cost-box
-            div class=total-cost-label data-i18n=totalCostLabelTotal Sisa Biayadiv
-            div id=totalCostDisplay class=total-cost-value0 Golddiv
-        div
-    div
+    <div class="calc-card">
+        <h1 data-i18n="title3">Estimasi Biaya Pasar</h1>
+        <div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
+        <div class="cost-input-group">
+            <label><span style="background-position:32px -32px;"></span> Token of Luck:</label>
+            <input type="number" id="price10" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
+        </div>
+        <div class="cost-input-group">
+            <label><span style="background-position:64px 0px;"></span> Tome Fragment:</label>
+            <input type="number" id="price11" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
+        </div>
+        <div class="cost-input-group">
+            <label><span style="background-position:32px 0px;"></span> Tome Page:</label>
+            <input type="number" id="price12" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
+        </div>
+        <div class="total-cost-box">
+            <div class="total-cost-label" data-i18n="totalCostLabel">Total Sisa Biaya:</div>
+            <div id="totalCostDisplay" class="total-cost-value">0 Gold</div>
+        </div>
+    </div>
     
-    div id=deductions
-        div class=calc-card
-            h2 data-i18n=title4📦 Inventory (Bahan Dimiliki)h2
-            div class=podzagolovok id=nazvaniye_vychet style=display flex; justify-content space-between; align-items center;
-                span data-i18n=desc4 style=flex1;Item di sini akan otomatis mengurangi total kebutuhan.span
-                button class=btn-success onClick=openInventoryModal() style=white-space nowrap; padding 8px 12px; font-size 0.85rem; border none; border-radius 6px; cursor pointer; color white; font-weight 600;➕ Tambah Itembutton
-            div
-            div id=deductionsList class=branchdiv
-        div
-    div
-div
+    <div id="deductions">
+        <div class="calc-card">
+            <h2 data-i18n="title4">📦 Inventory (Bahan Dimiliki)</h2>
+            <div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center;">
+                <span data-i18n="desc4" style="flex:1;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
+                <button class="btn-success" onClick="openInventoryModal()" style="white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600;">➕ Tambah Item</button>
+            </div>
+            <div id="deductionsList" class="branch"></div>
+        </div>
+    </div>
+</div>
 
-footer class=footer
-    div class=footer-text data-i18n=footerText
-        Kalkulator Tome &copy; 2026  Dibuat oleh strongSulfikarstrong
-    div
-    div class=social-icons
-        a href=httpswww.facebook.comzullQQ target=_blank title=Facebooki class=fab fa-facebook-fia
-        a href=httpsdiscord.ggnpyUAZuV target=_blank title=Discordi class=fab fa-discordia
-        a href=httpswww.youtube.com@idSkynet target=_blank title=YouTubei class=fab fa-youtubeia
-        a href=httpswww.zull.com target=_blank title=Websitei class=fas fa-globeia
-    div
-footer
+<footer class="footer">
+    <div class="footer-text" data-i18n="footerText">
+        Kalkulator Tome &copy; 2026 | Dibuat oleh <strong>Sulfikar</strong>
+    </div>
+    <div class="social-icons">
+        <a href="https://www.facebook.com/zullQQ/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://discord.gg/npyUAZuV" target="_blank" title="Discord"><i class="fab fa-discord"></i></a>
+        <a href="https://www.youtube.com/@idSkynet" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://www.zull.com/" target="_blank" title="Website"><i class="fas fa-globe"></i></a>
+    </div>
+</footer>
 
-button class=menu-toggle-btn id=menuToggleBtn onclick=var panel = document.getElementById('mainMenuPanel'); panel.style.display = (panel.style.display === 'none')  'block'  'none';⚙️ Buka Menubutton
+<button class="menu-toggle-btn" id="menuToggleBtn" onclick="var panel = document.getElementById('mainMenuPanel'); panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';">⚙️ Buka Menu</button>
 
-div class=vybor id=mainMenuPanel style=displaynone;
-    h4 style=margin-top 0; font-size 0.85rem; color var(--text-muted); border-bottom 1px solid var(--border-color); padding-bottom 5px; margin-bottom 10px;📁 Kelola Profil Buildh4
-    div style=display flex; flex-direction column; gap 8px; margin-bottom 15px; background rgba(0,0,0,0.2); padding 10px; border-radius 8px; border 1px solid var(--border-color);
-        select id=profileSelect onchange=handleProfileChange(this.value) style=width 100%; padding 8px; background #0f172a; border 1px solid var(--border-color); color white; border-radius 6px; outline none; font-family 'Inter', sans-serif; font-size 0.85rem; cursor pointer;select
-        div style=display flex; gap 8px;
-            button class=btn-success onClick=createNewProfile() style=flex 1; padding 6px; font-size 0.8rem; border none; border-radius 4px; cursor pointer; color white; font-weight 600;💾 Barubutton
-            button class=btn-danger onClick=removeCurrentProfile() style=padding 6px 10px; font-size 0.8rem; border none; border-radius 4px; cursor pointer; color white;i class=fas fa-trashibutton
-        div
-        div style=display flex; gap 8px; margin-top 4px;
-            button class=btn-primary onClick=exportProfilesData() style=flex 1; padding 6px; font-size 0.8rem; border none; border-radius 4px; cursor pointer; color white;i class=fas fa-file-exporti Eksporbutton
-            button class=btn-purple onClick=document.getElementById('importFileInput').click() style=flex 1; padding 6px; font-size 0.8rem; border none; border-radius 4px; cursor pointer; color white;i class=fas fa-file-importi Imporbutton
-            input type=file id=importFileInput accept=.json style=displaynone; onchange=importProfilesData(event)
-        div
-    div
+<div class="vybor" id="mainMenuPanel" style="display:none;">
+    <h4 style="margin-top: 0; font-size: 0.85rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px;">📁 Kelola Profil Build</h4>
+    <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
+        <select id="profileSelect" onchange="handleProfileChange(this.value)" style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid var(--border-color); color: white; border-radius: 6px; outline: none; font-family: 'Inter', sans-serif; font-size: 0.85rem; cursor: pointer;"></select>
+        <div style="display: flex; gap: 8px;">
+            <button class="btn-success" onClick="createNewProfile()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: 600;">💾 Baru</button>
+            <button class="btn-danger" onClick="removeCurrentProfile()" style="padding: 6px 10px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-trash"></i></button>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 4px;">
+            <button class="btn-primary" onClick="exportProfilesData()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-export"></i> Ekspor</button>
+            <button class="btn-purple" onClick="document.getElementById('importFileInput').click()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-import"></i> Impor</button>
+            <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importProfilesData(event)">
+        </div>
+    </div>
     
-	div class=panel-actions
-		button class=btn-primary onClick=toggleBookPanel();span data-i18n=btnTarget📚 Pilihan Buku Targetspanbutton
-		button class=btn-success onClick=copyShareLink()span data-i18n=btnShare🔗 Bagikan Build (Copy Link)spanbutton
-		button class=btn-primary style=background #ea580c; onClick=exportToImage(event)span data-i18n=btnExport📸 Download Gambar Buildspanbutton
-		button class=btn-purple onClick=toggleLanguage() id=langBtn🌐 Switch to Englishbutton
-		button class=btn-danger onClick=resetCalculator()span data-i18n=btnReset🔄 Reset Kalkulatorspanbutton
-	div
-	input type=text id=bookSearch class=search-box data-i18n=searchPlaceholder placeholder=🔍 Cari nama buku target... oninput=filterBooks(this.value) style=displaynone;
-	div id=vyborDiv class=branch style=displaynonediv
-div
+	<div class="panel-actions">
+		<button class="btn-primary" onClick="toggleBookPanel();"><span data-i18n="btnTarget">📚 Pilihan Buku Target</span></button>
+		<button class="btn-success" onClick="copyShareLink()"><span data-i18n="btnShare">🔗 Bagikan Build (Copy Link)</span></button>
+		<button class="btn-primary" style="background: #ea580c;" onClick="exportToImage(event)"><span data-i18n="btnExport">📸 Download Gambar Build</span></button>
+		<button class="btn-purple" onClick="toggleLanguage()" id="langBtn">🌐 Switch to English</button>
+		<button class="btn-danger" onClick="resetCalculator()"><span data-i18n="btnReset">🔄 Reset Kalkulator</span></button>
+	</div>
+	<input type="text" id="bookSearch" class="search-box" data-i18n="searchPlaceholder" placeholder="🔍 Cari nama buku target..." oninput="filterBooks(this.value)" style="display:none;">
+	<div id="vyborDiv" class="branch" style="display:none"></div>
+</div>
 
-div id=customModal class=modal-backdrop style=displaynone;
-	div class=modal-content
-		h3 id=modalTitle data-i18n=modalTitleAddTambah BukuBahanh3
-		p data-i18n=modalDescBerapa banyak item ini yang sudah Anda miliki saat inip
-		input type=number id=modalInput min=1 max=999 value=1
-		div class=modal-buttons
-			button class=modal-btn-confirm data-i18n=btnSave onClick=confirmModal()Simpanbutton
-			button class=modal-btn-cancel data-i18n=btnCancel onClick=closeModal()Batalbutton
-		div
-	div
-div
+<div id="customModal" class="modal-backdrop" style="display:none;">
+	<div class="modal-content">
+		<h3 id="modalTitle" data-i18n="modalTitleAdd">Tambah Buku/Bahan</h3>
+		<p data-i18n="modalDesc">Berapa banyak item ini yang sudah Anda miliki saat ini?</p>
+		<input type="number" id="modalInput" min="1" max="999" value="1">
+		<div class="modal-buttons">
+			<button class="modal-btn-confirm" data-i18n="btnSave" onClick="confirmModal()">Simpan</button>
+			<button class="modal-btn-cancel" data-i18n="btnCancel" onClick="closeModal()">Batal</button>
+		</div>
+	</div>
+</div>
 
-div id=inventoryModal class=modal-backdrop style=displaynone; z-index 2001;
-    div class=modal-content style=max-width 450px;
-        h3Pilih Item untuk Inventoryh3
-        input type=text id=invSearch class=search-box placeholder=🔍 Cari nama bukubahan... onkeyup=filterInventorySearch(this.value)
-        div id=invItemList class=branch style=max-height 250px; overflow-y auto; margin 15px 0; background rgba(0,0,0,0.2); padding 10px; border-radius 8px; border 1px solid var(--border-color);div
-        button class=modal-btn-cancel style=width 100%; padding 10px; border-radius 8px; font-weight bold; cursor pointer; border none; onClick=closeInventoryModal()Tutup Jendelabutton
-    div
-div
+<div id="inventoryModal" class="modal-backdrop" style="display:none; z-index: 2001;">
+    <div class="modal-content" style="max-width: 450px;">
+        <h3>Pilih Item untuk Inventory</h3>
+        <input type="text" id="invSearch" class="search-box" placeholder="🔍 Cari nama buku/bahan..." onkeyup="filterInventorySearch(this.value)">
+        <div id="invItemList" class="branch" style="max-height: 250px; overflow-y: auto; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);"></div>
+        <button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onClick="closeInventoryModal()">Tutup Jendela</button>
+    </div>
+</div>
 
-div id=floatingTooltip class=floating-tooltipdiv
+<div id="floatingTooltip" class="floating-tooltip"></div>
 
-script
+<script>
 const LANG = {
-    id { title1 Kebutuhan Total, title2 Cabang Terpilih, title3 Estimasi Biaya Pasar, title4 📦 Inventory (Bahan Dimiliki), desc1 Arahkan kursor ke ikon untuk melihat nama buku., desc3 Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan., desc4 Item di sini akan otomatis mengurangi total kebutuhan., progText Progres Pengumpulan, btnCalc Hitung Kuantitas, totalCostLabel Total Sisa Biaya, menuBtnText ⚙️ Buka Menu, btnTarget 📚 Pilihan Buku Target, btnShare 🔗 Bagikan Build (Copy), btnExport 📸 Download Gambar Build, btnReset 🔄 Reset Kalkulator, searchPlaceholder 🔍 Cari nama buku target..., modalTitleAdd Tambah BukuBahan, modalDesc Berapa banyak item ini yang sudah Anda miliki saat ini, btnSave Simpan, btnCancel Batal, baseMat Bahan Dasar, lvl Level, alertCopy Link Build berhasil disalin ke clipboard!, alertReset Hapus semua perhitungan, profil, dan mulai dari awal, promptCopy Salin tautan di bawah ini, statEquipDesc  Mengikat saat digunakan (Bind on Equip)., footerText Kalkulator Tome © 2026  Dibuat oleh strongSulfikarstrong, matDesc Bahan Crafting },
-    en { title1 Total Requirements, title2 Selected Branch, title3 Market Cost Estimator, title4 📦 Inventory (Owned Items), desc1 Hover over the icons to see the book names., desc3 Enter the market price per item to estimate required Gold., desc4 Items here will automatically deduct from total requirements., progText Collection Progress, btnCalc Calculate Qty, totalCostLabel Total Remaining Cost, menuBtnText ⚙️ Open Menu, btnTarget Target Book Selection, btnShare 🔗 Share Build (Copy), btnExport 📸 Download Build Image, btnReset 🔄 Reset Calculator, searchPlaceholder 🔍 Search target book name..., modalTitleAdd Add BookMaterial, modalDesc How many of this item do you currently own, btnSave Save, btnCancel Cancel, baseMat Base Materials, lvl Level, alertCopy Build Link successfully copied to clipboard!, alertReset Clear all calculations, profiles, and start over, promptCopy Copy the link below, statEquipDesc  Bind on Equip., footerText Tome Calculator © 2026  Created by strongSulfikarstrong, matDesc Crafting Material }
+    id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", matDesc: "Bahan Crafting" },
+    en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations, profiles, and start over?", promptCopy: "Copy the link below:", statEquipDesc: "* Bind on Equip.", footerText: "Tome Calculator © 2026 | Created by <strong>Sulfikar</strong>", matDesc: "Crafting Material" }
 };
 
-let currentLang = localStorage.getItem('tomeLang')  'id';
+let currentLang = localStorage.getItem('tomeLang') || 'id';
 
 function applyLanguage() {
-    document.querySelectorAll('[data-i18n]').forEach(el = {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (LANG[currentLang][key]) {
             if (el.tagName === 'INPUT') el.placeholder = LANG[currentLang][key];
@@ -308,7 +308,7 @@ function applyLanguage() {
         }
     });
     
-    document.getElementById('langBtn').innerText = currentLang === 'id'  '🌐 Switch to English'  '🌐 Ganti ke Indonesia';
+    document.getElementById('langBtn').innerText = currentLang === 'id' ? '🌐 Switch to English' : '🌐 Ganti ke Indonesia';
     document.getElementById('menuToggleBtn').innerText = LANG[currentLang]['menuBtnText'];
     
     processTree(leftTreeId, false);
@@ -318,7 +318,7 @@ function applyLanguage() {
 }
 
 function toggleLanguage() {
-    currentLang = currentLang === 'id'  'en'  'id';
+    currentLang = currentLang === 'id' ? 'en' : 'id';
     localStorage.setItem('tomeLang', currentLang);
     applyLanguage();
 }
@@ -332,7 +332,7 @@ TOME_DB[201] = [101, 104, 106, 17586, 'Tome of Iron Will']; TOME_DB[202] = [102,
 TOME_DB[101] = [0, 0, 0, 17579, 'Underestimated Resolve']; TOME_DB[102] = [0, 0, 0, 17580, 'Soaring Heart']; TOME_DB[103] = [0, 0, 0, 17581, 'Retributions Flame']; TOME_DB[104] = [0, 0, 0, 17582, 'Tome of the River Spirits']; TOME_DB[105] = [0, 0, 0, 17583, 'Flankers Tome']; TOME_DB[106] = [0, 0, 0, 17584, 'Tome of Hyperbolic Boasts']; TOME_DB[107] = [0, 0, 0, 17585, 'Tome of Grace']; TOME_DB[108] = [0, 0, 0, 17607, 'A Flowerless Plant']; TOME_DB[109] = [0, 0, 0, 17611, 'Eternitys Moon'];
 
 const TOME_STATS = {
-     Level 1
+    // LEVEL 1 TOMES
 	101 ["Strength +5"],                                            // Groundhog's Grounding
 	102 ["Dexterity +5"],                                           // Viper's Venom
 	103 ["Magic +5"],                                              // The Shaman's Incantation
@@ -342,8 +342,8 @@ const TOME_STATS = {
 	107 ["Magic +4", "Vitality +3"],                               // Stallion's Steed
 	108 ["HP Recovery Rate +3", "EXP Gain +1%"],                   // Silent Ritual
 	109 ["MP Recovery Rate +3", "EXP Gain +1%"],                   // Chanting Monks
-    
-     Level 2
+
+	// LEVEL 2 TOMES
 	201 ["Strength +7", "Vitality +6"],                            // The Claws of the Tiger
 	202 ["Dexterity +7", "Vitality +6"],                           // The Shadow of the Fox
 	203 ["Magic +7", "Vitality +6"],                               // The Plume of the Phoenix
@@ -353,8 +353,8 @@ const TOME_STATS = {
 	207 ["Vitality +9"],                                           // The Calm of the Forest
 	208 ["HP Recovery Rate +5", "EXP Gain +2%"],                   // Hymn of Meditation
 	209 ["MP Recovery Rate +5", "EXP Gain +2%"],                   // Chant of Rebirth
-    
-     Level 3
+
+	// LEVEL 3 TOMES
 	301 ["Strength +10", "Critical Hit Rate +1%"],                 // Eat Drink and be Merry
 	302 ["Magic +10", "Channeling Time -1%"],                        // Sunset Tales
 	303 ["Dexterity +10", "Critical Hit Rate +1%"],                  // Adventures and Mishaps
@@ -364,8 +364,8 @@ const TOME_STATS = {
 	307 ["Strength +12"],                                            // A Poets Musings
 	308 ["Dexterity +12"],                                           // The Fisherman's Pride
 	309 ["Magic +12"],                                               // The Scribe's Privilege
-    
-     Level 4
+	
+	// LEVEL 4 TOMES
 	401 ["Strength +15", "Critical Hit Rate +1%"],                 // Burning Desire
 	402 ["Magic +15", "Channeling Time -2%"],                        // Tome of Predestination
 	403 ["Dexterity +15", "Critical Hit Rate +1%"],                  // The Roses Thorn
@@ -375,8 +375,8 @@ const TOME_STATS = {
 	407 ["Magic +10", "Vitality +10"],                               // The Weak Stream of Many Miles
 	408 ["Strength +8", "Dexterity +8", "Vitality +8"],              // Battle Tactics
 	409 ["Magic +8", "Dexterity +8", "Vitality +8"],                 // A Bewitching Proposal
-    
-     Level 5
+
+	// LEVEL 5 TOMES
 	501 ["Magic +20", "Critical Hit Rate +1%"],                       // A Heart like Still Water
 	502 ["Magic +20", "Movement Speed +0.10 meters/second"],         // The Tsunamis of Yore
 	503 ["Vitality +25"],                                            // Laughing Mad
@@ -393,8 +393,8 @@ const TOME_STATS = {
 	514 ["Maximum HP +300"],                                         // Rouge and Red Lips
 	515 ["Strength +9", "Dexterity +9", "Vitality +8", "Magic +9", "Maximum HP +70"],     // Gang of Hooligans
 	516 ["Strength +9", "Dexterity +9", "Vitality +8", "Magic +9", "Critical Hit Rate +1%"], // The Voidlands
-    
-     Level 6
+
+	// LEVEL 6 TOMES
 	601 ["Strength +15", "Dexterity +15", "Critical Hit Rate +1%"], // The Calm of Ice
 	602 ["Magic +15", "Vitality +15", "Channeling Time -3%"],        // The Khatru
 	603 ["Strength +15", "Vitality +15", "Maximum HP +150"],         // A Carmine Tear
@@ -428,48 +428,48 @@ function showTooltip(element, event) {
     if (!TOME_DB[id] && id !== 10 && id !== 11 && id !== 12) return;
     
     const tooltip = document.getElementById('floatingTooltip');
-    let nameText = ;
+    let nameText = "";
     let typeText = LANG[currentLang]['matDesc'];
-    let statsHtml = ;
+    let statsHtml = "";
     
     if (id === 10) { 
-        nameText = Token of Luck; 
-        typeText = currentLang === 'id'  Mata Uang Kegiatan  Event Currency;
+        nameText = "Token of Luck"; 
+        typeText = currentLang === 'id' ? "Mata Uang Kegiatan" : "Event Currency";
     } else if (id === 11) { 
-        nameText = Tome Fragment; 
+        nameText = "Tome Fragment"; 
     } else if (id === 12) { 
-        nameText = Tome Page; 
+        nameText = "Tome Page"; 
     } else { 
         nameText = TOME_DB[id][4]; 
-        const lvl = Math.floor(id  100);
+        const lvl = Math.floor(id / 100);
         typeText = `Tome (${LANG[currentLang]['lvl']} ${lvl})`;
         
         if (TOME_STATS[id]) {
-            TOME_STATS[id].forEach(stat = {
-                statsHtml += `span class=tooltip-stat• ${stat}span`;
+            TOME_STATS[id].forEach(stat => {
+                statsHtml += `<span class="tooltip-stat">• ${stat}</span>`;
             });
         }
     }
 
     let html = `
-        div class=tooltip-title
-            span style=displayinline-block; width32px; height32px; background-imageurl('znachki.png'); ${getSpritePosition(id)}; transform scale(0.8); pointer-eventsnone;span
+        <div class="tooltip-title">
+            <span style="display:inline-block; width:32px; height:32px; background-image:url('znachki.png'); ${getSpritePosition(id)}; transform: scale(0.8); pointer-events:none;"></span>
             ${nameText}
-        div
-        div class=tooltip-type${typeText}div
-        div class=tooltip-list${statsHtml}div
-        div class=tooltip-footer${LANG[currentLang]['statEquipDesc']}div
+        </div>
+        <div class="tooltip-type">${typeText}</div>
+        <div class="tooltip-list">${statsHtml}</div>
+        <div class="tooltip-footer">${LANG[currentLang]['statEquipDesc']}</div>
     `;
     
     tooltip.innerHTML = html;
     tooltip.style.display = 'block';
     moveTooltip(event);
     
-    let linkUrl = (id === 10)  httpwww.pwdatabase.compwiitems24722 
-                  (id === 11)  httpwww.pwdatabase.compwiitems17011 
-                  (id === 12)  httpwww.pwdatabase.compwiitems17010 
-                  `httpwww.pwdatabase.compwiitems${TOME_DB[id][3]}`;
-    document.getElementById('nazvaniye').innerHTML = `a href=${linkUrl} target=_blank► ${nameText}a`;
+    let linkUrl = (id === 10) ? "http://www.pwdatabase.com/pwi/items/24722" :
+                  (id === 11) ? "http://www.pwdatabase.com/pwi/items/17011" :
+                  (id === 12) ? "http://www.pwdatabase.com/pwi/items/17010" :
+                  `http://www.pwdatabase.com/pwi/items/${TOME_DB[id][3]}`;
+    document.getElementById('nazvaniye').innerHTML = `<a href="${linkUrl}" target="_blank">► ${nameText}</a>`;
 }
 
 function moveTooltip(event) {
@@ -479,13 +479,13 @@ function moveTooltip(event) {
     let x = event.clientX + 15;
     let y = event.clientY + 15;
     
-    const tooltipWidth = tooltip.offsetWidth  240;
-    const tooltipHeight = tooltip.offsetHeight  160;
+    const tooltipWidth = tooltip.offsetWidth || 240;
+    const tooltipHeight = tooltip.offsetHeight || 160;
     
-    if (x + tooltipWidth  window.innerWidth) {
+    if (x + tooltipWidth > window.innerWidth) {
         x = event.clientX - tooltipWidth - 15;
     }
-    if (y + tooltipHeight  window.innerHeight) {
+    if (y + tooltipHeight > window.innerHeight) {
         y = event.clientY - tooltipHeight - 15;
     }
     
@@ -495,24 +495,24 @@ function moveTooltip(event) {
 
 function hideTooltip() { document.getElementById('floatingTooltip').style.display = 'none'; }
 
- --- TAMBAHKAN BLOK KODE INI UNTUK FIX BUG MOBILE ---
+// --- TAMBAHKAN BLOK KODE INI UNTUK FIX BUG MOBILE ---
 document.addEventListener('click', function(e) {
     if (!e.target.closest('button[onMouseOver]')) { hideTooltip(); }
 });
 document.addEventListener('touchstart', function(e) {
     if (!e.target.closest('button[onMouseOver]')) { hideTooltip(); }
 });
- ----------------------------------------------------
+// ----------------------------------------------------
 
 function copyShareLink() {
     const compD = {};
-    deductions.forEach((val, idx) = { if (val  0) compD[idx] = val; });
-    const finalState = { l leftTreeId, r rightTreeId, m document.getElementById('mnojitel').value, d compD };
+    deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
+    const finalState = { l: leftTreeId, r: rightTreeId, m: document.getElementById('mnojitel').value, d: compD };
     const hash = btoa(JSON.stringify(finalState));
-    const url = window.location.origin + window.location.pathname + # + hash;
+    const url = window.location.origin + window.location.pathname + "#" + hash;
     
     if (navigator.clipboard) {
-        navigator.clipboard.writeText(url).then(() = alert(LANG[currentLang]['alertCopy'])).catch(() = prompt(LANG[currentLang]['promptCopy'], url));
+        navigator.clipboard.writeText(url).then(() => alert(LANG[currentLang]['alertCopy'])).catch(() => prompt(LANG[currentLang]['promptCopy'], url));
     } else {
         prompt(LANG[currentLang]['promptCopy'], url);
     }
@@ -554,24 +554,24 @@ function resetCalculator() {
 }
 
 function handleItemClick(element) {
-    let clickedVal = parseInt(element.value)  1;
-    if(clickedVal  99) clickedVal = 99;
+    let clickedVal = parseInt(element.value) || 1;
+    if(clickedVal > 99) clickedVal = 99;
 	document.getElementById('mnojitel').value = clickedVal;
 	processTree(parseInt(element.title), true);
 }
 
 function addDeduction(id) {
-    const btn = document.querySelector(`.branch button[title=${id}]`);
+    const btn = document.querySelector(`.branch button[title="${id}"]`);
     activeModalItemId = id;
     
     let itemName = LANG[currentLang]['modalTitleAdd'];
-    if (id === 10) itemName = Token of Luck;
-    else if (id === 11) itemName = Tome Fragment;
-    else if (id === 12) itemName = Tome Page;
+    if (id === 10) itemName = "Token of Luck";
+    else if (id === 11) itemName = "Tome Fragment";
+    else if (id === 12) itemName = "Tome Page";
     else if (TOME_DB[id]) itemName = TOME_DB[id][4];
 
     document.getElementById('modalTitle').innerText = itemName;
-    document.getElementById('modalInput').value = btn  btn.value  1;
+    document.getElementById('modalInput').value = btn ? btn.value : 1;
     document.getElementById('customModal').style.display = 'flex';
     document.getElementById('modalInput').focus();
 }
@@ -580,7 +580,7 @@ function closeModal() { document.getElementById('customModal').style.display = '
 
 function confirmModal() {
     const amount = parseInt(document.getElementById('modalInput').value);
-    if (!isNaN(amount) && amount  0 && activeModalItemId) {
+    if (!isNaN(amount) && amount > 0 && activeModalItemId) {
         if (!deductions[activeModalItemId]) deductions[activeModalItemId] = 0;
         deductions[activeModalItemId] += amount;
         saveDeductions();
@@ -601,43 +601,43 @@ function removeDeduction(id) {
 
 function getSpritePosition(id) { 
     const parsedId = parseInt(id);
-    if (parsedId === 10) return 'background-position32px -32px';
-    if (parsedId === 11) return 'background-position64px 0px';
-    if (parsedId === 12) return 'background-position32px 0px';
-    let row = Math.floor(parsedId  100);
-    let num = parsedId - (row  100);
-    return `background-position-${32  (num - 1)}px -${32  (row - 1)}px`;
+    if (parsedId === 10) return 'background-position:32px -32px';
+    if (parsedId === 11) return 'background-position:64px 0px';
+    if (parsedId === 12) return 'background-position:32px 0px';
+    let row = Math.floor(parsedId / 100);
+    let num = parsedId - (row * 100);
+    return `background-position:-${32 * (num - 1)}px -${32 * (row - 1)}px`;
 }
 
 function toggleBookPanel() {
     const panel = document.getElementById('vyborDiv');
     const search = document.getElementById('bookSearch');
     const isHidden = panel.style.display === 'none';
-    panel.style.display = isHidden  'block'  'none';
-    search.style.display = isHidden  'block'  'none';
+    panel.style.display = isHidden ? 'block' : 'none';
+    search.style.display = isHidden ? 'block' : 'none';
     if(isHidden) search.focus();
 }
 
 function filterBooks(query) {
     const q = query.toLowerCase();
-    document.querySelectorAll('#vyborDiv ul').forEach(ul = {
+    document.querySelectorAll('#vyborDiv ul').forEach(ul => {
         let hasVisibleItem = false;
-        ul.querySelectorAll('li').forEach(li = {
+        ul.querySelectorAll('li').forEach(li => {
             const id = li.querySelector('button').title;
-            const bookName = TOME_DB[id]  TOME_DB[id][4].toLowerCase()  '';
+            const bookName = TOME_DB[id] ? TOME_DB[id][4].toLowerCase() : '';
             if (bookName.includes(q)) { li.style.display = 'inline-block'; hasVisibleItem = true; } 
             else li.style.display = 'none';
         });
         const header = ul.previousElementSibling;
-        if (header && header.tagName === 'H4') header.style.display = hasVisibleItem  'block'  'none';
-        ul.style.display = hasVisibleItem  'flex'  'none';
+        if (header && header.tagName === 'H4') header.style.display = hasVisibleItem ? 'block' : 'none';
+        ul.style.display = hasVisibleItem ? 'flex' : 'none';
     });
 }
 
 function updateCostAndProgress() {
-    let price10 = Math.max(0, parseInt(document.getElementById('price10').value)  0);
-    let price11 = Math.max(0, parseInt(document.getElementById('price11').value)  0);
-    let price12 = Math.max(0, parseInt(document.getElementById('price12').value)  0);
+    let price10 = Math.max(0, parseInt(document.getElementById('price10').value) || 0);
+    let price11 = Math.max(0, parseInt(document.getElementById('price11').value) || 0);
+    let price12 = Math.max(0, parseInt(document.getElementById('price12').value) || 0);
     
     document.getElementById('price10').value = price10;
     document.getElementById('price11').value = price11;
@@ -651,76 +651,76 @@ function updateCostAndProgress() {
 
     let netCounts = [];
     let dedCopy = Object.assign([], deductions);
-    let multiplier = Math.max(1, Math.min(99, parseInt(document.getElementById('mnojitel').value)  1));
+    let multiplier = Math.max(1, Math.min(99, parseInt(document.getElementById('mnojitel').value) || 1));
 
     function calcNetNode(nodeId) {
         if (!netCounts[nodeId]) netCounts[nodeId] = 0;
-        if (dedCopy[nodeId] && dedCopy[nodeId]  0) {
+        if (dedCopy[nodeId] && dedCopy[nodeId] > 0) {
             dedCopy[nodeId]--;
             return; 
         }
         netCounts[nodeId]++;
-        if (nodeId  200) { 
+        if (nodeId > 200) { 
             calcNetNode(TOME_DB[nodeId][0]); 
             calcNetNode(TOME_DB[nodeId][1]); 
             calcNetNode(TOME_DB[nodeId][2]); 
         }
     }
 
-    for (let z = 0; z  multiplier; z++) calcNetNode(rightTreeId);
+    for (let z = 0; z < multiplier; z++) calcNetNode(rightTreeId);
 
     let netBaseMats = 0;
-    for (let z = 101; z = 109; z++) if (netCounts[z]) netBaseMats += netCounts[z]  3;
+    for (let z = 101; z <= 109; z++) if (netCounts[z]) netBaseMats += netCounts[z] * 3;
     
-    netCounts[12] = netBaseMats; if (deductions[12]) netCounts[12] -= deductions[12]; if (netCounts[12]  0) netCounts[12] = 0;
-    netCounts[11] = netBaseMats; if (deductions[11]) netCounts[11] -= deductions[11]; if (netCounts[11]  0) netCounts[11] = 0;
-    netCounts[10] = netCounts[12]  80; if (deductions[10]) netCounts[10] -= deductions[10]; if (netCounts[10]  0) netCounts[10] = 0;
+    netCounts[12] = netBaseMats; if (deductions[12]) netCounts[12] -= deductions[12]; if (netCounts[12] < 0) netCounts[12] = 0;
+    netCounts[11] = netBaseMats; if (deductions[11]) netCounts[11] -= deductions[11]; if (netCounts[11] < 0) netCounts[11] = 0;
+    netCounts[10] = netCounts[12] * 80; if (deductions[10]) netCounts[10] -= deductions[10]; if (netCounts[10] < 0) netCounts[10] = 0;
 
     let grossCounts = [];
     function calcGrossNode(nodeId) {
         if (!grossCounts[nodeId]) grossCounts[nodeId] = 0;
         grossCounts[nodeId]++;
-        if (nodeId  200) { calcGrossNode(TOME_DB[nodeId][0]); calcGrossNode(TOME_DB[nodeId][1]); calcGrossNode(TOME_DB[nodeId][2]); }
+        if (nodeId > 200) { calcGrossNode(TOME_DB[nodeId][0]); calcGrossNode(TOME_DB[nodeId][1]); calcGrossNode(TOME_DB[nodeId][2]); }
     }
-    for (let z = 0; z  multiplier; z++) calcGrossNode(rightTreeId);
+    for (let z = 0; z < multiplier; z++) calcGrossNode(rightTreeId);
     
     let grossBaseMats = 0;
-    for (let z = 101; z = 109; z++) if (grossCounts[z]) grossBaseMats += grossCounts[z]  3;
-    grossCounts[11] = grossBaseMats; grossCounts[12] = grossBaseMats; grossCounts[10] = grossBaseMats  80;
+    for (let z = 101; z <= 109; z++) if (grossCounts[z]) grossBaseMats += grossCounts[z] * 3;
+    grossCounts[11] = grossBaseMats; grossCounts[12] = grossBaseMats; grossCounts[10] = grossBaseMats * 80;
 
-    let totalCost = (netCounts[10]  0)  price10 + (netCounts[11]  0)  price11 + (netCounts[12]  0)  price12;
-    document.getElementById('totalCostDisplay').innerText = totalCost.toLocaleString('id-ID') +  Gold;
+    let totalCost = (netCounts[10] || 0) * price10 + (netCounts[11] || 0) * price11 + (netCounts[12] || 0) * price12;
+    document.getElementById('totalCostDisplay').innerText = totalCost.toLocaleString('id-ID') + " Gold";
 
-    let grossVal = (grossCounts[10]  0) + (grossCounts[12]  0)  80 + (grossCounts[11]  0)  80;
-    let netVal = (netCounts[10]  0) + (netCounts[12]  0)  80 + (netCounts[11]  0)  80;
+    let grossVal = (grossCounts[10] || 0) + (grossCounts[12] || 0) * 80 + (grossCounts[11] || 0) * 80;
+    let netVal = (netCounts[10] || 0) + (netCounts[12] || 0) * 80 + (netCounts[11] || 0) * 80;
     
-    let pct = grossVal  0  ((grossVal - netVal)  grossVal)  100  0;
+    let pct = grossVal > 0 ? ((grossVal - netVal) / grossVal) * 100 : 0;
     pct = Math.max(0, Math.min(100, pct));
 
     document.getElementById('progressBar').style.width = pct.toFixed(1) + '%';
     document.getElementById('progressPercentText').innerText = pct.toFixed(1) + '%';
 
     if (pct === 100 && !window.confettiFired) {
-        confetti({ particleCount 150, spread 70, origin { y 0.6 }, colors ['#3b82f6', '#10b981', '#f59e0b'] });
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#3b82f6', '#10b981', '#f59e0b'] });
         window.confettiFired = true; 
-    } else if (pct  100) window.confettiFired = false; 
+    } else if (pct < 100) window.confettiFired = false; 
 }
 
 function exportToImage(e) {
-    const btn = e.currentTarget  document.querySelector('button[onClick=exportToImage]');
+    const btn = e.currentTarget || document.querySelector('button[onClick*="exportToImage"]');
     const originalText = btn.innerHTML;
-    btn.innerHTML = ⏳ Memproses...;
-    html2canvas(document.querySelector('.container'), { backgroundColor #0f172a, scale 2, logging false, useCORS true }).then(canvas = {
-        const link = document.createElement('a'); link.download = 'Tome-Build-Export.png'; link.href = canvas.toDataURL('imagepng'); link.click(); btn.innerHTML = originalText;
-    }).catch(() = { btn.innerHTML = ❌ Gagal!; setTimeout(() = btn.innerHTML = originalText, 2000); });
+    btn.innerHTML = "⏳ Memproses...";
+    html2canvas(document.querySelector('.container'), { backgroundColor: "#0f172a", scale: 2, logging: false, useCORS: true }).then(canvas => {
+        const link = document.createElement('a'); link.download = 'Tome-Build-Export.png'; link.href = canvas.toDataURL('image/png'); link.click(); btn.innerHTML = originalText;
+    }).catch(() => { btn.innerHTML = "❌ Gagal!"; setTimeout(() => btn.innerHTML = originalText, 2000); });
 }
 
 function getTreeItemHtml(id, isDeductionList = false) {
-    const count = isDeductionList  deductions[id]  itemCounts[id];
-    let actionSpan = isDeductionList  `span onClick=removeDeduction(${id}); title=Hapus dari daftar inispan`  `span onClick=addDeduction(${id}); title=Kurangi dari totalspan`;
-    let clickAction = isDeductionList  ''  'onClick=handleItemClick(this)';
-    if (!isDeductionList && (id === 12  id === 11  id === 10)) clickAction = '';
-    return `li${actionSpan}button style=${getSpritePosition(id)} value=${count} title=${id} ${clickAction} onMouseOver=showTooltip(this, event); onMouseMove=moveTooltip(event); onMouseOut=hideTooltip();buttonb×${count}bli`;
+    const count = isDeductionList ? deductions[id] : itemCounts[id];
+    let actionSpan = isDeductionList ? `<span onClick="removeDeduction(${id});" title="Hapus dari daftar ini"></span>` : `<span onClick="addDeduction(${id});" title="Kurangi dari total"></span>`;
+    let clickAction = isDeductionList ? '' : 'onClick="handleItemClick(this)"';
+    if (!isDeductionList && (id === 12 || id === 11 || id === 10)) clickAction = '';
+    return `<li>${actionSpan}<button style="${getSpritePosition(id)}" value="${count}" title="${id}" ${clickAction} onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button><b>×${count}</b></li>`;
 }
 
 function renderTree(isRightTree) {
@@ -728,54 +728,54 @@ function renderTree(isRightTree) {
     const txtLvl = LANG[currentLang]['lvl'];
     const txtBase = LANG[currentLang]['baseMat'];
 
-	for (let r = 6; r = 1; r--) {
-		let start = r  100 + 1; let end = r  100 + 16; let hasItem = false;
-		let tempTxt = `ulli${txtLvl} ${r}li `;
-		for (let e = start; e = end; e++) {
+	for (let r = 6; r >= 1; r--) {
+		let start = r * 100 + 1; let end = r * 100 + 16; let hasItem = false;
+		let tempTxt = `<ul><li>${txtLvl} ${r}</li> `;
+		for (let e = start; e <= end; e++) {
 			if (itemCounts[e]) { tempTxt += getTreeItemHtml(e); hasItem = true; }
 		}
-		tempTxt += 'ul';
+		tempTxt += '</ul>';
 		if (hasItem) txt += tempTxt;
 	}
 	
-	txt += `ul id=nizli${txtBase}li `;
+	txt += `<ul id="niz"><li>${txtBase}</li> `;
 	if (itemCounts[11]) txt += getTreeItemHtml(11);
 	if (itemCounts[12]) txt += getTreeItemHtml(12);
-	if (itemCounts[10]) txt += `li id=strelki style=margin 0 10px;→li${getTreeItemHtml(10)}`;
-	txt += `ul`;
-	document.getElementById(isRightTree  'rightTree'  'leftTree').innerHTML = txt;
+	if (itemCounts[10]) txt += `<li id="strelki" style="margin: 0 10px;">→</li>${getTreeItemHtml(10)}`;
+	txt += `</ul>`;
+	document.getElementById(isRightTree ? 'rightTree' : 'leftTree').innerHTML = txt;
 }
 
 function renderDeductions() {
     let txt = ''; let lis = ''; const deductionsDiv = document.getElementById('deductionsList');
     if (deductions[11]) lis += getTreeItemHtml(11, true); if (deductions[12]) lis += getTreeItemHtml(12, true); if (deductions[10]) lis += getTreeItemHtml(10, true);
-    if (lis !== '') txt += `ulli${LANG[currentLang]['baseMat']}li ${lis}ul`;
-    for (let r = 1; r = 6; r++) {
-        lis = ''; let start = r  100 + 1; let end = r  100 + 16;
-        for (let e = start; e = end; e++) if (deductions[e]) lis += getTreeItemHtml(e, true);
-        if (lis !== '') txt += `ulli${LANG[currentLang]['lvl']} ${r}li ${lis}ul`;
+    if (lis !== '') txt += `<ul><li>${LANG[currentLang]['baseMat']}</li> ${lis}</ul>`;
+    for (let r = 1; r <= 6; r++) {
+        lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
+        for (let e = start; e <= end; e++) if (deductions[e]) lis += getTreeItemHtml(e, true);
+        if (lis !== '') txt += `<ul><li>${LANG[currentLang]['lvl']} ${r}</li> ${lis}</ul>`;
     }
     deductionsDiv.innerHTML = txt;
 }
 
 function renderMenu() {
     let txt = '';
-    for (let r = 6; r = 1; r--) {
-        let lis = ''; let start = r  100 + 1; let end = r  100 + 16;
-        for (let e = start; e = end; e++) if (TOME_DB[e]) lis += `libutton style=${getSpritePosition(e)} title=${e} onClick=processTree(${e}, false) onMouseOver=showTooltip(this, event); onMouseMove=moveTooltip(event); onMouseOut=hideTooltip();buttonli`;
-        txt += `h4Tome ${LANG[currentLang]['lvl']} ${r}h4ul style=display flex; flex-wrap wrap; gap 8px; ${lis}ul`;
+    for (let r = 6; r >= 1; r--) {
+        let lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
+        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="${getSpritePosition(e)}" title="${e}" onClick="processTree(${e}, false)" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
+        txt += `<h4>Tome ${LANG[currentLang]['lvl']} ${r}</h4><ul style="display: flex; flex-wrap: wrap; gap: 8px;"> ${lis}</ul>`;
     }
     document.getElementById('vyborDiv').innerHTML = txt;
 }
 
 function calculateNode(id) {
 	if (!itemCounts[id]) itemCounts[id] = 0;
-	if (deductionsCopy[id] && deductionsCopy[id]  0) {
+	if (deductionsCopy[id] && deductionsCopy[id] > 0) {
 		deductionsCopy[id]--;
         return; 
 	}
 	itemCounts[id]++;
-	if (id  200) { 
+	if (id > 200) { 
         calculateNode(TOME_DB[id][0]); 
         calculateNode(TOME_DB[id][1]); 
         calculateNode(TOME_DB[id][2]); 
@@ -791,21 +791,21 @@ function processTree(id, isRightTree = false) {
         rightTreeId = id;
         let inputField = document.getElementById('mnojitel');
         let inputVal = parseInt(inputField.value);
-        if (isNaN(inputVal)  inputVal  1) inputVal = 1;
-        if (inputVal  99) inputVal = 99;
+        if (isNaN(inputVal) || inputVal < 1) inputVal = 1;
+        if (inputVal > 99) inputVal = 99;
         inputField.value = inputVal; 
         multiplier = inputVal;
     } else leftTreeId = id;
 
-    for (let z = 0; z  multiplier; z++) calculateNode(id);
+    for (let z = 0; z < multiplier; z++) calculateNode(id);
 
     let baseMats = 0;
-    for (let z = 101; z = 109; z++) if (itemCounts[z]) baseMats += itemCounts[z]  3;
+    for (let z = 101; z <= 109; z++) if (itemCounts[z]) baseMats += itemCounts[z] * 3;
 
-    for (let z = 12; z = 10; z--) {
-        itemCounts[z] = z === 10  (itemCounts[12]  0)  80  baseMats;
+    for (let z = 12; z >= 10; z--) {
+        itemCounts[z] = z === 10 ? (itemCounts[12] || 0) * 80 : baseMats;
         if (deductions[z]) itemCounts[z] -= deductions[z];
-        if (itemCounts[z]  0) itemCounts[z] = 0;
+        if (itemCounts[z] < 0) itemCounts[z] = 0;
     }
         
     renderTree(isRightTree);
@@ -822,23 +822,23 @@ function openInventoryModal() {
 function closeInventoryModal() { document.getElementById('inventoryModal').style.display = 'none'; }
 
 function renderInventorySelection(query) {
-    let html = 'ul style=displayflex; flex-wrapwrap; gap8px; justify-contentcenter;';
+    let html = '<ul style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">';
     const q = query.toLowerCase();
     
-    const baseMats = [ {id 12, name 'Tome Page'}, {id 11, name 'Tome Fragment'}, {id 10, name 'Token of Luck'} ];
-    baseMats.forEach(mat = {
+    const baseMats = [ {id: 12, name: 'Tome Page'}, {id: 11, name: 'Tome Fragment'}, {id: 10, name: 'Token of Luck'} ];
+    baseMats.forEach(mat => {
         if (mat.name.toLowerCase().includes(q)) {
-            html += `libutton style=${getSpritePosition(mat.id)} title=${mat.id} onClick=selectItemForInventory(${mat.id}) onMouseOver=showTooltip(this, event); onMouseMove=moveTooltip(event); onMouseOut=hideTooltip();buttonli`;
+            html += `<li><button style="${getSpritePosition(mat.id)}" title="${mat.id}" onClick="selectItemForInventory(${mat.id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
         }
     });
 
-	TOME_DB.forEach((tome, id) = {
+	TOME_DB.forEach((tome, id) => {
         if (tome && tome[4].toLowerCase().includes(q)) {
-            html += `libutton style=${getSpritePosition(id)} title=${id} onClick=selectItemForInventory(${id}) onMouseOver=showTooltip(this, event); onMouseMove=moveTooltip(event); onMouseOut=hideTooltip();buttonli`;
+            html += `<li><button style="${getSpritePosition(id)}" title="${id}" onClick="selectItemForInventory(${id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
         }
     });
     
-    html += 'ul';
+    html += '</ul>';
     document.getElementById('invItemList').innerHTML = html;
 }
 
@@ -856,10 +856,10 @@ function initProfiles() {
     } catch (e) { profiles = {}; }
     
     if (!profiles['Default']) {
-        profiles['Default'] = { l 616, r 515, m 1, d [], p10 0, p11 0, p12 0 };
+        profiles['Default'] = { l: 616, r: 515, m: 1, d: [], p10: 0, p11: 0, p12: 0 };
     }
     
-    currentProfile = localStorage.getItem('tomeCurrentProfile')  'Default';
+    currentProfile = localStorage.getItem('tomeCurrentProfile') || 'Default';
     if (!profiles[currentProfile]) currentProfile = 'Default';
     
     loadProfileData(currentProfile);
@@ -884,19 +884,19 @@ function loadProfileData(name) {
     localStorage.setItem('tomeCurrentProfile', name);
     
     const data = profiles[name];
-    leftTreeId = data.l  616;
-    rightTreeId = data.r  515;
-    document.getElementById('mnojitel').value = data.m  1;
-    deductions = data.d  [];
+    leftTreeId = data.l || 616;
+    rightTreeId = data.r || 515;
+    document.getElementById('mnojitel').value = data.m || 1;
+    deductions = data.d || [];
     
-    document.getElementById('price10').value = data.p10  0;
-    document.getElementById('price11').value = data.p11  0;
-    document.getElementById('price12').value = data.p12  0;
+    document.getElementById('price10').value = data.p10 || 0;
+    document.getElementById('price11').value = data.p11 || 0;
+    document.getElementById('price12').value = data.p12 || 0;
     
     localStorage.setItem('tomeDeductions', JSON.stringify(deductions));
-    localStorage.setItem('tomePrice10', data.p10  0);
-    localStorage.setItem('tomePrice11', data.p11  0);
-    localStorage.setItem('tomePrice12', data.p12  0);
+    localStorage.setItem('tomePrice10', data.p10 || 0);
+    localStorage.setItem('tomePrice11', data.p11 || 0);
+    localStorage.setItem('tomePrice12', data.p12 || 0);
 }
 
 function handleProfileChange(name) {
@@ -905,29 +905,29 @@ function handleProfileChange(name) {
 }
 
 function saveActiveProfile() {
-    let p10 = parseInt(document.getElementById('price10').value)  0;
-    let p11 = parseInt(document.getElementById('price11').value)  0;
-    let p12 = parseInt(document.getElementById('price12').value)  0;
-    let m = parseInt(document.getElementById('mnojitel').value)  1;
+    let p10 = parseInt(document.getElementById('price10').value) || 0;
+    let p11 = parseInt(document.getElementById('price11').value) || 0;
+    let p12 = parseInt(document.getElementById('price12').value) || 0;
+    let m = parseInt(document.getElementById('mnojitel').value) || 1;
 
     profiles[currentProfile] = {
-        l leftTreeId,
-        r rightTreeId,
-        m m,
-        d deductions,
-        p10 p10,
-        p11 p11,
-        p12 p12
+        l: leftTreeId,
+        r: rightTreeId,
+        m: m,
+        d: deductions,
+        p10: p10,
+        p11: p11,
+        p12: p12
     };
     localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
 }
 
 function createNewProfile() {
-    let name = prompt(Masukkan nama profil baru (misal Mage DPS, Alt Cleric));
+    let name = prompt("Masukkan nama profil baru (misal: Mage DPS, Alt Cleric):");
     if (!name) return;
     name = name.trim();
-    if (name === ) return;
-    if (profiles[name]) { alert(Nama profil tersebut sudah ada!); return; }
+    if (name === "") return;
+    if (profiles[name]) { alert("Nama profil tersebut sudah ada!"); return; }
     
     currentProfile = name;
     saveActiveProfile();
@@ -938,10 +938,10 @@ function createNewProfile() {
 
 function removeCurrentProfile() {
     if (currentProfile === 'Default') {
-        alert(Profil 'Default' sistem tidak dapat dihapus.);
+        alert("Profil 'Default' sistem tidak dapat dihapus.");
         return;
     }
-    if (confirm(`Apakah Anda yakin ingin menghapus profil ${currentProfile} beserta seluruh data di dalamnya`)) {
+    if (confirm(`Apakah Anda yakin ingin menghapus profil "${currentProfile}" beserta seluruh data di dalamnya?`)) {
         delete profiles[currentProfile];
         localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
         localStorage.setItem('tomeCurrentProfile', 'Default'); 
@@ -954,12 +954,12 @@ function removeCurrentProfile() {
 
 function exportProfilesData() {
     const dataStr = JSON.stringify(profiles, null, 2);
-    const blob = new Blob([dataStr], { type applicationjson });
+    const blob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     
     const a = document.createElement('a');
     a.href = url;
-    a.download = Tome-Profiles-Backup.json; 
+    a.download = "Tome-Profiles-Backup.json"; 
     document.body.appendChild(a);
     a.click();
     
@@ -982,24 +982,24 @@ function importProfilesData(event) {
                 renderProfileDropdown();
                 loadProfileData(currentProfile);
                 applyLanguage();
-                alert(currentLang === 'id'  Data profil berhasil diimpor!  Profile data imported successfully!);
+                alert(currentLang === 'id' ? "Data profil berhasil diimpor!" : "Profile data imported successfully!");
             } else {
-                alert(currentLang === 'id'  Format file tidak valid!  Invalid file format!);
+                alert(currentLang === 'id' ? "Format file tidak valid!" : "Invalid file format!");
             }
         } catch (err) {
-            alert(currentLang === 'id'  Gagal membaca file JSON!  Failed to read JSON file!);
+            alert(currentLang === 'id' ? "Gagal membaca file JSON!" : "Failed to read JSON file!");
         }
     };
     reader.readAsText(file);
     event.target.value = '';
 }
 
-window.onload = () = {
+window.onload = () => {
     initProfiles(); 
     loadFromHash(); 
     applyLanguage(); 
     document.getElementById('modalInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') confirmModal(); });
 };
-script
-body
-html
+</script>
+</body>
+</html>
