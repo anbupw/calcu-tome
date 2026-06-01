@@ -13,9 +13,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-
 <style>
 :root {
 	--bg-main: #0f172a;
@@ -188,15 +185,15 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 		<h1 data-i18n="title3">Estimasi Biaya Pasar</h1>
 		<div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
 		<div class="cost-input-group">
-			<label><span style="background-position:32px -32px;"></span> Token of Luck:</label>
+			<label><span style="background-position: -32px -32px;"></span> Token of Luck:</label>
 			<input type="number" id="price10" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
 		</div>
 		<div class="cost-input-group">
-			<label><span style="background-position:64px 0px;"></span> Tome Fragment:</label>
+			<label><span style="background-position: -64px 0px;"></span> Tome Fragment:</label>
 			<input type="number" id="price11" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
 		</div>
 		<div class="cost-input-group">
-			<label><span style="background-position:32px 0px;"></span> Tome Page:</label>
+			<label><span style="background-position: -32px 0px;"></span> Tome Page:</label>
 			<input type="number" id="price12" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
 		</div>
 		<div class="total-cost-box">
@@ -232,18 +229,6 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 <button class="menu-toggle-btn" id="menuToggleBtn" onclick="var panel = document.getElementById('mainMenuPanel'); panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';">⚙️ Buka Menu</button>
 
 <div class="vybor" id="mainMenuPanel" style="display:none;">
-	<div id="authSection" style="margin-bottom: 15px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 12px; border: 1px solid var(--border-color);">
-		<div id="authLoggedOut">
-			<h4 style="margin-top: 0; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;"><i class="fas fa-cloud"></i> Sinkronisasi Cloud (Firebase)</h4>
-			<button class="btn-primary" style="width:100%; padding: 8px; font-size: 0.85rem;" onClick="openAuthModal('login')">🔑 Masuk / Daftar Akun</button>
-		</div>
-		<div id="authLoggedIn" style="display:none;">
-			<h4 style="margin-top: 0; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;"><i class="fas fa-user-circle"></i> Sesi Akun Aktif</h4>
-			<div id="userEmailDisplay" style="font-size: 0.85rem; color: var(--success); font-weight:600; margin-bottom: 8px; word-break: break-all;">user@email.com</div>
-			<button class="btn-danger" style="width:100%; padding: 6px; font-size: 0.8rem;" onClick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Keluar Akun</button>
-		</div>
-	</div>
-
 	<h4 style="margin-top: 0; font-size: 0.85rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px;">📁 Kelola Profil Build</h4>
 	<div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
 		<select id="profileSelect" onchange="handleProfileChange(this.value)" style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid var(--border-color); color: white; border-radius: 6px; outline: none; font-family: 'Inter', sans-serif; font-size: 0.85rem; cursor: pointer;"></select>
@@ -287,23 +272,6 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 		<input type="text" id="invSearch" class="search-box" placeholder="🔍 Cari nama buku/bahan..." onkeyup="filterInventorySearch(this.value)">
 		<div id="invItemList" class="branch" style="max-height: 250px; overflow-y: auto; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);"></div>
 		<button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onClick="closeInventoryModal()">Tutup Jendela</button>
-	</div>
-</div>
-
-<div id="authModal" class="modal-backdrop" style="display:none; z-index: 2002;">
-	<div class="modal-content" style="max-width: 360px;">
-		<h3 id="authModalTitle">Masuk ke Akun</h3>
-		<p id="authModalDesc" style="margin-bottom: 12px;">Gunakan email dan password Anda</p>
-		<input type="email" id="authEmail" placeholder="Alamat Email..." class="search-box" style="margin-top:5px; margin-bottom: 10px; text-align: left;">
-		<input type="password" id="authPassword" placeholder="Kata Sandi..." class="search-box" style="margin-top:0; margin-bottom: 15px; text-align: left;">
-		<div class="modal-buttons" style="flex-direction: column; gap: 8px;">
-			<button class="modal-btn-confirm" id="authMainBtn" style="width: 100%; margin:0;" onClick="submitAuth()">Masuk Sekarang</button>
-			<button class="btn-primary" id="authGoogleBtn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; background:#db4437; border:none;" onClick="handleGoogleLogin()">
-				<i class="fab fa-google"></i> Masuk Lewat Google
-			</button>
-			<a href="#" id="authToggleLink" style="font-size: 0.8rem; margin: 5px 0;" onClick="toggleAuthMode(event)">Belum punya akun? Daftar gratis</a>
-			<button class="modal-btn-cancel" style="width: 100%;" onClick="closeAuthModal()">Batal</button>
-		</div>
 	</div>
 </div>
 
@@ -432,116 +400,27 @@ const TOME_STATS = {
 };
 
 // ==========================================
-// LOGIKA UTAMA JAVASCRIPT APLIKASI
+// LOGIKA UTAMA SCRIPT KENDALI PROFILE & RENDER
 // ==========================================
 let leftTreeId = 616;
 let rightTreeId = 616;
 let inventoryData = {};
 let profiles = { "Default Build": { target: 616, inventory: {}, prices: [0, 0, 0] } };
-let currentProfileName = "Default Build";
-	
-// ⚠️ TEMPELKAN KODE CONFIG FIREBASE ANDA DI SINI ⚠️ //
-const firebaseConfig = {
-	apiKey: "AIzaSyC1eCaQkeCf1IJQIDqveEKhHHFEYMd6bSs",
-	authDomain: "kalkulator-tome.firebaseapp.com",
-	projectId: "kalkulator-tome",
-	storageBucket: "kalkulator-tome.firebasestorage.app",
-	messagingSenderId: "794012581588",
-	appId: "1:794012581588:web:021341eda428298daf0541"
-};
-
-// Inisialisasi Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-
-let currentAuthMode = 'login';
-
-// Listener Status Autentikasi Login Pengguna
-auth.onAuthStateChanged((user) => {
-	if (user) {
-		document.getElementById('authLoggedOut').style.display = 'none';
-		document.getElementById('authLoggedIn').style.display = 'block';
-		document.getElementById('userEmailDisplay').innerText = user.email || user.displayName || "User Terverifikasi";
-	} else {
-		document.getElementById('authLoggedOut').style.display = 'block';
-		document.getElementById('authLoggedIn').style.display = 'none';
-	}
-});
-
-function openAuthModal(mode) {
-	currentAuthMode = mode;
-	const title = document.getElementById('authModalTitle');
-	const desc = document.getElementById('authModalDesc');
-	const btn = document.getElementById('authMainBtn');
-	const link = document.getElementById('authToggleLink');
-	
-	if (mode === 'login') {
-		title.innerText = "Masuk ke Akun";
-		desc.innerText = "Gunakan email dan password Anda";
-		btn.innerText = "Masuk Sekarang";
-		link.innerText = "Belum punya akun? Daftar gratis";
-	} else {
-		title.innerText = "Daftar Akun Baru";
-		desc.innerText = "Buat akun cloud untuk menyimpan build";
-		btn.innerText = "Daftar Akun";
-		link.innerText = "Sudah punya akun? Login di sini";
-	}
-	document.getElementById('authModal').style.display = 'flex';
-}
-
-function closeAuthModal() {
-	document.getElementById('authModal').style.display = 'none';
-}
-
-function toggleAuthMode(e) {
-	e.preventDefault();
-	if (currentAuthMode === 'login') openAuthModal('register');
-	else openAuthModal('login');
-}
-
-function submitAuth() {
-	const email = document.getElementById('authEmail').value.trim();
-	const password = document.getElementById('authPassword').value;
-	
-	if (!email || !password) { alert("Email dan Password harus diisi!"); return; }
-	
-	if (currentAuthMode === 'login') {
-		auth.signInWithEmailAndPassword(email, password)
-			.then(() => { closeAuthModal(); if (typeof confetti === 'function') confetti(); })
-			.catch(err => alert("Gagal Login: " + err.message));
-	} else {
-		auth.createUserWithEmailAndPassword(email, password)
-			.then(() => { closeAuthModal(); alert("Pendaftaran Berhasil! Akun terhubung otomatis."); })
-			.catch(err => alert("Gagal Daftar: " + err.message));
-	}
-}
-
-function handleGoogleLogin() {
-	const provider = new firebase.auth.GoogleAuthProvider();
-	auth.signInWithPopup(provider)
-		.then(() => { closeAuthModal(); if (typeof confetti === 'function') confetti(); })
-		.catch(err => alert("Gagal Login Google: " + err.message));
-}
-
-function handleLogout() {
-	if (confirm("Apakah Anda ingin keluar dari sesi akun cloud ini?")) {
-		auth.signOut().then(() => { alert("Berhasil Keluar!"); });
-	}
-}
+let currentProfile = "Default Build";
 
 function initProfiles() {
 	const saved = localStorage.getItem('tomeProfiles');
 	if (saved) {
 		try { profiles = JSON.parse(saved); } catch(e) { console.error(e); }
 	}
-	currentProfileName = localStorage.getItem('tomeCurrentProfile') || Object.keys(profiles)[0];
-	if (!profiles[currentProfileName]) currentProfileName = Object.keys(profiles)[0];
+	currentProfile = localStorage.getItem('tomeCurrentProfile') || Object.keys(profiles)[0];
+	if (!profiles[currentProfile]) currentProfile = Object.keys(profiles)[0];
 	
-	loadProfile(currentProfileName);
-	updateProfileSelect();
+	loadProfileData(currentProfile);
+	renderProfileDropdown();
 }
 
-function loadProfile(name) {
+function loadProfileData(name) {
 	const p = profiles[name];
 	leftTreeId = p.target || 616;
 	rightTreeId = p.target || 616;
@@ -557,8 +436,8 @@ function loadProfile(name) {
 	renderDeductions();
 }
 
-function saveProfilesToStorage() {
-	profiles[currentProfileName] = {
+function saveProfiles() {
+	profiles[currentProfile] = {
 		target: rightTreeId,
 		inventory: inventoryData,
 		prices: [
@@ -568,10 +447,10 @@ function saveProfilesToStorage() {
 		]
 	};
 	localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
-	localStorage.setItem('tomeCurrentProfile', currentProfileName);
+	localStorage.setItem('tomeCurrentProfile', currentProfile);
 }
 
-function updateProfileSelect() {
+function renderProfileDropdown() {
 	const select = document.getElementById('profileSelect');
 	if (!select) return;
 	select.innerHTML = '';
@@ -579,15 +458,15 @@ function updateProfileSelect() {
 		let opt = document.createElement('option');
 		opt.value = name;
 		opt.innerText = name;
-		if (name === currentProfileName) opt.selected = true;
+		if (name === currentProfile) opt.selected = true;
 		select.appendChild(opt);
 	});
 }
 
 function handleProfileChange(val) {
-	saveProfilesToStorage();
-	currentProfileName = val;
-	loadProfile(val);
+	saveProfiles();
+	currentProfile = val;
+	loadProfileData(val);
 }
 
 function createNewProfile() {
@@ -596,10 +475,10 @@ function createNewProfile() {
 	name = name.trim();
 	if (profiles[name]) { alert("Nama profil sudah ada!"); return; }
 	profiles[name] = { target: 616, inventory: {}, prices: [0,0,0] };
-	currentProfileName = name;
-	saveProfilesToStorage();
-	updateProfileSelect();
-	loadProfile(name);
+	currentProfile = name;
+	saveProfiles();
+	renderProfileDropdown();
+	loadProfileData(name);
 }
 
 function removeCurrentProfile() {
@@ -607,20 +486,24 @@ function removeCurrentProfile() {
 		alert("Anda tidak bisa menghapus satu-satunya profil yang tersisa.");
 		return;
 	}
-	if (!confirm(`Hapus profil "${currentProfileName}"?`)) return;
-	delete profiles[currentProfileName];
-	currentProfileName = Object.keys(profiles)[0];
-	saveProfilesToStorage();
-	updateProfileSelect();
-	loadProfile(currentProfileName);
+	if (!confirm(`Hapus profil "${currentProfile}"?`)) return;
+	delete profiles[currentProfile];
+	currentProfile = Object.keys(profiles)[0];
+	saveProfiles();
+	renderProfileDropdown();
+	loadProfileData(currentProfile);
 }
 
 function exportProfilesData() {
-	const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(profiles));
-	const dlAnchorElem = document.createElement('a');
-	dlAnchorElem.setAttribute("href", dataStr);
-	dlAnchorElem.setAttribute("download", "Tome-Profiles-Backup.json");
-	dlAnchorElem.click();
+    const blob = new Blob([JSON.stringify(profiles, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "Tome-Profiles-Backup.json"; 
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
 
 function importProfilesData(event) {
@@ -633,14 +516,14 @@ function importProfilesData(event) {
 			if (typeof importedData === 'object' && importedData !== null) {
 				profiles = { ...profiles, ...importedData };
 				localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
-				updateProfileSelect();
-				loadProfile(currentProfileName);
+				renderProfileDropdown();
+				loadProfileData(currentProfile);
 				applyLanguage();
 				alert(currentLang === 'id' ? "Data profil berhasil diimpor!" : "Profile data imported successfully!");
-			}
-		} catch (err) {
-			alert("Gagal membaca file JSON!");
-		}
+			} else {
+                alert(currentLang === 'id' ? "Format file tidak valid!" : "Invalid file format!");
+            }
+		} catch (err) { alert(currentLang === 'id' ? "Gagal membaca file JSON!" : "Failed to read JSON file!"); }
 	};
 	reader.readAsText(file);
 	event.target.value = '';
@@ -657,6 +540,7 @@ function generateRequirements(id, qty = 1, res = {}) {
 	return res;
 }
 
+// 🛠️ DIKEMBALIKAN KE RUMUS ASLI: itemId%10 (Sesuai Struktur Grid Kolom Gambar Anda)
 function processTree(id, isRight = false) {
 	if (!id) id = 616;
 	if (isRight) rightTreeId = id; else leftTreeId = id;
@@ -672,8 +556,10 @@ function processTree(id, isRight = false) {
 		}
 		
 		if (finalQty > 0 || !isRight) {
+			// 🛠️ DIPULIHKAN: Ditambahkan kembali onClick="processTree(${itemId}, true)" agar bisa diklik kembali seperti semula
 			html += `<li>
-				<button style="background-image:url('znachki.png'); background-position: -${(itemId%10)*32}px -${Math.floor(itemId/100)*32}px;" 
+				<button style="background-image:url('znachki.png'); background-position: -${(itemId%10)*32}px -${Math.floor(itemId/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" 
+						onClick="processTree(${itemId}, true)" 
 						onmouseenter="showTooltip(event, ${itemId})" 
 						onmouseleave="hideTooltip()"></button>
 				<b>${finalQty}</b>
@@ -715,7 +601,7 @@ function updateCostAndProgress() {
 	});
 	
 	document.getElementById('totalCostDisplay').innerText = `${totalCost.toLocaleString()} Gold`;
-	saveProfilesToStorage();
+	saveProfiles();
 }
 
 function renderDeductions() {
@@ -725,7 +611,7 @@ function renderDeductions() {
 		if (inventoryData[id] > 0) {
 			empty = false;
 			html += `<li style="margin: 10px;">
-				<button style="background-image:url('znachki.png'); background-position: -${(id%10)*32}px -${Math.floor(id/100)*32}px;" onmouseenter="showTooltip(event, ${id})" onmouseleave="hideTooltip()"></button>
+				<button style="background-image:url('znachki.png'); background-position: -${(id%10)*32}px -${Math.floor(id/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" onClick="processTree(${id}, true)" onmouseenter="showTooltip(event, ${id})" onmouseleave="hideTooltip()"></button>
 				<b>${inventoryData[id]}</b>
 				<span onClick="removeInventory(${id})"></span>
 			</li>`;
@@ -847,7 +733,7 @@ function setTarget(id) {
 	rightTreeId = id;
 	processTree(leftTreeId, false);
 	processTree(rightTreeId, true);
-	saveProfilesToStorage();
+	saveProfiles();
 	document.getElementById('mainMenuPanel').style.display = 'none';
 	if (typeof confetti === 'function') confetti();
 }
@@ -901,7 +787,7 @@ function exportToImage(e) {
 	e.preventDefault();
 	html2canvas(document.querySelector(".container")).then(canvas => {
 		let link = document.createElement('a');
-		link.download = `${currentProfileName}-tome-build.png`;
+		link.download = `${currentProfile}-tome-build.png`;
 		link.href = canvas.toDataURL();
 		link.click();
 	});
@@ -912,6 +798,7 @@ window.onload = function() {
 	loadFromHash();
 	applyLanguage();
 	setupTooltipListeners();
+	document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); });
 };
 </script>
 </body>
