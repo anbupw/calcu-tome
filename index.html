@@ -9,188 +9,230 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-
 <style>
-:root { --bg-main: #0f172a; --bg-card: #1e293b; --bg-card-hover: #334155; --text-main: #f8fafc; --text-muted: #94a3b8; --accent: #3b82f6; --accent-hover: #2563eb; --danger: #ef4444; --success: #10b981; --border-color: rgba(255, 255, 255, 0.08); }
+:root {
+	--bg-main: #0f172a;
+	--bg-card: #1e293b;
+	--bg-card-hover: #334155;    
+	--text-main: #f8fafc;
+	--text-muted: #94a3b8;
+	--accent: #3b82f6;
+	--accent-hover: #2563eb;
+	--danger: #ef4444;
+	--danger-hover: #dc2626;
+	--success: #10b981;
+	--success-hover: #059669;
+	--border-color: rgba(255, 255, 255, 0.08);
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Inter', sans-serif; background-color: var(--bg-main); color: var(--text-main); line-height: 1.6; min-height: 100vh; padding: 30px 30px 10px 30px; background-image: radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%); background-attachment: fixed; display: flex; flex-direction: column; }
-ul { list-style: none; } a { color: var(--accent); text-decoration: none; transition: 0.3s; } a:hover { color: #60a5fa; text-decoration: underline; }
+
+body {
+	font-family: 'Inter', sans-serif;
+	background-color: var(--bg-main);
+	color: var(--text-main);
+	line-height: 1.6;
+	min-height: 100vh;
+	padding: 30px 30px 10px 30px; 
+	background-image: 
+		radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+		radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+	background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+}
+
+ul { list-style: none; }
+a { color: var(--accent); text-decoration: none; transition: 0.3s; }
+a:hover { color: #60a5fa; text-decoration: underline; }
+
 .container { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; max-width: 1400px; margin: 0 auto; flex: 1; }
 .calc-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; width: 100%; max-width: 440px; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); position: relative; backdrop-filter: blur(10px); }
-#deductions { max-width: 1370px; margin: 24px auto 0; width: 100%; } #deductions .calc-card { max-width: 100%; }
+#deductions { max-width: 1370px; margin: 24px auto 0; width: 100%; }
+#deductions .calc-card { max-width: 100%; }
+
 h1, h2 { font-size: 1.25rem; font-weight: 700; color: #e2e8f0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
 h1::before, h2::before { content: ''; display: inline-block; width: 12px; height: 12px; background: var(--accent); border-radius: 3px; }
 .podzagolovok { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color); font-size: 0.9rem; color: var(--text-muted); min-height: 50px; }
-.podzagolovok input[type="number"] { background: #0f172a; border: 1px solid #475569; color: white; font-weight: 600; border-radius: 8px; padding: 8px 12px; width: 80px; text-align: center; outline: none; transition: border 0.3s; font-size: 1rem; }
-.btn-calc { background: var(--accent); color: white; border: none; padding: 9px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4); }
-.btn-calc:hover { background: var(--accent-hover); transform: translateY(-2px); }
+
+.podzagolovok input[type="number"] { background: #0f172a; border: 1px solid #475569; color: white; font-weight: 600; border-radius: 8px; padding: 8px 12px; width: 80px; text-align: center; font-size: 1rem; outline: none; transition: border 0.3s; }
+.podzagolovok input:focus { border-color: var(--accent); }
+.btn-calc { background: var(--accent); color: white; border: none; padding: 9px 18px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4); }
+.btn-calc:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 6px 12px -2px rgba(59, 130, 246, 0.5); }
+
 .progress-container { margin-bottom: 20px; background: rgba(0, 0, 0, 0.15); padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); }
 .progress-text { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
 .progress-text #progressPercentText { color: var(--success); }
 .progress-bar-bg { background: #0f172a; border-radius: 50px; height: 10px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05); }
 .progress-bar { background: linear-gradient(90deg, var(--accent), var(--success)); width: 0%; height: 100%; border-radius: 50px; transition: width 0.4s ease-in-out; }
+
 .cost-input-group { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; background: rgba(0,0,0,0.15); padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border-color); }
 .cost-input-group label { font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
 .cost-input-group label span { display: inline-block; width: 32px; height: 32px; background-image: url('znachki.png'); transform: scale(0.85); }
-.cost-input-group input { background: #0f172a; border: 1px solid #475569; color: var(--success); font-weight: 600; border-radius: 6px; padding: 6px 10px; width: 140px; text-align: right; outline: none; }
+.cost-input-group input { background: #0f172a; border: 1px solid #475569; color: var(--success); font-weight: 600; border-radius: 6px; padding: 6px 10px; width: 140px; text-align: right; outline: none; font-family: 'Inter', sans-serif; }
+.cost-input-group input:focus { border-color: var(--accent); }
 .total-cost-box { margin-top: 20px; background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.2); padding: 15px; border-radius: 12px; text-align: center; }
 .total-cost-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 5px; }
 .total-cost-value { font-size: 1.4rem; font-weight: 700; color: var(--success); text-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
+
 .branch ul { display: flex; flex-wrap: wrap; gap: 15px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; margin-bottom: 16px; align-items: center; }
-.branch ul li:first-child { width: 100%; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px; margin-bottom: 5px; }
+.branch ul li:first-child { width: 100%; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px; margin-bottom: 5px; }
 .branch ul li { position: relative; display: inline-flex; flex-direction: column; align-items: center; }
-.branch li button { display: block; width: 32px; height: 32px; transform: scale(1.2); margin: 6px; background-image: url('znachki.png'); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.2s ease; }
-.branch li button:hover { transform: scale(1.35) translateY(-2px); }
+.branch li button { display: block; width: 32px; height: 32px; transform: scale(1.2); margin: 6px; background-image: url('znachki.png'); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.branch li button:hover { transform: scale(1.35) translateY(-2px); box-shadow: 0 8px 15px rgba(0,0,0,0.5); }
 .branch li b { position: absolute; bottom: -8px; right: -5px; background: var(--accent); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 12px; border: 2px solid var(--bg-card); pointer-events: none; z-index: 2; }
 .branch li span { position: absolute; top: -5px; left: -5px; width: 20px; height: 20px; background: var(--danger); color: white; font-size: 14px; line-height: 14px; text-align: center; border-radius: 50%; cursor: pointer; opacity: 0; visibility: hidden; transition: all 0.2s ease; z-index: 3; border: 2px solid var(--bg-card); display: flex; align-items: center; justify-content: center; }
 .branch li span::before { content: "-"; font-weight: bold; }
 .branch li:hover span { opacity: 1; visibility: visible; }
 #strelki { color: var(--accent); font-weight: bold; letter-spacing: 2px; }
 #niz li:first-child { display: none; } 
-.floating-tooltip { position: fixed; background: rgba(10, 15, 30, 0.96); border: 2px solid #475569; border-radius: 10px; padding: 14px 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.85); z-index: 10000; pointer-events: none; display: none; min-width: 240px; font-family: 'Inter', sans-serif; backdrop-filter: blur(6px); }
+
+.floating-tooltip {
+	position: fixed; background: rgba(10, 15, 30, 0.96); border: 2px solid #475569; border-radius: 10px; padding: 14px 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.85), inset 0 0 15px rgba(0,0,0,0.7); z-index: 10000; pointer-events: none; display: none; min-width: 240px; max-width: 300px; font-family: 'Inter', sans-serif; backdrop-filter: blur(6px);
+}
 .tooltip-title { color: #f59e0b; font-size: 1rem; font-weight: 700; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
 .tooltip-type { color: #94a3b8; font-size: 0.75rem; margin-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.15); padding-bottom: 5px; }
 .tooltip-list { display: flex; flex-direction: column; gap: 4px; }
 .tooltip-stat { color: #60a5fa; font-size: 0.85rem; font-weight: 600; }
 .tooltip-footer { color: #64748b; font-size: 0.75rem; font-style: italic; margin-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 6px; }
+
 .footer { margin-top: 40px; padding: 25px 0; border-top: 1px solid var(--border-color); text-align: center; width: 100%; }
 .footer-text { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; }
 .social-icons { display: flex; justify-content: center; gap: 18px; }
 .social-icons a { color: var(--text-muted); font-size: 1.4rem; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.05); transition: all 0.3s ease; }
-.social-icons a:hover { color: white; background: var(--accent); transform: translateY(-3px); }
-.menu-toggle-btn { position: fixed; top: 25px; right: 25px; background: var(--accent); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; z-index: 1001; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-.vybor { position: fixed; right: 25px; top: 75px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--accent); padding: 20px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); z-index: 1000; width: 340px; max-height: 80vh; overflow-y: auto; }
-.panel-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
-.panel-actions > button { width: 100%; border: none; color: white; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-.btn-primary { background: var(--accent); } .btn-success { background: var(--success); } .btn-purple { background: #8b5cf6; } .btn-danger { background: var(--danger); }
-.search-box { width: 100%; padding: 10px 14px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: white; font-size: 0.9rem; margin-top: 10px; margin-bottom: 5px; outline: none; }
-#vyborDiv h4 { font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); margin-bottom: 10px; padding-bottom: 5px; margin-top: 15px; }
-#vyborDiv ul { display: flex; flex-wrap: wrap; gap: 8px; } #vyborDiv li { display: inline-block; }
-.modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); z-index: 2000; display: flex; align-items: center; justify-content: center; }
-.modal-content { background: var(--bg-card); border: 1px solid var(--accent); padding: 25px; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6); text-align: center; }
-.modal-content input { background: #0f172a; border: 1px solid #475569; color: white; padding: 10px; border-radius: 8px; width: 100%; text-align: center; font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; outline: none; }
-.modal-buttons { display: flex; gap: 12px; } .modal-buttons button { flex: 1; padding: 10px; font-weight: 600; border-radius: 8px; border: none; cursor: pointer; }
-.modal-btn-confirm { background: var(--accent); color: white; } .modal-btn-cancel { background: #334155; color: #cbd5e1; }
+.social-icons a:hover { color: white; background: var(--accent); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4); }
 
-/* FIREBASE AUTH UI */
-#authGate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-main); display: flex; justify-content: center; align-items: center; z-index: 99999; }
-.auth-card { background: var(--bg-card); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 20px; padding: 40px 30px; width: 100%; max-width: 400px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); text-align: center; }
-.auth-brand { font-size: 1.6rem; font-weight: 700; color: #e2e8f0; margin-bottom: 5px; }
-.auth-subtitle { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 25px; line-height: 1.4; }
-.auth-form-group { margin-bottom: 16px; text-align: left; }
-.auth-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 6px; }
-.auth-input { width: 100%; padding: 12px 16px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 8px; outline: none; }
-.auth-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 10px; }
-.auth-switch { margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); }
-.auth-switch span { color: var(--accent); cursor: pointer; font-weight: 600; }
-.user-status-bar { display: flex; justify-content: space-between; align-items: center; max-width: 1370px; margin: 0 auto 24px auto; width: 100%; background: rgba(30, 41, 59, 0.7); border: 1px solid var(--border-color); padding: 12px 20px; border-radius: 12px; font-size: 0.85rem; }
-.user-info { display: flex; align-items: center; gap: 8px; color: var(--text-main); }
-.btn-logout { background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 5px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+.menu-toggle-btn { position: fixed; top: 25px; right: 25px; background: var(--accent); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; z-index: 1001; box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: 0.2s ease; }
+.menu-toggle-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
+.vybor { position: fixed; right: 25px; top: 75px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--accent); padding: 20px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); z-index: 1000; width: 340px; max-height: 80vh; overflow-y: auto; }
+
+.panel-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+.panel-actions > button { width: 100%; border: none; color: white; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-primary { background: var(--accent); } .btn-primary:hover { background: var(--accent-hover); }
+.btn-success { background: var(--success); } .btn-success:hover { background: var(--success-hover); }
+.btn-purple { background: #8b5cf6; } .btn-purple:hover { background: #7c3aed; }
+.btn-danger { background: var(--danger); } .btn-danger:hover { background: var(--danger-hover); }
+.search-box { width: 100%; padding: 10px 14px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: white; font-family: 'Inter', sans-serif; font-size: 0.9rem; margin-top: 10px; margin-bottom: 5px; outline: none; transition: 0.2s; }
+.search-box:focus { border-color: var(--accent); }
+#vyborDiv h4 { font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); margin-bottom: 10px; padding-bottom: 5px; margin-top: 15px; }
+#vyborDiv ul { display: flex; flex-wrap: wrap; gap: 8px; }
+#vyborDiv li { display: inline-block; }
+.vybor::-webkit-scrollbar { width: 6px; } .vybor::-webkit-scrollbar-track { background: transparent; } .vybor::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+.modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 1; transition: opacity 0.2s ease; }
+.modal-content { background: var(--bg-card); border: 1px solid var(--accent); padding: 25px; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6); text-align: center; animation: modalSlide 0.3s ease; }
+@keyframes modalSlide { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-content h3 { margin-bottom: 10px; color: #e2e8f0; font-size: 1.1rem; }
+.modal-content p { margin-bottom: 18px; color: var(--text-muted); font-size: 0.9rem; }
+.modal-content input { background: #0f172a; border: 1px solid #475569; color: white; padding: 10px; border-radius: 8px; width: 100%; text-align: center; font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; outline: none; }
+.modal-content input:focus { border-color: var(--accent); }
+.modal-buttons { display: flex; gap: 12px; }
+.modal-buttons button { flex: 1; padding: 10px; font-weight: 600; border-radius: 8px; border: none; cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
+.modal-btn-confirm { background: var(--accent); color: white; } .modal-btn-confirm:hover { background: var(--accent-hover); }
+.modal-btn-cancel { background: #334155; color: #cbd5e1; } .modal-btn-cancel:hover { background: #475569; }
+
+#invItemList::-webkit-scrollbar { width: 6px; }
+#invItemList::-webkit-scrollbar-track { background: transparent; }
+#invItemList::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 </style>
 </head>
 <body>
 
-<div id="authGate">
-    <div class="auth-card">
-        <div class="auth-brand">Kalkulator Tome</div>
-        <div class="auth-subtitle" id="authSubtitle">Silakan masuk untuk mengakses data build cloud Anda</div>
-        <div class="auth-form-group">
-            <label class="auth-label">Alamat Email</label>
-            <input type="email" id="authEmail" class="auth-input" placeholder="nama@email.com">
-        </div>
-        <div class="auth-form-group">
-            <label class="auth-label">Kata Sandi</label>
-            <input type="password" id="authPassword" class="auth-input" placeholder="••••••••">
-        </div>
-        <button class="auth-btn" id="authSubmitBtn" onclick="handleAuthAction()">Masuk Aplikasi</button>
-        <div class="auth-switch" id="authSwitchText">
-            Belum punya akun? <span onclick="toggleAuthMode()">Daftar Sekarang</span>
-        </div>
-    </div>
-</div>
+<div class="container">
+	<div class="calc-card">
+		<h1 data-i18n="title1">Kebutuhan Total</h1>
+		<div class="podzagolovok" id="nazvaniye" data-i18n="desc1">Arahkan kursor ke ikon untuk melihat nama buku.</div>
+		<div id="leftTree" class="branch"></div>
+	</div>
+	
+	<div class="calc-card">
+		<h2 data-i18n="title2">Cabang Terpilih</h2>
+		<div class="podzagolovok">
+			<input type="number" id="mnojitel" value="1" min="1" max="99">
+			<button class="btn-calc" data-i18n="btnCalc" onClick="processTree(rightTreeId, true)">Hitung Kuantitas</button>
+		</div>
+		<div class="progress-container">
+			<div class="progress-text">
+				<span data-i18n="progText">Progres Pengumpulan:</span>
+				<span id="progressPercentText">0.0%</span>
+			</div>
+			<div class="progress-bar-bg">
+				<div id="progressBar" class="progress-bar"></div>
+			</div>
+		</div>
+		<div id="rightTree" class="branch"></div>
+	</div>
 
-<div class="container" id="appContainer" style="display: none; flex-direction: column;">
-    <div class="user-status-bar">
-        <div class="user-info">
-            <i class="fas fa-user-circle" style="color:var(--success)"></i>
-            <span id="userEmailDisplay">Memuat...</span>
-            <span style="background: rgba(16,185,129,0.2); color: var(--success); padding: 2px 8px; border-radius: 4px; font-weight: bold; margin-left: 8px;">Cloud Sync Active</span>
-        </div>
-        <button class="btn-logout" onclick="logoutUser()">Keluar <i class="fas fa-sign-out-alt"></i></button>
-    </div>
-
-    <div style="display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; width: 100%;">
-        <div class="calc-card">
-            <h1 data-i18n="title1">Kebutuhan Total</h1>
-            <div class="podzagolovok" id="nazvaniye" data-i18n="desc1">Arahkan kursor ke ikon untuk melihat nama buku.</div>
-            <div id="leftTree" class="branch"></div>
-        </div>
-        
-        <div class="calc-card">
-            <h2 data-i18n="title2">Cabang Terpilih</h2>
-            <div class="podzagolovok">
-                <input type="number" id="mnojitel" value="1" min="1" max="99">
-                <button class="btn-calc" data-i18n="btnCalc" onClick="processTree(rightTreeId, true)">Hitung Kuantitas</button>
-            </div>
-            <div class="progress-container">
-                <div class="progress-text"><span data-i18n="progText">Progres Pengumpulan:</span><span id="progressPercentText">0.0%</span></div>
-                <div class="progress-bar-bg"><div id="progressBar" class="progress-bar"></div></div>
-            </div>
-            <div id="rightTree" class="branch"></div>
-        </div>
-
-        <div class="calc-card">
-            <h1 data-i18n="title3">Estimasi Biaya Pasar</h1>
-            <div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
-            <div class="cost-input-group"><label><span style="background-position:-32px -32px;"></span> Token of Luck:</label><input type="number" id="price10" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0"></div>
-            <div class="cost-input-group"><label><span style="background-position:-64px 0px;"></span> Tome Fragment:</label><input type="number" id="price11" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0"></div>
-            <div class="cost-input-group"><label><span style="background-position:-32px 0px;"></span> Tome Page:</label><input type="number" id="price12" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0"></div>
-            <div class="total-cost-box"><div class="total-cost-label" data-i18n="totalCostLabel">Total Sisa Biaya:</div><div id="totalCostDisplay" class="total-cost-value">0 Gold</div></div>
-        </div>
-    </div>
-    
-    <div id="deductions" style="width:100%">
-        <div class="calc-card" style="max-width:100%">
-            <h2 data-i18n="title4">📦 Inventory (Bahan Dimiliki)</h2>
-            <div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center;">
-                <span data-i18n="desc4" style="flex:1;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
-                <button class="btn-success" onClick="openInventoryModal()" style="padding: 8px 12px; border-radius: 6px; cursor: pointer; color: white; font-weight: 600; border:none;">➕ Tambah Item</button>
-            </div>
-            <div id="deductionsList" class="branch"></div>
-        </div>
-    </div>
+	<div class="calc-card">
+		<h1 data-i18n="title3">Estimasi Biaya Pasar</h1>
+		<div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
+		<div class="cost-input-group">
+			<label><span style="background-position:32px -32px;"></span> Token of Luck:</label>
+			<input type="number" id="price10" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
+		</div>
+		<div class="cost-input-group">
+			<label><span style="background-position:64px 0px;"></span> Tome Fragment:</label>
+			<input type="number" id="price11" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
+		</div>
+		<div class="cost-input-group">
+			<label><span style="background-position:32px 0px;"></span> Tome Page:</label>
+			<input type="number" id="price12" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
+		</div>
+		<div class="total-cost-box">
+			<div class="total-cost-label" data-i18n="totalCostLabel">Total Sisa Biaya:</div>
+			<div id="totalCostDisplay" class="total-cost-value">0 Gold</div>
+		</div>
+	</div>
+	
+	<div id="deductions">
+		<div class="calc-card">
+			<h2 data-i18n="title4">📦 Inventory (Bahan Dimiliki)</h2>
+			<div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center;">
+				<span data-i18n="desc4" style="flex:1;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
+				<button class="btn-success" onClick="openInventoryModal()" style="white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600;">➕ Tambah Item</button>
+			</div>
+			<div id="deductionsList" class="branch"></div>
+		</div>
+	</div>
 </div>
 
 <footer class="footer">
-    <div class="footer-text" data-i18n="footerText">Kalkulator Tome &copy; 2026 | Dibuat oleh <strong>Sulfikar</strong></div>
-    <div class="social-icons">
-        <a href="https://www.facebook.com/zullQQ/" target="_blank"><i class="fab fa-facebook-f"></i></a>
-        <a href="https://discord.gg/npyUAZuV" target="_blank"><i class="fab fa-discord"></i></a>
-        <a href="https://www.youtube.com/@idSkynet" target="_blank"><i class="fab fa-youtube"></i></a>
-    </div>
+	<div class="footer-text" data-i18n="footerText">
+		Kalkulator Tome &copy; 2026 | Dibuat oleh <strong>Sulfikar</strong>
+	</div>
+	<div class="social-icons">
+		<a href="https://www.facebook.com/zullQQ/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+		<a href="https://discord.gg/npyUAZuV" target="_blank" title="Discord"><i class="fab fa-discord"></i></a>
+		<a href="https://www.youtube.com/@idSkynet" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+		<a href="https://www.zull.com/" target="_blank" title="Website"><i class="fas fa-globe"></i></a>
+	</div>
 </footer>
 
 <button class="menu-toggle-btn" id="menuToggleBtn" onclick="var panel = document.getElementById('mainMenuPanel'); panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';">⚙️ Buka Menu</button>
 
 <div class="vybor" id="mainMenuPanel" style="display:none;">
-    <h4 style="margin-top: 0; font-size: 0.85rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px;">📁 Kelola Profil Build</h4>
-    <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
-        <select id="profileSelect" onchange="handleProfileChange(this.value)" style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid var(--border-color); color: white; border-radius: 6px; outline: none; font-family: 'Inter', sans-serif; cursor: pointer;"></select>
-        <div style="display: flex; gap: 8px;">
-            <button class="btn-success" onClick="createNewProfile()" style="flex: 1; padding: 6px; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: 600;">💾 Baru</button>
-            <button class="btn-danger" onClick="removeCurrentProfile()" style="padding: 6px 10px; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-trash"></i></button>
-        </div>
-    </div>
-    
+	<h4 style="margin-top: 0; font-size: 0.85rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px;">📁 Kelola Profil Build</h4>
+	<div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
+		<select id="profileSelect" onchange="handleProfileChange(this.value)" style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid var(--border-color); color: white; border-radius: 6px; outline: none; font-family: 'Inter', sans-serif; font-size: 0.85rem; cursor: pointer;"></select>
+		<div style="display: flex; gap: 8px;">
+			<button class="btn-success" onClick="createNewProfile()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: 600;">💾 Baru</button>
+			<button class="btn-danger" onClick="removeCurrentProfile()" style="padding: 6px 10px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-trash"></i></button>
+		</div>
+		<div style="display: flex; gap: 8px; margin-top: 4px;">
+			<button class="btn-primary" onClick="exportProfilesData()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-export"></i> Ekspor</button>
+			<button class="btn-purple" onClick="document.getElementById('importFileInput').click()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-import"></i> Impor</button>
+			<input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importProfilesData(event)">
+		</div>
+	</div>
+	
 	<div class="panel-actions">
 		<button class="btn-primary" onClick="toggleBookPanel();"><span data-i18n="btnTarget">📚 Pilihan Buku Target</span></button>
 		<button class="btn-success" onClick="copyShareLink()"><span data-i18n="btnShare">🔗 Bagikan Build (Copy Link)</span></button>
+		<button class="btn-primary" style="background: #ea580c;" onClick="exportToImage(event)"><span data-i18n="btnExport">📸 Download Gambar Build</span></button>
 		<button class="btn-purple" onClick="toggleLanguage()" id="langBtn">🌐 Switch to English</button>
 		<button class="btn-danger" onClick="resetCalculator()"><span data-i18n="btnReset">🔄 Reset Kalkulator</span></button>
 	</div>
@@ -211,90 +253,204 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 </div>
 
 <div id="inventoryModal" class="modal-backdrop" style="display:none; z-index: 2001;">
-    <div class="modal-content" style="max-width: 450px;">
-        <h3>Pilih Item untuk Inventory</h3>
-        <input type="text" id="invSearch" class="search-box" placeholder="🔍 Cari nama buku/bahan..." onkeyup="filterInventorySearch(this.value)">
-        <div id="invItemList" class="branch" style="max-height: 250px; overflow-y: auto; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);"></div>
-        <button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; cursor: pointer; border: none;" onClick="closeInventoryModal()">Tutup Jendela</button>
-    </div>
+	<div class="modal-content" style="max-width: 450px;">
+		<h3>Pilih Item untuk Inventory</h3>
+		<input type="text" id="invSearch" class="search-box" placeholder="🔍 Cari nama buku/bahan..." onkeyup="filterInventorySearch(this.value)">
+		<div id="invItemList" class="branch" style="max-height: 250px; overflow-y: auto; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);"></div>
+		<button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onClick="closeInventoryModal()">Tutup Jendela</button>
+	</div>
 </div>
 
 <div id="floatingTooltip" class="floating-tooltip"></div>
 
 <script>
 const LANG = {
-    id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", matDesc: "Bahan Crafting" },
-    en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations, profiles, and start over?", promptCopy: "Copy the link below:", statEquipDesc: "* Bind on Equip.", footerText: "Tome Calculator © 2026 | Created by <strong>Sulfikar</strong>", matDesc: "Crafting Material" }
+	id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", matDesc: "Bahan Crafting" },
+	en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations, profiles, and start over?", promptCopy: "Copy the link below:", statEquipDesc: "* Bind on Equip.", footerText: "Tome Calculator © 2026 | Created by <strong>Sulfikar</strong>", matDesc: "Crafting Material" }
 };
-let currentLang = localStorage.getItem('tomeLang') || 'id';
-function applyLanguage() {
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (LANG[currentLang][key]) { if (el.tagName === 'INPUT') el.placeholder = LANG[currentLang][key]; else el.innerHTML = LANG[currentLang][key]; }
-    });
-    document.getElementById('langBtn').innerText = currentLang === 'id' ? '🌐 Switch to English' : '🌐 Ganti ke Indonesia';
-    document.getElementById('menuToggleBtn').innerText = LANG[currentLang]['menuBtnText'];
-    processTree(leftTreeId, false); processTree(rightTreeId, true); renderDeductions(); renderMenu();
-}
-function toggleLanguage() { currentLang = currentLang === 'id' ? 'en' : 'id'; localStorage.setItem('tomeLang', currentLang); applyLanguage(); }
 
-const TOME_DB = {
-601:[501,502,509,17615,'The Calm of Ice'],602:[502,503,505,17622,'The Khatru'],603:[504,503,508,17628,'A Carmine Tear'],604:[503,508,501,17630,'The Fruit of Intense Labor'],605:[505,512,509,17634,'Tomorrows Phoenix'],606:[505,506,507,17636,'Riding the Scree'],607:[513,514,507,17642,'Turning the Tide'],608:[508,506,514,17649,'Existential Woe'],609:[510,501,505,17655,'Book of Fragrances'],610:[510,506,501,17657,'Bouquet of Regrets'],611:[511,509,505,17661,'The Union'],612:[511,513,503,17663,'Oblivious Enlightenment'],613:[513,507,514,17669,'As the Universe Fades'],614:[514,512,513,17676,'The Concubines Laugh'],615:[515,501,507,17679,'The Academy of the East'],616:[516,515,514,17683,'Pan Gu Creator'],
-501:[401,408,405,17618,'A Heart like Still Water'],502:[409,405,403,17621,'The Tsunamis of Yore'],503:[404,408,401,17624,'Laughing Mad'],504:[408,404,401,17627,'The Book of Congratulations'],505:[403,409,404,17633,'The Wrath of Heaven'],506:[409,403,402,17639,'A Strange Kindness'],507:[402,404,409,17645,'Flesh of the Lamia'],508:[404,408,402,17648,'Everything is Emptiness'],509:[403,401,405,17651,'The Oasis Remembered'],510:[401,405,407,17654,'The Heavenly Scent'],511:[403,409,404,17660,'Debt and Tombstones'],512:[409,403,404,17666,'Endless Waves'],513:[408,402,404,17672,'Parting Grief'],514:[408,402,404,17675,'Rouge and Red Lips'],515:[406,407,401,17678,'Gang of Hooligans'],516:[406,407,401,17682,'The Voidlands'],
-401:[303,307,304,17602,'Burning Desire'],402:[304,301,305,17603,'Tome of Predestination'],403:[302,305,303,17604,'The Roses Thorn'],404:[306,307,301,17605,'Letters of Social Unrest'],405:[303,307,306,17606,'The Appetites of Spring'],406:[308,205,207,17610,'The Rivers Edge'],407:[309,302,306,17614,'The Weak Stream of Many Miles'],408:[301,304,302,17600,'Battle Tactics'],409:[302,305,303,17601,'A Bewitching Proposal'],
-301:[201,206,203,17593,'Eat Drink and be Merry'],302:[202,205,206,17594,'Sunset Tales'],303:[207,203,202,17595,'Adventures and Mishaps'],304:[204,201,203,17596,'The Sunny Pass'],305:[205,202,201,17597,'Tales of Beauty'],306:[206,203,201,17598,'The Bards Wanderlust'],307:[207,205,204,17599,'A Poets Musings'],308:[208,202,204,17609,'Decaying Tome'],309:[209,203,202,17613,'Scene of Carnage'],
-201:[101,104,106,17586,'Tome of Iron Will'],202:[102,105,106,17587,'Misty Peach Blossoms'],203:[107,103,102,17588,'Tale of the Red Lotus'],204:[101,104,103,17589,'Tale of the Dolt'],205:[102,105,107,17590,'Tale of the Peach Fan'],206:[106,101,103,17591,'Story of the Blockade'],207:[107,103,104,17592,'Mediations Flame'],208:[108,103,101,17608,'Guide to Wolf Hunting'],209:[109,103,107,17612,'Fire Dance'],
-101:[0,0,0,17579,'Underestimated Resolve'],102:[0,0,0,17580,'Soaring Heart'],103:[0,0,0,17581,'Retributions Flame'],104:[0,0,0,17582,'Tome of the River Spirits'],105:[0,0,0,17583,'Flankers Tome'],106:[0,0,0,17584,'Tome of Hyperbolic Boasts'],107:[0,0,0,17585,'Tome of Grace'],108:[0,0,0,17607,'A Flowerless Plant'],109:[0,0,0,17611,'Eternitys Moon']
-};
+let currentLang = localStorage.getItem('tomeLang') || 'id';
+
+function applyLanguage() {
+	document.querySelectorAll('[data-i18n]').forEach(el => {
+		const key = el.getAttribute('data-i18n');
+		if (LANG[currentLang][key]) {
+			if (el.tagName === 'INPUT') el.placeholder = LANG[currentLang][key];
+			else el.innerHTML = LANG[currentLang][key]; 
+		}
+	});
+	
+	document.getElementById('langBtn').innerText = currentLang === 'id' ? '🌐 Switch to English' : '🌐 Ganti ke Indonesia';
+	document.getElementById('menuToggleBtn').innerText = LANG[currentLang]['menuBtnText'];
+	
+	processTree(leftTreeId, false);
+	processTree(rightTreeId, true);
+	renderDeductions();
+	renderMenu();
+}
+
+function toggleLanguage() {
+	currentLang = currentLang === 'id' ? 'en' : 'id';
+	localStorage.setItem('tomeLang', currentLang);
+	applyLanguage();
+}
+
+const TOME_DB = [];
+TOME_DB[601] = [501, 502, 509, 17615, 'The Calm of Ice']; 
+TOME_DB[602] = [502, 503, 505, 17622, 'The Khatru']; 
+TOME_DB[603] = [504, 503, 508, 17628, 'A Carmine Tear']; 
+TOME_DB[604] = [503, 508, 501, 17630, 'The Fruit of Intense Labor']; 
+TOME_DB[605] = [505, 512, 509, 17634, 'Tomorrows Phoenix']; 
+TOME_DB[606] = [505, 506, 507, 17636, 'Riding the Scree']; 
+TOME_DB[607] = [513, 514, 507, 17642, 'Turning the Tide']; 
+TOME_DB[608] = [508, 506, 514, 17649, 'Existential Woe']; 
+TOME_DB[609] = [510, 501, 505, 17655, 'Book of Fragrances']; 
+TOME_DB[610] = [510, 506, 501, 17657, 'Bouquet of Regrets']; 
+TOME_DB[611] = [511, 509, 505, 17661, 'The Union']; 
+TOME_DB[612] = [511, 513, 503, 17663, 'Oblivious Enlightenment']; 
+TOME_DB[613] = [513, 507, 514, 17669, 'As the Universe Fades']; 
+TOME_DB[614] = [514, 512, 513, 17676, 'The Concubines Laugh']; 
+TOME_DB[615] = [515, 501, 507, 17679, 'The Academy of the East']; 
+TOME_DB[616] = [516, 515, 514, 17683, 'Pan Gu Creator'];
+
+TOME_DB[501] = [401, 408, 405, 17618, 'A Heart like Still Water']; 
+TOME_DB[502] = [409, 405, 403, 17621, 'The Tsunamis of Yore']; 
+TOME_DB[503] = [404, 408, 401, 17624, 'Laughing Mad']; 
+TOME_DB[504] = [408, 404, 401, 17627, 'The Book of Congratulations']; 
+TOME_DB[505] = [403, 409, 404, 17633, 'The Wrath of Heaven']; 
+TOME_DB[506] = [409, 403, 402, 17639, 'A Strange Kindness']; 
+TOME_DB[507] = [402, 404, 409, 17645, 'Flesh of the Lamia']; 
+TOME_DB[508] = [404, 408, 402, 17648, 'Everything is Emptiness']; 
+TOME_DB[509] = [403, 401, 405, 17651, 'The Oasis Remembered']; 
+TOME_DB[510] = [401, 405, 407, 17654, 'The Heavenly Scent']; 
+TOME_DB[511] = [403, 409, 404, 17660, 'Debt and Tombstones']; 
+TOME_DB[512] = [409, 403, 404, 17666, 'Endless Waves']; 
+TOME_DB[513] = [408, 402, 404, 17672, 'Parting Grief']; 
+TOME_DB[514] = [408, 402, 404, 17675, 'Rouge and Red Lips']; 
+TOME_DB[515] = [406, 407, 401, 17678, 'Gang of Hooligans']; 
+TOME_DB[516] = [406, 407, 401, 17682, 'The Voidlands'];
+
+TOME_DB[401] = [303, 307, 304, 17602, 'Burning Desire']; 
+TOME_DB[402] = [304, 301, 305, 17603, 'Tome of Predestination']; 
+TOME_DB[403] = [302, 305, 303, 17604, 'The Roses Thorn']; 
+TOME_DB[404] = [306, 307, 301, 17605, 'Letters of Social Unrest']; 
+TOME_DB[405] = [303, 307, 306, 17606, 'The Appetites of Spring']; 
+TOME_DB[406] = [308, 205, 207, 17610, 'The Rivers Edge']; 
+TOME_DB[407] = [309, 302, 306, 17614, 'The Weak Stream of Many Miles']; 
+TOME_DB[408] = [301, 304, 302, 17600, 'Battle Tactics']; 
+TOME_DB[409] = [302, 305, 303, 17601, 'A Bewitching Proposal'];
+
+TOME_DB[301] = [201, 206, 203, 17593, 'Eat Drink and be Merry']; 
+TOME_DB[302] = [202, 205, 206, 17594, 'Sunset Tales']; 
+TOME_DB[303] = [207, 203, 202, 17595, 'Adventures and Mishaps']; 
+TOME_DB[304] = [204, 201, 203, 17596, 'The Sunny Pass']; 
+TOME_DB[305] = [205, 202, 201, 17597, 'Tales of Beauty']; 
+TOME_DB[306] = [206, 203, 201, 17598, 'The Bards Wanderlust']; 
+TOME_DB[307] = [207, 205, 204, 17599, 'A Poets Musings']; 
+TOME_DB[308] = [208, 202, 204, 17609, 'Decaying Tome']; 
+TOME_DB[309] = [209, 203, 202, 17613, 'Scene of Carnage'];
+
+TOME_DB[201] = [101, 104, 106, 17586, 'Tome of Iron Will']; 
+TOME_DB[202] = [102, 105, 106, 17587, 'Misty Peach Blossoms']; 
+TOME_DB[203] = [107, 103, 102, 17588, 'Tale of the Red Lotus']; 
+TOME_DB[204] = [101, 104, 103, 17589, 'Tale of the Dolt']; 
+TOME_DB[205] = [102, 105, 107, 17590, 'Tale of the Peach Fan']; 
+TOME_DB[206] = [106, 101, 103, 17591, 'Story of the Blockade']; 
+TOME_DB[207] = [107, 103, 104, 17592, 'Mediations Flame']; 
+TOME_DB[208] = [108, 103, 101, 17608, 'Guide to Wolf Hunting']; 
+TOME_DB[209] = [109, 103, 107, 17612, 'Fire Dance'];
+
+TOME_DB[101] = [0, 0, 0, 17579, 'Underestimated Resolve']; 
+TOME_DB[102] = [0, 0, 0, 17580, 'Soaring Heart']; 
+TOME_DB[103] = [0, 0, 0, 17581, 'Retributions Flame']; 
+TOME_DB[104] = [0, 0, 0, 17582, 'Tome of the River Spirits']; 
+TOME_DB[105] = [0, 0, 0, 17583, 'Flankers Tome']; 
+TOME_DB[106] = [0, 0, 0, 17584, 'Tome of Hyperbolic Boasts']; 
+TOME_DB[107] = [0, 0, 0, 17585, 'Tome of Grace']; 
+TOME_DB[108] = [0, 0, 0, 17607, 'A Flowerless Plant']; 
+TOME_DB[109] = [0, 0, 0, 17611, 'Eternitys Moon'];
 
 const STATS_DB = {
-101:["Strength +4"],102:["Dexterity +4"],103:["Magic +4"],104:["Vitality +4"],105:["Critical Hit Rate +1%"],106:["Maximum HP +30"],107:["Maximum MP +50"],108:["HP Recovery Rate +3","EXP Gain +1%"],109:["MP Recovery Rate +3","EXP Gain +1%"],
-201:["Strength +5","Vitality +4"],202:["Dexterity +5","Vitality +4"],203:["Magic +5","Vitality +4"],204:["Strength +9"],205:["Dexterity +9"],206:["Vitality +9"],207:["Magic +9"],208:["HP Recovery Rate +5","EXP Gain +2%"],209:["MP Recovery Rate +5","EXP Gain +2%"],
-301:["Strength +9","Vitality +8"],302:["Dexterity +9","Vitality +8"],303:["Magic +9","Vitality +8"],304:["Strength +15"],305:["Dexterity +15"],306:["Vitality +15"],307:["Magic +15"],308:["Critical Hit Rate +1%"],309:["Maximum HP +60"],
-401:["Magic +13","Vitality +12"],402:["Strength +20"],403:["Dexterity +20"],404:["Vitality +20"],405:["Magic +20"],406:["Strength +13","Vitality +12"],407:["Dexterity +13","Vitality +12"],408:["Critical Hit Rate +1%","Maximum HP +50"],409:["Maximum HP +120"],
-501:["Magic +20","Channeling Time -3%"],502:["Magic +20","Critical Hit Rate +1%"],503:["Vitality +25"],504:["Vitality +20","Maximum HP +200"],505:["Strength +15","Dexterity +15"],506:["Magic +15","Vitality +15"],507:["Strength +12","Dexterity +12","Vitality +12"],508:["Magic +12","Dexterity +12","Vitality +12"],509:["Strength +10","Dexterity +10","Magic +10","Vitality +10"],510:["Strength +15","Physical Attack +20"],511:["Magic +15","Magic Attack +20"],512:["Dexterity +15","Interval Between Hits -0.05 seconds"],513:["Vitality +15","Physical Defense +100"],514:["Maximum HP +300"],515:["Strength +9","Dexterity +9","Magic +9","Vitality +8","Maximum HP +70"],516:["Strength +9","Dexterity +9","Magic +9","Vitality +8","Critical Hit Rate +1%"],
-601:["Strength +15","Dexterity +15","Critical Hit Rate +1%"],602:["Magic +15","Vitality +15","Channeling Time -3%"],603:["Strength +15","Vitality +15","Maximum HP +150"],604:["Dexterity +20","Movement Speed +0.10 m/s","Interval Between Hits -0.05 s"],605:["Magic +20","Maximum MP +200","Channeling Time -3%"],606:["Strength +20","Physical Attack +30","Critical Hit Rate +1%"],607:["Vitality +20","Maximum HP +200","Physical Defense +50"],608:["Strength +15","Dexterity +15","Magic +15","Vitality +15"],609:["Dexterity +15","Vitality +15","Critical Hit Rate +1%"],610:["Magic +15","Dexterity +15","Channeling Time -3%"],611:["Strength +15","Magic +15","Physical Attack +20"],612:["Magic +25","Channeling Time -3%"],613:["Strength +25","Critical Hit Rate +1%"],614:["Dexterity +25","Interval Between Hits -0.05 seconds"],615:["Dexterity +20","Magic +20","Critical Hit Rate +1%","Channeling Time -3%"],616:["Strength +15","Dexterity +15","Magic +15","Vitality +15","Critical Hit Rate +1%","Channeling Time -1%","Interval Between Hits -0.05 s"] 
+	101: ["Strength +4"], 102: ["Dexterity +4"], 103: ["Magic +4"], 104: ["Vitality +4"], 105: ["Critical Hit Rate +1%"], 106: ["Maximum HP +30"], 107: ["Maximum MP +50"], 108: ["HP Recovery Rate +3", "EXP Gain +1%"], 109: ["MP Recovery Rate +3", "EXP Gain +1%"],
+	201: ["Strength +5", "Vitality +4"], 202: ["Dexterity +5", "Vitality +4"], 203: ["Magic +5", "Vitality +4"], 204: ["Strength +9"], 205: ["Dexterity +9"], 206: ["Vitality +9"], 207: ["Magic +9"], 208: ["HP Recovery Rate +5", "EXP Gain +2%"], 209: ["MP Recovery Rate +5", "EXP Gain +2%"],
+	301: ["Strength +9", "Vitality +8"], 302: ["Dexterity +9", "Vitality +8"], 303: ["Magic +9", "Vitality +8"], 304: ["Strength +15"], 305: ["Dexterity +15"], 306: ["Vitality +15"], 307: ["Magic +15"], 308: ["Critical Hit Rate +1%"], 309: ["Maximum HP +60"],
+	401: ["Magic +13", "Vitality +12"], 402: ["Strength +20"], 403: ["Dexterity +20"], 404: ["Vitality +20"], 405: ["Magic +20"], 406: ["Strength +13", "Vitality +12"], 407: ["Dexterity +13", "Vitality +12"], 408: ["Critical Hit Rate +1%", "Maximum HP +50"], 409: ["Maximum HP +120"],
+	501: ["Magic +20", "Channeling Time -3%"], 502: ["Magic +20", "Critical Hit Rate +1%"], 503: ["Vitality +25"], 504: ["Vitality +20", "Maximum HP +200"], 505: ["Strength +15", "Dexterity +15"], 506: ["Magic +15", "Vitality +15"], 507: ["Strength +12", "Dexterity +12", "Vitality +12"], 508: ["Magic +12", "Dexterity +12", "Vitality +12"], 509: ["Strength +10", "Dexterity +10", "Magic +10", "Vitality +10"], 510: ["Strength +15", "Physical Attack +20"], 511: ["Magic +15", "Magic Attack +20"], 512: ["Dexterity +15", "Interval Between Hits -0.05 seconds"], 513: ["Vitality +15", "Physical Defense +100"], 514: ["Maximum HP +300"], 515: ["Strength +9", "Dexterity +9", "Magic +9", "Vitality +8", "Maximum HP +70"], 516: ["Strength +9", "Dexterity +9", "Magic +9", "Vitality +8", "Critical Hit Rate +1%"],
+	601: ["Strength +15", "Dexterity +15", "Critical Hit Rate +1%"], 602: ["Magic +15", "Vitality +15", "Channeling Time -3%"], 603: ["Strength +15", "Vitality +15", "Maximum HP +150"], 604: ["Dexterity +20", "Movement Speed +0.10 meters/second", "Interval Between Hits -0.05 seconds"], 605: ["Magic +20", "Maximum MP +200", "Channeling Time -3%"], 606: ["Strength +20", "Physical Attack +30", "Critical Hit Rate +1%"], 607: ["Vitality +20", "Maximum HP +200", "Physical Defense +50"], 608: ["Strength +15", "Dexterity +15", "Magic +15", "Vitality +15"], 609: ["Dexterity +15", "Vitality +15", "Critical Hit Rate +1%"], 610: ["Magic +15", "Dexterity +15", "Channeling Time -3%"], 611: ["Strength +15", "Magic +15", "Physical Attack +20"], 612: ["Magic +25", "Channeling Time -3%"], 613: ["Strength +25", "Critical Hit Rate +1%"], 614: ["Dexterity +25", "Interval Between Hits -0.05 seconds"], 615: ["Dexterity +20", "Magic +20", "Critical Hit Rate +1%", "Channeling Time -3%"], 616: ["Strength +15", "Dexterity +15", "Magic +15", "Vitality +15", "Critical Hit Rate +1%", "Channeling Time -1%", "Interval Between Hits -0.05 seconds"] 
 };
 
-let itemCounts = [], deductions = [];
-let leftTreeId = 616, rightTreeId = 616, activeModalItemId = null;
-let profiles = { "Default Build": { l: 616, r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 } };
-let currentProfile = "Default Build";
+let itemCounts = [];
+let deductions = [];
+let deductionsCopy = [];
+let leftTreeId = 616;
+let rightTreeId = 616;
+let activeModalItemId = null;
+let profiles = {};
+let currentProfile = 'Default';
 
-// ⚠️ FIX: RUMUS KOORDINAT GAMBAR DIKEMBALIKAN 100% KE ASLINYA ⚠️
 function getSpritePosition(id) {
-    const pId = parseInt(id);
-    if (pId === 10) return 'background-position: -32px -32px;';
-    if (pId === 11) return 'background-position: -64px 0px;';
-    if (pId === 12) return 'background-position: -32px 0px;';
-    return `background-position: -${(pId % 10) * 32}px -${Math.floor(pId / 100) * 32}px;`;
+    const parsedId = parseInt(id);
+    if (parsedId === 10) return 'background-position:32px -32px';
+    if (parsedId === 11) return 'background-position:64px 0px';
+    if (parsedId === 12) return 'background-position:32px 0px';
+    let row = Math.floor(parsedId / 100);
+    let num = parsedId - (row * 100);
+    return `background-position:-${32 * (num - 1)}px -${32 * (row - 1)}px`;
 }
 
 function showTooltip(element, event) {
     const id = parseInt(element.title);
     if (!TOME_DB[id] && id !== 10 && id !== 11 && id !== 12) return;
-    const t = document.getElementById('floatingTooltip');
-    let n = "", typ = LANG[currentLang]['matDesc'], sts = "";
-    if (id === 10) n = "Token of Luck"; else if (id === 11) n = "Tome Fragment"; else if (id === 12) n = "Tome Page";
-    else { n = TOME_DB[id][4]; typ = `${LANG[currentLang]['lvl']} ${Math.floor(id / 100)} Tome`; if (STATS_DB[id]) STATS_DB[id].forEach(st => { sts += `<div class="tooltip-stat">+ ${st}</div>`; }); }
-    let html = `<div class="tooltip-title"><div style="width:32px; height:32px; display:inline-block; vertical-align:middle; background-image:url('znachki.png'); ${getSpritePosition(id)}; transform:scale(0.85); border-radius:4px;"></div> ${n}</div><div class="tooltip-type">${typ}</div>`;
-    if (sts !== "") html += `<div class="tooltip-list">${sts}</div>`;
-    if (id > 100) html += `<div class="tooltip-footer">${LANG[currentLang]['statEquipDesc']}</div>`;
-    t.innerHTML = html; t.style.display = 'block'; moveTooltip(event);
-    let lk = (id===10)?"24722":(id===11)?"17011":(id===12)?"17010":TOME_DB[id][3];
-    document.getElementById('nazvaniye').innerHTML = `<a href="http://www.pwdatabase.com/pwi/items/${lk}" target="_blank">► ${n}</a>`;
+    const tooltip = document.getElementById('floatingTooltip');
+    let nameText = "";
+    let typeText = "";
+    let statsHtml = "";
+    let footerText = LANG[currentLang]['statEquipDesc'];
+    
+    if (id === 10) { nameText = "Token of Luck"; typeText = LANG[currentLang]['matDesc']; }
+    else if (id === 11) { nameText = "Tome Fragment"; typeText = LANG[currentLang]['matDesc']; }
+    else if (id === 12) { nameText = "Tome Page"; typeText = LANG[currentLang]['matDesc']; }
+    else {
+        nameText = TOME_DB[id][4];
+        let row = Math.floor(id / 100);
+        typeText = `${LANG[currentLang]['lvl']} ${row} Tome`;
+        if (STATS_DB[id]) {
+            STATS_DB[id].forEach(stat => { statsHtml += `<div class="tooltip-stat">${stat}</div>`; });
+        }
+    }
+    
+    tooltip.innerHTML = `
+        <div class="tooltip-title"><div style="width:32px; height:32px; display:inline-block; vertical-align:middle; background-image:url('znachki.png'); ${getSpritePosition(id)}; transform:scale(0.85); border-radius:4px;"></div> ${nameText}</div>
+        <div class="tooltip-type">${typeText}</div>
+        <div class="tooltip-list">${statsHtml}</div>
+        <div class="tooltip-footer">${footerText}</div>
+    `;
+    tooltip.style.display = 'block';
+    moveTooltip(event);
+    
+    let linkUrl = (id === 10) ? "http://www.pwdatabase.com/pwi/items/24722" : (id === 11) ? "http://www.pwdatabase.com/pwi/items/17011" : (id === 12) ? "http://www.pwdatabase.com/pwi/items/17010" : `http://www.pwdatabase.com/pwi/items/${TOME_DB[id][3]}`;
+    document.getElementById('nazvaniye').innerHTML = `<a href="${linkUrl}" target="_blank">► ${nameText}</a>`;
 }
 
 function moveTooltip(event) {
-    const t = document.getElementById('floatingTooltip'); if (t.style.display !== 'block') return;
-    let x = event.clientX + 15, y = event.clientY + 15;
-    if (x + 240 > window.innerWidth) x = event.clientX - 255;
-    if (y + 160 > window.innerHeight) y = event.clientY - 175;
-    t.style.left = x + 'px'; t.style.top = y + 'px';
+    const tooltip = document.getElementById('floatingTooltip');
+    if (tooltip.style.display !== 'block') return;
+    let x = event.clientX + 15;
+    let y = event.clientY + 15;
+    const tooltipWidth = tooltip.offsetWidth || 240;
+    const tooltipHeight = tooltip.offsetHeight || 160;
+    if (x + tooltipWidth > window.innerWidth) { x = event.clientX - tooltipWidth - 15; }
+    if (y + tooltipHeight > window.innerHeight) { y = event.clientY - tooltipHeight - 15; }
+    tooltip.style.left = x + 'px';
+    tooltip.style.top = y + 'px';
 }
-function hideTooltip() { document.getElementById('floatingTooltip').style.display = 'none'; }
-document.addEventListener('click', function(e) { if (!e.target.closest('button[onMouseOver]')) hideTooltip(); });
-document.addEventListener('touchstart', function(e) { if (!e.target.closest('button[onMouseOver]')) hideTooltip(); });
+
+function hideTooltip() {
+    document.getElementById('floatingTooltip').style.display = 'none';
+}
+
+document.addEventListener('click', function(e) { if (!e.target.closest('button[onMouseOver]')) { hideTooltip(); } });
+document.addEventListener('touchstart', function(e) { if (!e.target.closest('button[onMouseOver]')) { hideTooltip(); } });
 
 function getTreeItemHtml(id, isDeductionsView = false) {
     let count = isDeductionsView ? deductions[id] : itemCounts[id];
@@ -304,62 +460,88 @@ function getTreeItemHtml(id, isDeductionsView = false) {
     return `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" ${clickAttr} onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
 }
 
-function processTree(id, isRightTree) {
-    if (!isRightTree) leftTreeId = id; else rightTreeId = id;
-    let multiplier = isRightTree ? (parseInt(document.getElementById('mnojitel').value) || 1) : 1;
-    itemCounts = [];
-    
-    function calculateNode(nodeId) {
-        if (!itemCounts[nodeId]) itemCounts[nodeId] = 0; itemCounts[nodeId]++;
-        if (nodeId > 200) { calculateNode(TOME_DB[nodeId][0]); calculateNode(TOME_DB[nodeId][1]); calculateNode(TOME_DB[nodeId][2]); }
+function calculateNode(id) {
+    if (!itemCounts[id]) itemCounts[id] = 0;
+    itemCounts[id]++;
+    if (id > 200) {
+        calculateNode(TOME_DB[id][0]);
+        calculateNode(TOME_DB[id][1]);
+        calculateNode(TOME_DB[id][2]);
     }
-    for (let z = 0; z < multiplier; z++) calculateNode(id);
-    
-    // Hitung pengurangan dari Inventory jika ini adalah sisi Target Kanan
-    if (isRightTree) {
-        let deductionsCopy = [...deductions];
-        for (let z = 616; z >= 101; z--) {
-            if (itemCounts[z] && deductionsCopy[z]) {
-                if (deductionsCopy[z] >= itemCounts[z]) { deductionsCopy[z] -= itemCounts[z]; itemCounts[z] = 0; }
-                else { itemCounts[z] -= deductionsCopy[z]; deductionsCopy[z] = 0; }
-            }
-            if (itemCounts[z] > 0 && z > 200) {
-                if(!itemCounts[TOME_DB[z][0]]) itemCounts[TOME_DB[z][0]] = 0; itemCounts[TOME_DB[z][0]] += itemCounts[z];
-                if(!itemCounts[TOME_DB[z][1]]) itemCounts[TOME_DB[z][1]] = 0; itemCounts[TOME_DB[z][1]] += itemCounts[z];
-                if(!itemCounts[TOME_DB[z][2]]) itemCounts[TOME_DB[z][2]] = 0; itemCounts[TOME_DB[z][2]] += itemCounts[z];
-                itemCounts[z] = 0;
-            }
+}
+
+function renderTree(isRightTree) {
+    let txt = '';
+    const txtLvl = LANG[currentLang]['lvl'];
+    const txtBase = LANG[currentLang]['baseMat'];
+    for (let r = 6; r >= 1; r--) {
+        let start = r * 100 + 1;
+        let end = r * 100 + 16;
+        let hasItem = false;
+        let tempTxt = `<ul><li>${txtLvl} ${r}</li> `;
+        for (let e = start; e <= end; e++) {
+            if (itemCounts[e]) { tempTxt += getTreeItemHtml(e); hasItem = true; }
         }
-        let baseMats = 0;
-        for (let z = 101; z <= 109; z++) {
-            if (itemCounts[z]) {
-                if (deductionsCopy[z] >= itemCounts[z]) { deductionsCopy[z] -= itemCounts[z]; itemCounts[z] = 0; }
-                else { itemCounts[z] -= deductionsCopy[z]; deductionsCopy[z] = 0; }
-                baseMats += itemCounts[z] * 3;
-            }
-        }
-        itemCounts[11] = baseMats; itemCounts[12] = baseMats;
-        if (deductionsCopy[11] >= itemCounts[11]) { deductionsCopy[11] -= itemCounts[11]; itemCounts[11] = 0; } else { itemCounts[11] -= deductionsCopy[11]; }
-        if (deductionsCopy[12] >= itemCounts[12]) { deductionsCopy[12] -= itemCounts[12]; itemCounts[12] = 0; } else { itemCounts[12] -= deductionsCopy[12]; }
-        itemCounts[10] = itemCounts[12] * 80;
-        if (deductionsCopy[10] >= itemCounts[10]) { deductionsCopy[10] -= itemCounts[10]; itemCounts[10] = 0; } else { itemCounts[10] -= deductionsCopy[10]; }
-    } else {
-        // Jika sisi kiri (Kebutuhan Total), abaikan Inventory
-        let baseMats = 0;
-        for (let z = 101; z <= 109; z++) { if (itemCounts[z]) baseMats += itemCounts[z] * 3; }
-        itemCounts[11] = baseMats; itemCounts[12] = baseMats; itemCounts[10] = baseMats * 80;
+        tempTxt += '</ul>';
+        if (hasItem) txt += tempTxt;
     }
-    
-    renderTree(isRightTree); 
-    if(isRightTree) updateCostAndProgress();
+    txt += `<ul id="niz"><li>${txtBase}</li> `;
+    if (itemCounts[11]) txt += getTreeItemHtml(11);
+    if (itemCounts[12]) txt += getTreeItemHtml(12);
+    if (itemCounts[10]) txt += `<li id="strelki" style="margin: 0 10px;">→</li>${getTreeItemHtml(10)}`;
+    txt += `</ul>`;
+    document.getElementById(isRightTree ? 'rightTree' : 'leftTree').innerHTML = txt;
+}
+
+function renderDeductions() {
+    let txt = ''; let lis = '';
+    const deductionsDiv = document.getElementById('deductionsList');
+    if (deductions[11]) lis += getTreeItemHtml(11, true);
+    if (deductions[12]) lis += getTreeItemHtml(12, true);
+    if (deductions[10]) lis += getTreeItemHtml(10, true);
+    if (lis !== '') txt += `<ul><li>${LANG[currentLang]['baseMat']}</li> ${lis}</ul>`;
+    for (let r = 1; r <= 6; r++) {
+        lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
+        for (let e = start; e <= end; e++) if (deductions[e]) lis += getTreeItemHtml(e, true);
+        if (lis !== '') txt += `<ul><li>${LANG[currentLang]['lvl']} ${r}</li> ${lis}</ul>`;
+    }
+    deductionsDiv.innerHTML = txt;
+}
+
+function renderMenu() {
+    let txt = '';
+    for (let r = 6; r >= 1; r--) {
+        let lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
+        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(e)}" title="${e}" onClick="selectTargetBook(${e})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
+        if (lis !== '') txt += `<h4>${LANG[currentLang]['lvl']} ${r}</h4><ul style="justify-content:center;">${lis}</ul>`;
+    }
+    document.getElementById('vyborDiv').innerHTML = txt;
 }
 
 function updateCostAndProgress() {
-    let p10 = parseInt(document.getElementById('price10').value) || 0, p11 = parseInt(document.getElementById('price11').value) || 0, p12 = parseInt(document.getElementById('price12').value) || 0;
+    let price10 = parseInt(document.getElementById('price10').value) || 0;
+    let price11 = parseInt(document.getElementById('price11').value) || 0;
+    let price12 = parseInt(document.getElementById('price12').value) || 0;
     let multiplier = parseInt(document.getElementById('mnojitel').value) || 1;
     saveActiveProfile();
     
-    // Perhitungan Gross (Kotor) untuk mengukur panjang Progress Bar
+    let netCounts = [];
+    deductionsCopy = [...deductions];
+    function calcNetNode(nodeId) {
+        if (!netCounts[nodeId]) netCounts[nodeId] = 0;
+        if (deductionsCopy[nodeId] && deductionsCopy[nodeId] > 0) { deductionsCopy[nodeId]--; return; }
+        netCounts[nodeId]++;
+        if (nodeId > 200) { calcNetNode(TOME_DB[nodeId][0]); calcNetNode(TOME_DB[nodeId][1]); calcNetNode(TOME_DB[nodeId][2]); }
+    }
+    for (let z = 0; z < multiplier; z++) calcNetNode(rightTreeId);
+    let netBaseMats = 0;
+    for (let z = 101; z <= 109; z++) if (netCounts[z]) netBaseMats += netCounts[z] * 3;
+    netCounts[11] = netBaseMats; netCounts[12] = netBaseMats;
+    if (deductions[11]) netCounts[11] -= deductions[11]; if (netCounts[11] < 0) netCounts[11] = 0;
+    if (deductions[12]) netCounts[12] -= deductions[12]; if (netCounts[12] < 0) netCounts[12] = 0;
+    netCounts[10] = netCounts[12] * 80;
+    if (deductions[10]) netCounts[10] -= deductions[10]; if (netCounts[10] < 0) netCounts[10] = 0;
+    
     let grossCounts = [];
     function calcGrossNode(nodeId) {
         if (!grossCounts[nodeId]) grossCounts[nodeId] = 0; grossCounts[nodeId]++;
@@ -370,260 +552,321 @@ function updateCostAndProgress() {
     for (let z = 101; z <= 109; z++) if (grossCounts[z]) grossBaseMats += grossCounts[z] * 3;
     grossCounts[11] = grossBaseMats; grossCounts[12] = grossBaseMats; grossCounts[10] = grossBaseMats * 80;
     
-    let totalCost = (itemCounts[10] || 0) * p10 + (itemCounts[11] || 0) * p11 + (itemCounts[12] || 0) * p12;
+    let totalCost = (netCounts[10] || 0) * price10 + (netCounts[11] || 0) * price11 + (netCounts[12] || 0) * price12;
     document.getElementById('totalCostDisplay').innerText = totalCost.toLocaleString('id-ID') + " Gold";
     
     let grossVal = (grossCounts[10] || 0) + (grossCounts[12] || 0) * 80 + (grossCounts[11] || 0) * 80;
-    let netVal = (itemCounts[10] || 0) + (itemCounts[12] || 0) * 80 + (itemCounts[11] || 0) * 80;
-    let pct = grossVal > 0 ? ((grossVal - netVal) / grossVal) * 100 : 0; pct = Math.max(0, Math.min(100, pct));
-    document.getElementById('progressBar').style.width = pct.toFixed(1) + '%'; document.getElementById('progressPercentText').innerText = pct.toFixed(1) + '%';
-}
-
-function renderTree(isRightTree) {
-    let txt = ''; const txtLvl = LANG[currentLang]['lvl'], txtBase = LANG[currentLang]['baseMat'];
-    for (let r = 6; r >= 1; r--) {
-        let start = r * 100 + 1, end = r * 100 + 16, hasItem = false, tempTxt = `<ul><li>${txtLvl} ${r}</li> `;
-        for (let e = start; e <= end; e++) { if (itemCounts[e]) { tempTxt += getTreeItemHtml(e); hasItem = true; } }
-        tempTxt += '</ul>'; if (hasItem) txt += tempTxt;
+    let netVal = (netCounts[10] || 0) + (netCounts[12] || 0) * 80 + (netCounts[11] || 0) * 80;
+    let pct = grossVal > 0 ? ((grossVal - netVal) / grossVal) * 100 : 0;
+    pct = Math.max(0, Math.min(100, pct));
+    document.getElementById('progressBar').style.width = pct.toFixed(1) + '%';
+    document.getElementById('progressPercentText').innerText = pct.toFixed(1) + '%';
+    
+    if (pct >= 100 && typeof confetti === 'function') {
+        confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 }, colors: ['#3b82f6', '#10b981', '#f59e0b'] });
     }
-    txt += `<ul id="niz"><li>${txtBase}</li> `;
-    if (itemCounts[11]) txt += getTreeItemHtml(11); if (itemCounts[12]) txt += getTreeItemHtml(12);
-    if (itemCounts[10]) txt += `<li id="strelki" style="margin: 0 10px;">→</li>${getTreeItemHtml(10)}`;
-    txt += `</ul>`; document.getElementById(isRightTree ? 'rightTree' : 'leftTree').innerHTML = txt;
 }
 
-function renderDeductions() {
-    let txt = '', lis = ''; const dDiv = document.getElementById('deductionsList'); if (!dDiv) return;
-    if (deductions[11]) lis += getTreeItemHtml(11, true); if (deductions[12]) lis += getTreeItemHtml(12, true); if (deductions[10]) lis += getTreeItemHtml(10, true);
-    if (lis !== '') txt += `<ul><li>${LANG[currentLang]['baseMat']}</li> ${lis}</ul>`;
-    for (let r = 1; r <= 6; r++) {
-        lis = ''; let start = r * 100 + 1, end = r * 100 + 16;
-        for (let e = start; e <= end; e++) if (deductions[e]) lis += getTreeItemHtml(e, true);
-        if (lis !== '') txt += `<ul><li>${LANG[currentLang]['lvl']} ${r}</li> ${lis}</ul>`;
+function processTree(id, isRightTree) {
+    if (!isRightTree) leftTreeId = id; else rightTreeId = id;
+    let multiplier = isRightTree ? (parseInt(document.getElementById('mnojitel').value) || 1) : 1;
+    itemCounts = [];
+    for (let z = 0; z < multiplier; z++) calculateNode(id);
+    for (let z = 616; z >= 101; z--) {
+        if (itemCounts[z] && deductions[z]) {
+            itemCounts[z] -= deductions[z];
+            if (itemCounts[z] < 0) { deductionsCopy[z] = -itemCounts[z]; itemCounts[z] = 0; }
+            else deductionsCopy[z] = 0;
+        } else deductionsCopy[z] = deductions[z] || 0;
     }
-    dDiv.innerHTML = txt;
-}
-
-function renderMenu() {
-    let txt = '';
-    for (let r = 6; r >= 1; r--) {
-        let lis = ''; let start = r * 100 + 1, end = r * 100 + 16;
-        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(e)}" title="${e}" onClick="selectTargetBook(${e})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
-        if (lis !== '') txt += `<h4>${LANG[currentLang]['lvl']} ${r}</h4><ul style="justify-content:center;">${lis}</ul>`;
+    let baseMats = 0;
+    for (let z = 101; z <= 109; z++) {
+        let req = itemCounts[z] || 0;
+        if (deductionsCopy[z]) { req -= deductionsCopy[z]; if (req < 0) req = 0; }
+        baseMats += req * 3;
     }
-    document.getElementById('vyborDiv').innerHTML = txt;
+    for (let z = 12; z >= 10; z--) {
+        itemCounts[z] = z === 10 ? (itemCounts[12] || 0) * 80 : baseMats;
+        if (deductions[z]) itemCounts[z] -= deductions[z];
+        if (itemCounts[z] < 0) itemCounts[z] = 0;
+    }
+    renderTree(isRightTree);
+    if(isRightTree) updateCostAndProgress();
 }
 
-function selectTargetBook(id) { rightTreeId = id; leftTreeId = id; document.getElementById('mainMenuPanel').style.display = 'none'; processTree(leftTreeId, false); processTree(rightTreeId, true); }
-function openInventoryModal() { document.getElementById('inventoryModal').style.display = 'flex'; document.getElementById('invSearch').value = ''; renderInventorySelection(''); document.getElementById('invSearch').focus(); }
+function selectTargetBook(id) {
+    rightTreeId = id;
+    leftTreeId = id;
+    document.getElementById('mainMenuPanel').style.display = 'none';
+    processTree(leftTreeId, false);
+    processTree(rightTreeId, true);
+}
+
+function openInventoryModal() {
+    document.getElementById('inventoryModal').style.display = 'flex';
+    document.getElementById('invSearch').value = '';
+    renderInventorySelection('');
+    document.getElementById('invSearch').focus();
+}
+
 function closeInventoryModal() { document.getElementById('inventoryModal').style.display = 'none'; }
 
 function renderInventorySelection(query) {
     let html = '<ul style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">';
     const q = query.toLowerCase();
     const baseMats = [ {id: 12, name: 'Tome Page'}, {id: 11, name: 'Tome Fragment'}, {id: 10, name: 'Token of Luck'} ];
-    baseMats.forEach(mat => { if (mat.name.toLowerCase().includes(q)) html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onClick="selectItemForInventory(${mat.id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`; });
-    for (let id in TOME_DB) { if (TOME_DB[id][4].toLowerCase().includes(q)) html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" onClick="selectItemForInventory(${id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`; }
-    html += '</ul>'; document.getElementById('invItemList').innerHTML = html;
+    baseMats.forEach(mat => {
+        if (mat.name.toLowerCase().includes(q)) { html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onClick="selectItemForInventory(${mat.id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`; }
+    });
+    TOME_DB.forEach((tome, id) => {
+        if (tome && tome[4].toLowerCase().includes(q)) { html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" onClick="selectItemForInventory(${id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`; }
+    });
+    html += '</ul>';
+    document.getElementById('invItemList').innerHTML = html;
 }
 
 function filterInventorySearch(val) { renderInventorySelection(val); }
+
 function selectItemForInventory(id) { closeInventoryModal(); openModal(id); }
 
 function openModal(id) {
     activeModalItemId = id;
-    let n = (id===10)?"Token of Luck":(id===11)?"Tome Fragment":(id===12)?"Tome Page":TOME_DB[id][4];
-    document.getElementById('modalTitle').innerText = n; document.getElementById('modalInput').value = 1;
-    document.getElementById('customModal').style.display = 'flex'; document.getElementById('modalInput').focus();
+    let nameText = (id === 10) ? "Token of Luck" : (id === 11) ? "Tome Fragment" : (id === 12) ? "Tome Page" : TOME_DB[id][4];
+    document.getElementById('modalTitle').innerText = `${LANG[currentLang]['modalTitleAdd']} - ${nameText}`;
+    document.getElementById('modalInput').value = 1;
+    document.getElementById('customModal').style.display = 'flex';
+    document.getElementById('modalInput').focus();
 }
+
 function closeModal() { document.getElementById('customModal').style.display = 'none'; activeModalItemId = null; }
 
 function confirmModal() {
     const amount = parseInt(document.getElementById('modalInput').value);
     if (!isNaN(amount) && amount > 0 && activeModalItemId) {
-        if (!deductions[activeModalItemId]) deductions[activeModalItemId] = 0; deductions[activeModalItemId] += amount;
-        saveActiveProfile(); processTree(leftTreeId, false); processTree(rightTreeId, true); renderDeductions();
+        if (!deductions[activeModalItemId]) deductions[activeModalItemId] = 0;
+        deductions[activeModalItemId] += amount;
+        saveActiveProfile(); 
+        processTree(leftTreeId, false); 
+        processTree(rightTreeId, true); 
+        renderDeductions();
     }
     closeModal();
 }
 
-function removeDeduction(id) { deductions[id] = 0; saveActiveProfile(); processTree(leftTreeId, false); processTree(rightTreeId, true); renderDeductions(); }
-function toggleBookPanel() { const p = document.getElementById('vyborDiv'), s = document.getElementById('bookSearch'), isH = p.style.display === 'none'; p.style.display = isH ? 'block' : 'none'; s.style.display = isH ? 'block' : 'none'; if(isH) s.focus(); }
+function removeDeduction(id) {
+    deductions[id] = 0;
+    saveActiveProfile(); processTree(leftTreeId, false); processTree(rightTreeId, true); renderDeductions();
+}
+
+function toggleBookPanel() {
+    const panel = document.getElementById('vyborDiv'); const search = document.getElementById('bookSearch'); const isHidden = panel.style.display === 'none';
+    panel.style.display = isHidden ? 'block' : 'none'; search.style.display = isHidden ? 'block' : 'none';
+    if(isHidden) search.focus();
+}
 
 function filterBooks(query) {
     const q = query.toLowerCase();
     document.querySelectorAll('#vyborDiv ul').forEach(ul => {
-        let hasVisible = false;
+        let hasVisibleItem = false;
         ul.querySelectorAll('li').forEach(li => {
-            const id = li.querySelector('button').title, n = TOME_DB[id] ? TOME_DB[id][4].toLowerCase() : '';
-            if (n.includes(q)) { li.style.display = 'inline-block'; hasVisible = true; } else li.style.display = 'none';
+            const id = li.querySelector('button').title; const bookName = TOME_DB[id] ? TOME_DB[id][4].toLowerCase() : '';
+            if (bookName.includes(q)) { li.style.display = 'inline-block'; hasVisibleItem = true; } else li.style.display = 'none';
         });
-        const header = ul.previousElementSibling; if (header && header.tagName === 'H4') header.style.display = hasVisible ? 'block' : 'none';
+        const header = ul.previousElementSibling; if (header && header.tagName === 'H4') header.style.display = hasVisibleItem ? 'block' : 'none';
     });
 }
 
 function copyShareLink() {
     const compD = {}; deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
     const finalState = { l: leftTreeId, r: rightTreeId, m: document.getElementById('mnojitel').value, d: compD };
-    const url = window.location.origin + window.location.pathname + "#" + btoa(JSON.stringify(finalState));
-    if (navigator.clipboard) navigator.clipboard.writeText(url).then(() => alert(LANG[currentLang]['alertCopy'])).catch(() => prompt(LANG[currentLang]['promptCopy'], url)); else prompt(LANG[currentLang]['promptCopy'], url);
+    const hash = btoa(JSON.stringify(finalState)); const url = window.location.origin + window.location.pathname + "#" + hash;
+    if (navigator.clipboard) navigator.clipboard.writeText(url).then(() => alert(LANG[currentLang]['alertCopy'])).catch(() => prompt(LANG[currentLang]['promptCopy'], url));
+    else prompt(LANG[currentLang]['promptCopy'], url);
 }
 
 function loadFromHash() {
     if (window.location.hash) {
         try {
             const state = JSON.parse(atob(window.location.hash.substring(1)));
-            if (state.l && TOME_DB[state.l]) leftTreeId = state.l; if (state.r && TOME_DB[state.r]) rightTreeId = state.r;
+            if (state.l && TOME_DB[state.l]) leftTreeId = state.l;
+            if (state.r && TOME_DB[state.r]) rightTreeId = state.r;
             if (state.m) document.getElementById('mnojitel').value = state.m;
-            if (state.d) { deductions = []; for (const k in state.d) deductions[parseInt(k)] = state.d[k]; } window.location.hash = '';
+            if (state.d) { deductions = []; for (const k in state.d) deductions[parseInt(k)] = state.d[k]; }
+            window.location.hash = '';
         } catch(e) {}
     }
 }
 
 function resetCalculator() {
     if (confirm(LANG[currentLang]['alertReset'])) {
-        deductions = []; profiles = { "Default Build": { l: 616, r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 } }; currentProfile = "Default Build"; 
-        saveActiveProfile(); document.getElementById('price10').value = 0; document.getElementById('price11').value = 0; document.getElementById('price12').value = 0; document.getElementById('mnojitel').value = 1;
-        leftTreeId = 616; rightTreeId = 616; renderProfileDropdown(); processTree(leftTreeId, false); processTree(rightTreeId, true); renderDeductions();
+        deductions = []; 
+        profiles = { "Default Build": { l: 616, r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 } };
+        currentProfile = "Default Build"; 
+        saveActiveProfile();
+        document.getElementById('price10').value = 0; document.getElementById('price11').value = 0; document.getElementById('price12').value = 0; document.getElementById('mnojitel').value = 1;
+        leftTreeId = 616; rightTreeId = 616;
+        renderProfileDropdown(); processTree(leftTreeId, false); processTree(rightTreeId, true); renderDeductions();
     }
 }
 
+function exportToImage(event) {
+    event.preventDefault();
+    const btn = event.currentTarget; const oldTxt = btn.innerHTML;
+    btn.innerHTML = '📸 Generating...'; btn.disabled = true;
+    const menuPanel = document.getElementById('mainMenuPanel'); const oldMenuDisp = menuPanel.style.display; menuPanel.style.display = 'none';
+    const menuBtn = document.getElementById('menuToggleBtn'); const oldBtnDisp = menuBtn.style.display; menuBtn.style.display = 'none';
+    
+    html2canvas(document.body, { useCORS: true, allowTaint: true, backgroundColor: '#0f172a', scale: 2 }).then(canvas => {
+        const url = canvas.toDataURL('image/png'); const a = document.createElement('a');
+        a.href = url; a.download = `Tome_Build_${currentProfile}.png`; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        menuPanel.style.display = oldMenuDisp; menuBtn.style.display = oldBtnDisp; btn.innerHTML = oldTxt; btn.disabled = false;
+    }).catch(() => {
+        menuPanel.style.display = oldMenuDisp; menuBtn.style.display = oldBtnDisp; btn.innerHTML = oldTxt; btn.disabled = false;
+    });
+}
+
 function initProfiles() {
-    const saved = localStorage.getItem('tomeProfiles');
-    if (saved) { try { profiles = JSON.parse(saved); } catch(e) {} }
-    currentProfile = localStorage.getItem('tomeCurrentProfile') || Object.keys(profiles)[0];
-    if (!profiles[currentProfile]) currentProfile = Object.keys(profiles)[0] || "Default Build";
-    loadProfileData(currentProfile); renderProfileDropdown();
-}
-
-function loadProfileData(name) {
-    const p = profiles[name]; if(!p) return;
-    leftTreeId = p.l || 616; rightTreeId = p.r || 616;
-    document.getElementById('mnojitel').value = p.m || 1;
-    document.getElementById('price10').value = p.p10 || 0; document.getElementById('price11').value = p.p11 || 0; document.getElementById('price12').value = p.p12 || 0;
-    deductions = []; if (p.d) { for (const k in p.d) deductions[parseInt(k)] = p.d[k]; }
-    processTree(leftTreeId, false); processTree(rightTreeId, true); renderDeductions();
-}
-
-function saveActiveProfile() {
-    let p10 = parseInt(document.getElementById('price10').value) || 0, p11 = parseInt(document.getElementById('price11').value) || 0, p12 = parseInt(document.getElementById('price12').value) || 0;
-    let m = parseInt(document.getElementById('mnojitel').value) || 1;
-    const compD = {}; deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
-    profiles[currentProfile] = { l: leftTreeId, r: rightTreeId, m: m, d: compD, p10: p10, p11: p11, p12: p12 };
-    localStorage.setItem('tomeProfiles', JSON.stringify(profiles)); localStorage.setItem('tomeCurrentProfile', currentProfile);
-    if(window.syncToFirebase) window.syncToFirebase(profiles);
+    let saved = localStorage.getItem('tomeProfiles');
+    if (saved) {
+        try { profiles = JSON.parse(saved); } catch(e) { profiles = {}; }
+    }
+    if (!profiles || Object.keys(profiles).length === 0) {
+        profiles = { 'Default Build': { l: 616, r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 } };
+    }
+    currentProfile = localStorage.getItem('tomeCurrentProfile') || Object.keys(profiles)[0] || 'Default Build';
+    if (!profiles[currentProfile]) currentProfile = Object.keys(profiles)[0];
+    
+    loadProfileData(currentProfile);
+    renderProfileDropdown();
 }
 
 function renderProfileDropdown() {
-    const s = document.getElementById('profileSelect'); if (!s) return; s.innerHTML = '';
-    Object.keys(profiles).forEach(n => { let opt = document.createElement('option'); opt.value = n; opt.innerText = n; if (n === currentProfile) opt.selected = true; s.appendChild(opt); });
+    const select = document.getElementById('profileSelect');
+    if (!select) return;
+    select.innerHTML = '';
+    Object.keys(profiles).forEach(name => {
+        let opt = document.createElement('option');
+        opt.value = name;
+        opt.innerText = name;
+        if (name === currentProfile) opt.selected = true;
+        select.appendChild(opt);
+    });
 }
 
-function handleProfileChange(val) { saveActiveProfile(); currentProfile = val; loadProfileData(val); }
-function createNewProfile() { let n = prompt("Masukkan nama profil build baru:"); if (!n) return; n = n.trim(); if (profiles[n]) { alert("Nama profil sudah ada!"); return; } profiles[n] = { l: 616, r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 }; currentProfile = n; saveActiveProfile(); renderProfileDropdown(); loadProfileData(n); }
-function removeCurrentProfile() { if (Object.keys(profiles).length <= 1) { alert("Satu-satunya profil tidak bisa dihapus."); return; } if (!confirm(`Hapus profil "${currentProfile}"?`)) return; delete profiles[currentProfile]; currentProfile = Object.keys(profiles)[0]; saveActiveProfile(); renderProfileDropdown(); loadProfileData(currentProfile); }
+function handleProfileChange(val) {
+    saveActiveProfile();
+    currentProfile = val;
+    loadProfileData(val);
+}
 
-window.initProfiles = initProfiles;
-window.loadFromHash = loadFromHash;
-window.applyLanguage = applyLanguage;
+function loadProfileData(name) {
+    const p = profiles[name];
+    if(!p) return;
+    leftTreeId = p.l || 616;
+    rightTreeId = p.r || 616;
+    
+    document.getElementById('mnojitel').value = p.m || 1;
+    document.getElementById('price10').value = p.p10 || 0;
+    document.getElementById('price11').value = p.p11 || 0;
+    document.getElementById('price12').value = p.p12 || 0;
+    
+    deductions = [];
+    if (p.d) { 
+        for (const k in p.d) deductions[parseInt(k)] = p.d[k]; 
+    }
+    
+    processTree(leftTreeId, false);
+    processTree(rightTreeId, true);
+    renderDeductions();
+}
 
-// Pasang event pendengar untuk Enter
-document.addEventListener('DOMContentLoaded', () => {
+function saveActiveProfile() {
+    let p10 = parseInt(document.getElementById('price10').value) || 0;
+    let p11 = parseInt(document.getElementById('price11').value) || 0;
+    let p12 = parseInt(document.getElementById('price12').value) || 0;
+    let m = parseInt(document.getElementById('mnojitel').value) || 1;
+    
+    const compD = {}; 
+    deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
+
+    profiles[currentProfile] = { 
+        l: leftTreeId, 
+        r: rightTreeId, 
+        m: m, 
+        d: compD, 
+        p10: p10, 
+        p11: p11, 
+        p12: p12 
+    };
+    
+    localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
+    localStorage.setItem('tomeCurrentProfile', currentProfile);
+}
+
+function createNewProfile() {
+    let name = prompt("Masukkan nama profil build baru:");
+    if (!name) return;
+    name = name.trim();
+    if (profiles[name]) { alert("Nama profil sudah ada!"); return; }
+    profiles[name] = { l: 616, r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 };
+    currentProfile = name;
+    saveActiveProfile();
+    renderProfileDropdown();
+    loadProfileData(name);
+}
+
+function removeCurrentProfile() {
+    if (Object.keys(profiles).length <= 1) {
+        alert("Anda tidak bisa menghapus satu-satunya profil yang tersisa.");
+        return;
+    }
+    if (!confirm(`Hapus profil "${currentProfile}"?`)) return;
+    delete profiles[currentProfile];
+    currentProfile = Object.keys(profiles)[0];
+    saveActiveProfile();
+    renderProfileDropdown();
+    loadProfileData(currentProfile);
+}
+
+function exportProfilesData() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(profiles));
+    const a = document.createElement('a');
+    a.href = dataStr;
+    a.download = "Tome-Profiles-Backup.json"; 
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+function importProfilesData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+            if (typeof importedData === 'object' && importedData !== null) {
+                profiles = { ...profiles, ...importedData };
+                localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
+                renderProfileDropdown();
+                loadProfileData(currentProfile);
+                applyLanguage();
+                alert(currentLang === 'id' ? "Data profil berhasil diimpor!" : "Profile data imported successfully!");
+            }
+        } catch (err) {
+            alert(currentLang === 'id' ? "Gagal membaca file JSON!" : "Failed to read JSON file!");
+        }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+}
+
+window.onload = () => {
+    initProfiles(); 
+    loadFromHash(); 
+    applyLanguage(); 
     document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); });
-});
-</script>
-
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyC1eCaQkeCf1IJQIDqveEKhHHFEYMd6bSs",
-    authDomain: "kalkulator-tome.firebaseapp.com",
-    databaseURL: "https://kalkulator-tome-default-rtdb.firebaseio.com",
-    projectId: "kalkulator-tome",
-    storageBucket: "kalkulator-tome.firebasestorage.app",
-    messagingSenderId: "794012581588",
-    appId: "1:794012581588:web:021341eda428298daf0541"
-  };
-
-  if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-  const auth = firebase.auth();
-  const database = firebase.database();
-
-  let isSignUpMode = false;
-  let currentUserUid = null;
-
-  window.toggleAuthMode = function() {
-      isSignUpMode = !isSignUpMode;
-      const title = document.getElementById('authSubtitle');
-      const btn = document.getElementById('authSubmitBtn');
-      const switchText = document.getElementById('authSwitchText');
-      if(isSignUpMode) {
-          title.innerText = "Buat akun baru untuk menyimpan build secara permanen";
-          btn.innerText = "Daftar Akun Baru";
-          switchText.innerHTML = "Sudah memiliki akun? <span onclick='toggleAuthMode()'>Masuk di sini</span>";
-      } else {
-          title.innerText = "Silakan masuk untuk mengakses build cloud Anda";
-          btn.innerText = "Masuk Aplikasi";
-          switchText.innerHTML = "Belum punya akun? <span onclick='toggleAuthMode()'>Daftar Sekarang</span>";
-      }
-  }
-
-  window.handleAuthAction = function() {
-      const email = document.getElementById('authEmail').value.trim();
-      const password = document.getElementById('authPassword').value;
-      const btn = document.getElementById('authSubmitBtn');
-
-      if(!email || !password) { alert("Harap isi email dan sandi!"); return; }
-      if(password.length < 6) { alert("Sandi minimal 6 karakter!"); return; }
-      btn.disabled = true; btn.innerText = "Memproses...";
-
-      if(isSignUpMode) {
-          auth.createUserWithEmailAndPassword(email, password)
-              .then(() => { alert("Akun berhasil dibuat! Silakan masuk."); toggleAuthMode(); btn.disabled = false; btn.innerText = "Masuk Aplikasi"; })
-              .catch((error) => { alert("Gagal mendaftar: " + error.message); btn.disabled = false; btn.innerText = "Daftar Akun Baru"; });
-      } else {
-          auth.signInWithEmailAndPassword(email, password)
-              .then(() => { console.log("Login Sukses"); })
-              .catch((error) => { alert("Gagal masuk: Email atau Sandi salah."); btn.disabled = false; btn.innerText = "Masuk Aplikasi"; });
-      }
-  }
-
-  window.logoutUser = function() { if(confirm("Keluar dari sesi cloud ini?")) auth.signOut().then(() => { location.reload(); }); }
-
-  window.syncToFirebase = function(data) {
-      if (currentUserUid) database.ref('users/' + currentUserUid + '/tomeProfiles').set(data).catch(console.error);
-  }
-
-  function loadFallback() {
-      if(typeof window.initProfiles === 'function') {
-          window.initProfiles(); window.loadFromHash(); window.applyLanguage();
-      }
-  }
-
-  auth.onAuthStateChanged((user) => {
-      if (user) {
-          currentUserUid = user.uid;
-          document.getElementById('userEmailDisplay').innerText = user.email;
-          document.getElementById('authGate').style.display = 'none';
-          document.getElementById('appContainer').style.display = 'flex';
-          
-          database.ref('users/' + currentUserUid + '/tomeProfiles').once('value').then((snapshot) => {
-              if (snapshot.exists()) {
-                  let cloudData = snapshot.val();
-                  localStorage.setItem('tomeProfiles', JSON.stringify(cloudData));
-              }
-              loadFallback();
-          }).catch(() => { loadFallback(); });
-      } else {
-          currentUserUid = null;
-          document.getElementById('authGate').style.display = 'flex';
-          document.getElementById('appContainer').style.display = 'none';
-      }
-  });
-
-  // Shortcut login Enter
-  document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('authPassword').addEventListener('keydown', function(e) { if(e.key === 'Enter') window.handleAuthAction(); });
-  });
+};
 </script>
 </body>
 </html>
