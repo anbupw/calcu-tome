@@ -141,16 +141,65 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 .social-icons a { color: var(--text-muted); font-size: 1.4rem; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.05); transition: all 0.3s ease; }
 .social-icons a:hover { color: white; background: var(--accent); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4); }
 
-.menu-toggle-btn { position: fixed; top: 25px; right: 25px; background: var(--accent); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; z-index: 1001; box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: 0.2s ease; }
-.menu-toggle-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
-.vybor { position: fixed; right: 25px; top: 75px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--accent); padding: 20px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); z-index: 1000; width: 340px; max-height: 80vh; overflow-y: auto; }
+/* Minimalist Floating Action Button (FAB) */
+.menu-toggle-btn { 
+	position: fixed; 
+	bottom: 25px; 
+	right: 25px; 
+	background: rgba(30, 41, 59, 0.7); 
+	backdrop-filter: blur(8px);
+	border: 1px solid var(--border-color);
+	color: white; 
+	width: 48px;
+	height: 48px;
+	border-radius: 50%; 
+	cursor: pointer; 
+	z-index: 1001; 
+	box-shadow: 0 8px 24px rgba(0,0,0,0.4); 
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.25rem;
+}
+.menu-toggle-btn:hover { 
+	background: var(--accent); 
+	border-color: var(--accent);
+	transform: scale(1.1) rotate(45deg); 
+	box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+}
+.menu-toggle-btn.active {
+	background: var(--danger);
+	border-color: var(--danger);
+	transform: rotate(135deg);
+}
 
-.panel-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
-.panel-actions > button { width: 100%; border: none; color: white; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.vybor { 
+	position: fixed; 
+	right: 25px; 
+	bottom: 85px; 
+	background: rgba(15, 23, 42, 0.95); 
+	backdrop-filter: blur(10px); 
+	border: 1px solid var(--border-color); 
+	padding: 20px; 
+	border-radius: 16px; 
+	box-shadow: 0 20px 40px rgba(0,0,0,0.6); 
+	z-index: 1000; 
+	width: 280px; 
+	max-height: 80vh; 
+	overflow-y: auto; 
+	animation: panelFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes panelFadeIn {
+	from { opacity: 0; transform: translateY(10px) scale(0.95); }
+	to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.panel-actions { display: flex; flex-direction: column; gap: 10px; }
+.panel-actions > button { width: 100%; border: none; color: white; padding: 11px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.85rem; font-family: 'Inter', sans-serif; }
 .btn-primary { background: var(--accent); } .btn-primary:hover { background: var(--accent-hover); }
-.btn-success { background: var(--success); } .btn-success:hover { background: var(--success-hover); }
-.btn-purple { background: #8b5cf6; } .btn-purple:hover { background: #7c3aed; }
 .btn-danger { background: var(--danger); } .btn-danger:hover { background: var(--danger-hover); }
+.btn-purple { background: #8b5cf6; } .btn-purple:hover { background: #7c3aed; }
 
 .search-box { width: 100%; padding: 10px 14px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: white; font-family: 'Inter', sans-serif; font-size: 0.9rem; margin-top: 10px; margin-bottom: 15px; outline: none; transition: 0.2s; }
 .search-box:focus { border-color: var(--accent); }
@@ -266,23 +315,9 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 	</div>
 </footer>
 
-<button class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleMenu()">⚙️ Buka Menu</button>
+<button class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleMenu()" title="Pengaturan"><i class="fas fa-gear"></i></button>
 
 <div class="vybor" id="mainMenuPanel" style="display:none;">
-	<h4 id="menuProfileTitle" data-i18n="menuProfileTitle" style="margin-top: 0; font-size: 0.85rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px;">📁 Kelola Profil Build</h4>
-	<div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
-		<select id="profileSelect" onchange="handleProfileChange(this.value)" style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid var(--border-color); color: white; border-radius: 6px; outline: none; font-family: 'Inter', sans-serif; font-size: 0.85rem; cursor: pointer;"></select>
-		<div style="display: flex; gap: 8px;">
-			<button class="btn-success" onClick="createNewProfile()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: 600;"><span data-i18n="btnNew">💾 Baru</span></button>
-			<button class="btn-danger" onClick="removeCurrentProfile()" style="padding: 6px 10px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-trash"></i></button>
-		</div>
-		<div style="display: flex; gap: 8px; margin-top: 4px;">
-			<button class="btn-primary" onClick="exportProfilesData()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-export"></i> <span data-i18n="btnExport">Ekspor</span></button>
-			<button class="btn-purple" onClick="document.getElementById('importFileInput').click()" style="flex: 1; padding: 6px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white;"><i class="fas fa-file-import"></i> <span data-i18n="btnImport">Impor</span></button>
-			<input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importProfilesData(event)">
-		</div>
-	</div>
-	
 	<div class="panel-actions">
 		<button class="btn-purple" onClick="toggleLanguage()" id="langBtn">🌐 Switch to English</button>
 		<button class="btn-danger" onClick="resetCalculator()"><span data-i18n="btnReset">🔄 Reset Kalkulator</span></button>
@@ -330,15 +365,11 @@ const LANG = {
 		modalDesc: "Berapa banyak item yang Anda inginkan?", 
 		baseMat: "Bahan Dasar", 
 		lvl: "Level", 
-		alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", 
+		alertReset: "Hapus semua perhitungan dan mulai dari awal?", 
 		statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", 
 		footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", 
 		matDesc: "Bahan Crafting",
 		btnAddItem: "➕ Tambah Item",
-		menuProfileTitle: "📁 Kelola Profil Build",
-		btnNew: "💾 Baru",
-		btnExport: "Ekspor",
-		btnImport: "Impor",
 		modalInvTitle: "Menambahkan Item",
 		invSearchPlaceholder: "🔍 Cari nama tome/bahan...",
 		btnCloseWindow: "Tutup Jendela"
@@ -356,20 +387,16 @@ const LANG = {
 		btnReset: "🔄 Reset Calculator", 
 		searchPlaceholder: "🔍 Search target book name...", 
 		modalTitleAdd: "Add to Inventory", 
-		modalDesc: "How many of this item do you currently own?", 
+		modalDesc: "How many items do you want?", 
 		btnSave: "Save", 
 		btnCancel: "Cancel", 
 		baseMat: "Base Materials", 
 		lvl: "Level", 
-		alertReset: "Clear all calculations, profiles, and start over?", 
+		alertReset: "Clear all calculations and start over?", 
 		statEquipDesc: "* Bind on Equip.", 
 		footerText: "Tome Calculator © 2026 | Created by <strong>Sulfikar</strong>", 
 		matDesc: "Crafting Material",
 		btnAddItem: "➕ Add Item",
-		menuProfileTitle: "📁 Manage Build Profiles",
-		btnNew: "💾 New",
-		btnExport: "Export",
-		btnImport: "Import",
 		modalInvTitle: "Select Item for Inventory",
 		invSearchPlaceholder: "🔍 Search book or material name...",
 		btnCloseWindow: "Close Window"
@@ -396,16 +423,6 @@ function applyLanguage() {
 
 	document.getElementById('langBtn').innerText = currentLang === 'id' ? '🌐 Switch to English' : '🌐 Ganti ke Indonesia';
 	
-	const panel = document.getElementById('mainMenuPanel');
-	const btn = document.getElementById('menuToggleBtn');
-	if (panel && btn) {
-		if (panel.style.display === 'block') {
-			btn.innerText = currentLang === 'id' ? '❌ Tutup Menu' : '❌ Close Menu';
-		} else {
-			btn.innerText = currentLang === 'id' ? '⚙️ Buka Menu' : '⚙️ Open Menu';
-		}
-	}
-	
 	renderBookSelection();
 	processTree(rightTreeId);
 	renderDeductions();
@@ -424,10 +441,12 @@ function toggleMenu() {
 	
 	if (panel.style.display === 'none' || panel.style.display === '') {
 		panel.style.display = 'block';
-		btn.innerText = currentLang === 'id' ? '❌ Tutup Menu' : '❌ Close Menu';
+		btn.classList.add('active');
+		btn.innerHTML = '<i class="fas fa-xmark"></i>';
 	} else {
 		panel.style.display = 'none';
-		btn.innerText = currentLang === 'id' ? '⚙️ Buka Menu' : '⚙️ Open Menu';
+		btn.classList.remove('active');
+		btn.innerHTML = '<i class="fas fa-gear"></i>';
 	}
 }
 
@@ -519,8 +538,6 @@ let itemCounts = [];
 let deductions = [];
 let rightTreeId = 616;
 let activeModalItemId = null;
-let profiles = {};
-let currentProfile = 'Default';
 
 function getSpritePosition(id) {
     const parsedId = parseInt(id);
@@ -672,7 +689,7 @@ function updateCostAndProgress() {
     let price11 = parseInt(document.getElementById('price11').value) || 0;
     let price12 = parseInt(document.getElementById('price12').value) || 0;
     let multiplier = parseInt(document.getElementById('mnojitel').value) || 1;
-    saveActiveProfile();
+    saveToLocalStorage();
     
     let netCounts = [];
     let deductionsCopy = [];
@@ -812,12 +829,12 @@ function confirmModal() {
     if (!isNaN(amount) && amount > 0 && activeModalItemId) {
         if (!deductions[activeModalItemId]) deductions[activeModalItemId] = 0;
         deductions[activeModalItemId] += amount;
-        saveActiveProfile(); processTree(rightTreeId); 
+        saveToLocalStorage(); processTree(rightTreeId); 
     }
     closeModal();
 }
 
-function removeDeduction(id) { deductions[id] = 0; saveActiveProfile(); processTree(rightTreeId); }
+function removeDeduction(id) { deductions[id] = 0; saveToLocalStorage(); processTree(rightTreeId); }
 
 function filterBooks(query) {
     const q = query.toLowerCase();
@@ -831,89 +848,45 @@ function filterBooks(query) {
     });
 }
 
-function initProfiles() {
-    let saved = localStorage.getItem('tomeProfiles');
-    if (saved) { try { profiles = JSON.parse(saved); } catch(e) { profiles = {}; } }
-    if (!profiles || Object.keys(profiles).length === 0) { profiles = { 'Default Build': { r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 } }; }
-    currentProfile = localStorage.getItem('tomeCurrentProfile') || Object.keys(profiles)[0] || 'Default Build';
-    if (!profiles[currentProfile]) currentProfile = Object.keys(profiles)[0];
-    loadProfileData(currentProfile); renderProfileDropdown();
-}
-
-function renderProfileDropdown() {
-    const select = document.getElementById('profileSelect'); if (!select) return; select.innerHTML = '';
-    Object.keys(profiles).forEach(name => {
-        let opt = document.createElement('option'); opt.value = name; opt.innerText = name;
-        if (name === currentProfile) opt.selected = true; select.appendChild(opt);
-    });
-}
-
-function handleProfileChange(val) { saveActiveProfile(); currentProfile = val; loadProfileData(val); }
-
-function loadProfileData(name) {
-    const p = profiles[name]; if(!p) return;
-    rightTreeId = p.r || 616;
-    document.getElementById('mnojitel').value = p.m || 1; document.getElementById('price10').value = p.p10 || 0; document.getElementById('price11').value = p.p11 || 0; document.getElementById('price12').value = p.p12 || 0;
-    deductions = [];
-    if (p.d) { for (const k in p.d) deductions[parseInt(k)] = p.d[k]; }
-    processTree(rightTreeId);
-}
-
-function saveActiveProfile() {
-    let p10 = parseInt(document.getElementById('price10').value) || 0; let p11 = parseInt(document.getElementById('price11').value) || 0; let p12 = parseInt(document.getElementById('price12').value) || 0; let m = parseInt(document.getElementById('mnojitel').value) || 1;
-    const compD = {}; deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
-    profiles[currentProfile] = { r: rightTreeId, m: m, d: compD, p10: p10, p11: p11, p12: p12 };
-    localStorage.setItem('tomeProfiles', JSON.stringify(profiles)); localStorage.setItem('tomeCurrentProfile', currentProfile);
-}
-
-function createNewProfile() {
-    let name = prompt("Masukkan nama profil build baru:"); if (!name) return; name = name.trim();
-    if (profiles[name]) { alert("Nama profil sudah ada!"); return; }
-    profiles[name] = { r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 }; currentProfile = name;
-    saveActiveProfile(); renderProfileDropdown(); loadProfileData(name);
-}
-
-function removeCurrentProfile() {
-	if (Object.keys(profiles).length <= 1) { alert(currentLang === 'id' ? "Anda tidak bisa menghapus satu-satunya profil yang tersisa." : "You cannot delete the only remaining profile."); return; }
-	if (!confirm(currentLang === 'id' ? `Hapus profil "${currentProfile}"?` : `Delete profile "${currentProfile}"?`)) return;
-	delete profiles[currentProfile]; currentProfile = Object.keys(profiles)[0];
-	saveActiveProfile(); renderProfileDropdown(); loadProfileData(currentProfile);
-}
-
-function exportProfilesData() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(profiles)); const a = document.createElement('a'); a.href = dataStr; a.download = "Tome-Profiles-Backup.json"; document.body.appendChild(a); a.click(); document.body.removeChild(a);
-}
-
-function importProfilesData(event) {
-    const file = event.target.files[0]; if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
+function loadFromLocalStorage() {
+    let savedData = localStorage.getItem('tomeCalculatorState');
+    if (savedData) {
         try {
-            const importedData = JSON.parse(e.target.result);
-            if (typeof importedData === 'object' && importedData !== null) {
-                profiles = { ...profiles, ...importedData };
-                localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
-                renderProfileDropdown(); loadProfileData(currentProfile); applyLanguage();
-                alert(currentLang === 'id' ? "Data profil berhasil diimpor!" : "Profile data imported successfully!");
-            }
-        } catch (err) { alert(currentLang === 'id' ? "Gagal membaca file JSON!" : "Failed to read JSON file!"); }
-    };
-    reader.readAsText(file); event.target.value = '';
+            let state = JSON.parse(savedData);
+            rightTreeId = state.r || 616;
+            document.getElementById('mnojitel').value = state.m || 1;
+            document.getElementById('price10').value = state.p10 || 0;
+            document.getElementById('price11').value = state.p11 || 0;
+            document.getElementById('price12').value = state.p12 || 0;
+            deductions = [];
+            if (state.d) { for (const k in state.d) deductions[parseInt(k)] = state.d[k]; }
+        } catch(e) { deductions = []; }
+    }
+}
+
+function saveToLocalStorage() {
+    let p10 = parseInt(document.getElementById('price10').value) || 0; 
+    let p11 = parseInt(document.getElementById('price11').value) || 0; 
+    let p12 = parseInt(document.getElementById('price12').value) || 0; 
+    let m = parseInt(document.getElementById('mnojitel').value) || 1;
+    const compD = {}; deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
+    
+    let state = { r: rightTreeId, m: m, d: compD, p10: p10, p11: p11, p12: p12 };
+    localStorage.setItem('tomeCalculatorState', JSON.stringify(state));
 }
 
 function resetCalculator() {
     if (confirm(LANG[currentLang]['alertReset'])) {
         deductions = []; 
-        profiles = { "Default Build": { r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 } };
-        currentProfile = "Default Build"; 
-        saveActiveProfile();
+        localStorage.removeItem('tomeCalculatorState');
         document.getElementById('price10').value = 0; document.getElementById('price11').value = 0; document.getElementById('price12').value = 0; document.getElementById('mnojitel').value = 1;
         rightTreeId = 616;
-        renderProfileDropdown(); processTree(rightTreeId);
+        processTree(rightTreeId);
+        toggleMenu();
     }
 }
 
-window.onload = () => { initProfiles(); applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
+window.onload = () => { loadFromLocalStorage(); applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
 </script>
 </body>
 </html>
