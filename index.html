@@ -332,12 +332,85 @@ TOME_DB[201] = [101, 104, 106, 17586, 'Tome of Iron Will']; TOME_DB[202] = [102,
 TOME_DB[101] = [0, 0, 0, 17579, 'Underestimated Resolve']; TOME_DB[102] = [0, 0, 0, 17580, 'Soaring Heart']; TOME_DB[103] = [0, 0, 0, 17581, 'Retributions Flame']; TOME_DB[104] = [0, 0, 0, 17582, 'Tome of the River Spirits']; TOME_DB[105] = [0, 0, 0, 17583, 'Flankers Tome']; TOME_DB[106] = [0, 0, 0, 17584, 'Tome of Hyperbolic Boasts']; TOME_DB[107] = [0, 0, 0, 17585, 'Tome of Grace']; TOME_DB[108] = [0, 0, 0, 17607, 'A Flowerless Plant']; TOME_DB[109] = [0, 0, 0, 17611, 'Eternitys Moon'];
 
 const TOME_STATS = {
-    101: ["+5 Magic"], 102: ["+5 Strength"], 103: ["+5 Dexterity"], 104: ["+5 Vitality"], 105: ["HP Regeneration +3", "Exp Gain +1%"], 106: ["MP Regeneration +3", "Exp Gain +1%"], 107: ["+4 Strength", "+3 Vitality"], 108: ["+4 Dexterity", "+3 Vitality"], 109: ["+4 Magic", "+3 Vitality"],
-    201: ["+7 Magic", "+6 Vitality"], 202: ["+7 Strength", "+6 Vitality"], 203: ["+7 Dexterity", "+6 Vitality"], 204: ["+9 Magic"], 205: ["+9 Strength"], 206: ["+9 Dexterity"], 207: ["+9 Vitality"], 208: ["HP Regeneration +5", "Exp Gain +2%"], 209: ["MP Regeneration +5", "Exp Gain +2%"],
-    301: ["+10 Strength", "Critical Hit Rate +1%"], 302: ["+10 Magic", "Channelling -1%"], 303: ["+10 Dexterity", "Critical Hit Rate +1%"], 304: ["+10 Vitality", "Maximum HP +100"], 305: ["+7 Strength", "+7 Dexterity"], 306: ["+7 Magic", "+7 Vitality"], 307: ["+12 Strength"], 308: ["+12 Dexterity"], 309: ["+12 Magic"],
-    401: ["+15 Strength", "Critical Hit Rate +1%"], 402: ["+15 Magic", "Channelling -2%"], 403: ["+15 Dexterity", "Critical Hit Rate +1%"], 404: ["+15 Vitality", "Maximum HP +150"], 405: ["+10 Strength", "+10 Vitality"], 406: ["+10 Dexterity", "+10 Vitality"], 407: ["+10 Magic", "+10 Vitality"], 408: ["+8 Strength", "+8 Dexterity", "+8 Vitality"], 409: ["+8 Magic", "+8 Dexterity", "+8 Vitality"],
-    501: ["+20 Strength", "Critical Hit Rate +1%"], 502: ["+20 Magic", "Channelling -2%"], 503: ["+20 Dexterity", "Critical Hit Rate +1%"], 504: ["+20 Vitality", "Maximum HP +200"], 505: ["+15 Strength", "+15 Dexterity"], 506: ["+15 Magic", "+15 Vitality"], 507: ["+12 Strength", "+12 Dexterity", "+12 Vitality"], 508: ["+12 Magic", "+12 Dexterity", "+12 Vitality"], 509: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"], 510: ["+15 Strength", "Physical Attack +20"], 511: ["+15 Magic", "Magic Attack +20"], 512: ["+15 Dexterity", "Critical Hit Rate +2%"], 513: ["+15 Vitality", "Physical Defense +100"], 514: ["Maximum HP +300"], 515: ["+18 Magic", "Channelling -3%"], 516: ["+18 Strength", "Critical Hit Rate +2%"],
-    601: ["+15 Strength", "+15 Dexterity", "Critical Hit Rate +1%"], 602: ["+15 Magic", "+15 Vitality", "Channelling -3%"], 603: ["+15 Strength", "+15 Vitality", "Maximum HP +150"], 604: ["+20 Dexterity", "Attack Interval -0.05", "Movement Speed +0.10"], 605: ["+20 Magic", "Channelling -3", "Maximum MP +200"], 606: ["+20 Strength", "Critical Hit Rate +1%", "Physical Attack +30"], 607: ["+20 Vitality", "Maximum HP +200", "Physical Defense +50"], 608: ["+10 Strength", "+10 Dexterity", "+10 Magic", "+10 Vitality"], 609: ["+15 Dexterity", "+15 Vitality", "Critical Hit Rate +1%"], 610: ["+15 Magic", "+15 Dexterity", "Channelling -3%"], 611: ["+15 Strength", "+15 Magic", "Physical Attack +20"], 612: ["+25 Magic", "Channelling -3%"], 613: ["+25 Strength", "Critical Hit Rate +1%"], 614: ["+25 Dexterity", "Attack Interval -0.05"], 615: ["+20 Magic", "+20 Dexterity", "Channelling -3%", "Critical Hit Rate +1%"], 616: ["+20 Strength", "+20 Dexterity", "+20 Magic", "+20 Vitality", "Critical Hit Rate +1%"]
+    // Level 1 Tomes
+    101: ["Strength +5"], 
+    102: ["Dexterity +5"], 
+    103: ["Magic +5"], 
+    104: ["Vitality +5"], 
+    105: ["Strength +4", "Vitality +3"], 
+    106: ["Dexterity +4", "Vitality +3"], 
+    107: ["Magic +4", "Vitality +3"], 
+    108: ["HP Recovery +3", "EXP Gain +1%"], 
+    109: ["MP Recovery +3", "EXP Gain +1%"],
+    
+    // Level 2 Tomes
+    201: ["Strength +7", "Vitality +6"], 
+    202: ["Dexterity +7", "Vitality +6"], 
+    203: ["Magic +7", "Vitality +6"], 
+    204: ["Strength +9"], 
+    205: ["Dexterity +9"], 
+    206: ["Magic +9"], 
+    207: ["Vitality +9"], 
+    208: ["HP Recovery +5", "EXP Gain +2%"], 
+    209: ["MP Recovery +5", "EXP Gain +2%"],
+    
+    // Level 3 Tomes
+    301: ["Strength +10", "Critical Hit Rate +1%"], 
+    302: ["Magic +10", "Channeling -1%"], 
+    303: ["Dexterity +10", "Critical Hit Rate +1%"], 
+    304: ["Vitality +10", "Max HP +100"], 
+    305: ["Strength +7", "Dexterity +7"], 
+    306: ["Magic +7", "Vitality +7"], 
+    307: ["Strength +12"], 
+    308: ["Dexterity +12"], 
+    309: ["Magic +12"],
+    
+    // Level 4 Tomes
+    401: ["Strength +15", "Critical Hit Rate +1%"], 
+    402: ["Magic +15", "Channeling -2%"], 
+    403: ["Dexterity +15", "Critical Hit Rate +1%"], 
+    404: ["Vitality +15", "Max HP +150"], 
+    405: ["Strength +10", "Vitality +10"], 
+    406: ["Dexterity +10", "Vitality +10"], 
+    407: ["Magic +10", "Vitality +10"], 
+    408: ["Strength +8", "Dexterity +8", "Vitality +8"], 
+    409: ["Magic +8", "Dexterity +8", "Vitality +8"],
+    
+    // Level 5 Tomes
+    501: ["Strength +20", "Critical Hit Rate +1%"], 
+    502: ["Magic +20", "Channeling -2%"], 
+    503: ["Dexterity +20", "Critical Hit Rate +1%"], 
+    504: ["Vitality +20", "Max HP +200"], 
+    505: ["Strength +15", "Dexterity +15"], 
+    506: ["Magic +15", "Vitality +15"], 
+    507: ["Strength +12", "Dexterity +12", "Vitality +12"], 
+    508: ["Magic +12", "Dexterity +12", "Vitality +12"], 
+    509: ["Strength +10", "Dexterity +10", "Magic +10", "Vitality +10"], 
+    510: ["Strength +15", "Physical Attack +20"], 
+    511: ["Magic +15", "Magic Attack +20"], 
+    512: ["Dexterity +15", "Critical Hit Rate +2%"], 
+    513: ["Vitality +15", "Physical Defense +100"], 
+    514: ["Max HP +300"], 
+    515: ["Magic +18", "Channeling -3%"], 
+    516: ["Strength +18", "Critical Hit Rate +2%"],
+    
+    // Level 6 Tomes
+    601: ["Strength +15", "Dexterity +15", "Critical Hit Rate +1%"], 
+    602: ["Magic +15", "Vitality +15", "Channeling -3%"], 
+    603: ["Strength +15", "Vitality +15", "Max HP +150"], 
+    604: ["Dexterity +20", "Interval Between Hits -0.05 seconds", "Movement Speed +0.10"], 
+    605: ["Magic +20", "Channeling -3%", "Max MP +200"], 
+    606: ["Strength +20", "Critical Hit Rate +1%", "Physical Attack +30"], 
+    607: ["Vitality +20", "Max HP +200", "Physical Defense +50"], 
+    608: ["Strength +10", "Dexterity +10", "Magic +10", "Vitality +10"], 
+    609: ["Dexterity +15", "Vitality +15", "Critical Hit Rate +1%"], 
+    610: ["Magic +15", "Dexterity +15", "Channeling -3%"], 
+    611: ["Strength +15", "Magic +15", "Physical Attack +20"], 
+    612: ["Magic +25", "Channeling -3%"], 
+    613: ["Strength +25", "Critical Hit Rate +1%"], 
+    614: ["Dexterity +25", "Interval Between Hits -0.05 seconds"], 
+    615: ["Magic +20", "Dexterity +20", "Channeling -3%", "Critical Hit Rate +1%"], 
+    616: ["Strength +9", "Dexterity +9", "Vitality +8", "Magic +9", "Critical Hit Rate +1%", "Channeling -1%", "Interval Between Hits -0.05 seconds"]
 };
 
 let itemCounts = [];       
@@ -420,9 +493,16 @@ function moveTooltip(event) {
     tooltip.style.top = y + 'px';
 }
 
-function hideTooltip() {
-    document.getElementById('floatingTooltip').style.display = 'none';
-}
+function hideTooltip() { document.getElementById('floatingTooltip').style.display = 'none'; }
+
+// --- TAMBAHKAN BLOK KODE INI UNTUK FIX BUG MOBILE ---
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('button[onMouseOver]')) { hideTooltip(); }
+});
+document.addEventListener('touchstart', function(e) {
+    if (!e.target.closest('button[onMouseOver]')) { hideTooltip(); }
+});
+// ----------------------------------------------------
 
 function copyShareLink() {
     const compD = {};
