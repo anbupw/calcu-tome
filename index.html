@@ -95,10 +95,10 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 .progress-bar-bg { background: #0f172a; border-radius: 50px; height: 10px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05); }
 .progress-bar { background: linear-gradient(90deg, var(--accent), var(--success)); width: 0%; height: 100%; border-radius: 50px; transition: width 0.4s ease-in-out; }
 
-.cost-input-group { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; background: rgba(0,0,0,0.15); padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border-color); }
-.cost-input-group label { font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
-.cost-input-group label span { display: inline-block; width: 32px; height: 32px; background-image: url('znachki.png'); transform: scale(0.85); }
-.cost-input-group input { background: #0f172a; border: 1px solid #475569; color: var(--success); font-weight: 600; border-radius: 6px; padding: 6px 10px; width: 140px; text-align: right; outline: none; font-family: 'Inter', sans-serif; }
+.cost-input-group { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; background: rgba(0,0,0,0.15); padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border-color); gap: 15px; }
+.cost-input-group label { font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; white-space: normal; word-break: break-word; }
+.cost-input-group label span { display: inline-block; width: 32px; height: 32px; background-image: url('znachki.png'); transform: scale(0.85); flex-shrink: 0; }
+.cost-input-group input { background: #0f172a; border: 1px solid #475569; color: var(--success); font-weight: 600; border-radius: 6px; padding: 6px 10px; width: 140px; text-align: right; outline: none; font-family: 'Inter', sans-serif; flex-shrink: 0; }
 .cost-input-group input:focus { border-color: var(--accent); }
 .total-cost-box { margin-top: 20px; background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.2); padding: 15px; border-radius: 12px; text-align: center; }
 .total-cost-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 5px; }
@@ -213,7 +213,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
     <div class="main-column">
 		<div class="calc-card">
-			<h2 data-i18n="title2">Cabang Terpilih</h2>
+			<h2 data-i18n="title2">Resep Tome</h2>
 			<div class="podzagolovok">
 				<input type="number" id="mnojitel" value="1" min="1" max="99">
 				<button class="btn-calc" data-i18n="btnCalc" onClick="processTree(rightTreeId)">Hitung Kuantitas</button>
@@ -291,7 +291,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 <div id="customModal" class="modal-backdrop" style="display:none;">
 	<div class="modal-content">
 		<h3 id="modalTitle" data-i18n="modalTitleAdd">Tambah Buku/Bahan</h3>
-		<p data-i18n="modalDesc">Berapa banyak item ini yang sudah Anda miliki saat ini?</p>
+		<p id="modalDescription" data-i18n="modalDesc">Berapa banyak item yang Anda inginkan?</p>
 		<input type="number" id="modalInput" min="1" max="999" value="1">
 		<div class="modal-buttons">
 			<button class="modal-btn-confirm" data-i18n="btnSave" onClick="confirmModal()">Simpan</button>
@@ -313,8 +313,8 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 <script>
 const LANG = {
-	id: { title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", matDesc: "Bahan Crafting" },
-	en: { title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "Target Book Selection", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertReset: "Clear all calculations, profiles, and start over?", statEquipDesc: "* Bind on Equip.", footerText: "Tome Calculator © 2026 | Created by <strong>Sulfikar</strong>", matDesc: "Crafting Material" }
+	id: { title2: "Resep Tome", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item yang Anda inginkan?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", matDesc: "Bahan Crafting" },
+	en: { title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "Target Book Selection", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you desire?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertReset: "Clear all calculations, profiles, and start over?", statEquipDesc: "* Bind on Equip.", footerText: "Tome Calculator © 2026 | Created by <strong>Sulfikar</strong>", matDesc: "Crafting Material" }
 };
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
@@ -379,13 +379,13 @@ TOME_DB[514] = [408, 402, 404, 17675, 'Rouge and Red Lips'];
 TOME_DB[515] = [406, 407, 401, 17678, 'Gang of Hooligans']; 
 TOME_DB[516] = [406, 407, 402, 17682, 'The Voidlands']; 
 
-// Level 4 (Membutuhkan 3 Buku Level 3) -> FIXED BUGS DI 406
+// Level 4 (Membutuhkan 3 Buku Level 3)
 TOME_DB[401] = [303, 307, 304, 17602, 'Burning Desire']; 
 TOME_DB[402] = [304, 301, 305, 17603, 'Tome of Predestination']; 
 TOME_DB[403] = [302, 305, 303, 17604, 'The Roses Thorn']; 
 TOME_DB[404] = [306, 307, 301, 17605, 'Letters of Social Unrest']; 
 TOME_DB[405] = [303, 307, 306, 17606, 'The Appetites of Spring']; 
-TOME_DB[406] = [308, 305, 307, 17610, 'The Rivers Edge']; // Fix: 205->305, 207->307
+TOME_DB[406] = [308, 305, 307, 17610, 'The Rivers Edge']; 
 TOME_DB[407] = [309, 302, 306, 17614, 'The Weak Stream of Many Miles']; 
 TOME_DB[408] = [301, 304, 302, 17600, 'Battle Tactics']; 
 TOME_DB[409] = [302, 305, 303, 17601, 'A Bewitching Proposal'];
@@ -423,13 +423,14 @@ TOME_DB[107] = [0, 0, 0, 17585, 'Tome of Grace'];
 TOME_DB[108] = [0, 0, 0, 17607, 'A Flowerless Plant']; 
 TOME_DB[109] = [0, 0, 0, 17611, 'Eternitys Moon'];
 
+// DATABASE STATS REVISI TERBARU PILIHAN ANDA
 const STATS_DB = {
-	101: ["Strength +4"], 102: ["Dexterity +4"], 103: ["Magic +4"], 104: ["Vitality +4"], 105: ["Critical Hit Rate +1%"], 106: ["Maximum HP +30"], 107: ["Maximum MP +50"], 108: ["HP Recovery Rate +3", "EXP Gain +1%"], 109: ["MP Recovery Rate +3", "EXP Gain +1%"],
-	201: ["Strength +5", "Vitality +4"], 202: ["Dexterity +5", "Vitality +4"], 203: ["Magic +5", "Vitality +4"], 204: ["Strength +9"], 205: ["Dexterity +9"], 206: ["Vitality +9"], 207: ["Magic +9"], 208: ["HP Recovery Rate +5", "EXP Gain +2%"], 209: ["MP Recovery Rate +5", "EXP Gain +2%"],
-	301: ["Strength +9", "Vitality +8"], 302: ["Dexterity +9", "Vitality +8"], 303: ["Magic +9", "Vitality +8"], 304: ["Strength +15"], 305: ["Dexterity +15"], 306: ["Vitality +15"], 307: ["Magic +15"], 308: ["Critical Hit Rate +1%"], 309: ["Maximum HP +60"],
-	401: ["Magic +13", "Vitality +12"], 402: ["Strength +20"], 403: ["Dexterity +20"], 404: ["Vitality +20"], 405: ["Magic +20"], 406: ["Strength +13", "Vitality +12"], 407: ["Dexterity +13", "Vitality +12"], 408: ["Critical Hit Rate +1%", "Maximum HP +50"], 409: ["Maximum HP +120"],
-	501: ["Magic +20", "Channeling Time -3%"], 502: ["Magic +20", "Critical Hit Rate +1%"], 503: ["Vitality +25"], 504: ["Vitality +20", "Maximum HP +200"], 505: ["Strength +15", "Dexterity +15"], 506: ["Magic +15", "Vitality +15"], 507: ["Strength +12", "Dexterity +12", "Vitality +12"], 508: ["Magic +12", "Dexterity +12", "Vitality +12"], 509: ["Strength +10", "Dexterity +10", "Magic +10", "Vitality +10"], 510: ["Strength +15", "Physical Attack +20"], 511: ["Magic +15", "Magic Attack +20"], 512: ["Dexterity +15", "Interval Between Hits -0.05 seconds"], 513: ["Vitality +15", "Physical Defense +100"], 514: ["Maximum HP +300"], 515: ["Strength +9", "Dexterity +9", "Magic +9", "Vitality +8", "Maximum HP +70"], 516: ["Strength +9", "Dexterity +9", "Magic +9", "Vitality +8", "Critical Hit Rate +1%"],
-	601: ["Strength +15", "Dexterity +15", "Critical Hit Rate +1%"], 602: ["Magic +15", "Vitality +15", "Channeling Time -3%"], 603: ["Strength +15", "Vitality +15", "Maximum HP +150"], 604: ["Dexterity +20", "Movement Speed +0.10 meters/second", "Interval Between Hits -0.05 seconds"], 605: ["Magic +20", "Maximum MP +200", "Channeling Time -3%"], 606: ["Strength +20", "Physical Attack +30", "Critical Hit Rate +1%"], 607: ["Vitality +20", "Maximum HP +200", "Physical Defense +50"], 608: ["Strength +15", "Dexterity +15", "Magic +15", "Vitality +15"], 609: ["Dexterity +15", "Vitality +15", "Critical Hit Rate +1%"], 610: ["Magic +15", "Dexterity +15", "Channeling Time -3%"], 611: ["Strength +15", "Magic +15", "Physical Attack +20"], 612: ["Magic +25", "Channeling Time -3%"], 613: ["Strength +25", "Critical Hit Rate +1%"], 614: ["Dexterity +25", "Interval Between Hits -0.05 seconds"], 615: ["Dexterity +20", "Magic +20", "Critical Hit Rate +1%", "Channeling Time -3%"], 616: ["Strength +15", "Dexterity +15", "Magic +15", "Vitality +15", "Critical Hit Rate +1%", "Channeling Time -1%", "Interval Between Hits -0.05 seconds"] 
+    101: ["Magic +1", "Vitality +2"], 102: ["Strength +1", "Vitality +2"], 103: ["Dexterity +1", "Vitality +2"], 104: ["Magic +2", "Vitality +1"], 105: ["Strength +2", "Vitality +1"], 106: ["Dexterity +2", "Vitality +1"], 107: ["HP Recovery +3", "EXP +1%"], 108: ["Strength +3"], 109: ["Magic +3"],
+    201: ["Magic +3", "Vitality +2"], 202: ["Strength +3", "Vitality +2"], 203: ["Dexterity +3", "Vitality +2"], 204: ["Magic +4", "Vitality +3"], 205: ["Strength +4", "Vitality +3"], 206: ["Dexterity +4", "Vitality +3"], 207: ["HP Recovery +6", "EXP +2%"], 208: ["Strength +5"], 209: ["Magic +5"],
+    301: ["Magic +5", "Vitality +4"], 302: ["Strength +9", "Vitality +8"], 303: ["Magic +9", "Vitality +8"], 304: ["Strength +15"], 305: ["Dexterity +15"], 306: ["Vitality +15"], 307: ["Magic +15"], 308: ["HP Recovery +9", "EXP +3%"], 309: ["MP Recovery +9", "EXP +3%"],
+    401: ["Magic +13", "Vitality +12"], 402: ["Strength +20"], 403: ["Dexterity +20"], 404: ["Vitality +20"], 405: ["Magic +20"], 406: ["HP Recovery +9", "EXP +4%"], 407: ["MP Recovery +12", "EXP +4%"], 408: ["Strength +13", "Vitality +12"], 409: ["Dexterity +13", "Vitality +12"],
+    501: ["Magic +20", "Critical Hit Rate +1%"], 502: ["Magic +20", "Movement Speed +0.10 meters/second"], 503: ["Vitality +25"], 504: ["Vitality +20", "Reduce Physical damage taken +3%"], 505: ["Dexterity +25"], 506: ["Strength +20", "Critical Hit Rate +1%"], 507: ["Strength +20", "Movement Speed +0.10 m/s"], 508: ["Strength +25"], 509: ["Vitality +20", "Critical Hit Rate +1%"], 510: ["Magic +15", "Vitality +10"], 511: ["Dexterity +15", "Vitality +10"], 512: ["Dexterity +20", "Critical Hit Rate +1%"], 513: ["Strength +15", "Vitality +10"], 514: ["Strength +15", "Dexterity +10"], 515: ["Strength +5", "Dexterity +5", "Vitality +5", "Magic +5", "Max HP +40", "Max MP +50"], 516: ["Strength +5", "Dexterity +5", "Vitality +5", "Magic +5", "Critical Hit Rate +1%"],
+    601: ["Magic +35"], 602: ["Magic +20", "Critical Hit Rate +2%"], 603: ["Vitality +6", "Reduce Physical damage taken +6%"], 604: ["Vitality +20", "Critical Hit Rate +2%"], 605: ["Dexterity +35"], 606: ["Dexterity +20", "Speed +0.2 meters/second"], 607: ["Strength +35"], 608: ["Strength +20", "Critical Hit Rate +2%"], 609: ["Magic +13", "Vitality +12", "Channeling -2%"], 610: ["Magic +13", "Vitality +12", "Critical Hit Rate +2%"], 611: ["Dexterity +13", "Vitality +12", "Speed +0.2 meters/second"], 612: ["Dexterity +13", "Vitality +12", "Max HP +140"], 613: ["Strength +13", "Vitality +12", "Reduce Physical damage taken +6%"], 614: ["Strength +13", "Vitality +12", "Critical Hit Rate +2%"], 615: ["Strength +9", "Dexterity +9", "Vitality +8", "Magic +9", "Max HP +70", "Max MP +80"], 616: ["Strength +9", "Dexterity +9", "Vitality +8", "Magic +9", "Critical Hit Rate +1%", "Channeling Time -1%", "Interval Between Hits -0.05 seconds"]
 };
 
 let itemCounts = [];
@@ -694,7 +695,6 @@ function renderInventorySelection(query) {
     const q = query.toLowerCase(); let activeIds = getActiveTreeIds();
     const baseMats = [ {id: 12, name: 'Tome Page'}, {id: 11, name: 'Tome Fragment'}, {id: 10, name: 'Token of Luck'} ];
     
-    // PERBAIKAN BUG UTAMA: Menghapus variabel spanTag yang tidak didefinisikan di sini
     baseMats.forEach(mat => {
         if (mat.name.toLowerCase().includes(q) && activeIds.has(mat.id)) { 
             html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onClick="selectItemForInventory(${mat.id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`; 
