@@ -37,7 +37,7 @@ body {
 	color: var(--text-main);
 	line-height: 1.6;
 	min-height: 100vh;
-	padding: 30px 30px 10px 30px; 
+	padding: 30px; 
 	background-image: 
 		radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
 		radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
@@ -50,15 +50,37 @@ ul { list-style: none; }
 a { color: var(--accent); text-decoration: none; transition: 0.3s; }
 a:hover { color: #60a5fa; text-decoration: underline; }
 
-.container { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; max-width: 1400px; margin: 0 auto; flex: 1; align-items: flex-start; }
-.calc-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; width: 100%; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); position: relative; backdrop-filter: blur(10px); }
+/* Pembagian 2 Layar Utama (50/50 Split) */
+.container { 
+	display: flex; 
+	flex-wrap: wrap; 
+	gap: 24px; 
+	justify-content: center; 
+	max-width: 1450px; 
+	margin: 0 auto; 
+	flex: 1; 
+	width: 100%;
+	align-items: flex-start;
+}
 
-/* Struktur Grid Pembagi Baris Atas & Bawah */
-.top-wrapper, .bottom-wrapper { width: 100%; display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; align-items: flex-start; }
+.main-column {
+	flex: 1 1 calc(50% - 12px);
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	min-width: 340px;
+}
 
-/* Pembagian Ukuran Card secara Konsisten */
-.narrow-card { flex: 1 1 350px; max-width: 440px; }
-.wide-card { flex: 2 1 500px; max-width: 935px; }
+.calc-card { 
+	background: var(--bg-card); 
+	border: 1px solid var(--border-color); 
+	border-radius: 20px; 
+	padding: 25px; 
+	width: 100%; 
+	box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); 
+	position: relative; 
+	backdrop-filter: blur(10px); 
+}
 
 h1, h2 { font-size: 1.25rem; font-weight: 700; color: #e2e8f0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
 h1::before, h2::before { content: ''; display: inline-block; width: 12px; height: 12px; background: var(--accent); border-radius: 3px; }
@@ -85,8 +107,21 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 .total-cost-value { font-size: 1.4rem; font-weight: 700; color: var(--success); text-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
 
 .branch ul { display: flex; flex-wrap: wrap; gap: 15px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; margin-bottom: 16px; align-items: center; }
-.branch ul li:first-child { width: 100%; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px; margin-bottom: 5px; }
-.branch ul li { position: relative; display: inline-flex; flex-direction: column; align-items: center; }
+
+/* FIX: Judul List Hanya Berlaku untuk Cabang & Inventory, Tidak Merusak Buku Target */
+#rightTree ul li:first-child, #deductionsList ul li:first-child { 
+	width: 100%; 
+	font-size: 0.75rem; 
+	font-weight: 700; 
+	color: var(--text-muted); 
+	text-transform: uppercase; 
+	letter-spacing: 1.5px; 
+	border-bottom: 1px dashed var(--border-color); 
+	padding-bottom: 8px; 
+	margin-bottom: 5px; 
+}
+
+.branch li { position: relative; display: inline-flex; flex-direction: column; align-items: center; }
 .branch li button { display: block; width: 32px; height: 32px; transform: scale(1.2); margin: 6px; background-image: url('znachki.png'); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; }
 .branch li button:hover { transform: scale(1.35) translateY(-2px); box-shadow: 0 8px 15px rgba(0,0,0,0.5); }
 .branch li b { position: absolute; bottom: -8px; right: -5px; background: var(--accent); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 12px; border: 2px solid var(--bg-card); pointer-events: none; z-index: 2; }
@@ -122,12 +157,11 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 .search-box { width: 100%; padding: 10px 14px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: white; font-family: 'Inter', sans-serif; font-size: 0.9rem; margin-top: 10px; margin-bottom: 15px; outline: none; transition: 0.2s; }
 .search-box:focus { border-color: var(--accent); }
-#vyborDiv { max-height: 500px; overflow-y: auto; padding-right: 5px; }
-#vyborDiv::-webkit-scrollbar { width: 6px; }
-#vyborDiv tribe-track { background: transparent; }
-#vyborDiv::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
-#vyborDiv h4 { font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); margin-bottom: 10px; padding-bottom: 5px; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; }
-#vyborDiv ul { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 15px; }
+
+/* FIX: Desain Panel Buku Target Menjadi Rata Kiri & Presisi */
+#vyborDiv { padding-right: 5px; }
+#vyborDiv h4 { font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); margin-bottom: 10px; padding-bottom: 5px; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; }
+#vyborDiv ul { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start; margin-bottom: 15px; background: rgba(0, 0, 0, 0.15); padding: 10px; border-radius: 12px; }
 #vyborDiv li { display: inline-block; }
 
 .vybor::-webkit-scrollbar { width: 6px; } .vybor::-webkit-scrollbar-track { background: transparent; } .vybor::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
@@ -148,12 +182,15 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 #invItemList::-webkit-scrollbar-track { background: transparent; }
 #invItemList::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 
-/* OPTIMASI RESPONSIVITAS MOBILE */
+/* OPTIMASI RESPONSIVITAS MOBILE & TABLET */
+@media (max-width: 1024px) {
+	.main-column { flex: 1 1 100%; max-width: 100%; }
+}
 @media (max-width: 768px) {
 	body { padding: 15px 10px 10px 10px; }
 	.container { gap: 16px; }
+	.main-column { gap: 16px; }
 	.calc-card { padding: 15px; border-radius: 14px; }
-	.top-wrapper, .bottom-wrapper { gap: 16px; }
 }
 </style>
 </head>
@@ -161,15 +198,26 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 <div class="container">
 	
-	<div class="top-wrapper">
-		<div class="calc-card wide-card">
+	<div class="main-column">
+		<div class="calc-card">
 			<h1 data-i18n="btnTarget">📚 Pilihan Buku Target</h1>
 			<div class="podzagolovok" id="nazvaniye" data-i18n="desc1">Arahkan kursor ke ikon untuk melihat nama buku.</div>
 			<input type="text" id="bookSearch" class="search-box" data-i18n="searchPlaceholder" placeholder="🔍 Cari nama buku target..." oninput="filterBooks(this.value)">
 			<div id="vyborDiv" class="branch"></div>
 		</div>
 		
-		<div class="calc-card narrow-card">
+		<div class="calc-card">
+			<h2 data-i18n="title4">📦 Inventory (Bahan Dimiliki)</h2>
+			<div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+				<span data-i18n="desc4" style="flex:1; min-width: 180px;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
+				<button class="btn-success" onClick="openInventoryModal()" style="white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600;">➕ Tambah Item</button>
+			</div>
+			<div id="deductionsList" class="branch"></div>
+		</div>
+	</div>
+
+    <div class="main-column">
+		<div class="calc-card">
 			<h2 data-i18n="title2">Cabang Terpilih</h2>
 			<div class="podzagolovok">
 				<input type="number" id="mnojitel" value="1" min="1" max="99">
@@ -186,39 +234,28 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 			</div>
 			<div id="rightTree" class="branch"></div>
 		</div>
+
+		<div class="calc-card">
+			<h1 data-i18n="title3">Estimasi Biaya Pasar</h1>
+			<div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
+			<div class="cost-input-group">
+				<label><span style="background-position:32px -32px;"></span> Token of Luck:</label>
+				<input type="number" id="price10" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
+			</div>
+			<div class="cost-input-group">
+				<label><span style="background-position:64px 0px;"></span> Tome Fragment:</label>
+				<input type="number" id="price11" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
+			</div>
+			<div class="cost-input-group">
+				<label><span style="background-position:32px 0px;"></span> Tome Page:</label>
+				<input type="number" id="price12" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
+			</div>
+			<div class="total-cost-box">
+				<div class="total-cost-label" data-i18n="totalCostLabel">Total Sisa Biaya:</div>
+				<div id="totalCostDisplay" class="total-cost-value">0 Gold</div>
+			</div>
+		</div>
 	</div>
-
-    <div class="bottom-wrapper">
-        <div class="calc-card wide-card">
-            <h2 data-i18n="title4">📦 Inventory (Bahan Dimiliki)</h2>
-            <div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                <span data-i18n="desc4" style="flex:1; min-width: 180px;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
-                <button class="btn-success" onClick="openInventoryModal()" style="white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600;">➕ Tambah Item</button>
-            </div>
-            <div id="deductionsList" class="branch"></div>
-        </div>
-
-        <div class="calc-card narrow-card">
-            <h1 data-i18n="title3">Estimasi Biaya Pasar</h1>
-            <div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
-            <div class="cost-input-group">
-                <label><span style="background-position:32px -32px;"></span> Token of Luck:</label>
-                <input type="number" id="price10" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
-            </div>
-            <div class="cost-input-group">
-                <label><span style="background-position:64px 0px;"></span> Tome Fragment:</label>
-                <input type="number" id="price11" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
-            </div>
-            <div class="cost-input-group">
-                <label><span style="background-position:32px 0px;"></span> Tome Page:</label>
-                <input type="number" id="price12" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
-            </div>
-            <div class="total-cost-box">
-                <div class="total-cost-label" data-i18n="totalCostLabel">Total Sisa Biaya:</div>
-                <div id="totalCostDisplay" class="total-cost-value">0 Gold</div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <footer class="footer">
