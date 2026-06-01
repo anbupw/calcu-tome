@@ -375,7 +375,7 @@ TOME_DB[512] = [409, 403, 404, 17666, 'Endless Waves'];
 TOME_DB[513] = [408, 402, 404, 17672, 'Parting Grief']; 
 TOME_DB[514] = [408, 402, 404, 17675, 'Rouge and Red Lips']; 
 TOME_DB[515] = [406, 407, 401, 17678, 'Gang of Hooligans']; 
-TOME_DB[516] = [406, 407, 402, 17682, 'The Voidlands']; // PERBAIKAN DI SINI (Ditambahkan indeks komponen ke-3 agar data tidak bergeser)
+TOME_DB[516] = [406, 407, 402, 17682, 'The Voidlands']; 
 
 TOME_DB[401] = [303, 307, 304, 17602, 'Burning Desire']; 
 TOME_DB[402] = [304, 301, 305, 17603, 'Tome of Predestination']; 
@@ -521,7 +521,7 @@ function getTreeItemHtml(id, isDeductionsView = false) {
 }
 
 function calculateNode(id) {
-    if (!id || !TOME_DB[id]) return; // Safety Guard
+    if (!id || !TOME_DB[id]) return; 
     if (!itemCounts[id]) itemCounts[id] = 0;
     itemCounts[id]++;
     if (id > 200) {
@@ -585,7 +585,6 @@ function updateCostAndProgress() {
     let multiplier = parseInt(document.getElementById('mnojitel').value) || 1;
     saveActiveProfile();
     
-    // --- HITUNG KEBUTUHAN BERSIH (NET) ---
     let netCounts = [];
     let deductionsCopy = [];
     for (let i = 0; i < deductions.length; i++) { deductionsCopy[i] = deductions[i] || 0; }
@@ -611,7 +610,6 @@ function updateCostAndProgress() {
     netCounts[10] = netCounts[12] * 20;
     if (deductionsCopy[10]) { netCounts[10] -= deductionsCopy[10]; if (netCounts[10] < 0) netCounts[10] = 0; }
     
-    // --- HITUNG TOTAL KEBUTUHAN AWAL (GROSS) ---
     let grossCounts = [];
     function calcGrossNode(nodeId) {
         if (!nodeId || !TOME_DB[nodeId]) return;
@@ -626,11 +624,9 @@ function updateCostAndProgress() {
     grossCounts[12] = grossLv1Tomes * 4;
     grossCounts[10] = grossCounts[12] * 20;
     
-    // Total Biaya Pasar
     let totalCost = (netCounts[10] || 0) * price10 + (netCounts[11] || 0) * price11 + (netCounts[12] || 0) * price12;
     document.getElementById('totalCostDisplay').innerText = totalCost.toLocaleString('id-ID') + " Gold";
     
-    // Progres Pengumpulan
     let grossTotalTokens = (grossCounts[10] || 0) + (grossCounts[12] || 0) * 20 + (grossCounts[11] || 0) * 20; 
     let netTotalTokens = (netCounts[10] || 0) + (netCounts[12] || 0) * 20 + (netCounts[11] || 0) * 20;
     
@@ -666,7 +662,6 @@ function processTree(id) {
         totalLv1Tomes += req;
     }
     
-    // Integrasi Formulasi Otentik Sesuai Resep Forge
     itemCounts[11] = totalLv1Tomes * 3; 
     itemCounts[12] = totalLv1Tomes * 4; 
     
@@ -692,11 +687,14 @@ function renderInventorySelection(query) {
     let html = '<ul style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">';
     const q = query.toLowerCase(); let activeIds = getActiveTreeIds();
     const baseMats = [ {id: 12, name: 'Tome Page'}, {id: 11, name: 'Tome Fragment'}, {id: 10, name: 'Token of Luck'} ];
+    
+    // PERBAIKAN BUG UTAMA: Menghapus variabel spanTag yang tidak didefinisikan di sini
     baseMats.forEach(mat => {
         if (mat.name.toLowerCase().includes(q) && activeIds.has(mat.id)) { 
             html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onClick="selectItemForInventory(${mat.id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`; 
         }
     });
+    
     TOME_DB.forEach((tome, id) => {
         if (tome && tome[4].toLowerCase().includes(q) && activeIds.has(id)) { 
             html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" onClick="selectItemForInventory(${id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`; 
