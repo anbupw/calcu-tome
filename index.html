@@ -186,19 +186,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 	.container { gap: 16px; }
 	.main-column { gap: 16px; }
 	.calc-card { padding: 15px; border-radius: 14px; }
-	
-	/* PERBAIKAN TIMBULNYA TOOLTIP MOBILE (BOTTOM SHEET) */
-	.floating-tooltip {
-		position: fixed !important;
-		left: 50% !important;
-		top: auto !important;
-		bottom: 20px !important;
-		transform: translateX(-50%) !important;
-		width: 92% !important;
-		max-width: 360px !important;
-		box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5), 0 15px 35px rgba(0,0,0,0.85);
-		border: 2px solid var(--accent) !important;
-	}
+	.floating-tooltip { pointer-events: auto !important; max-width: 90%; }
 }
 </style>
 </head>
@@ -326,8 +314,8 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 <script>
 const LANG = {
-	id: { title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", matDesc: "Bahan Crafting" },
-	en: { title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "Target Book Selection", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertReset: "Clear all calculations, profiles, and start over?", statEquipDesc: "* Bind on Equip.", footerText: "Tome Calculator © 2026 | Created by <strong>Sulfikar</strong>", matDesc: "Crafting Material" }
+	id: { title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: window.innerWidth <= 768 ? "Sentuh ikon buku/bahan untuk melihat nama & stat." : "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", matDesc: "Bahan Crafting" },
+	en: { title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: window.innerWidth <= 768 ? "Tap book/material icons to view names & stats." : "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "Target Book Selection", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertReset: "Clear all calculations, profiles, and start over?", statEquipDesc: "* Bind on Equip.", footerText: "Tome Calculator © 2026 | Created by <strong>Sulfikar</strong>", matDesc: "Crafting Material" }
 };
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
@@ -515,9 +503,6 @@ function showTooltip(element, event) {
 }
 
 function moveTooltip(event) {
-    // MATIKAN PERGERAKAN TOOLTIP JIKA DIBUKA DI SMARTPHONE
-    if (window.innerWidth <= 768) return;
-
     const tooltip = document.getElementById('floatingTooltip');
     if (tooltip.style.display !== 'block') return;
     let x = event.clientX + 15;
@@ -699,6 +684,7 @@ function processTree(id) {
 function selectTargetBook(id) { rightTreeId = id; processTree(rightTreeId); }
 
 function openInventoryModal() {
+    hideTooltip();
     document.getElementById('inventoryModal').style.display = 'flex';
     document.getElementById('invSearch').value = ''; renderInventorySelection(''); document.getElementById('invSearch').focus();
 }
@@ -728,6 +714,7 @@ function filterInventorySearch(val) { renderInventorySelection(val); }
 function selectItemForInventory(id) { closeInventoryModal(); openModal(id); }
 
 function openModal(id) {
+    hideTooltip();
     activeModalItemId = id;
     let nameText = (id === 10) ? "Token of Luck" : (id === 11) ? "Tome Fragment" : (id === 12) ? "Tome Page" : TOME_DB[id][4];
     document.getElementById('modalTitle').innerText = `${LANG[currentLang]['modalTitleAdd']} - ${nameText}`;
