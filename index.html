@@ -237,6 +237,10 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 	.calc-card { padding: 15px; border-radius: 14px; }
 	.floating-tooltip { pointer-events: auto !important; max-width: 90%; }
 }
+@media (max-width: 400px) {
+	.vybor { right: 10px; left: 10px; width: auto; bottom: 85px; }
+	.menu-toggle-btn { bottom: 20px; right: 20px; }
+}
 </style>
 </head>
 <body>
@@ -255,7 +259,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 			<h2 data-i18n="title4">📦 Inventory</h2>
 			<div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
 				<span data-i18n="desc4" style="flex:1; min-width: 180px;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
-				<button class="btn-success" onClick="openInventoryModal()" style="white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600;"><span data-i18n="btnAddItem">➕ Tambah Item</span></button>
+				<button class="btn-success" onclick="openInventoryModal()" style="white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600;"><span data-i18n="btnAddItem">➕ Tambah Item</span></button>
 			</div>
 			<div id="deductionsList" class="branch"></div>
 		</div>
@@ -265,8 +269,8 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 		<div class="calc-card">
 			<h2 data-i18n="title2">📋 Rincian Crafting Tome</h2>
 			<div class="podzagolovok">
-				<input type="number" id="mnojitel" value="1" min="1" max="99">
-				<button class="btn-calc" data-i18n="btnCalc" onClick="processTree(rightTreeId)">Hitung Kuantitas</button>
+				<input type="number" id="mnojitel" value="1" min="1" max="99" oninput="sanitizeMultiplier(this)">
+				<button class="btn-calc" data-i18n="btnCalc" onclick="processTree(rightTreeId)">Hitung Kuantitas</button>
 			</div>
 			<div class="progress-container">
 				<div class="progress-text">
@@ -285,15 +289,15 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 			<div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
 			<div class="cost-input-group">
 				<label><span style="background-position:32px -32px;"></span> Token of Luck:</label>
-				<input type="number" id="price10" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
+				<input type="number" id="price10" value="0" min="0" oninput="sanitizePrice(this); updateCostAndProgress();" placeholder="0">
 			</div>
 			<div class="cost-input-group">
 				<label><span style="background-position:64px 0px;"></span> Tome Fragment:</label>
-				<input type="number" id="price11" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
+				<input type="number" id="price11" value="0" min="0" oninput="sanitizePrice(this); updateCostAndProgress();" placeholder="0">
 			</div>
 			<div class="cost-input-group">
 				<label><span style="background-position:32px 0px;"></span> Tome Page:</label>
-				<input type="number" id="price12" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
+				<input type="number" id="price12" value="0" min="0" oninput="sanitizePrice(this); updateCostAndProgress();" placeholder="0">
 			</div>
 			<div class="total-cost-box">
 				<div class="total-cost-label" data-i18n="totalCostLabel">Total Sisa Biaya:</div>
@@ -319,29 +323,29 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 <div class="vybor" id="mainMenuPanel" style="display:none;">
 	<div class="panel-actions">
-		<button class="btn-purple" onClick="toggleLanguage()" id="langBtn">🌐 Switch to English</button>
-		<button class="btn-danger" onClick="resetCalculator()"><span data-i18n="btnReset">🔄 Reset Kalkulator</span></button>
+		<button class="btn-purple" onclick="toggleLanguage()" id="langBtn">🌐 Switch to English</button>
+		<button class="btn-danger" onclick="resetCalculator()"><span data-i18n="btnReset">🔄 Reset Kalkulator</span></button>
 	</div>
 </div>
 
-<div id="customModal" class="modal-backdrop" style="display:none;">
+<div id="customModal" class="modal-backdrop" style="display:none;" onclick="if(event.target===this) closeModal()">
 	<div class="modal-content">
 		<h3 id="modalTitle" data-i18n="modalTitleAdd">Masukkan ke Inventory</h3>
 		<p data-i18n="modalDesc">Berapa banyak item yang Anda inginkan?</p>
-		<input type="number" id="modalInput" min="1" max="999" value="1">
+		<input type="number" id="modalInput" min="1" max="999" value="1" oninput="sanitizeMultiplier(this)">
 		<div class="modal-buttons">
-			<button class="modal-btn-confirm" data-i18n="btnSave" onClick="confirmModal()">Simpan</button>
-			<button class="modal-btn-cancel" data-i18n="btnCancel" onClick="closeModal()">Batal</button>
+			<button class="modal-btn-confirm" data-i18n="btnSave" onclick="confirmModal()">Simpan</button>
+			<button class="modal-btn-cancel" data-i18n="btnCancel" onclick="closeModal()">Batal</button>
 		</div>
 	</div>
 </div>
 
-<div id="inventoryModal" class="modal-backdrop" style="display:none; z-index: 2001;">
+<div id="inventoryModal" class="modal-backdrop" style="display:none; z-index: 2001;" onclick="if(event.target===this) closeInventoryModal()">
 	<div class="modal-content" style="max-width: 450px;">
 		<h3 data-i18n="modalInvTitle">Menambahkan Item</h3>
 		<input type="text" id="invSearch" class="search-box" style="margin-bottom: 5px;" data-i18n="invSearchPlaceholder" placeholder="🔍 Cari nama tome/bahan..." onkeyup="filterInventorySearch(this.value)">
 		<div id="invItemList" class="branch" style="max-height: 250px; overflow-y: auto; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);"></div>
-		<button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onClick="closeInventoryModal()" data-i18n="btnCloseWindow">Tutup Jendela</button>
+		<button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onclick="closeInventoryModal()" data-i18n="btnCloseWindow">Tutup Jendela</button>
 	</div>
 </div>
 
@@ -404,6 +408,7 @@ const LANG = {
 };
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
+window.confettiLaunched = false;
 
 function applyLanguage() {
 	document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -515,6 +520,7 @@ TOME_DB[207] = [107, 103, 104, 17592, 'Mediations Flame'];
 TOME_DB[208] = [108, 103, 101, 17608, 'Guide to Wolf Hunting']; 
 TOME_DB[209] = [109, 103, 107, 17612, 'Fire Dance'];
 
+// Level 1 Tomes
 TOME_DB[101] = [0, 0, 0, 17579, 'Underestimated Resolve']; 
 TOME_DB[102] = [0, 0, 0, 17580, 'Soaring Heart']; 
 TOME_DB[103] = [0, 0, 0, 17581, 'Retributions Flame']; 
@@ -538,6 +544,17 @@ let itemCounts = [];
 let deductions = [];
 let rightTreeId = 616;
 let activeModalItemId = null;
+
+function sanitizeMultiplier(input) {
+	let val = parseInt(input.value);
+	if (isNaN(val) || val < 1) input.value = 1;
+	if (val > 999) input.value = 999;
+}
+
+function sanitizePrice(input) {
+	let val = parseInt(input.value);
+	if (isNaN(val) || val < 0) input.value = 0;
+}
 
 function getSpritePosition(id) {
     const parsedId = parseInt(id);
@@ -615,26 +632,15 @@ function moveTooltip(event) {
 }
 
 function hideTooltip() { document.getElementById('floatingTooltip').style.display = 'none'; }
-document.addEventListener('click', function(e) { if (!e.target.closest('button[onMouseOver]')) { hideTooltip(); } });
-document.addEventListener('touchstart', function(e) { if (!e.target.closest('button[onMouseOver]')) { hideTooltip(); } });
+document.addEventListener('click', function(e) { if (!e.target.closest('button[title]')) { hideTooltip(); } });
+document.addEventListener('touchstart', function(e) { if (!e.target.closest('button[title]')) { hideTooltip(); } });
 
 function getTreeItemHtml(id, isDeductionsView = false) {
     let count = isDeductionsView ? deductions[id] : itemCounts[id];
     if (!count) return '';
-    let clickAttr = isDeductionsView ? `onClick="removeDeduction(${id})"` : `onClick="openModal(${id})"`;
+    let clickAttr = isDeductionsView ? `onclick="removeDeduction(${id})"` : `onclick="openModal(${id})"`;
     let spanTag = isDeductionsView ? `<span title="Hapus item dari inventory"></span>` : '';
-    return `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" ${clickAttr} onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
-}
-
-function calculateNode(id) {
-    if (!id || !TOME_DB[id]) return; 
-    if (!itemCounts[id]) itemCounts[id] = 0;
-    itemCounts[id]++;
-    if (id > 200) {
-        calculateNode(TOME_DB[id][0]);
-        calculateNode(TOME_DB[id][1]);
-        calculateNode(TOME_DB[id][2]);
-    }
+    return `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" ${clickAttr} onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
 }
 
 function renderTree() {
@@ -678,17 +684,17 @@ function renderBookSelection() {
     let txt = '';
     for (let r = 6; r >= 1; r--) {
         let lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
-        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(e)}" title="${e}" onClick="selectTargetBook(${e})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
+        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(e)}" title="${e}" onclick="selectTargetBook(${e})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`;
         if (lis !== '') txt += `<h4>${LANG[currentLang]['lvl']} ${r}</h4><ul>${lis}</ul>`;
     }
     document.getElementById('vyborDiv').innerHTML = txt;
 }
 
 function updateCostAndProgress() {
-    let price10 = parseInt(document.getElementById('price10').value) || 0;
-    let price11 = parseInt(document.getElementById('price11').value) || 0;
-    let price12 = parseInt(document.getElementById('price12').value) || 0;
-    let multiplier = parseInt(document.getElementById('mnojitel').value) || 1;
+    let price10 = Math.max(0, parseInt(document.getElementById('price10').value) || 0);
+    let price11 = Math.max(0, parseInt(document.getElementById('price11').value) || 0);
+    let price12 = Math.max(0, parseInt(document.getElementById('price12').value) || 0);
+    let multiplier = Math.max(1, parseInt(document.getElementById('mnojitel').value) || 1);
     saveToLocalStorage();
     
     let netCounts = [];
@@ -741,41 +747,60 @@ function updateCostAndProgress() {
     document.getElementById('progressBar').style.width = pct.toFixed(1) + '%';
     document.getElementById('progressPercentText').innerText = pct.toFixed(1) + '%';
     
-    if (pct >= 100 && typeof confetti === 'function') { confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 }, colors: ['#3b82f6', '#10b981', '#f59e0b'] }); }
+    if (pct >= 100) {
+        if (!window.confettiLaunched && typeof confetti === 'function') { 
+            confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 }, colors: ['#3b82f6', '#10b981', '#f59e0b'] }); 
+            window.confettiLaunched = true;
+        }
+    } else {
+        window.confettiLaunched = false;
+    }
 }
 
 function processTree(id) {
     if (!id || !TOME_DB[id]) return;
     rightTreeId = id;
-    let multiplier = parseInt(document.getElementById('mnojitel').value) || 1;
+    let multiplier = Math.max(1, parseInt(document.getElementById('mnojitel').value) || 1);
     itemCounts = [];
     
-    for (let z = 0; z < multiplier; z++) calculateNode(id);
-    
     let deductionsCopy = [];
-    for (let z = 616; z >= 101; z--) {
-        if (itemCounts[z] && deductions[z]) {
-            itemCounts[z] -= deductions[z];
-            if (itemCounts[z] < 0) { deductionsCopy[z] = -itemCounts[z]; itemCounts[z] = 0; }
-            else deductionsCopy[z] = 0;
-        } else deductionsCopy[z] = deductions[z] || 0;
+    for (let i = 0; i < deductions.length; i++) { deductionsCopy[i] = deductions[i] || 0; }
+    
+    function walkAndCount(nodeId) {
+        if (!nodeId || !TOME_DB[nodeId]) return;
+        
+        if (deductionsCopy[nodeId] > 0) {
+            deductionsCopy[nodeId]--;
+            return;
+        }
+        
+        if (!itemCounts[nodeId]) itemCounts[nodeId] = 0;
+        itemCounts[nodeId]++;
+        
+        if (nodeId > 200) {
+            walkAndCount(TOME_DB[nodeId][0]);
+            walkAndCount(TOME_DB[nodeId][1]);
+            walkAndCount(TOME_DB[nodeId][2]);
+        }
+    }
+    
+    for (let z = 0; z < multiplier; z++) {
+        walkAndCount(id);
     }
     
     let totalLv1Tomes = 0;
     for (let z = 101; z <= 109; z++) {
-        let req = itemCounts[z] || 0;
-        if (deductionsCopy[z]) { req -= deductionsCopy[z]; if (req < 0) req = 0; }
-        totalLv1Tomes += req;
+        totalLv1Tomes += (itemCounts[z] || 0);
     }
     
     itemCounts[11] = totalLv1Tomes * 3; 
     itemCounts[12] = totalLv1Tomes * 4; 
     
-    if (deductions[11]) { itemCounts[11] -= deductions[11]; if (itemCounts[11] < 0) itemCounts[11] = 0; }
-    if (deductions[12]) { itemCounts[12] -= deductions[12]; if (itemCounts[12] < 0) itemCounts[12] = 0; }
+    if (deductionsCopy[11]) { itemCounts[11] -= deductionsCopy[11]; if (itemCounts[11] < 0) itemCounts[11] = 0; }
+    if (deductionsCopy[12]) { itemCounts[12] -= deductionsCopy[12]; if (itemCounts[12] < 0) itemCounts[12] = 0; }
     
     itemCounts[10] = (itemCounts[12] || 0) * 20;
-    if (deductions[10]) { itemCounts[10] -= deductions[10]; if (itemCounts[10] < 0) itemCounts[10] = 0; }
+    if (deductionsCopy[10]) { itemCounts[10] -= deductionsCopy[10]; if (itemCounts[10] < 0) itemCounts[10] = 0; }
     
     renderTree(); renderDeductions(); updateCostAndProgress();
 }
@@ -797,13 +822,13 @@ function renderInventorySelection(query) {
     
     baseMats.forEach(mat => {
         if (mat.name.toLowerCase().includes(q) && activeIds.has(mat.id)) { 
-            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onClick="selectItemForInventory(${mat.id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`; 
+            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onclick="selectItemForInventory(${mat.id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
         }
     });
     
     TOME_DB.forEach((tome, id) => {
         if (tome && tome[4].toLowerCase().includes(q) && activeIds.has(id)) { 
-            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" onClick="selectItemForInventory(${id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`; 
+            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" onclick="selectItemForInventory(${id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
         }
     });
     html += '</ul>'; document.getElementById('invItemList').innerHTML = html;
@@ -825,7 +850,7 @@ function openModal(id) {
 function closeModal() { document.getElementById('customModal').style.display = 'none'; activeModalItemId = null; }
 
 function confirmModal() {
-    const amount = parseInt(document.getElementById('modalInput').value);
+    const amount = Math.max(1, parseInt(document.getElementById('modalInput').value) || 1);
     if (!isNaN(amount) && amount > 0 && activeModalItemId) {
         if (!deductions[activeModalItemId]) deductions[activeModalItemId] = 0;
         deductions[activeModalItemId] += amount;
@@ -865,10 +890,10 @@ function loadFromLocalStorage() {
 }
 
 function saveToLocalStorage() {
-    let p10 = parseInt(document.getElementById('price10').value) || 0; 
-    let p11 = parseInt(document.getElementById('price11').value) || 0; 
-    let p12 = parseInt(document.getElementById('price12').value) || 0; 
-    let m = parseInt(document.getElementById('mnojitel').value) || 1;
+    let p10 = Math.max(0, parseInt(document.getElementById('price10').value) || 0); 
+    let p11 = Math.max(0, parseInt(document.getElementById('price11').value) || 0); 
+    let p12 = Math.max(0, parseInt(document.getElementById('price12').value) || 0); 
+    let m = Math.max(1, parseInt(document.getElementById('mnojitel').value) || 1);
     const compD = {}; deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
     
     let state = { r: rightTreeId, m: m, d: compD, p10: p10, p11: p11, p12: p12 };
