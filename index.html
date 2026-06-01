@@ -122,7 +122,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 .search-box:focus { border-color: var(--accent); }
 #vyborDiv { max-height: 480px; overflow-y: auto; padding-right: 5px; }
 #vyborDiv::-webkit-scrollbar { width: 6px; }
-#vyborDiv::-webkit-scrollbar-track { background: transparent; }
+#vyborDiv tribe-track { background: transparent; }
 #vyborDiv::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 #vyborDiv h4 { font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); margin-bottom: 10px; padding-bottom: 5px; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; }
 #vyborDiv ul { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 15px; }
@@ -145,6 +145,14 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 #invItemList::-webkit-scrollbar { width: 6px; }
 #invItemList::-webkit-scrollbar-track { background: transparent; }
 #invItemList::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+/* OPTIMASI RESPONSIVITAS MOBILE */
+@media (max-width: 768px) {
+	body { padding: 15px 10px 10px 10px; }
+	.container { gap: 16px; }
+	.calc-card { padding: 15px; border-radius: 14px; }
+	.bottom-wrapper { gap: 16px; }
+}
 </style>
 </head>
 <body>
@@ -200,8 +208,8 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
         
         <div class="calc-card inv-card">
             <h2 data-i18n="title4">📦 Inventory (Bahan Dimiliki)</h2>
-            <div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center;">
-                <span data-i18n="desc4" style="flex:1;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
+            <div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <span data-i18n="desc4" style="flex:1; min-width: 180px;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
                 <button class="btn-success" onClick="openInventoryModal()" style="white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600;">➕ Tambah Item</button>
             </div>
             <div id="deductionsList" class="branch"></div>
@@ -386,7 +394,6 @@ const STATS_DB = {
 
 let itemCounts = [];
 let deductions = [];
-let deductionsCopy = [];
 let rightTreeId = 616;
 let activeModalItemId = null;
 let profiles = {};
@@ -544,7 +551,7 @@ function updateCostAndProgress() {
     saveActiveProfile();
     
     let netCounts = [];
-    deductionsCopy = [...deductions];
+    let deductionsCopy = [...deductions]; // Ditambahkan let (Scope Fix)
     function calcNetNode(nodeId) {
         if (!netCounts[nodeId]) netCounts[nodeId] = 0;
         if (deductionsCopy[nodeId] && deductionsCopy[nodeId] > 0) { deductionsCopy[nodeId]--; return; }
@@ -588,6 +595,8 @@ function processTree(id) {
     let multiplier = parseInt(document.getElementById('mnojitel').value) || 1;
     itemCounts = [];
     for (let z = 0; z < multiplier; z++) calculateNode(id);
+    
+    let deductionsCopy = []; // Ditambahkan let (Scope Fix)
     for (let z = 616; z >= 101; z--) {
         if (itemCounts[z] && deductions[z]) {
             itemCounts[z] -= deductions[z];
