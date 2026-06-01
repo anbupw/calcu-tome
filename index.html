@@ -49,7 +49,6 @@ ul { list-style: none; }
 a { color: var(--accent); text-decoration: none; transition: 0.3s; }
 a:hover { color: #60a5fa; text-decoration: underline; }
 
-/* Pembagian 2 Layar Utama (50/50 Split) */
 .container { 
 	display: flex; 
 	flex-wrap: wrap; 
@@ -179,7 +178,6 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 #invItemList::-webkit-scrollbar-track { background: transparent; }
 #invItemList::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 
-/* OPTIMASI RESPONSIVITAS MOBILE & TABLET */
 @media (max-width: 1024px) {
 	.main-column { flex: 1 1 100%; max-width: 100%; }
 }
@@ -377,7 +375,7 @@ TOME_DB[512] = [409, 403, 404, 17666, 'Endless Waves'];
 TOME_DB[513] = [408, 402, 404, 17672, 'Parting Grief']; 
 TOME_DB[514] = [408, 402, 404, 17675, 'Rouge and Red Lips']; 
 TOME_DB[515] = [406, 407, 401, 17678, 'Gang of Hooligans']; 
-TOME_DB[516] = [406, 407, 17682, 'The Voidlands'];
+TOME_DB[516] = [406, 407, 402, 17682, 'The Voidlands']; // PERBAIKAN DI SINI (Ditambahkan indeks komponen ke-3 agar data tidak bergeser)
 
 TOME_DB[401] = [303, 307, 304, 17602, 'Burning Desire']; 
 TOME_DB[402] = [304, 301, 305, 17603, 'Tome of Predestination']; 
@@ -448,9 +446,9 @@ function getSpritePosition(id) {
 function getActiveTreeIds() {
     let activeIds = new Set();
     function walk(nodeId) {
-        if (!nodeId) return;
+        if (!nodeId || !TOME_DB[nodeId]) return;
         activeIds.add(nodeId);
-        if (nodeId > 200 && TOME_DB[nodeId]) {
+        if (nodeId > 200) {
             walk(TOME_DB[nodeId][0]);
             walk(TOME_DB[nodeId][1]);
             walk(TOME_DB[nodeId][2]);
@@ -523,6 +521,7 @@ function getTreeItemHtml(id, isDeductionsView = false) {
 }
 
 function calculateNode(id) {
+    if (!id || !TOME_DB[id]) return; // Safety Guard
     if (!itemCounts[id]) itemCounts[id] = 0;
     itemCounts[id]++;
     if (id > 200) {
@@ -586,39 +585,56 @@ function updateCostAndProgress() {
     let multiplier = parseInt(document.getElementById('mnojitel').value) || 1;
     saveActiveProfile();
     
+    // --- HITUNG KEBUTUHAN BERSIH (NET) ---
     let netCounts = [];
-    let deductionsCopy = [...deductions];
+    let deductionsCopy = [];
+    for (let i = 0; i < deductions.length; i++) { deductionsCopy[i] = deductions[i] || 0; }
+    
     function calcNetNode(nodeId) {
-        if (!netCounts[nodeId]) netCounts[nodeId] = 0;
+        if (!nodeId || !TOME_DB[nodeId]) return;
         if (deductionsCopy[nodeId] && deductionsCopy[nodeId] > 0) { deductionsCopy[nodeId]--; return; }
+        if (!netCounts[nodeId]) netCounts[nodeId] = 0;
         netCounts[nodeId]++;
         if (nodeId > 200) { calcNetNode(TOME_DB[nodeId][0]); calcNetNode(TOME_DB[nodeId][1]); calcNetNode(TOME_DB[nodeId][2]); }
     }
     for (let z = 0; z < multiplier; z++) calcNetNode(rightTreeId);
-    let netBaseMats = 0;
-    for (let z = 101; z <= 109; z++) if (netCounts[z]) netBaseMats += netCounts[z] * 3;
-    netCounts[11] = netBaseMats; netCounts[12] = netBaseMats;
-    if (deductions[11]) netCounts[11] -= deductions[11]; if (netCounts[11] < 0) netCounts[11] = 0;
-    if (deductions[12]) netCounts[12] -= deductions[12]; if (netCounts[12] < 0) netCounts[12] = 0;
-    netCounts[10] = netCounts[12] * 80;
-    if (deductions[10]) netCounts[10] -= deductions[10]; if (netCounts[10] < 0) netCounts[10] = 0;
     
+    let netLv1Tomes = 0;
+    for (let z = 101; z <= 109; z++) { if (netCounts[z]) netLv1Tomes += netCounts[z]; }
+    
+    netCounts[11] = netLv1Tomes * 3;
+    netCounts[12] = netLv1Tomes * 4;
+    
+    if (deductionsCopy[11]) { netCounts[11] -= deductionsCopy[11]; if (netCounts[11] < 0) netCounts[11] = 0; }
+    if (deductionsCopy[12]) { netCounts[12] -= deductionsCopy[12]; if (netCounts[12] < 0) netCounts[12] = 0; }
+    
+    netCounts[10] = netCounts[12] * 20;
+    if (deductionsCopy[10]) { netCounts[10] -= deductionsCopy[10]; if (netCounts[10] < 0) netCounts[10] = 0; }
+    
+    // --- HITUNG TOTAL KEBUTUHAN AWAL (GROSS) ---
     let grossCounts = [];
     function calcGrossNode(nodeId) {
+        if (!nodeId || !TOME_DB[nodeId]) return;
         if (!grossCounts[nodeId]) grossCounts[nodeId] = 0; grossCounts[nodeId]++;
         if (nodeId > 200) { calcGrossNode(TOME_DB[nodeId][0]); calcGrossNode(TOME_DB[nodeId][1]); calcGrossNode(TOME_DB[nodeId][2]); }
     }
     for (let z = 0; z < multiplier; z++) calcGrossNode(rightTreeId);
-    let grossBaseMats = 0;
-    for (let z = 101; z <= 109; z++) if (grossCounts[z]) grossBaseMats += grossCounts[z] * 3;
-    grossCounts[11] = grossBaseMats; grossCounts[12] = grossBaseMats; grossCounts[10] = grossBaseMats * 80;
     
+    let grossLv1Tomes = 0;
+    for (let z = 101; z <= 109; z++) { if (grossCounts[z]) grossLv1Tomes += grossCounts[z]; }
+    grossCounts[11] = grossLv1Tomes * 3;
+    grossCounts[12] = grossLv1Tomes * 4;
+    grossCounts[10] = grossCounts[12] * 20;
+    
+    // Total Biaya Pasar
     let totalCost = (netCounts[10] || 0) * price10 + (netCounts[11] || 0) * price11 + (netCounts[12] || 0) * price12;
     document.getElementById('totalCostDisplay').innerText = totalCost.toLocaleString('id-ID') + " Gold";
     
-    let grossVal = (grossCounts[10] || 0) + (grossCounts[12] || 0) * 80 + (grossCounts[11] || 0) * 80;
-    let netVal = (netCounts[10] || 0) + (netCounts[12] || 0) * 80 + (netCounts[11] || 0) * 80;
-    let pct = grossVal > 0 ? ((grossVal - netVal) / grossVal) * 100 : 0;
+    // Progres Pengumpulan
+    let grossTotalTokens = (grossCounts[10] || 0) + (grossCounts[12] || 0) * 20 + (grossCounts[11] || 0) * 20; 
+    let netTotalTokens = (netCounts[10] || 0) + (netCounts[12] || 0) * 20 + (netCounts[11] || 0) * 20;
+    
+    let pct = grossTotalTokens > 0 ? ((grossTotalTokens - netTotalTokens) / grossTotalTokens) * 100 : 0;
     pct = Math.max(0, Math.min(100, pct));
     document.getElementById('progressBar').style.width = pct.toFixed(1) + '%';
     document.getElementById('progressPercentText').innerText = pct.toFixed(1) + '%';
@@ -627,9 +643,11 @@ function updateCostAndProgress() {
 }
 
 function processTree(id) {
+    if (!id || !TOME_DB[id]) return;
     rightTreeId = id;
     let multiplier = parseInt(document.getElementById('mnojitel').value) || 1;
     itemCounts = [];
+    
     for (let z = 0; z < multiplier; z++) calculateNode(id);
     
     let deductionsCopy = [];
@@ -640,17 +658,24 @@ function processTree(id) {
             else deductionsCopy[z] = 0;
         } else deductionsCopy[z] = deductions[z] || 0;
     }
-    let baseMats = 0;
+    
+    let totalLv1Tomes = 0;
     for (let z = 101; z <= 109; z++) {
         let req = itemCounts[z] || 0;
         if (deductionsCopy[z]) { req -= deductionsCopy[z]; if (req < 0) req = 0; }
-        baseMats += req * 3;
+        totalLv1Tomes += req;
     }
-    for (let z = 12; z >= 10; z--) {
-        itemCounts[z] = z === 10 ? (itemCounts[12] || 0) * 80 : baseMats;
-        if (deductions[z]) itemCounts[z] -= deductions[z];
-        if (itemCounts[z] < 0) itemCounts[z] = 0;
-    }
+    
+    // Integrasi Formulasi Otentik Sesuai Resep Forge
+    itemCounts[11] = totalLv1Tomes * 3; 
+    itemCounts[12] = totalLv1Tomes * 4; 
+    
+    if (deductions[11]) { itemCounts[11] -= deductions[11]; if (itemCounts[11] < 0) itemCounts[11] = 0; }
+    if (deductions[12]) { itemCounts[12] -= deductions[12]; if (itemCounts[12] < 0) itemCounts[12] = 0; }
+    
+    itemCounts[10] = (itemCounts[12] || 0) * 20;
+    if (deductions[10]) { itemCounts[10] -= deductions[10]; if (itemCounts[10] < 0) itemCounts[10] = 0; }
+    
     renderTree(); renderDeductions(); updateCostAndProgress();
 }
 
