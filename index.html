@@ -50,10 +50,13 @@ ul { list-style: none; }
 a { color: var(--accent); text-decoration: none; transition: 0.3s; }
 a:hover { color: #60a5fa; text-decoration: underline; }
 
-.container { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; max-width: 1400px; margin: 0 auto; flex: 1; }
+.container { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; max-width: 1400px; margin: 0 auto; flex: 1; align-items: flex-start; }
 .calc-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; width: 100%; max-width: 440px; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); position: relative; backdrop-filter: blur(10px); }
-#deductions { max-width: 1370px; margin: 24px auto 0; width: 100%; }
-#deductions .calc-card { max-width: 100%; }
+
+/* Layout Bawah untuk Biaya dan Inventory */
+.bottom-wrapper { width: 100%; display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; align-items: flex-start; }
+.cost-card { flex: 1 1 350px; max-width: 440px; }
+.inv-card { flex: 2 1 500px; max-width: 935px; }
 
 h1, h2 { font-size: 1.25rem; font-weight: 700; color: #e2e8f0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
 h1::before, h2::before { content: ''; display: inline-block; width: 12px; height: 12px; background: var(--accent); border-radius: 3px; }
@@ -91,9 +94,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 #strelki { color: var(--accent); font-weight: bold; letter-spacing: 2px; }
 #niz li:first-child { display: none; } 
 
-.floating-tooltip {
-	position: fixed; background: rgba(10, 15, 30, 0.96); border: 2px solid #475569; border-radius: 10px; padding: 14px 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.85), inset 0 0 15px rgba(0,0,0,0.7); z-index: 10000; pointer-events: none; display: none; min-width: 240px; max-width: 300px; font-family: 'Inter', sans-serif; backdrop-filter: blur(6px);
-}
+.floating-tooltip { position: fixed; background: rgba(10, 15, 30, 0.96); border: 2px solid #475569; border-radius: 10px; padding: 14px 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.85), inset 0 0 15px rgba(0,0,0,0.7); z-index: 10000; pointer-events: none; display: none; min-width: 240px; max-width: 300px; font-family: 'Inter', sans-serif; backdrop-filter: blur(6px); }
 .tooltip-title { color: #f59e0b; font-size: 1rem; font-weight: 700; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
 .tooltip-type { color: #94a3b8; font-size: 0.75rem; margin-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.15); padding-bottom: 5px; }
 .tooltip-list { display: flex; flex-direction: column; gap: 4px; }
@@ -116,11 +117,17 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 .btn-success { background: var(--success); } .btn-success:hover { background: var(--success-hover); }
 .btn-purple { background: #8b5cf6; } .btn-purple:hover { background: #7c3aed; }
 .btn-danger { background: var(--danger); } .btn-danger:hover { background: var(--danger-hover); }
-.search-box { width: 100%; padding: 10px 14px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: white; font-family: 'Inter', sans-serif; font-size: 0.9rem; margin-top: 10px; margin-bottom: 5px; outline: none; transition: 0.2s; }
+
+.search-box { width: 100%; padding: 10px 14px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: white; font-family: 'Inter', sans-serif; font-size: 0.9rem; margin-top: 10px; margin-bottom: 15px; outline: none; transition: 0.2s; }
 .search-box:focus { border-color: var(--accent); }
-#vyborDiv h4 { font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); margin-bottom: 10px; padding-bottom: 5px; margin-top: 15px; }
-#vyborDiv ul { display: flex; flex-wrap: wrap; gap: 8px; }
+#vyborDiv { max-height: 480px; overflow-y: auto; padding-right: 5px; }
+#vyborDiv::-webkit-scrollbar { width: 6px; }
+#vyborDiv::-webkit-scrollbar-track { background: transparent; }
+#vyborDiv::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+#vyborDiv h4 { font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); margin-bottom: 10px; padding-bottom: 5px; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; }
+#vyborDiv ul { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 15px; }
 #vyborDiv li { display: inline-block; }
+
 .vybor::-webkit-scrollbar { width: 6px; } .vybor::-webkit-scrollbar-track { background: transparent; } .vybor::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 
 .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 1; transition: opacity 0.2s ease; }
@@ -143,17 +150,19 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 <body>
 
 <div class="container">
+	
 	<div class="calc-card">
-		<h1 data-i18n="title1">Kebutuhan Total</h1>
+		<h1 data-i18n="btnTarget">📚 Pilihan Buku Target</h1>
 		<div class="podzagolovok" id="nazvaniye" data-i18n="desc1">Arahkan kursor ke ikon untuk melihat nama buku.</div>
-		<div id="leftTree" class="branch"></div>
+		<input type="text" id="bookSearch" class="search-box" data-i18n="searchPlaceholder" placeholder="🔍 Cari nama buku target..." oninput="filterBooks(this.value)">
+		<div id="vyborDiv" class="branch"></div>
 	</div>
 	
 	<div class="calc-card">
 		<h2 data-i18n="title2">Cabang Terpilih</h2>
 		<div class="podzagolovok">
 			<input type="number" id="mnojitel" value="1" min="1" max="99">
-			<button class="btn-calc" data-i18n="btnCalc" onClick="processTree(rightTreeId, true)">Hitung Kuantitas</button>
+			<button class="btn-calc" data-i18n="btnCalc" onClick="processTree(rightTreeId)">Hitung Kuantitas</button>
 		</div>
 		<div class="progress-container">
 			<div class="progress-text">
@@ -167,37 +176,37 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 		<div id="rightTree" class="branch"></div>
 	</div>
 
-	<div class="calc-card">
-		<h1 data-i18n="title3">Estimasi Biaya Pasar</h1>
-		<div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
-		<div class="cost-input-group">
-			<label><span style="background-position:32px -32px;"></span> Token of Luck:</label>
-			<input type="number" id="price10" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
-		</div>
-		<div class="cost-input-group">
-			<label><span style="background-position:64px 0px;"></span> Tome Fragment:</label>
-			<input type="number" id="price11" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
-		</div>
-		<div class="cost-input-group">
-			<label><span style="background-position:32px 0px;"></span> Tome Page:</label>
-			<input type="number" id="price12" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
-		</div>
-		<div class="total-cost-box">
-			<div class="total-cost-label" data-i18n="totalCostLabel">Total Sisa Biaya:</div>
-			<div id="totalCostDisplay" class="total-cost-value">0 Gold</div>
-		</div>
-	</div>
-	
-	<div id="deductions">
-		<div class="calc-card">
-			<h2 data-i18n="title4">📦 Inventory (Bahan Dimiliki)</h2>
-			<div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center;">
-				<span data-i18n="desc4" style="flex:1;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
-				<button class="btn-success" onClick="openInventoryModal()" style="white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600;">➕ Tambah Item</button>
-			</div>
-			<div id="deductionsList" class="branch"></div>
-		</div>
-	</div>
+    <div class="bottom-wrapper">
+        <div class="calc-card cost-card">
+            <h1 data-i18n="title3">Estimasi Biaya Pasar</h1>
+            <div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
+            <div class="cost-input-group">
+                <label><span style="background-position:32px -32px;"></span> Token of Luck:</label>
+                <input type="number" id="price10" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
+            </div>
+            <div class="cost-input-group">
+                <label><span style="background-position:64px 0px;"></span> Tome Fragment:</label>
+                <input type="number" id="price11" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
+            </div>
+            <div class="cost-input-group">
+                <label><span style="background-position:32px 0px;"></span> Tome Page:</label>
+                <input type="number" id="price12" value="0" min="0" oninput="updateCostAndProgress()" placeholder="0">
+            </div>
+            <div class="total-cost-box">
+                <div class="total-cost-label" data-i18n="totalCostLabel">Total Sisa Biaya:</div>
+                <div id="totalCostDisplay" class="total-cost-value">0 Gold</div>
+            </div>
+        </div>
+        
+        <div class="calc-card inv-card">
+            <h2 data-i18n="title4">📦 Inventory (Bahan Dimiliki)</h2>
+            <div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center;">
+                <span data-i18n="desc4" style="flex:1;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
+                <button class="btn-success" onClick="openInventoryModal()" style="white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600;">➕ Tambah Item</button>
+            </div>
+            <div id="deductionsList" class="branch"></div>
+        </div>
+    </div>
 </div>
 
 <footer class="footer">
@@ -230,14 +239,11 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 	</div>
 	
 	<div class="panel-actions">
-		<button class="btn-primary" onClick="toggleBookPanel();"><span data-i18n="btnTarget">📚 Pilihan Buku Target</span></button>
 		<button class="btn-success" onClick="copyShareLink()"><span data-i18n="btnShare">🔗 Bagikan Build (Copy Link)</span></button>
 		<button class="btn-primary" style="background: #ea580c;" onClick="exportToImage(event)"><span data-i18n="btnExport">📸 Download Gambar Build</span></button>
 		<button class="btn-purple" onClick="toggleLanguage()" id="langBtn">🌐 Switch to English</button>
 		<button class="btn-danger" onClick="resetCalculator()"><span data-i18n="btnReset">🔄 Reset Kalkulator</span></button>
 	</div>
-	<input type="text" id="bookSearch" class="search-box" data-i18n="searchPlaceholder" placeholder="🔍 Cari nama buku target..." oninput="filterBooks(this.value)" style="display:none;">
-	<div id="vyborDiv" class="branch" style="display:none"></div>
 </div>
 
 <div id="customModal" class="modal-backdrop" style="display:none;">
@@ -255,7 +261,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 <div id="inventoryModal" class="modal-backdrop" style="display:none; z-index: 2001;">
 	<div class="modal-content" style="max-width: 450px;">
 		<h3>Pilih Item untuk Inventory</h3>
-		<input type="text" id="invSearch" class="search-box" placeholder="🔍 Cari nama buku/bahan..." onkeyup="filterInventorySearch(this.value)">
+		<input type="text" id="invSearch" class="search-box" style="margin-bottom: 5px;" placeholder="🔍 Cari nama buku/bahan..." onkeyup="filterInventorySearch(this.value)">
 		<div id="invItemList" class="branch" style="max-height: 250px; overflow-y: auto; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);"></div>
 		<button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onClick="closeInventoryModal()">Tutup Jendela</button>
 	</div>
@@ -265,8 +271,8 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 <script>
 const LANG = {
-	id: { title1: "Kebutuhan Total", title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", matDesc: "Bahan Crafting" },
-	en: { title1: "Total Requirements", title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations, profiles, and start over?", promptCopy: "Copy the link below:", statEquipDesc: "* Bind on Equip.", footerText: "Tome Calculator © 2026 | Created by <strong>Sulfikar</strong>", matDesc: "Crafting Material" }
+	id: { title2: "Cabang Terpilih", title3: "Estimasi Biaya Pasar", title4: "📦 Inventory (Bahan Dimiliki)", desc1: "Arahkan kursor ke ikon untuk melihat nama buku.", desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", progText: "Progres Pengumpulan:", btnCalc: "Hitung Kuantitas", totalCostLabel: "Total Sisa Biaya:", menuBtnText: "⚙️ Buka Menu", btnTarget: "📚 Pilihan Buku Target", btnShare: "🔗 Bagikan Build (Copy)", btnExport: "📸 Download Gambar Build", btnReset: "🔄 Reset Kalkulator", searchPlaceholder: "🔍 Cari nama buku target...", modalTitleAdd: "Tambah Buku/Bahan", modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", btnSave: "Simpan", btnCancel: "Batal", baseMat: "Bahan Dasar", lvl: "Level", alertCopy: "Link Build berhasil disalin ke clipboard!", alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", promptCopy: "Salin tautan di bawah ini:", statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", matDesc: "Bahan Crafting" },
+	en: { title2: "Selected Branch", title3: "Market Cost Estimator", title4: "📦 Inventory (Owned Items)", desc1: "Hover over the icons to see the book names.", desc3: "Enter the market price per item to estimate required Gold.", desc4: "Items here will automatically deduct from total requirements.", progText: "Collection Progress:", btnCalc: "Calculate Qty", totalCostLabel: "Total Remaining Cost:", menuBtnText: "⚙️ Open Menu", btnTarget: "Target Book Selection", btnShare: "🔗 Share Build (Copy)", btnExport: "📸 Download Build Image", btnReset: "🔄 Reset Calculator", searchPlaceholder: "🔍 Search target book name...", modalTitleAdd: "Add Book/Material", modalDesc: "How many of this item do you currently own?", btnSave: "Save", btnCancel: "Cancel", baseMat: "Base Materials", lvl: "Level", alertCopy: "Build Link successfully copied to clipboard!", alertReset: "Clear all calculations, profiles, and start over?", promptCopy: "Copy the link below:", statEquipDesc: "* Bind on Equip.", footerText: "Tome Calculator © 2026 | Created by <strong>Sulfikar</strong>", matDesc: "Crafting Material" }
 };
 
 let currentLang = localStorage.getItem('tomeLang') || 'id';
@@ -283,10 +289,9 @@ function applyLanguage() {
 	document.getElementById('langBtn').innerText = currentLang === 'id' ? '🌐 Switch to English' : '🌐 Ganti ke Indonesia';
 	document.getElementById('menuToggleBtn').innerText = LANG[currentLang]['menuBtnText'];
 	
-	processTree(leftTreeId, false);
-	processTree(rightTreeId, true);
+	renderBookSelection();
+	processTree(rightTreeId);
 	renderDeductions();
-	renderMenu();
 }
 
 function toggleLanguage() {
@@ -382,7 +387,6 @@ const STATS_DB = {
 let itemCounts = [];
 let deductions = [];
 let deductionsCopy = [];
-let leftTreeId = 616;
 let rightTreeId = 616;
 let activeModalItemId = null;
 let profiles = {};
@@ -396,6 +400,24 @@ function getSpritePosition(id) {
     let row = Math.floor(parsedId / 100);
     let num = parsedId - (row * 100);
     return `background-position:-${32 * (num - 1)}px -${32 * (row - 1)}px`;
+}
+
+function getActiveTreeIds() {
+    let activeIds = new Set();
+    function walk(nodeId) {
+        if (!nodeId) return;
+        activeIds.add(nodeId);
+        if (nodeId > 200 && TOME_DB[nodeId]) {
+            walk(TOME_DB[nodeId][0]);
+            walk(TOME_DB[nodeId][1]);
+            walk(TOME_DB[nodeId][2]);
+        }
+    }
+    walk(rightTreeId);
+    activeIds.add(10);
+    activeIds.add(11);
+    activeIds.add(12);
+    return activeIds;
 }
 
 function showTooltip(element, event) {
@@ -445,10 +467,7 @@ function moveTooltip(event) {
     tooltip.style.top = y + 'px';
 }
 
-function hideTooltip() {
-    document.getElementById('floatingTooltip').style.display = 'none';
-}
-
+function hideTooltip() { document.getElementById('floatingTooltip').style.display = 'none'; }
 document.addEventListener('click', function(e) { if (!e.target.closest('button[onMouseOver]')) { hideTooltip(); } });
 document.addEventListener('touchstart', function(e) { if (!e.target.closest('button[onMouseOver]')) { hideTooltip(); } });
 
@@ -470,18 +489,14 @@ function calculateNode(id) {
     }
 }
 
-function renderTree(isRightTree) {
+function renderTree() {
     let txt = '';
     const txtLvl = LANG[currentLang]['lvl'];
     const txtBase = LANG[currentLang]['baseMat'];
     for (let r = 6; r >= 1; r--) {
-        let start = r * 100 + 1;
-        let end = r * 100 + 16;
-        let hasItem = false;
+        let start = r * 100 + 1; let end = r * 100 + 16; let hasItem = false;
         let tempTxt = `<ul><li>${txtLvl} ${r}</li> `;
-        for (let e = start; e <= end; e++) {
-            if (itemCounts[e]) { tempTxt += getTreeItemHtml(e); hasItem = true; }
-        }
+        for (let e = start; e <= end; e++) { if (itemCounts[e]) { tempTxt += getTreeItemHtml(e); hasItem = true; } }
         tempTxt += '</ul>';
         if (hasItem) txt += tempTxt;
     }
@@ -490,30 +505,33 @@ function renderTree(isRightTree) {
     if (itemCounts[12]) txt += getTreeItemHtml(12);
     if (itemCounts[10]) txt += `<li id="strelki" style="margin: 0 10px;">→</li>${getTreeItemHtml(10)}`;
     txt += `</ul>`;
-    document.getElementById(isRightTree ? 'rightTree' : 'leftTree').innerHTML = txt;
+    document.getElementById('rightTree').innerHTML = txt;
 }
 
 function renderDeductions() {
     let txt = ''; let lis = '';
     const deductionsDiv = document.getElementById('deductionsList');
-    if (deductions[11]) lis += getTreeItemHtml(11, true);
-    if (deductions[12]) lis += getTreeItemHtml(12, true);
-    if (deductions[10]) lis += getTreeItemHtml(10, true);
+    let activeIds = getActiveTreeIds();
+    
+    if (deductions[11] && activeIds.has(11)) lis += getTreeItemHtml(11, true);
+    if (deductions[12] && activeIds.has(12)) lis += getTreeItemHtml(12, true);
+    if (deductions[10] && activeIds.has(10)) lis += getTreeItemHtml(10, true);
     if (lis !== '') txt += `<ul><li>${LANG[currentLang]['baseMat']}</li> ${lis}</ul>`;
+    
     for (let r = 1; r <= 6; r++) {
         lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
-        for (let e = start; e <= end; e++) if (deductions[e]) lis += getTreeItemHtml(e, true);
+        for (let e = start; e <= end; e++) { if (deductions[e] && activeIds.has(e)) lis += getTreeItemHtml(e, true); }
         if (lis !== '') txt += `<ul><li>${LANG[currentLang]['lvl']} ${r}</li> ${lis}</ul>`;
     }
     deductionsDiv.innerHTML = txt;
 }
 
-function renderMenu() {
+function renderBookSelection() {
     let txt = '';
     for (let r = 6; r >= 1; r--) {
         let lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
         for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(e)}" title="${e}" onClick="selectTargetBook(${e})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`;
-        if (lis !== '') txt += `<h4>${LANG[currentLang]['lvl']} ${r}</h4><ul style="justify-content:center;">${lis}</ul>`;
+        if (lis !== '') txt += `<h4>${LANG[currentLang]['lvl']} ${r}</h4><ul>${lis}</ul>`;
     }
     document.getElementById('vyborDiv').innerHTML = txt;
 }
@@ -562,14 +580,12 @@ function updateCostAndProgress() {
     document.getElementById('progressBar').style.width = pct.toFixed(1) + '%';
     document.getElementById('progressPercentText').innerText = pct.toFixed(1) + '%';
     
-    if (pct >= 100 && typeof confetti === 'function') {
-        confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 }, colors: ['#3b82f6', '#10b981', '#f59e0b'] });
-    }
+    if (pct >= 100 && typeof confetti === 'function') { confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 }, colors: ['#3b82f6', '#10b981', '#f59e0b'] }); }
 }
 
-function processTree(id, isRightTree) {
-    if (!isRightTree) leftTreeId = id; else rightTreeId = id;
-    let multiplier = isRightTree ? (parseInt(document.getElementById('mnojitel').value) || 1) : 1;
+function processTree(id) {
+    rightTreeId = id;
+    let multiplier = parseInt(document.getElementById('mnojitel').value) || 1;
     itemCounts = [];
     for (let z = 0; z < multiplier; z++) calculateNode(id);
     for (let z = 616; z >= 101; z--) {
@@ -590,43 +606,36 @@ function processTree(id, isRightTree) {
         if (deductions[z]) itemCounts[z] -= deductions[z];
         if (itemCounts[z] < 0) itemCounts[z] = 0;
     }
-    renderTree(isRightTree);
-    if(isRightTree) updateCostAndProgress();
+    renderTree(); renderDeductions(); updateCostAndProgress();
 }
 
-function selectTargetBook(id) {
-    rightTreeId = id;
-    leftTreeId = id;
-    document.getElementById('mainMenuPanel').style.display = 'none';
-    processTree(leftTreeId, false);
-    processTree(rightTreeId, true);
-}
+function selectTargetBook(id) { rightTreeId = id; processTree(rightTreeId); }
 
 function openInventoryModal() {
     document.getElementById('inventoryModal').style.display = 'flex';
-    document.getElementById('invSearch').value = '';
-    renderInventorySelection('');
-    document.getElementById('invSearch').focus();
+    document.getElementById('invSearch').value = ''; renderInventorySelection(''); document.getElementById('invSearch').focus();
 }
 
 function closeInventoryModal() { document.getElementById('inventoryModal').style.display = 'none'; }
 
 function renderInventorySelection(query) {
     let html = '<ul style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">';
-    const q = query.toLowerCase();
+    const q = query.toLowerCase(); let activeIds = getActiveTreeIds();
     const baseMats = [ {id: 12, name: 'Tome Page'}, {id: 11, name: 'Tome Fragment'}, {id: 10, name: 'Token of Luck'} ];
     baseMats.forEach(mat => {
-        if (mat.name.toLowerCase().includes(q)) { html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onClick="selectItemForInventory(${mat.id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`; }
+        if (mat.name.toLowerCase().includes(q) && activeIds.has(mat.id)) { 
+            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onClick="selectItemForInventory(${mat.id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`; 
+        }
     });
     TOME_DB.forEach((tome, id) => {
-        if (tome && tome[4].toLowerCase().includes(q)) { html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" onClick="selectItemForInventory(${id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`; }
+        if (tome && tome[4].toLowerCase().includes(q) && activeIds.has(id)) { 
+            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" onClick="selectItemForInventory(${id})" onMouseOver="showTooltip(this, event);" onMouseMove="moveTooltip(event);" onMouseOut="hideTooltip();"></button></li>`; 
+        }
     });
-    html += '</ul>';
-    document.getElementById('invItemList').innerHTML = html;
+    html += '</ul>'; document.getElementById('invItemList').innerHTML = html;
 }
 
 function filterInventorySearch(val) { renderInventorySelection(val); }
-
 function selectItemForInventory(id) { closeInventoryModal(); openModal(id); }
 
 function openModal(id) {
@@ -645,24 +654,12 @@ function confirmModal() {
     if (!isNaN(amount) && amount > 0 && activeModalItemId) {
         if (!deductions[activeModalItemId]) deductions[activeModalItemId] = 0;
         deductions[activeModalItemId] += amount;
-        saveActiveProfile(); 
-        processTree(leftTreeId, false); 
-        processTree(rightTreeId, true); 
-        renderDeductions();
+        saveActiveProfile(); processTree(rightTreeId); 
     }
     closeModal();
 }
 
-function removeDeduction(id) {
-    deductions[id] = 0;
-    saveActiveProfile(); processTree(leftTreeId, false); processTree(rightTreeId, true); renderDeductions();
-}
-
-function toggleBookPanel() {
-    const panel = document.getElementById('vyborDiv'); const search = document.getElementById('bookSearch'); const isHidden = panel.style.display === 'none';
-    panel.style.display = isHidden ? 'block' : 'none'; search.style.display = isHidden ? 'block' : 'none';
-    if(isHidden) search.focus();
-}
+function removeDeduction(id) { deductions[id] = 0; saveActiveProfile(); processTree(rightTreeId); }
 
 function filterBooks(query) {
     const q = query.toLowerCase();
@@ -678,7 +675,7 @@ function filterBooks(query) {
 
 function copyShareLink() {
     const compD = {}; deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
-    const finalState = { l: leftTreeId, r: rightTreeId, m: document.getElementById('mnojitel').value, d: compD };
+    const finalState = { r: rightTreeId, m: document.getElementById('mnojitel').value, d: compD };
     const hash = btoa(JSON.stringify(finalState)); const url = window.location.origin + window.location.pathname + "#" + hash;
     if (navigator.clipboard) navigator.clipboard.writeText(url).then(() => alert(LANG[currentLang]['alertCopy'])).catch(() => prompt(LANG[currentLang]['promptCopy'], url));
     else prompt(LANG[currentLang]['promptCopy'], url);
@@ -688,7 +685,6 @@ function loadFromHash() {
     if (window.location.hash) {
         try {
             const state = JSON.parse(atob(window.location.hash.substring(1)));
-            if (state.l && TOME_DB[state.l]) leftTreeId = state.l;
             if (state.r && TOME_DB[state.r]) rightTreeId = state.r;
             if (state.m) document.getElementById('mnojitel').value = state.m;
             if (state.d) { deductions = []; for (const k in state.d) deductions[parseInt(k)] = state.d[k]; }
@@ -700,12 +696,12 @@ function loadFromHash() {
 function resetCalculator() {
     if (confirm(LANG[currentLang]['alertReset'])) {
         deductions = []; 
-        profiles = { "Default Build": { l: 616, r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 } };
+        profiles = { "Default Build": { r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 } };
         currentProfile = "Default Build"; 
         saveActiveProfile();
         document.getElementById('price10').value = 0; document.getElementById('price11').value = 0; document.getElementById('price12').value = 0; document.getElementById('mnojitel').value = 1;
-        leftTreeId = 616; rightTreeId = 616;
-        renderProfileDropdown(); processTree(leftTreeId, false); processTree(rightTreeId, true); renderDeductions();
+        rightTreeId = 616;
+        renderProfileDropdown(); processTree(rightTreeId);
     }
 }
 
@@ -727,120 +723,59 @@ function exportToImage(event) {
 
 function initProfiles() {
     let saved = localStorage.getItem('tomeProfiles');
-    if (saved) {
-        try { profiles = JSON.parse(saved); } catch(e) { profiles = {}; }
-    }
-    if (!profiles || Object.keys(profiles).length === 0) {
-        profiles = { 'Default Build': { l: 616, r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 } };
-    }
+    if (saved) { try { profiles = JSON.parse(saved); } catch(e) { profiles = {}; } }
+    if (!profiles || Object.keys(profiles).length === 0) { profiles = { 'Default Build': { r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 } }; }
     currentProfile = localStorage.getItem('tomeCurrentProfile') || Object.keys(profiles)[0] || 'Default Build';
     if (!profiles[currentProfile]) currentProfile = Object.keys(profiles)[0];
-    
-    loadProfileData(currentProfile);
-    renderProfileDropdown();
+    loadProfileData(currentProfile); renderProfileDropdown();
 }
 
 function renderProfileDropdown() {
-    const select = document.getElementById('profileSelect');
-    if (!select) return;
-    select.innerHTML = '';
+    const select = document.getElementById('profileSelect'); if (!select) return; select.innerHTML = '';
     Object.keys(profiles).forEach(name => {
-        let opt = document.createElement('option');
-        opt.value = name;
-        opt.innerText = name;
-        if (name === currentProfile) opt.selected = true;
-        select.appendChild(opt);
+        let opt = document.createElement('option'); opt.value = name; opt.innerText = name;
+        if (name === currentProfile) opt.selected = true; select.appendChild(opt);
     });
 }
 
-function handleProfileChange(val) {
-    saveActiveProfile();
-    currentProfile = val;
-    loadProfileData(val);
-}
+function handleProfileChange(val) { saveActiveProfile(); currentProfile = val; loadProfileData(val); }
 
 function loadProfileData(name) {
-    const p = profiles[name];
-    if(!p) return;
-    leftTreeId = p.l || 616;
+    const p = profiles[name]; if(!p) return;
     rightTreeId = p.r || 616;
-    
-    document.getElementById('mnojitel').value = p.m || 1;
-    document.getElementById('price10').value = p.p10 || 0;
-    document.getElementById('price11').value = p.p11 || 0;
-    document.getElementById('price12').value = p.p12 || 0;
-    
+    document.getElementById('mnojitel').value = p.m || 1; document.getElementById('price10').value = p.p10 || 0; document.getElementById('price11').value = p.p11 || 0; document.getElementById('price12').value = p.p12 || 0;
     deductions = [];
-    if (p.d) { 
-        for (const k in p.d) deductions[parseInt(k)] = p.d[k]; 
-    }
-    
-    processTree(leftTreeId, false);
-    processTree(rightTreeId, true);
-    renderDeductions();
+    if (p.d) { for (const k in p.d) deductions[parseInt(k)] = p.d[k]; }
+    processTree(rightTreeId);
 }
 
 function saveActiveProfile() {
-    let p10 = parseInt(document.getElementById('price10').value) || 0;
-    let p11 = parseInt(document.getElementById('price11').value) || 0;
-    let p12 = parseInt(document.getElementById('price12').value) || 0;
-    let m = parseInt(document.getElementById('mnojitel').value) || 1;
-    
-    const compD = {}; 
-    deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
-
-    profiles[currentProfile] = { 
-        l: leftTreeId, 
-        r: rightTreeId, 
-        m: m, 
-        d: compD, 
-        p10: p10, 
-        p11: p11, 
-        p12: p12 
-    };
-    
-    localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
-    localStorage.setItem('tomeCurrentProfile', currentProfile);
+    let p10 = parseInt(document.getElementById('price10').value) || 0; let p11 = parseInt(document.getElementById('price11').value) || 0; let p12 = parseInt(document.getElementById('price12').value) || 0; let m = parseInt(document.getElementById('mnojitel').value) || 1;
+    const compD = {}; deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
+    profiles[currentProfile] = { r: rightTreeId, m: m, d: compD, p10: p10, p11: p11, p12: p12 };
+    localStorage.setItem('tomeProfiles', JSON.stringify(profiles)); localStorage.setItem('tomeCurrentProfile', currentProfile);
 }
 
 function createNewProfile() {
-    let name = prompt("Masukkan nama profil build baru:");
-    if (!name) return;
-    name = name.trim();
+    let name = prompt("Masukkan nama profil build baru:"); if (!name) return; name = name.trim();
     if (profiles[name]) { alert("Nama profil sudah ada!"); return; }
-    profiles[name] = { l: 616, r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 };
-    currentProfile = name;
-    saveActiveProfile();
-    renderProfileDropdown();
-    loadProfileData(name);
+    profiles[name] = { r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 }; currentProfile = name;
+    saveActiveProfile(); renderProfileDropdown(); loadProfileData(name);
 }
 
 function removeCurrentProfile() {
-    if (Object.keys(profiles).length <= 1) {
-        alert("Anda tidak bisa menghapus satu-satunya profil yang tersisa.");
-        return;
-    }
+    if (Object.keys(profiles).length <= 1) { alert("Anda tidak bisa menghapus satu-satunya profil yang tersisa."); return; }
     if (!confirm(`Hapus profil "${currentProfile}"?`)) return;
-    delete profiles[currentProfile];
-    currentProfile = Object.keys(profiles)[0];
-    saveActiveProfile();
-    renderProfileDropdown();
-    loadProfileData(currentProfile);
+    delete profiles[currentProfile]; currentProfile = Object.keys(profiles)[0];
+    saveActiveProfile(); renderProfileDropdown(); loadProfileData(currentProfile);
 }
 
 function exportProfilesData() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(profiles));
-    const a = document.createElement('a');
-    a.href = dataStr;
-    a.download = "Tome-Profiles-Backup.json"; 
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(profiles)); const a = document.createElement('a'); a.href = dataStr; a.download = "Tome-Profiles-Backup.json"; document.body.appendChild(a); a.click(); document.body.removeChild(a);
 }
 
 function importProfilesData(event) {
-    const file = event.target.files[0];
-    if (!file) return;
+    const file = event.target.files[0]; if (!file) return;
     const reader = new FileReader();
     reader.onload = function(e) {
         try {
@@ -848,25 +783,15 @@ function importProfilesData(event) {
             if (typeof importedData === 'object' && importedData !== null) {
                 profiles = { ...profiles, ...importedData };
                 localStorage.setItem('tomeProfiles', JSON.stringify(profiles));
-                renderProfileDropdown();
-                loadProfileData(currentProfile);
-                applyLanguage();
+                renderProfileDropdown(); loadProfileData(currentProfile); applyLanguage();
                 alert(currentLang === 'id' ? "Data profil berhasil diimpor!" : "Profile data imported successfully!");
             }
-        } catch (err) {
-            alert(currentLang === 'id' ? "Gagal membaca file JSON!" : "Failed to read JSON file!");
-        }
+        } catch (err) { alert(currentLang === 'id' ? "Gagal membaca file JSON!" : "Failed to read JSON file!"); }
     };
-    reader.readAsText(file);
-    event.target.value = '';
+    reader.readAsText(file); event.target.value = '';
 }
 
-window.onload = () => {
-    initProfiles(); 
-    loadFromHash(); 
-    applyLanguage(); 
-    document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); });
-};
+window.onload = () => { initProfiles(); loadFromHash(); applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
 </script>
 </body>
 </html>
