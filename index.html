@@ -292,7 +292,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 <div id="customModal" class="modal-backdrop" style="display:none;">
 	<div class="modal-content">
 		<h3 id="modalTitle" data-i18n="modalTitleAdd">Masukkan ke Inventory</h3>
-		<p data-i18n="modalDesc">Berapa banyak item ini yang sudah Anda miliki saat ini?</p>
+		<p data-i18n="modalDesc">Berapa banyak item yang Anda inginkan?</p>
 		<input type="number" id="modalInput" min="1" max="999" value="1">
 		<div class="modal-buttons">
 			<button class="modal-btn-confirm" data-i18n="btnSave" onClick="confirmModal()">Simpan</button>
@@ -303,8 +303,8 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 
 <div id="inventoryModal" class="modal-backdrop" style="display:none; z-index: 2001;">
 	<div class="modal-content" style="max-width: 450px;">
-		<h3 data-i18n="modalInvTitle">Pilih Item untuk Inventory</h3>
-		<input type="text" id="invSearch" class="search-box" style="margin-bottom: 5px;" data-i18n="invSearchPlaceholder" placeholder="🔍 Cari nama buku/bahan..." onkeyup="filterInventorySearch(this.value)">
+		<h3 data-i18n="modalInvTitle">Menambahkan Item</h3>
+		<input type="text" id="invSearch" class="search-box" style="margin-bottom: 5px;" data-i18n="invSearchPlaceholder" placeholder="🔍 Cari nama tome/bahan..." onkeyup="filterInventorySearch(this.value)">
 		<div id="invItemList" class="branch" style="max-height: 250px; overflow-y: auto; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);"></div>
 		<button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onClick="closeInventoryModal()" data-i18n="btnCloseWindow">Tutup Jendela</button>
 	</div>
@@ -327,9 +327,7 @@ const LANG = {
 		btnReset: "🔄 Reset Kalkulator", 
 		searchPlaceholder: "🔍 Cari nama buku target...", 
 		modalTitleAdd: "Masukkan ke Inventory", 
-		modalDesc: "Berapa banyak item ini yang sudah Anda miliki saat ini?", 
-		btnSave: "Simpan", 
-		btnCancel: "Batal", 
+		modalDesc: "Berapa banyak item yang Anda inginkan?", 
 		baseMat: "Bahan Dasar", 
 		lvl: "Level", 
 		alertReset: "Hapus semua perhitungan, profil, dan mulai dari awal?", 
@@ -341,8 +339,8 @@ const LANG = {
 		btnNew: "💾 Baru",
 		btnExport: "Ekspor",
 		btnImport: "Impor",
-		modalInvTitle: "Pilih Item untuk Inventory",
-		invSearchPlaceholder: "🔍 Cari nama buku/bahan...",
+		modalInvTitle: "Menambahkan Item",
+		invSearchPlaceholder: "🔍 Cari nama tome/bahan...",
 		btnCloseWindow: "Tutup Jendela"
 	},
 	en: { 
