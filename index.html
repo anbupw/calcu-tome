@@ -931,9 +931,11 @@ window.applyLanguage = applyLanguage;
   import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
   import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+  // Konfigurasi dengan tambahan databaseURL
   const firebaseConfig = {
     apiKey: "AIzaSyC1eCaQkeCf1IJQIDqveEKhHHFEYMd6bSs",
     authDomain: "kalkulator-tome.firebaseapp.com",
+    databaseURL: "https://kalkulator-tome-default-rtdb.firebaseio.com", // <-- INI YANG KURANG SEBELUMNYA
     projectId: "kalkulator-tome",
     storageBucket: "kalkulator-tome.firebasestorage.app",
     messagingSenderId: "794012581588",
@@ -942,7 +944,14 @@ window.applyLanguage = applyLanguage;
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const database = getDatabase(app);
+  let database = null;
+  
+  // Pengaman agar kalkulator tidak blank jika database gagal/belum aktif
+  try {
+      database = getDatabase(app);
+  } catch (err) {
+      console.warn("Peringatan: Database gagal terhubung.", err);
+  }
 
   let isSignUpMode = false;
   let currentUserUid = null;
@@ -975,12 +984,25 @@ window.applyLanguage = applyLanguage;
 
       if(isSignUpMode) {
           createUserWithEmailAndPassword(auth, email, password)
-              .then(() => { alert("Akun berhasil dibuat! Silakan masuk."); toggleAuthMode(); btn.disabled = false; btn.innerText = "Masuk Aplikasi"; })
-              .catch((error) => { alert("Gagal mendaftar: " + error.message); btn.disabled = false; btn.innerText = "Daftar Akun Baru"; });
+              .then(() => { 
+                  alert("Akun berhasil dibuat! Silakan masuk."); 
+                  toggleAuthMode(); 
+                  btn.disabled = false; 
+                  btn.innerText = "Masuk Aplikasi"; 
+              })
+              .catch((error) => { 
+                  alert("Gagal mendaftar: " + error.message); 
+                  btn.disabled = false; 
+                  btn.innerText = "Daftar Akun Baru"; 
+              });
       } else {
           signInWithEmailAndPassword(auth, email, password)
               .then(() => { /* Login Sukses ditangani otomatis oleh onAuthStateChanged */ })
-              .catch((error) => { alert("Gagal masuk: Email atau Sandi salah."); btn.disabled = false; btn.innerText = "Masuk Aplikasi"; });
+              .catch((error) => { 
+                  alert("Gagal masuk: Email atau Sandi salah."); 
+                  btn.disabled = false; 
+                  btn.innerText = "Masuk Aplikasi"; 
+              });
       }
   }
 
@@ -991,8 +1013,17 @@ window.applyLanguage = applyLanguage;
   }
 
   window.syncToFirebase = function(data) {
-      if (currentUserUid) {
+      if (currentUserUid && database) {
           set(ref(database, `users/${currentUserUid}/tomeProfiles`), data).catch(console.error);
+      }
+  }
+
+  // Fungsi darurat untuk memuat kalkulator lokal secara paksa
+  function loadLocalCalculatorFallback() {
+      if(typeof window.initProfiles === 'function') {
+          window.initProfiles();
+          window.loadFromHash();
+          window.applyLanguage();
       }
   }
 
@@ -1003,20 +1034,20 @@ window.applyLanguage = applyLanguage;
           document.getElementById('authGate').style.display = 'none';
           document.getElementById('appContainer').style.display = 'flex';
           
-          const dbRef = ref(database);
-          get(child(dbRef, `users/${currentUserUid}/tomeProfiles`)).then((snapshot) => {
-              if (snapshot.exists()) {
-                  let cloudData = snapshot.val();
-                  localStorage.setItem('tomeProfiles', JSON.stringify(cloudData));
-              }
-              window.initProfiles();
-              window.loadFromHash();
-              window.applyLanguage();
-          }).catch(() => {
-              window.initProfiles();
-              window.loadFromHash();
-              window.applyLanguage();
-          });
+          if (database) {
+              const dbRef = ref(database);
+              get(child(dbRef, `users/${currentUserUid}/tomeProfiles`)).then((snapshot) => {
+                  if (snapshot.exists()) {
+                      let cloudData = snapshot.val();
+                      localStorage.setItem('tomeProfiles', JSON.stringify(cloudData));
+                  }
+                  loadLocalCalculatorFallback();
+              }).catch(() => {
+                  loadLocalCalculatorFallback(); // Tetap load Tome walau cloud error
+              });
+          } else {
+              loadLocalCalculatorFallback();
+          }
       } else {
           currentUserUid = null;
           document.getElementById('authGate').style.display = 'flex';
