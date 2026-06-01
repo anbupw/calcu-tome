@@ -440,7 +440,7 @@ let inventoryData = {};
 let profiles = { "Default Build": { target: 616, inventory: {}, prices: [0, 0, 0] } };
 let currentProfileName = "Default Build";
 
-// ⚠️ TEMPELKAN KODE CONFIG FIREBASE ANDA DI SINI ⚠️ //
+// 🔥 CONFIG FIREBASE PERMANEN MILIK ANDA 🔥
 const firebaseConfig = {
 	apiKey: "AIzaSyC1eCaQkeCf1IJQIDqveEKhHHFEYMd6bSs",
 	authDomain: "kalkulator-tome.firebaseapp.com",
@@ -489,9 +489,7 @@ function openAuthModal(mode) {
 	document.getElementById('authModal').style.display = 'flex';
 }
 
-function closeAuthModal() {
-	document.getElementById('authModal').style.display = 'none';
-}
+function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
 
 function toggleAuthMode(e) {
 	e.preventDefault();
@@ -638,9 +636,7 @@ function importProfilesData(event) {
 				applyLanguage();
 				alert(currentLang === 'id' ? "Data profil berhasil diimpor!" : "Profile data imported successfully!");
 			}
-		} catch (err) {
-			alert("Gagal membaca file JSON!");
-		}
+		} catch (err) { alert("Gagal membaca file JSON!"); }
 	};
 	reader.readAsText(file);
 	event.target.value = '';
@@ -673,7 +669,7 @@ function processTree(id, isRight = false) {
 		
 		if (finalQty > 0 || !isRight) {
 			html += `<li>
-				<button style="background-image:url('znachki.png'); background-position: -${(itemId%10)*32}px -${Math.floor(itemId/100)*32}px;" 
+				<button style="background-image:url('znachki.png'); background-position: -${(itemId%10)*32}px -${Math.floor(itemId/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" 
 						onmouseenter="showTooltip(event, ${itemId})" 
 						onmouseleave="hideTooltip()"></button>
 				<b>${finalQty}</b>
@@ -725,7 +721,7 @@ function renderDeductions() {
 		if (inventoryData[id] > 0) {
 			empty = false;
 			html += `<li style="margin: 10px;">
-				<button style="background-image:url('znachki.png'); background-position: -${(id%10)*32}px -${Math.floor(id/100)*32}px;" onmouseenter="showTooltip(event, ${id})" onmouseleave="hideTooltip()"></button>
+				<button style="background-image:url('znachki.png'); background-position: -${(id%10)*32}px -${Math.floor(id/100)*32}px; width:32px; height:32px; border:none; cursor:pointer;" onmouseenter="showTooltip(event, ${id})" onmouseleave="hideTooltip()"></button>
 				<b>${inventoryData[id]}</b>
 				<span onClick="removeInventory(${id})"></span>
 			</li>`;
