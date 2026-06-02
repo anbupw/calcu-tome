@@ -30,6 +30,7 @@ auth.onAuthStateChanged(user => {
         }
         
         loadFromCloud(user.uid);
+		listenGlobalChat();
         
     } else {
         // Jika belum Login / Keluar Akun -> Kunci Aplikasi & Paksa Layar Login Muncul
@@ -37,6 +38,8 @@ auth.onAuthStateChanged(user => {
         if (appContent) appContent.style.display = 'none';
         
         if (accountSection) accountSection.innerHTML = ''; // Kosongkan saat logout
+		
+		unsubscribeGlobalChat();
     }
 });
 
@@ -113,6 +116,9 @@ const LANG = {
 		farmComplete: "✅ Semua material atau Token mencukupi untuk Crafting!",
 		farmBuy: "🛒 Beli di Item Mall/Farming:",
 		farmRecToken: "Gunakan <strong>{tokens} Token of Luck</strong> untuk mencetak <strong>{pages} Tome Page</strong>."
+		chatTitle: "🔊 Forum Chat Global",
+		chatDesc: "Tempat berkumpul dan koordinasi semua Player secara real-time!",
+		chatPlaceholder: "Ketik pesan di sini (Enter untuk kirim)..."
 	},
 	en: { 
 		btnTarget: "📚 Target Tome Crafting", 
@@ -162,6 +168,9 @@ const LANG = {
 		farmComplete: "✅ All materials (or Tokens) are sufficient for Crafting!",
 		farmBuy: "🛒 Buy from Item Mall:",
 		farmRecToken: "Use <strong>{tokens} Token of Luck</strong> to forge <strong>{pages} Tome Page</strong>."
+		chatTitle: "🔊 Global Chat Forum",
+		chatDesc: "Real-time gathering and coordination room for all players!",
+		chatPlaceholder: "Type a message here (Enter to send)..."
 	}
 };
 
@@ -1221,6 +1230,117 @@ function attemptCrafting(targetId) {
         const bookName = (TOME_DB[targetId] && TOME_DB[targetId][4]) ? TOME_DB[targetId][4] : "Target Tome";
         alert(`❌ CRAFTING GAGAL!\n\nBahan baku atau sub-buku di Inventory Anda belum cukup untuk merakit [${bookName}].`);
     }
+}
+
+// ==================== ENGINE CORE: REAL-TIME GLOBAL CHAT LOGIC ====================
+let chatUnsubscribe = null;
+
+// A. FUNGSI SINKRONISASI REAL-TIME (MENDENGAR CHAT MASUK)
+function listenGlobalChat() {
+    // Bersihkan listener aktif sebelumnya jika ada (Mencegah memory leak)
+    if (chatUnsubscribe) chatUnsubscribe();
+
+    const chatMessages = document.getElementById('chatMessages');
+    if (!chatMessages) return;
+
+    chatUnsubscribe = db.collection("global_chats")
+        .orderBy("timestamp", "desc")
+        .limit(50) // Hanya ambil 50 pesan terakhir demi performa & menghemat kuota Firestore
+        .onSnapshot(snapshot => {
+            let html = "";
+            const docs = snapshot.docs.reverse(); // Balik urutan agar pesan terbaru berada di bawah
+
+            if (docs.length === 0) {
+                html = `<div style="color:var(--text-muted); text-align:center; padding: 20px; font-style:italic; font-size:0.85rem;">Belum ada obrolan. Mari sapa pemain lain pertama kali!</div>`;
+                chatMessages.innerHTML = html;
+                return;
+            }
+
+            docs.forEach(doc => {
+                const data = doc.data();
+                const isMe = data.uid === (currentUser ? currentUser.uid : null);
+                
+                // Konfigurasi waktu pesan secara lokal
+                let timeStr = "...";
+                if (data.timestamp) {
+                    const date = data.timestamp.toDate();
+                    timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                }
+
+                // Proteksi Keamanan Tinggi: Bersihkan input teks dari kode berbahaya (Anti-XSS Injection)
+                const safeName = escapeChatHTML(data.name || "Anonymous");
+                const safeMessage = escapeChatHTML(data.message || "");
+                const photoURL = data.photo || "https://via.placeholder.com/40";
+
+                // Layouting chat bubble yang presisi sesuai identitas pengirim
+                html += `
+                    <div class="chat-bubble" style="display: flex; gap: 10px; align-items: flex-start; ${isMe ? 'flex-direction: row-reverse;' : ''}">
+                        <img src="${photoURL}" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid ${isMe ? 'var(--accent)' : 'var(--border-color)'}; flex-shrink: 0;" alt="Avatar">
+                        <div style="background: ${isMe ? 'rgba(245,158,11,0.12)' : 'rgba(255,255,255,0.03)'}; border: 1px solid ${isMe ? 'var(--accent)' : 'var(--border-color)'}; padding: 8px 12px; border-radius: 10px; max-width: 80%; text-align: left; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 2px;">
+                                <span style="font-weight: 600; font-size: 0.78rem; color: ${isMe ? 'var(--accent)' : '#fbbf24'};">${safeName}</span>
+                                <span style="font-size: 0.65rem; color: var(--text-muted);">${timeStr}</span>
+                            </div>
+                            <p style="margin: 0; font-size: 0.85rem; color: #e2e8f0; line-height: 1.4; word-break: break-word; white-space: pre-wrap;">${safeMessage}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            chatMessages.innerHTML = html;
+            
+            // Auto-scroll halus ke pesan paling bawah setiap ada pesan baru masuk
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, err => {
+            console.error("Gagal melakukan sinkronisasi chat forum:", err);
+        });
+}
+
+// B. FUNGSI UNTUK MEMATIKAN STREAM CHAT
+function unsubscribeGlobalChat() {
+    if (chatUnsubscribe) {
+        chatUnsubscribe();
+        chatUnsubscribe = null;
+    }
+}
+
+// C. FUNGSI MENGIRIM PESAN BARU KELIAR
+function sendGlobalChat() {
+    const inputField = document.getElementById('chatInputField');
+    if (!inputField) return;
+
+    const text = inputField.value.trim();
+    if (!text) return; // Validasi: Dilarang kirim pesan kosong
+    if (!currentUser) return;
+
+    if (text.length > 400) {
+        alert("Pesan Anda terlalu panjang! Maksimal adalah 400 karakter.");
+        return;
+    }
+
+    // Eksekusi kirim paket data ke Cloud Firestore
+    db.collection("global_chats").add({
+        uid: currentUser.uid,
+        name: currentUser.displayName || "Player Classic",
+        photo: currentUser.photoURL || "https://via.placeholder.com/40",
+        message: text,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    })
+    .then(() => {
+        inputField.value = ''; // Kosongkan kolom input seketika setelah berhasil terkirim
+    })
+    .catch(err => {
+        console.error("Gagal mengirim pesan ke server:", err);
+        alert("Gagal mengirim obrolan. Silakan periksa jaringan Anda.");
+    });
+}
+
+// D. HELPER PROTEKSI SCRIPT INJECTION (XSS SANITIZER)
+function escapeChatHTML(str) {
+    if (!str) return '';
+    return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag] || tag));
 }
 
 window.onload = () => { applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };

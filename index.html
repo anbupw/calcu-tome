@@ -127,6 +127,26 @@
 					<ul id="farmingRecUI" style="list-style: none; padding: 0; margin: 5px 0; font-size: 0.85rem; color: var(--success); display: flex; flex-direction: column; gap: 6px;"></ul>
 				</div>
 			</div>
+			
+			<div class="calc-card" style="margin-top: 20px;">
+				<h2 style="display: flex; align-items: center; gap: 10px;">
+					<i class="fas fa-comments" style="color: var(--accent);"></i>
+					<span data-i18n="chatTitle">🔊 Forum Chat Global</span>
+				</h2>
+				<div class="podzagolovok" data-i18n="chatDesc">Tempat berkumpul dan mengobrol semua Player secara real-time!</div>
+				
+				<div id="chatMessages" class="chat-messages-area" style="max-height: 280px; overflow-y: auto; margin: 15px 0; background: rgba(0,0,0,0.25); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 12px;">
+					<div style="color: var(--text-muted); text-align: center; padding: 20px; font-style: italic;">Memuat obrolan guild...</div>
+				</div>
+				
+				<div class="chat-input-group" style="display: flex; gap: 8px; align-items: center;">
+					<input type="text" id="chatInputField" class="search-box" style="margin: 0; flex: 1;" data-i18n="chatPlaceholder" placeholder="Ketik pesan di sini lalu tekan Enter..." onkeydown="if(event.key === 'Enter') sendGlobalChat()">
+					<button class="btn-calc" id="btnSendChat" onclick="sendGlobalChat()" style="width: auto; padding: 0 16px; height: 42px; margin: 0; border-radius: 8px;">
+						<i class="fas fa-paper-plane"></i>
+					</button>
+				</div>
+			</div>
+			
 		</div>
 		
 	</div>

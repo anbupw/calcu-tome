@@ -340,3 +340,19 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
         display: none !important;
     }
 }
+
+/* Styling Scrollbar Area Chat Box */
+.chat-messages-area::-webkit-scrollbar {
+    width: 6px;
+}
+.chat-messages-area::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+.chat-messages-area::-webkit-scrollbar-thumb {
+    background: rgba(245, 158, 11, 0.3);
+    border-radius: 10px;
+}
+.chat-messages-area::-webkit-scrollbar-thumb:hover {
+    background: rgba(245, 158, 11, 0.5);
+}
