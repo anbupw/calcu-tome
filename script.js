@@ -1,5 +1,6 @@
 // ==================== INITIALIZATION & FIREBASE AUTH WALL ====================
 let currentUser = null;
+let isDataLoaded = false; // Kunci pengaman Cloud Sync
 
 // GERBANG MONITOR STATUS LOG-IN REALTIME
 auth.onAuthStateChanged(user => {
@@ -938,6 +939,8 @@ function filterBooks(query) {
 // ---------------- DATABASE MECHANISM (CLOUD VS LOCAL) ---------------- //
 
 function saveDataTrigger() {
+    if (!isDataLoaded) return;
+	
     let p10 = Math.max(0, parseInt(document.getElementById('price10').value) || 0); 
     let p11 = Math.max(0, parseInt(document.getElementById('price11').value) || 0); 
     let p12 = Math.max(0, parseInt(document.getElementById('price12').value) || 0); 
@@ -977,15 +980,20 @@ function loadFromCloud(uid) {
                 try {
                     let state = JSON.parse(savedData);
                     parseStateToUI(state);
+					
+					isDataLoaded = true; // <--- BUKA KUNCI SEBELUM SAVE TRIGGER
                     saveDataTrigger();
                 } catch(e){}
             }
         }
+		isDataLoaded = true; // <--- BUKA KUNCI JIKA BERHASIL LOAD DARI CLOUD
         applyLanguage();
     }).catch(err => {
         console.error("Gagal sinkronisasi cloud, fallback ke lokal:", err);
         loadFromLocalStorage();
-        applyLanguage();
+        
+		isDataLoaded = true; // <--- TETAP BUKA KUNCI MESKI ERROR (Agar aplikasi tetap bisa save saat offline)
+		applyLanguage();
     });
 }
 
