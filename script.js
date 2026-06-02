@@ -1392,34 +1392,38 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// ==================== FITUR SCROLLSPY MOBILE NAVBAR ====================
+// ==================== FITUR SCROLLSPY MOBILE NAVBAR (VERSI VIEWPORT) ====================
 window.addEventListener('scroll', () => {
-    // 1. Ambil semua elemen kartu yang memiliki ID
     const sections = document.querySelectorAll('.calc-card[id]');
     const navItems = document.querySelectorAll('.mobile-navbar .nav-item');
     
     let currentSectionId = '';
 
-    // 2. Deteksi posisi layar saat ini
+    // Gunakan getBoundingClientRect untuk mengukur jarak real-time dari lensa layar
     sections.forEach(section => {
-        // Ambil jarak kartu dari ujung atas web
-        const sectionTop = section.offsetTop;
+        const rect = section.getBoundingClientRect();
         
-        // 90px adalah angka kompensasi (karena layar tertutup navbar di atasnya)
-        if (pageYOffset >= (sectionTop - 90)) {
+        // 150 adalah titik toleransi (sensor). Jika bagian atas kartu sudah
+        // menyentuh atau melewati 150px dari puncak layar, jadikan ini sebagai seksi aktif.
+        if (rect.top <= 150) {
             currentSectionId = section.getAttribute('id');
         }
     });
 
-    // 3. Matikan semua ikon menu, lalu nyalakan ikon yang ID-nya cocok
-    navItems.forEach(item => {
-        item.classList.remove('active'); // Matikan semua dulu
-        
-        // Jika link (href) pada navbar sama dengan ID kartu yang sedang dilihat layarnya
-        if (item.getAttribute('href') === `#${currentSectionId}`) {
-            item.classList.add('active'); // Nyalakan efek warnanya!
-        }
-    });
+    // Jika pengguna menggulir ke paling atas mentok (opsional, untuk memastikan Target menyala)
+    if (window.scrollY === 0) {
+        currentSectionId = 'cardTarget';
+    }
+
+    // Jalankan efek ganti warna di Navbar
+    if (currentSectionId) {
+        navItems.forEach(item => {
+            item.classList.remove('active'); // Matikan semua
+            if (item.getAttribute('href') === `#${currentSectionId}`) {
+                item.classList.add('active'); // Nyalakan yang sedang dilihat
+            }
+        });
+    }
 });
 
 window.onload = () => { applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
