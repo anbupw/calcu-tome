@@ -115,10 +115,10 @@ const LANG = {
 		farmTitle: "Optimalisasi Farm",
 		farmComplete: "✅ Semua material atau Token mencukupi untuk Crafting!",
 		farmBuy: "🛒 Beli di Item Mall/Farming:",
-		farmRecToken: "Gunakan <strong>{tokens} Token of Luck</strong> untuk mencetak <strong>{pages} Tome Page</strong>."
+		farmRecToken: "Gunakan <strong>{tokens} Token of Luck</strong> untuk mencetak <strong>{pages} Tome Page</strong>.",
 		chatTitle: "🔊 Forum Chat Global",
 		chatDesc: "Tempat berkumpul dan koordinasi semua Player secara real-time!",
-		chatPlaceholder: "Ketik pesan di sini (Enter untuk kirim)...",
+		chatPlaceholder: "Ketik pesan di sini (Enter untuk kirim)..."
 	},
 	en: { 
 		btnTarget: "📚 Target Tome Crafting", 
@@ -167,10 +167,10 @@ const LANG = {
 		farmTitle: "Smart Farming Optimizer",
 		farmComplete: "✅ All materials (or Tokens) are sufficient for Crafting!",
 		farmBuy: "🛒 Buy from Item Mall:",
-		farmRecToken: "Use <strong>{tokens} Token of Luck</strong> to forge <strong>{pages} Tome Page</strong>."
+		farmRecToken: "Use <strong>{tokens} Token of Luck</strong> to forge <strong>{pages} Tome Page</strong>.",
 		chatTitle: "🔊 Global Chat Forum",
 		chatDesc: "Real-time gathering and coordination room for all players!",
-		chatPlaceholder: "Type a message here (Enter to send)...",
+		chatPlaceholder: "Type a message here (Enter to send)..."
 	}
 };
 
