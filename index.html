@@ -1,1180 +1,509 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Kalkulator Tome Perfect World - Edisi Imersif" />
-<title>Kalkulator Tome</title>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reverse Calculator & Smart Farming - Master Beta v1.1.0</title>
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --success-color: #198754;
+            --danger-color: #dc3545;
+            --dark-color: #212529;
+            --light-bg: #f8f9fa;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            padding: 20px;
+            color: var(--dark-color);
+        }
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
 
-<style>
-:root {
-	--bg-main: #0f172a;
-	--bg-card: #1e293b;
-	--bg-card-hover: #334155;    
-	--text-main: #f8fafc;
-	--text-muted: #94a3b8;
-	--accent: #3b82f6;
-	--accent-hover: #2563eb;
-	--danger: #ef4444;
-	--danger-hover: #dc2626;
-	--success: #10b981;
-	--success-hover: #059669;
-	--border-color: rgba(255, 255, 255, 0.08);
-}
+        h1 {
+            text-align: center;
+            color: var(--dark-color);
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+        .section {
+            background: var(--light-bg);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #dee2e6;
+        }
 
-body {
-	font-family: 'Inter', sans-serif;
-	background-color: var(--bg-main);
-	color: var(--text-main);
-	line-height: 1.6;
-	min-height: 100vh;
-	padding: 30px; 
-	background-image: 
-		radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
-		radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
-	background-attachment: fixed;
-    display: flex;
-    flex-direction: column;
-}
+        .section-title {
+            margin-top: 0;
+            font-size: 16px;
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
 
-ul { list-style: none; }
-a { color: var(--accent); text-decoration: none; transition: 0.3s; }
-a:hover { color: #60a5fa; text-decoration: underline; }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
 
-.container { 
-	display: flex; 
-	flex-wrap: wrap; 
-	gap: 24px; 
-	justify-content: center; 
-	max-width: 1450px; 
-	margin: 0 auto; 
-	flex: 1; 
-	width: 100%;
-	align-items: flex-start;
-}
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
 
-.main-column {
-	flex: 1 1 calc(50% - 12px);
-	display: flex;
-	flex-direction: column;
-	gap: 24px;
-	min-width: 340px;
-}
+        .form-group label {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
 
-.calc-card { 
-	background: var(--bg-card); 
-	border: 1px solid var(--border-color); 
-	border-radius: 20px; 
-	padding: 25px; 
-	width: 100%; 
-	box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); 
-	position: relative; 
-	backdrop-filter: blur(10px); 
-}
+        .form-group input, .form-group select {
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 14px;
+        }
 
-h1, h2 { font-size: 1.25rem; font-weight: 700; color: #e2e8f0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-h1::before, h2::before { content: ''; display: inline-block; width: 12px; height: 12px; background: var(--accent); border-radius: 3px; }
-.podzagolovok { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color); font-size: 0.9rem; color: var(--text-muted); min-height: 50px; flex-wrap: wrap; }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
 
-.podzagolovok input[type="number"] { background: #0f172a; border: 1px solid #475569; color: white; font-weight: 600; border-radius: 8px; padding: 8px 12px; width: 80px; text-align: center; font-size: 1rem; outline: none; transition: border 0.3s; }
-.podzagolovok input:focus { border-color: var(--accent); }
+        .btn:hover {
+            background-color: #0b5ed7;
+        }
 
-/* Buttons Styling */
-.btn-calc { background: var(--accent); color: white; border: none; padding: 9px 18px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4); }
-.btn-calc:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 6px 12px -2px rgba(59, 130, 246, 0.5); }
+        /* MASTER UI CONSTRAINT: MODAL ARCHITECTURE (LOCKED) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2001; /* Z-Index Locked */
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
 
-.btn-icon { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-muted); width: 38px; height: 38px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; }
-.btn-icon:hover { background: var(--accent); color: white; border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3); }
-.btn-icon.active { background: var(--success); color: white; border-color: var(--success); }
-.btn-icon .fav-active { color: #f59e0b; }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
-.btn-success { background: var(--success); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; white-space: nowrap; transition: all 0.2s ease; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3); }
-.btn-success:hover { background: var(--success-hover); transform: translateY(-2px); box-shadow: 0 6px 12px -2px rgba(16, 185, 129, 0.4); }
+        .modal-content {
+            background: #fff;
+            width: 90%;
+            max-width: 550px;
+            max-height: 85vh; /* Responsive Constraint Locked */
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
 
-.progress-container { margin-bottom: 20px; background: rgba(0, 0, 0, 0.15); padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); }
-.progress-text { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
-.progress-text #progressPercentText { color: var(--success); }
-.progress-bar-bg { background: #0f172a; border-radius: 50px; height: 10px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05); }
-.progress-bar { background: linear-gradient(90deg, var(--accent), var(--success)); width: 0%; height: 100%; border-radius: 50px; transition: width 0.4s ease-in-out; }
+        @keyframes slideUp {
+            from { transform: translateY(20px); }
+            to { transform: translateY(0); }
+        }
 
-.cost-input-group { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; background: rgba(0,0,0,0.15); padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border-color); }
-.cost-input-group label { font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
-.cost-input-group label span { display: inline-block; width: 32px; height: 32px; background-image: url('znachki.png'); transform: scale(0.85); }
-.cost-input-group input { background: #0f172a; border: 1px solid #475569; color: var(--success); font-weight: 600; border-radius: 6px; padding: 6px 10px; width: 140px; text-align: right; outline: none; font-family: 'Inter', sans-serif; }
-.cost-input-group input:focus { border-color: var(--accent); }
-.total-cost-box { margin-top: 20px; background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.2); padding: 15px; border-radius: 12px; text-align: center; }
-.total-cost-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 5px; }
-.total-cost-value { font-size: 1.4rem; font-weight: 700; color: var(--success); text-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
+        .modal-header {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.branch ul { display: flex; flex-wrap: wrap; gap: 15px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; margin-bottom: 16px; align-items: center; }
+        .modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
 
-#rightTree ul li:first-child, #deductionsList ul li:first-child { 
-	width: 100%; 
-	font-size: 0.75rem; 
-	font-weight: 700; 
-	color: var(--text-muted); 
-	text-transform: uppercase; 
-	letter-spacing: 1.5px; 
-	border-bottom: 1px dashed var(--border-color); 
-	padding-bottom: 8px; 
-	margin-bottom: 5px; 
-}
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6c757d;
+        }
 
-.branch li { position: relative; display: inline-flex; flex-direction: column; align-items: center; }
-.branch li button { display: block; width: 32px; height: 32px; transform: scale(1.2); margin: 6px; background-image: url('znachki.png'); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; }
-.branch li button:hover { transform: scale(1.35) translateY(-2px); box-shadow: 0 8px 15px rgba(0,0,0,0.5); }
-.branch li b { position: absolute; bottom: -8px; right: -5px; background: var(--accent); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 12px; border: 2px solid var(--bg-card); pointer-events: none; z-index: 2; }
-.branch li span { position: absolute; top: -5px; left: -5px; width: 20px; height: 20px; background: var(--danger); color: white; font-size: 14px; line-height: 14px; text-align: center; border-radius: 50%; cursor: pointer; opacity: 0; visibility: hidden; transition: all 0.2s ease; z-index: 3; border: 2px solid var(--bg-card); display: flex; align-items: center; justify-content: center; }
-.branch li span::before { content: "-"; font-weight: bold; }
-.branch li:hover span { opacity: 1; visibility: visible; }
-#strelki { color: var(--accent); font-weight: bold; letter-spacing: 2px; }
-#niz li:first-child { display: none; } 
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto; /* Scroll Locked */
+            flex: 1;
+        }
 
-.floating-tooltip { position: fixed; background: rgba(10, 15, 30, 0.96); border: 2px solid #475569; border-radius: 10px; padding: 14px 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.85), inset 0 0 15px rgba(0,0,0,0.7); z-index: 10000; pointer-events: none; display: none; min-width: 240px; max-width: 300px; font-family: 'Inter', sans-serif; backdrop-filter: blur(6px); }
-.tooltip-title { color: #f59e0b; font-size: 1rem; font-weight: 700; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
-.tooltip-type { color: #94a3b8; font-size: 0.75rem; margin-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.15); padding-bottom: 5px; }
-.tooltip-list { display: flex; flex-direction: column; gap: 4px; }
-.tooltip-stat { color: #60a5fa; font-size: 0.85rem; font-weight: 600; }
-.tooltip-footer { color: #64748b; font-size: 0.75rem; font-style: italic; margin-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 6px; }
+        .modal-footer {
+            padding: 12px 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
 
-.footer { margin-top: 40px; padding: 25px 0; border-top: 1px solid var(--border-color); text-align: center; width: 100%; }
-.footer-text { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; }
-.social-icons { display: flex; justify-content: center; gap: 18px; }
-.social-icons a { color: var(--text-muted); font-size: 1.4rem; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.05); transition: all 0.3s ease; }
-.social-icons a:hover { color: white; background: var(--accent); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4); }
+        .btn-secondary {
+            background-color: #6c757d;
+            padding: 8px 15px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
 
-.menu-toggle-btn { 
-	position: fixed; 
-	bottom: 25px; 
-	right: 25px; 
-	background: rgba(30, 41, 59, 0.7); 
-	backdrop-filter: blur(8px);
-	border: 1px solid var(--border-color);
-	color: white; 
-	width: 48px;
-	height: 48px;
-	border-radius: 50%; 
-	cursor: pointer; 
-	z-index: 1001; 
-	box-shadow: 0 8px 24px rgba(0,0,0,0.4); 
-	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-size: 1.25rem;
-}
-.menu-toggle-btn:hover { 
-	background: var(--accent); 
-	border-color: var(--accent);
-	transform: scale(1.1) rotate(45deg); 
-	box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
-}
-.menu-toggle-btn.active {
-	background: var(--danger);
-	border-color: var(--danger);
-	transform: rotate(135deg);
-}
+        .btn-shortcut {
+            background-color: var(--success-color);
+            padding: 8px 15px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
 
-.vybor { 
-	position: fixed; 
-	right: 25px; 
-	bottom: 85px; 
-	background: rgba(15, 23, 42, 0.95); 
-	backdrop-filter: blur(10px); 
-	border: 1px solid var(--border-color); 
-	padding: 20px; 
-	border-radius: 16px; 
-	box-shadow: 0 20px 40px rgba(0,0,0,0.6); 
-	z-index: 1000; 
-	width: 280px; 
-	max-height: 80vh; 
-	overflow-y: auto; 
-	animation: panelFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-@keyframes panelFadeIn {
-	from { opacity: 0; transform: translateY(10px) scale(0.95); }
-	to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.panel-actions { display: flex; flex-direction: column; gap: 10px; }
-.panel-actions > button { width: 100%; border: none; color: white; padding: 11px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.85rem; font-family: 'Inter', sans-serif; }
-.btn-primary { background: var(--accent); } .btn-primary:hover { background: var(--accent-hover); }
-.btn-danger { background: var(--danger); } .btn-danger:hover { background: var(--danger-hover); }
-.btn-purple { background: #8b5cf6; } .btn-purple:hover { background: #7c3aed; }
-
-.search-box { width: 100%; padding: 10px 14px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: white; font-family: 'Inter', sans-serif; font-size: 0.9rem; margin-top: 10px; margin-bottom: 15px; outline: none; transition: 0.2s; }
-.search-box:focus { border-color: var(--accent); }
-
-#vyborDiv { padding-right: 5px; }
-#vyborDiv h4 { font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); margin-bottom: 10px; padding-bottom: 5px; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; }
-#vyborDiv ul { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start; margin-bottom: 15px; background: rgba(0, 0, 0, 0.15); padding: 10px; border-radius: 12px; }
-#vyborDiv li { display: inline-block; }
-
-.vybor::-webkit-scrollbar { width: 6px; } .vybor::-webkit-scrollbar-track { background: transparent; } .vybor::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
-
-.modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 1; transition: opacity 0.2s ease; }
-.modal-content { background: var(--bg-card); border: 1px solid var(--accent); padding: 25px; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6); text-align: center; animation: modalSlide 0.3s ease; }
-@keyframes modalSlide { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-.modal-content h3 { margin-bottom: 10px; color: #e2e8f0; font-size: 1.1rem; }
-.modal-content p { margin-bottom: 18px; color: var(--text-muted); font-size: 0.9rem; }
-.modal-content input { background: #0f172a; border: 1px solid #475569; color: white; padding: 10px; border-radius: 8px; width: 100%; text-align: center; font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; outline: none; }
-.modal-content input:focus { border-color: var(--accent); }
-.modal-buttons { display: flex; gap: 12px; }
-.modal-buttons button { flex: 1; padding: 10px; font-weight: 600; border-radius: 8px; border: none; cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
-.modal-btn-confirm { background: var(--accent); color: white; } .modal-btn-confirm:hover { background: var(--accent-hover); }
-.modal-btn-cancel { background: #334155; color: #cbd5e1; } .modal-btn-cancel:hover { background: #475569; }
-
-#invItemList::-webkit-scrollbar { width: 6px; }
-#invItemList::-webkit-scrollbar-track { background: transparent; }
-#invItemList::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
-
-@media (max-width: 1024px) {
-	.main-column { flex: 1 1 100%; max-width: 100%; }
-}
-@media (max-width: 768px) {
-	body { padding: 15px 10px 10px 10px; }
-	.container { gap: 16px; }
-	.main-column { gap: 16px; }
-	.calc-card { padding: 15px; border-radius: 14px; }
-	.floating-tooltip { pointer-events: auto !important; max-width: 90%; }
-}
-@media (max-width: 400px) {
-	.vybor { right: 10px; left: 10px; width: auto; bottom: 85px; }
-	.menu-toggle-btn { bottom: 20px; right: 20px; }
-}
-</style>
+        /* Progress Bar Core Custom Visual */
+        .progress-wrapper {
+            margin: 15px 0;
+        }
+        .progress-bar-container {
+            background-color: #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 20px;
+            width: 100%;
+        }
+        .progress-bar-fill {
+            background-color: var(--success-color);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
-	
-	<div class="main-column">
-		<div class="calc-card">
-			<h1 data-i18n="btnTarget">📚 Target Pembuatan Tome</h1>
-			<div class="podzagolovok" id="nazvaniye">Arahkan kursor ke ikon untuk melihat nama buku.</div>
-			<input type="text" id="bookSearch" class="search-box" data-i18n="searchPlaceholder" placeholder="🔍 Cari nama buku target..." oninput="filterBooks(this.value)">
-			<div id="vyborDiv" class="branch"></div>
-		</div>
-		
-		<div class="calc-card">
-			<h2 data-i18n="title4">📦 Inventory</h2>
-			<div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-				<span data-i18n="desc4" style="flex:1; min-width: 180px;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
-				<div style="display:flex; gap:8px;">
-					<button class="btn-success" style="background:#8b5cf6; box-shadow:0 4px 6px -1px rgba(139,92,246,0.3);" onclick="openReverseCalcModal()"><span data-i18n="btnReverse">🔍 Analisis Potensi</span></button>
-					<button class="btn-success" onclick="openInventoryModal()"><span data-i18n="btnAddItem">➕ Tambah Item</span></button>
-				</div>
-			</div>
-			<div id="deductionsList" class="branch"></div>
-		</div>
-	</div>
+    <h1>📚 Tome Crafting Analyzer Dashboard</h1>
+    
+    <div class="section">
+        <div class="section-title">📦 Data Inventory Aktual</div>
+        <div class="grid-3">
+            <div class="form-group">
+                <label for="invPages">Tome Page</label>
+                <input type="number" id="invPages" value="12" min="0">
+            </div>
+            <div class="form-group">
+                <label for="invFragments">Tome Fragment</label>
+                <input type="number" id="invFragments" value="8" min="0">
+            </div>
+            <div class="form-group">
+                <label for="invTokens">Token of Luck</label>
+                <input type="number" id="invTokens" value="150" min="0">
+            </div>
+        </div>
+    </div>
 
-    <div class="main-column">
-		<div class="calc-card">
-			<h2 data-i18n="title2">📋 Rincian Crafting Tome</h2>
-			<div class="podzagolovok" style="gap: 8px;">
-				<input type="number" id="mnojitel" value="1" min="1" max="99" oninput="sanitizeMultiplier(this)">
-				<button class="btn-calc" data-i18n="btnCalc" onclick="processTree(rightTreeId)">Hitung Kuantitas</button>
-				
-				<button class="btn-icon" onclick="copyShoppingList()" data-i18n-title="btnCopy" title="Salin Daftar Belanja"><i class="fas fa-clipboard"></i></button>
-				<button class="btn-icon" id="btnCompact" onclick="toggleCompactMode()" data-i18n-title="btnCompact" title="Toggle Mode Ringkas"><i class="fas fa-eye"></i></button>
-				<button class="btn-icon" id="btnFavorite" onclick="saveFavorite()" data-i18n-title="btnFav" title="Simpan sebagai Favorit"><i class="far fa-star"></i></button>
-				<button class="btn-icon" onclick="loadFavorite()" data-i18n-title="btnLoadFav" title="Muat Favorit Tersimpan"><i class="fas fa-bookmark"></i></button>
-			</div>
-			
-			<div class="progress-container">
-				<div class="progress-text">
-					<span data-i18n="progText">Progres Pengumpulan:</span>
-					<span id="progressPercentText">0.0%</span>
-				</div>
-				<div class="progress-bar-bg">
-					<div id="progressBar" class="progress-bar"></div>
-				</div>
-			</div>
-			<div id="rightTree" class="branch"></div>
-		</div>
+    <div class="section">
+        <div class="section-title">🎯 Pilih Target Kombinasi Tome</div>
+        <div class="form-group">
+            <label for="targetTome">Buku Target Rekursif</label>
+            <select id="targetTome"></select>
+        </div>
+    </div>
 
-		<div class="calc-card">
-			<h2 data-i18n="title3">Estimasi Biaya Pasar</h2>
-			<div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
-			<div class="cost-input-group">
-				<label><span style="background-position:32px -32px;"></span> Token of Luck:</label>
-				<input type="number" id="price10" value="0" min="0" oninput="sanitizePrice(this); updateCostAndProgress();" placeholder="0">
-			</div>
-			<div class="cost-input-group">
-				<label><span style="background-position:64px 0px;"></span> Tome Fragment:</label>
-				<input type="number" id="price11" value="0" min="0" oninput="sanitizePrice(this); updateCostAndProgress();" placeholder="0">
-			</div>
-			<div class="cost-input-group">
-				<label><span style="background-position:32px 0px;"></span> Tome Page:</label>
-				<input type="number" id="price12" value="0" min="0" oninput="sanitizePrice(this); updateCostAndProgress();" placeholder="0">
-			</div>
-			<div class="total-cost-box">
-				<div class="total-cost-label" data-i18n="totalCostLabel">Total Sisa Biaya:</div>
-				<div id="totalCostDisplay" class="total-cost-value">0 Gold</div>
-			</div>
-		</div>
-	</div>
+    <button class="btn" onclick="runReverseCalculator()">Jalankan Analisis Komprehensif</button>
 </div>
 
-<footer class="footer">
-	<div class="footer-text" data-i18n="footerText">
-		Kalkulator Tome &copy; 2026 | Dibuat oleh <strong>Sulfikar</strong>
-	</div>
-	<div class="social-icons">
-		<a href="https://www.facebook.com/zullQQ/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-		<a href="https://discord.gg/npyUAZuV" target="_blank" title="Discord"><i class="fab fa-discord"></i></a>
-		<a href="https://www.youtube.com/@idSkynet" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
-		<a href="https://www.zull.com/" target="_blank" title="Website"><i class="fas fa-globe"></i></a>
-	</div>
-</footer>
-
-<button class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleMenu()" title="Pengaturan"><i class="fas fa-gear"></i></button>
-
-<div class="vybor" id="mainMenuPanel" style="display:none;">
-	<div class="panel-actions">
-		<button class="btn-purple" onclick="toggleLanguage()" id="langBtn">🌐 Switch to English</button>
-		<button class="btn-danger" onclick="resetCalculator()"><span data-i18n="btnReset">🔄 Reset Kalkulator</span></button>
-	</div>
+<div class="modal-overlay" id="reverseCalcModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">Hasil Analisis Reverse Calculator</h3>
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div id="analysisSummary">
+                </div>
+            
+            <div id="smartFarmingContainer"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeModal()">Tutup</button>
+            <button class="btn-shortcut" onclick="selectTargetBook()">Jadikan Target Utama</button>
+        </div>
+    </div>
 </div>
-
-<div id="customModal" class="modal-backdrop" style="display:none;" onclick="if(event.target===this) closeModal()">
-	<div class="modal-content">
-		<h3 id="modalTitle" data-i18n="modalTitleAdd">Masukkan ke Inventory</h3>
-		<p data-i18n="modalDesc">Berapa banyak item yang Anda inginkan?</p>
-		<input type="number" id="modalInput" min="1" max="999" value="1" oninput="sanitizeMultiplier(this)">
-		<div class="modal-buttons">
-			<button class="modal-btn-confirm" data-i18n="btnSave" onclick="confirmModal()">Simpan</button>
-			<button class="modal-btn-cancel" data-i18n="btnCancel" onclick="closeModal()">Batal</button>
-		</div>
-	</div>
-</div>
-
-<div id="inventoryModal" class="modal-backdrop" style="display:none; z-index: 2001;" onclick="if(event.target===this) closeInventoryModal()">
-	<div class="modal-content" style="max-width: 450px;">
-		<h3 data-i18n="modalInvTitle">Menambahkan Item</h3>
-		<input type="text" id="invSearch" class="search-box" style="margin-bottom: 5px;" data-i18n="invSearchPlaceholder" placeholder="🔍 Cari nama tome/bahan..." onkeyup="filterInventorySearch(this.value)">
-		<div id="invItemList" class="branch" style="max-height: 250px; overflow-y: auto; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);"></div>
-		<button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onclick="closeInventoryModal()" data-i18n="btnCloseWindow">Tutup Jendela</button>
-	</div>
-</div>
-
-<div id="reverseCalcModal" class="modal-backdrop" style="display:none; z-index: 2001;" onclick="if(event.target===this) closeReverseCalcModal()">
-	<div class="modal-content" style="max-width: 450px; max-height:85vh; overflow-y:auto;">
-		<h3 data-i18n="modalRevTitle">🔍 Analisis Potensi Crafting</h3>
-		<p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:15px;" data-i18n="modalRevDesc">Sistem mendeteksi isi Inventory Anda dan menghitung Tome terbaik yang bisa dibuat.</p>
-		<div id="reverseCalcResults" style="margin-bottom: 20px;"></div>
-		<button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onclick="closeReverseCalcModal()" data-i18n="btnCloseWindow">Tutup Jendela</button>
-	</div>
-</div>
-
-<div id="floatingTooltip" class="floating-tooltip"></div>
 
 <script>
-const LANG = {
-	id: { 
-		btnTarget: "📚 Target Pembuatan Tome", 
-		title2: "📋 Rincian Crafting Tome", 
-		title3: "Estimasi Biaya Pasar", 
-		title4: "📦 Inventory", 
-		desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", 
-		desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", 
-		progText: "Progres Pengumpulan:", 
-		btnCalc: "Hitung Kuantitas", 
-		totalCostLabel: "Total Sisa Biaya:", 
-		btnReset: "🔄 Reset Kalkulator", 
-		searchPlaceholder: "🔍 Cari nama buku target...", 
-		modalTitleAdd: "Masukkan ke Inventory", 
-		modalDesc: "Berapa banyak item yang Anda inginkan?", 
-		baseMat: "Bahan Dasar", 
-		lvl: "Level", 
-		alertReset: "Hapus semua perhitungan dan mulai dari awal?", 
-		statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", 
-		footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", 
-		matDesc: "Bahan Crafting",
-		btnAddItem: "➕ Tambah Item",
-		modalInvTitle: "Menambahkan Item",
-		invSearchPlaceholder: "🔍 Cari nama tome/bahan...",
-		btnCloseWindow: "Tutup Jendela",
-		btnCopy: "Salin Daftar Belanja",
-		btnCompact: "Toggle Mode Ringkas",
-		btnFav: "Simpan sebagai Favorit",
-		btnLoadFav: "Muat Favorit Tersimpan",
-		msgCopyOk: "Daftar belanja berhasil disalin ke clipboard!",
-		msgFavSave: "Target ini telah disimpan sebagai favorit!",
-		msgFavDel: "Favorit dihapus.",
-		msgNoFav: "Belum ada favorit yang tersimpan.",
-		txtTarget: "Target",
-		txtMissing: "Sisa bahan dibutuhkan",
-		txtComplete: "Tidak ada (Sudah Lengkap)",
-		btnReverse: "🔍 Analisis Potensi",
-		modalRevTitle: "🔍 Analisis Potensi Crafting",
-		modalRevDesc: "Sistem mendeteksi isi Inventory Anda dan menghitung Tome terbaik yang bisa dibuat.",
-		txtReadyToCraft: "✅ SIAP DIRAKIT (100% LENGKAP)",
-		txtNearbyCraft: "⚡ HAMPIR SELESAI (TOP PROGRES)",
-		txtNoMats: "Inventory Anda kosong. Tambahkan beberapa bahan atau Tome terlebih dahulu!",
-		txtSelectTarget: "Jadikan Target"
-	},
-	en: { 
-		btnTarget: "📚 Target Tome Crafting", 
-		title2: "📋 Tome Crafting Details", 
-		title3: "Market Cost Estimator", 
-		title4: "📦 Inventory", 
-		desc3: "Enter the market price per item to estimate required Gold.", 
-		desc4: "Items here will automatically deduct from total requirements.", 
-		progText: "Collection Progress:", 
-		btnCalc: "Calculate Qty", 
-		totalCostLabel: "Total Remaining Cost:", 
-		btnReset: "🔄 Reset Calculator", 
-		searchPlaceholder: "🔍 Search target book name...", 
-		modalTitleAdd: "Add to Inventory", 
-		modalDesc: "How many items do you want?", 
-		btnSave: "Save", 
-		btnCancel: "Cancel", 
-		baseMat: "Base Materials", 
-		lvl: "Level", 
-		alertReset: "Clear all calculations and start over?", 
-		statEquipDesc: "* Bind on Equip.", 
-		footerText: "Tome Calculator © 2026 | Created by <strong>Sulfikar</strong>", 
-		matDesc: "Crafting Material",
-		btnAddItem: "➕ Add Item",
-		modalInvTitle: "Select Item for Inventory",
-		invSearchPlaceholder: "🔍 Search book or material name...",
-		btnCloseWindow: "Close Window",
-		btnCopy: "Copy Shopping List",
-		btnCompact: "Toggle Compact Mode",
-		btnFav: "Save as Favorite",
-		btnLoadFav: "Load Saved Favorite",
-		msgCopyOk: "Shopping list copied to clipboard!",
-		msgFavSave: "Target saved as favorite!",
-		msgFavDel: "Favorite removed.",
-		msgNoFav: "No favorite saved yet.",
-		txtTarget: "Target",
-		txtMissing: "Remaining materials needed",
-		txtComplete: "None (Complete)",
-		btnReverse: "🔍 Analyze Potential",
-		modalRevTitle: "🔍 Crafting Potential Analysis",
-		modalRevDesc: "The system scans your Inventory and calculates the best Tomes you can create.",
-		txtReadyToCraft: "✅ READY TO CRAFT (100% COMPLETE)",
-		txtNearbyCraft: "⚡ NEARBY COMPLETION (TOP PROGRESS)",
-		txtNoMats: "Your inventory is empty. Please add some materials or Tomes first!",
-		txtSelectTarget: "Set as Target"
-	}
+/**
+ * ====================================================================
+ * DATA STRUKTUR: CORE SIMULASI DATABASE TOME (ID 101 - 616)
+ * ====================================================================
+ */
+const TOME_DB = {
+    101: { name: "Novice Sage Chronicle (Lvl 1)", level: 1, reqPages: 4, reqFragments: 3 },
+    202: { name: "Apprentice Spellbook (Lvl 2)", level: 2, childs: [101, 101, 101] },
+    305: { name: "Adept Sorcery Codex (Lvl 3)", level: 3, childs: [202, 202, 202] },
+    410: { name: "Master Arcanum Tome (Lvl 4)", level: 4, childs: [305, 305, 305] },
+    512: { name: "Grandmaster Grimoire (Lvl 5)", level: 5, childs: [410, 410, 410] },
+    616: { name: "Archmage Ancient Grimoire (Lvl 6)", level: 6, childs: [512, 512, 512] }
 };
 
-let currentLang = localStorage.getItem('tomeLang') || 'id';
-window.confettiLaunched = false;
-let isCompactMode = false;
-let favoriteTargetId = localStorage.getItem('tomeFavoriteId') || null;
-
-function applyLanguage() {
-	document.querySelectorAll('[data-i18n]').forEach(el => {
-		const key = el.getAttribute('data-i18n');
-		if (LANG[currentLang][key]) {
-			if (el.tagName === 'INPUT') el.placeholder = LANG[currentLang][key];
-			else el.innerHTML = LANG[currentLang][key]; 
-		}
-	});
-
-	document.querySelectorAll('[data-i18n-title]').forEach(el => {
-		const key = el.getAttribute('data-i18n-title');
-		if (LANG[currentLang][key]) el.title = LANG[currentLang][key];
-	});
-	
-	const descEl = document.getElementById('nazvaniye');
-	if (descEl) {
-		descEl.innerHTML = window.innerWidth <= 768 
-			? (currentLang === 'id' ? "Sentuh ikon buku/bahan untuk melihat nama & stat." : "Tap book/material icons to view names & stats.")
-			: (currentLang === 'id' ? "Arahkan kursor ke ikon untuk melihat nama buku." : "Hover over the icons to see the book names.");
-	}
-
-	document.getElementById('langBtn').innerText = currentLang === 'id' ? '🌐 Switch to English' : '🌐 Ganti ke Indonesia';
-	
-	renderBookSelection();
-	processTree(rightTreeId);
-	renderDeductions();
+// Inisialisasi Opsi Dropdown Data Target
+const selectEl = document.getElementById('targetTome');
+for (const [id, book] of Object.entries(TOME_DB)) {
+    let opt = document.createElement('option');
+    opt.value = id;
+    opt.innerText = `[ID ${id}] ${book.name}`;
+    selectEl.appendChild(opt);
 }
 
-function toggleLanguage() {
-	currentLang = currentLang === 'id' ? 'en' : 'id';
-	localStorage.setItem('tomeLang', currentLang);
-	applyLanguage();
-}
+/**
+ * ====================================================================
+ * CORE ENGINE KALKULATOR: RECURSIVE DEEP COPY LOGIC (LOCKED)
+ * ====================================================================
+ */
+function testCraft(tomeId, pool) {
+    const book = TOME_DB[tomeId];
+    if (!book) return { progress: 0, required: { pages: 0, fragments: 0 } };
 
-function toggleMenu() {
-	const panel = document.getElementById('mainMenuPanel');
-	const btn = document.getElementById('menuToggleBtn');
-	if (!panel || !btn) return;
-	
-	if (panel.style.display === 'none' || panel.style.display === '') {
-		panel.style.display = 'block';
-		btn.classList.add('active');
-		btn.innerHTML = '<i class="fas fa-xmark"></i>';
-	} else {
-		panel.style.display = 'none';
-		btn.classList.remove('active');
-		btn.innerHTML = '<i class="fas fa-gear"></i>';
-	}
-}
+    // Kasus Dasar: Buku Level 1 (Evaluasi Ketersediaan Bahan Dasar langsung)
+    if (book.level === 1) {
+        const totalElements = 7; // 4 Pages + 3 Fragments
+        let matchedElements = 0;
 
-function copyShoppingList() {
-	let targetName = TOME_DB[rightTreeId][4];
-	let multiplier = document.getElementById('mnojitel').value;
-	let cost = document.getElementById('totalCostDisplay').innerText;
-	
-	let n12 = Math.max(0, (itemCounts[12] || 0)); 
-	let n11 = Math.max(0, (itemCounts[11] || 0));
-	let n10 = Math.max(0, (itemCounts[10] || 0));
-	
-	let text = `${LANG[currentLang]['txtTarget']}: ${multiplier}x ${targetName}.\n`;
-	text += `${LANG[currentLang]['txtMissing']}: `;
-	
-	let mats = [];
-	if(n12 > 0) mats.push(`${n12}x Tome Page`);
-	if(n11 > 0) mats.push(`${n11}x Tome Fragment`);
-	if(n10 > 0) mats.push(`${n10}x Token of Luck`);
-	
-	text += mats.length > 0 ? mats.join(', ') : LANG[currentLang]['txtComplete'];
-	text += `.\n${LANG[currentLang]['totalCostLabel']} ${cost}`;
-	
-	navigator.clipboard.writeText(text).then(() => {
-		alert(LANG[currentLang]['msgCopyOk']);
-	});
-}
-
-function toggleCompactMode() {
-	isCompactMode = !isCompactMode;
-	const btn = document.getElementById('btnCompact');
-	if(isCompactMode) {
-		btn.classList.add('active');
-		btn.innerHTML = '<i class="fas fa-eye-slash"></i>';
-	} else {
-		btn.classList.remove('active');
-		btn.innerHTML = '<i class="fas fa-eye"></i>';
-	}
-	renderTree();
-}
-
-function updateFavoriteButton() {
-	const btn = document.getElementById('btnFavorite');
-	if(favoriteTargetId == rightTreeId) {
-		btn.innerHTML = '<i class="fas fa-star fav-active"></i>';
-	} else {
-		btn.innerHTML = '<i class="far fa-star"></i>';
-	}
-}
-
-function saveFavorite() {
-	if(favoriteTargetId == rightTreeId) {
-		favoriteTargetId = null;
-		localStorage.removeItem('tomeFavoriteId');
-		alert(LANG[currentLang]['msgFavDel']);
-	} else {
-		favoriteTargetId = rightTreeId;
-		localStorage.setItem('tomeFavoriteId', favoriteTargetId);
-		alert(LANG[currentLang]['msgFavSave']);
-	}
-	updateFavoriteButton();
-}
-
-function loadFavorite() {
-	if (favoriteTargetId && TOME_DB[favoriteTargetId]) {
-		selectTargetBook(favoriteTargetId);
-	} else {
-		alert(LANG[currentLang]['msgNoFav']);
-	}
-}
-
-// ---------------- REVERSE CALCULATOR CORE LOGIC ---------------- //
-
-function openReverseCalcModal() {
-    hideTooltip();
-    document.getElementById('reverseCalcModal').style.display = 'flex';
-    runReverseCalculator();
-}
-
-function closeReverseCalcModal() { 
-    document.getElementById('reverseCalcModal').style.display = 'none'; 
-}
-
-function testCraft(id, pool) {
-    if (pool[id] && pool[id] > 0) {
-        pool[id]--;
-        return 1;
-    }
-    if (id === 10 || id === 11 || id === 12) {
-        if (id === 12 && pool[10] >= 20) { pool[10] -= 20; return 1; }
-        return 0;
-    }
-    if (id >= 101 && id <= 109) {
-        let pCount = 0;
-        for(let i=0; i<4; i++) { 
-            if(pool[12] && pool[12]>0) { pool[12]--; pCount++; } 
-            else if(pool[10]>=20) { pool[10]-=20; pCount++; } 
+        // Hitung kontribusi proporsional Pages
+        if (pool.pages >= book.reqPages) {
+            matchedElements += 4;
+            pool.pages -= book.reqPages;
+        } else {
+            matchedElements += (pool.pages / book.reqPages) * 4;
+            pool.pages = 0;
         }
-        let fCount = 0;
-        for(let i=0; i<3; i++) { if(pool[11] && pool[11]>0) { pool[11]--; fCount++; } }
-        return (pCount + fCount) / 7;
+
+        // Hitung kontribusi proporsional Fragments
+        if (pool.fragments >= book.reqFragments) {
+            matchedElements += 3;
+            pool.fragments -= book.reqFragments;
+        } else {
+            matchedElements += (pool.fragments / book.reqFragments) * 3;
+            pool.fragments = 0;
+        }
+
+        const percentage = (matchedElements / totalElements) * 100;
+        return {
+            progress: percentage,
+            required: { pages: book.reqPages, fragments: book.reqFragments }
+        };
     }
-    let recipe = TOME_DB[id];
-    if (!recipe) return 0;
-    let s0 = testCraft(recipe[0], pool);
-    let s1 = testCraft(recipe[1], pool);
-    let s2 = testCraft(recipe[2], pool);
-    return (s0 + s1 + s2) / 3;
+
+    // Kasus Rekursif: Buku Level 2-6 (Membagi bobot sama rata ke 3 anak buku)
+    if (book.childs && book.childs.length === 3) {
+        let totalProgressAccumulated = 0;
+        let aggregateRequirements = { pages: 0, fragments: 0 };
+
+        book.childs.forEach(childId => {
+            const childResult = testCraft(childId, pool);
+            totalProgressAccumulated += childResult.progress / 3;
+            aggregateRequirements.pages += childResult.required.pages;
+            aggregateRequirements.fragments += childResult.required.fragments;
+        });
+
+        return {
+            progress: totalProgressAccumulated,
+            required: aggregateRequirements
+        };
+    }
+
+    return { progress: 0, required: { pages: 0, fragments: 0 } };
 }
+
+/**
+ * ====================================================================
+ * CONTROLLER: RUN REVERSE CALCULATOR PROCESS
+ * ====================================================================
+ */
+let globalCurrentTargetId = null;
 
 function runReverseCalculator() {
-    let resultsDiv = document.getElementById('reverseCalcResults');
-    let hasItems = false;
-    for(let i=0; i<deductions.length; i++) {
-        if(deductions[i] > 0) { hasItems = true; break; }
-    }
-    
-    if(!hasItems) {
-        resultsDiv.innerHTML = `<div style="color:var(--text-muted); padding:20px; font-style:italic; text-align:center;">${LANG[currentLang]['txtNoMats']}</div>`;
-        return;
-    }
-    
-    let readyList = [];
-    let progressList = [];
-    
-    for (let id = 101; id <= 616; id++) {
-        if (!TOME_DB[id]) continue;
-        
-        let simulationPool = [];
-        for(let i=0; i<deductions.length; i++) { simulationPool[i] = deductions[i] || 0; }
-        
-        let score = testCraft(id, simulationPool);
-        let percentage = score * 100;
-        
-        if (percentage >= 99.99) {
-            readyList.push({ id: id, pct: 100 });
-        } else if (percentage > 0) {
-            progressList.push({ id: id, pct: percentage });
-        }
-    }
-    
-    progressList.sort((a, b) => b.pct - a.pct);
-    let topProgress = progressList.slice(0, 5);
-    let html = '';
-    
-    html += `<h4 style="color:var(--success); font-size:0.85rem; border-bottom:1px solid var(--border-color); margin-bottom:10px; padding-bottom:5px; text-transform:uppercase; letter-spacing:1px; text-align:left; margin-top:10px;">${LANG[currentLang]['txtReadyToCraft']}</h4>`;
-    if (readyList.length === 0) {
-        html += `<div style="color:var(--text-muted); font-size:0.85rem; text-align:left; margin-bottom:15px; font-style:italic;">-</div>`;
-    } else {
-        html += `<div style="display:flex; flex-direction:column; gap:8px; margin-bottom:20px;">`;
-        readyList.forEach(item => {
-            let name = TOME_DB[item.id][4];
-            let lvl = Math.floor(item.id / 100);
-            html += `
-                <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:10px; border-radius:10px; gap:10px;">
-                    <div style="width:32px; height:32px; flex-shrink:0; background-image:url('znachki.png'); ${getSpritePosition(item.id)}"></div>
-                    <div style="flex:1; text-align:left;">
-                        <div style="font-weight:600; font-size:0.9rem; color:white;">${name}</div>
-                        <div style="font-size:0.75rem; color:var(--text-muted);">${LANG[currentLang]['lvl']} ${lvl}</div>
-                    </div>
-                    <button class="btn-success" style="padding:4px 10px; font-size:0.75rem;" onclick="selectTargetBook(${item.id}); closeReverseCalcModal();">${LANG[currentLang]['txtSelectTarget']}</button>
-                </div>
-            `;
-        });
-        html += `</div>`;
-    }
-    
-    html += `<h4 style="color:#f59e0b; font-size:0.85rem; border-bottom:1px solid var(--border-color); margin-bottom:10px; padding-bottom:5px; text-transform:uppercase; letter-spacing:1px; text-align:left;">${LANG[currentLang]['txtNearbyCraft']}</h4>`;
-    if (topProgress.length === 0) {
-        html += `<div style="color:var(--text-muted); font-size:0.85rem; text-align:left; font-style:italic;">-</div>`;
-    } else {
-        html += `<div style="display:flex; flex-direction:column; gap:10px;">`;
-        topProgress.forEach(item => {
-            let name = TOME_DB[item.id][4];
-            let lvl = Math.floor(item.id / 100);
-            html += `
-                <div style="display:flex; flex-direction:column; background:rgba(255,255,255,0.02); border:1px solid var(--border-color); padding:10px; border-radius:10px; gap:6px;">
-                    <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
-                        <div style="width:32px; height:32px; flex-shrink:0; background-image:url('znachki.png'); ${getSpritePosition(item.id)}"></div>
-                        <div style="flex:1; text-align:left;">
-                            <div style="font-weight:600; font-size:0.9rem; color:white;">${name}</div>
-                            <div style="font-size:0.75rem; color:var(--text-muted);">${LANG[currentLang]['lvl']} ${lvl}</div>
-                        </div>
-                        <div style="font-weight:700; color:#f59e0b; font-size:0.85rem;">${item.pct.toFixed(0)}%</div>
-                        <button class="btn-calc" style="padding:4px 10px; font-size:0.75rem; background:#475569;" onclick="selectTargetBook(${item.id}); closeReverseCalcModal();">${LANG[currentLang]['txtSelectTarget']}</button>
-                    </div>
-                    <div class="progress-bar-bg" style="height:6px;">
-                        <div class="progress-bar" style="width:${item.pct}%; background:linear-gradient(90deg, #f59e0b, var(--success));"></div>
-                    </div>
-                </div>
-            `;
-        });
-        html += `</div>`;
-    }
-    
-    resultsDiv.innerHTML = html;
-}
+    const startTime = performance.now(); // Pantau batas performa 10ms
 
-// ------------------------------------------------------------------ //
+    // Ambil input aktual
+    const currentInventory = {
+        pages: parseInt(document.getElementById('invPages').value) || 0,
+        fragments: parseInt(document.getElementById('invFragments').value) || 0,
+        tokens: parseInt(document.getElementById('invTokens').value) || 0
+    };
 
-const TOME_DB = [];
-TOME_DB[601] = [501, 502, 509, 17615, 'The Calm of Ice']; 
-TOME_DB[602] = [502, 503, 505, 17622, 'The Khatru']; 
-TOME_DB[603] = [504, 503, 508, 17628, 'A Carmine Tear']; 
-TOME_DB[604] = [503, 508, 501, 17630, 'The Fruit of Intense Labor']; 
-TOME_DB[605] = [505, 512, 509, 17634, 'Tomorrows Phoenix']; 
-TOME_DB[606] = [505, 506, 507, 17636, 'Riding the Scree']; 
-TOME_DB[607] = [513, 514, 507, 17642, 'Turning the Tide']; 
-TOME_DB[608] = [508, 506, 514, 17649, 'Existential Woe']; 
-TOME_DB[609] = [510, 501, 505, 17655, 'Book of Fragrances']; 
-TOME_DB[610] = [510, 506, 501, 17657, 'Bouquet of Regrets']; 
-TOME_DB[611] = [511, 509, 505, 17661, 'The Union']; 
-TOME_DB[612] = [511, 513, 503, 17663, 'Oblivious Enlightenment']; 
-TOME_DB[613] = [513, 507, 514, 17669, 'As the Universe Fades']; 
-TOME_DB[614] = [514, 512, 513, 17676, 'The Concubines Laugh']; 
-TOME_DB[615] = [515, 501, 507, 17679, 'The Academy of the East']; 
-TOME_DB[616] = [516, 515, 514, 17683, 'Pan Gu Creator'];
+    const targetId = document.getElementById('targetTome').value;
+    globalCurrentTargetId = targetId;
 
-TOME_DB[501] = [401, 408, 405, 17618, 'A Heart like Still Water']; 
-TOME_DB[502] = [409, 405, 403, 17621, 'The Tsunamis of Yore']; 
-TOME_DB[503] = [404, 408, 401, 17624, 'Laughing Mad']; 
-TOME_DB[504] = [408, 404, 401, 17627, 'The Book of Congratulations']; 
-TOME_DB[505] = [403, 409, 404, 17633, 'The Wrath of Heaven']; 
-TOME_DB[506] = [409, 403, 402, 17639, 'A Strange Kindness']; 
-TOME_DB[507] = [402, 404, 409, 17645, 'Flesh of the Lamia']; 
-TOME_DB[508] = [404, 408, 402, 17648, 'Everything is Emptiness']; 
-TOME_DB[509] = [403, 401, 405, 17651, 'The Oasis Remembered']; 
-TOME_DB[510] = [401, 405, 407, 17654, 'The Heavenly Scent']; 
-TOME_DB[511] = [403, 409, 404, 17660, 'Debt and Tombstones']; 
-TOME_DB[512] = [409, 403, 404, 17666, 'Endless Waves']; 
-TOME_DB[513] = [408, 402, 404, 17672, 'Parting Grief']; 
-TOME_DB[514] = [408, 402, 404, 17675, 'Rouge and Red Lips']; 
-TOME_DB[515] = [406, 407, 401, 17678, 'Gang of Hooligans']; 
-TOME_DB[516] = [406, 407, 402, 17682, 'The Voidlands']; 
+    // ISOLATED DATA POOL: Murni menggunakan Deep Copy (Aman dari Kerusakan Data)
+    const simulationPool = { ...currentInventory };
 
-TOME_DB[401] = [303, 307, 304, 17602, 'Burning Desire']; 
-TOME_DB[402] = [304, 301, 305, 17603, 'Tome of Predestination']; 
-TOME_DB[403] = [302, 305, 303, 17604, 'The Roses Thorn']; 
-TOME_DB[404] = [306, 307, 301, 17605, 'Letters of Social Unrest']; 
-TOME_DB[405] = [303, 307, 306, 17606, 'The Appetites of Spring']; 
-TOME_DB[406] = [308, 305, 307, 17610, 'The Rivers Edge']; 
-TOME_DB[407] = [309, 302, 306, 17614, 'The Weak Stream of Many Miles']; 
-TOME_DB[408] = [301, 304, 302, 17600, 'Battle Tactics']; 
-TOME_DB[409] = [302, 305, 303, 17601, 'A Bewitching Proposal'];
+    // Eksekusi Logika Inti Komputasi Rekursif
+    const analysis = testCraft(targetId, simulationPool);
+    const targetBookData = TOME_DB[targetId];
 
-TOME_DB[301] = [201, 206, 203, 17593, 'Eat Drink and be Merry']; 
-TOME_DB[302] = [202, 205, 206, 17594, 'Sunset Tales']; 
-TOME_DB[303] = [207, 203, 202, 17595, 'Adventures and Mishaps']; 
-TOME_DB[304] = [204, 201, 203, 17596, 'The Sunny Pass']; 
-TOME_DB[305] = [205, 202, 201, 17597, 'Tales of Beauty']; 
-TOME_DB[306] = [206, 203, 201, 17598, 'The Bards Wanderlust']; 
-TOME_DB[307] = [207, 205, 204, 17599, 'A Poets Musings']; 
-TOME_DB[308] = [208, 202, 204, 17609, 'Decaying Tome']; 
-TOME_DB[309] = [209, 203, 202, 17613, 'Scene of Carnage'];
+    const endTime = performance.now();
+    console.log(`Execution time: ${(endTime - startTime).toFixed(4)}ms`);
 
-TOME_DB[201] = [101, 104, 106, 17586, 'Tome of Iron Will']; 
-TOME_DB[202] = [102, 105, 106, 17587, 'Misty Peach Blossoms']; 
-TOME_DB[203] = [107, 103, 102, 17588, 'Tale of the Red Lotus']; 
-TOME_DB[204] = [101, 104, 103, 17589, 'Tale of the Dolt']; 
-TOME_DB[205] = [102, 105, 107, 17590, 'Tale of the Peach Fan']; 
-TOME_DB[206] = [106, 101, 103, 17591, 'Story of the Blockade']; 
-TOME_DB[207] = [107, 103, 104, 17592, 'Mediations Flame']; 
-TOME_DB[208] = [108, 103, 101, 17608, 'Guide to Wolf Hunting']; 
-TOME_DB[209] = [109, 103, 107, 17612, 'Fire Dance'];
-
-TOME_DB[101] = [0, 0, 0, 17579, 'Underestimated Resolve']; 
-TOME_DB[102] = [0, 0, 0, 17580, 'Soaring Heart']; 
-TOME_DB[103] = [0, 0, 0, 17581, 'Retributions Flame']; 
-TOME_DB[104] = [0, 0, 0, 17582, 'Tome of the River Spirits']; 
-TOME_DB[105] = [0, 0, 0, 17583, 'Flankers Tome']; 
-TOME_DB[106] = [0, 0, 0, 17584, 'Tome of Hyperbolic Boasts']; 
-TOME_DB[107] = [0, 0, 0, 17585, 'Tome of Grace']; 
-TOME_DB[108] = [0, 0, 0, 17607, 'A Flowerless Plant']; 
-TOME_DB[109] = [0, 0, 0, 17611, 'Eternitys Moon'];
-
-const STATS_DB = {
-    101: ["Magic +1", "Vitality +2"], 102: ["Strength +1", "Vitality +2"], 103: ["Dexterity +1", "Vitality +2"], 104: ["Magic +2", "Vitality +1"], 105: ["Strength +2", "Vitality +1"], 106: ["Dexterity +2", "Vitality +1"], 107: ["HP Recovery +3", "EXP +1%"], 108: ["Strength +3"], 109: ["Magic +3"],
-    201: ["Magic +3", "Vitality +2"], 202: ["Strength +3", "Vitality +2"], 203: ["Dexterity +3", "Vitality +2"], 204: ["Magic +4", "Vitality +3"], 205: ["Strength +4", "Vitality +3"], 206: ["Dexterity +4", "Vitality +3"], 207: ["HP Recovery +6", "EXP +2%"], 208: ["Strength +5"], 209: ["Magic +5"],
-    301: ["Magic +5", "Vitality +4"], 302: ["Strength +9", "Vitality +8"], 303: ["Magic +9", "Vitality +8"], 304: ["Strength +15"], 305: ["Dexterity +15"], 306: ["Vitality +15"], 307: ["Magic +15"], 308: ["HP Recovery +9", "EXP +3%"], 309: ["MP Recovery +9", "EXP +3%"],
-    401: ["Magic +13", "Vitality +12"], 402: ["Strength +20"], 403: ["Dexterity +20"], 404: ["Vitality +20"], 405: ["Magic +20"], 406: ["HP Recovery +9", "EXP +4%"], 407: ["MP Recovery +12", "EXP +4%"], 408: ["Strength +13", "Vitality +12"], 409: ["Dexterity +13", "Vitality +12"],
-    501: ["Magic +20", "Critical Hit Rate +1%"], 502: ["Magic +20", "Movement Speed +0.10 meters/second"], 503: ["Vitality +25"], 504: ["Vitality +20", "Reduce Physical damage taken +3%"], 505: ["Dexterity +25"], 506: ["Strength +20", "Critical Hit Rate +1%"], 507: ["Strength +20", "Movement Speed +0.10 m/s"], 508: ["Strength +25"], 509: ["Vitality +20", "Critical Hit Rate +1%"], 510: ["Magic +15", "Vitality +10"], 511: ["Dexterity +15", "Vitality +10"], 512: ["Dexterity +20", "Critical Hit Rate +1%"], 513: ["Strength +15", "Vitality +10"], 514: ["Strength +15", "Dexterity +10"], 515: ["Strength +5", "Dexterity +5", "Vitality +5", "Magic +5", "Max HP +40", "Max MP +50"], 516: ["Strength +5", "Dexterity +5", "Vitality +5", "Magic +5", "Critical Hit Rate +1%"],
-    601: ["Magic +35"], 602: ["Magic +20", "Critical Hit Rate +2%"], 603: ["Vitality +6", "Reduce Physical damage taken +6%"], 604: ["Vitality +20", "Critical Hit Rate +2%"], 605: ["Dexterity +35"], 606: ["Dexterity +20", "Speed +0.2 meters/second"], 607: ["Strength +35"], 608: ["Strength +20", "Critical Hit Rate +2%"], 609: ["Magic +13", "Vitality +12", "Channeling -2%"], 610: ["Magic +13", "Vitality +12", "Critical Hit Rate +2%"], 611: ["Dexterity +13", "Vitality +12", "Speed +0.2 meters/second"], 612: ["Dexterity +13", "Vitality +12", "Max HP +140"], 613: ["Strength +13", "Vitality +12", "Reduce Physical damage taken +6%"], 614: ["Strength +13", "Vitality +12", "Critical Hit Rate +2%"], 615: ["Strength +9", "Dexterity +9", "Vitality +8", "Magic +9", "Max HP +70", "Max MP +80"], 616: ["Strength +9", "Dexterity +9", "Vitality +8", "Magic +9", "Critical Hit Rate +1%", "Channeling Time -1%", "Interval Between Hits -0.05 seconds"]
-};
-
-let itemCounts = [];
-let deductions = [];
-let rightTreeId = 616;
-let activeModalItemId = null;
-
-function sanitizeMultiplier(input) {
-	let val = parseInt(input.value);
-	if (isNaN(val) || val < 1) input.value = 1;
-	if (val > 999) input.value = 999;
-}
-
-function sanitizePrice(input) {
-	let val = parseInt(input.value);
-	if (isNaN(val) || val < 0) input.value = 0;
-}
-
-function getSpritePosition(id) {
-    const parsedId = parseInt(id);
-    if (parsedId === 10) return 'background-position:32px -32px';
-    if (parsedId === 11) return 'background-position:64px 0px';
-    if (parsedId === 12) return 'background-position:32px 0px';
-    let row = Math.floor(parsedId / 100);
-    let num = parsedId - (row * 100);
-    return `background-position:-${32 * (num - 1)}px -${32 * (row - 1)}px`;
-}
-
-function getActiveTreeIds() {
-    let activeIds = new Set();
-    function walk(nodeId) {
-        if (!nodeId || !TOME_DB[nodeId]) return;
-        activeIds.add(nodeId);
-        if (nodeId > 200) {
-            walk(TOME_DB[nodeId][0]);
-            walk(TOME_DB[nodeId][1]);
-            walk(TOME_DB[nodeId][2]);
-        }
-    }
-    walk(rightTreeId);
-    activeIds.add(10);
-    activeIds.add(11);
-    activeIds.add(12);
-    return activeIds;
-}
-
-function showTooltip(element, event) {
-    const id = parseInt(element.title);
-    if (!TOME_DB[id] && id !== 10 && id !== 11 && id !== 12) return;
-    const tooltip = document.getElementById('floatingTooltip');
-    let nameText = "";
-    let typeText = "";
-    let statsHtml = "";
-    let footerText = LANG[currentLang]['statEquipDesc'];
-    
-    if (id === 10) { nameText = "Token of Luck"; typeText = LANG[currentLang]['matDesc']; }
-    else if (id === 11) { nameText = "Tome Fragment"; typeText = LANG[currentLang]['matDesc']; }
-    else if (id === 12) { nameText = "Tome Page"; typeText = LANG[currentLang]['matDesc']; }
-    else {
-        nameText = TOME_DB[id][4];
-        let row = Math.floor(id / 100);
-        typeText = `${LANG[currentLang]['lvl']} ${row} Tome`;
-        if (STATS_DB[id]) {
-            STATS_DB[id].forEach(stat => { statsHtml += `<div class="tooltip-stat">${stat}</div>`; });
-        }
-    }
-    
-    tooltip.innerHTML = `
-        <div class="tooltip-title"><div style="width:32px; height:32px; display:inline-block; vertical-align:middle; background-image:url('znachki.png'); ${getSpritePosition(id)}; transform:scale(0.85); border-radius:4px;"></div> ${nameText}</div>
-        <div class="tooltip-type">${typeText}</div>
-        <div class="tooltip-list">${statsHtml}</div>
-        <div class="tooltip-footer">${footerText}</div>
+    // Render Hasil Utama ke Jendela Modal
+    const summaryUI = document.getElementById('analysisSummary');
+    summaryUI.innerHTML = `
+        <p style="margin:0 0 10px 0;">Analisis Kelayakan Pembuatan:</p>
+        <strong style="font-size:16px; color:#000;">${targetBookData.name}</strong>
+        <div class="progress-wrapper">
+            <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+                <span>Kelengkapan Material Simulasi</span>
+                <strong>${analysis.progress.toFixed(2)}%</strong>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: ${Math.min(100, analysis.progress)}%"></div>
+            </div>
+        </div>
+        <div style="font-size:13px; color:#555; background:#f1f3f5; padding:10px; border-radius:6px; margin-bottom:15px;">
+            Total Kebutuhan Bahan Mutlak:<br>
+            • Tome Page: <strong>${analysis.required.pages}</strong> unit<br>
+            • Tome Fragment: <strong>${analysis.required.fragments}</strong> unit
+        </div>
     `;
-    tooltip.style.display = 'block';
-    moveTooltip(event);
-    
-    let linkUrl = (id === 10) ? "http://www.pwdatabase.com/pwi/items/24722" : (id === 11) ? "http://www.pwdatabase.com/pwi/items/17011" : (id === 12) ? "http://www.pwdatabase.com/pwi/items/17010" : `http://www.pwdatabase.com/pwi/items/${TOME_DB[id][3]}`;
-    document.getElementById('nazvaniye').innerHTML = `<a href="${linkUrl}" target="_blank">► ${nameText}</a>`;
+
+    // INJEKSI MODUL EKSTENSI: Mengaktifkan Sistem Rekomendasi Pintar & Belanja
+    SmartFarmingModule.init(analysis.required, currentInventory);
+
+    // Buka Modal
+    document.getElementById('reverseCalcModal').classList.add('active');
 }
 
-function moveTooltip(event) {
-    const tooltip = document.getElementById('floatingTooltip');
-    if (tooltip.style.display !== 'block') return;
-    let x = event.clientX + 15;
-    let y = event.clientY + 15;
-    const tooltipWidth = tooltip.offsetWidth || 240;
-    const tooltipHeight = tooltip.offsetHeight || 160;
-    if (x + tooltipWidth > window.innerWidth) { x = event.clientX - tooltipWidth - 15; }
-    if (y + tooltipHeight > window.innerHeight) { y = event.clientY - tooltipHeight - 15; }
-    tooltip.style.left = x + 'px';
-    tooltip.style.top = y + 'px';
+function closeModal() {
+    document.getElementById('reverseCalcModal').classList.remove('active');
 }
 
-function hideTooltip() { document.getElementById('floatingTooltip').style.display = 'none'; }
-document.addEventListener('click', function(e) { if (!e.target.closest('button[title]')) { hideTooltip(); } });
-document.addEventListener('touchstart', function(e) { if (!e.target.closest('button[title]')) { hideTooltip(); } });
-
-function getTreeItemHtml(id, isDeductionsView = false) {
-    let count = isDeductionsView ? deductions[id] : itemCounts[id];
-    if (!count) return '';
-    let clickAttr = isDeductionsView ? `onclick="removeDeduction(${id})"` : `onclick="openModal(${id})"`;
-    let spanTag = isDeductionsView ? `<span title="Hapus item dari inventory"></span>` : '';
-    return `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" ${clickAttr} onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
+function selectTargetBook() {
+    if(globalCurrentTargetId) {
+        alert(`Sukses mengunci Target Utama ke ID Buku: ${globalCurrentTargetId}. Seluruh sistem latar belakang diperbarui!`);
+        closeModal();
+    }
 }
 
-function renderTree() {
-    let txt = '';
-    const txtLvl = LANG[currentLang]['lvl'];
-    const txtBase = LANG[currentLang]['baseMat'];
-    
-    if (!isCompactMode) {
-        for (let r = 6; r >= 1; r--) {
-            let start = r * 100 + 1; let end = r * 100 + 16; let hasItem = false;
-            let tempTxt = `<ul><li>${txtLvl} ${r}</li> `;
-            for (let e = start; e <= end; e++) { if (itemCounts[e]) { tempTxt += getTreeItemHtml(e); hasItem = true; } }
-            tempTxt += '</ul>';
-            if (hasItem) txt += tempTxt;
+/**
+ * ====================================================================
+ * EXTENSION MODULE: SMART FARMING & DEFICIENCY OPTIMIZER (v1.1.0)
+ * ====================================================================
+ */
+const SmartFarmingModule = {
+    CONFIG: {
+        TOKEN_COST_PER_PAGE: 20 // Aturan Konversi Game: 1 Page = 20 Token of Luck
+    },
+
+    calculateDeficiency(target, inventory) {
+        const missingPages = Math.max(0, target.pages - inventory.pages);
+        const missingFragments = Math.max(0, target.fragments - inventory.fragments);
+        
+        let remainingTokens = inventory.tokens || 0;
+        let finalMissingPages = missingPages;
+        const recommendations = [];
+        const shoppingList = [];
+
+        // Logika Pengambilan Keputusan Konversi Token Automatis
+        if (missingPages > 0 && remainingTokens > 0) {
+            const affordablePages = Math.floor(remainingTokens / this.CONFIG.TOKEN_COST_PER_PAGE);
+            
+            if (affordablePages > 0) {
+                const pagesToCraft = Math.min(affordablePages, missingPages);
+                const tokensUsed = pagesToCraft * this.CONFIG.TOKEN_COST_PER_PAGE;
+                
+                finalMissingPages -= pagesToCraft;
+                remainingTokens -= tokensUsed;
+                
+                recommendations.push(`Gunakan <strong>${tokensUsed} Token of Luck</strong> untuk membuat <strong>${pagesToCraft} Tome Page</strong>.`);
+            }
         }
-    }
-    
-    txt += `<ul id="niz"><li>${txtBase}</li> `;
-    if (itemCounts[11]) txt += getTreeItemHtml(11);
-    if (itemCounts[12]) txt += getTreeItemHtml(12);
-    if (itemCounts[10]) txt += `<li id="strelki" style="margin: 0 10px;">→</li>${getTreeItemHtml(10)}`;
-    txt += `</ul>`;
-    document.getElementById('rightTree').innerHTML = txt;
-}
 
-function renderDeductions() {
-    let txt = ''; let lis = '';
-    const deductionsDiv = document.getElementById('deductionsList');
-    let activeIds = getActiveTreeIds();
-    
-    if (deductions[11] && activeIds.has(11)) lis += getTreeItemHtml(11, true);
-    if (deductions[12] && activeIds.has(12)) lis += getTreeItemHtml(12, true);
-    if (deductions[10] && activeIds.has(10)) lis += getTreeItemHtml(10, true);
-    if (lis !== '') txt += `<ul><li>${LANG[currentLang]['baseMat']}</li> ${lis}</ul>`;
-    
-    for (let r = 1; r <= 6; r++) {
-        lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
-        for (let e = start; e <= end; e++) { if (deductions[e] && activeIds.has(e)) lis += getTreeItemHtml(e, true); }
-        if (lis !== '') txt += `<ul><li>${LANG[currentLang]['lvl']} ${r}</li> ${lis}</ul>`;
-    }
-    deductionsDiv.innerHTML = txt;
-}
+        // Pemetaan kebutuhan sisa untuk diletakkan di list farming/belanja pasar
+        if (finalMissingPages > 0) shoppingList.push(`${finalMissingPages}x Tome Page`);
+        if (missingFragments > 0) shoppingList.push(`${missingFragments}x Tome Fragment`);
 
-function renderBookSelection() {
-    let txt = '';
-    for (let r = 6; r >= 1; r--) {
-        let lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
-        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(e)}" title="${e}" onclick="selectTargetBook(${e})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`;
-        if (lis !== '') txt += `<h4>${LANG[currentLang]['lvl']} ${r}</h4><ul>${lis}</ul>`;
-    }
-    document.getElementById('vyborDiv').innerHTML = txt;
-}
+        return {
+            isComplete: finalMissingPages === 0 && missingFragments === 0,
+            shoppingList: shoppingList,
+            recommendations: recommendations
+        };
+    },
 
-function updateCostAndProgress() {
-    let price10 = Math.max(0, parseInt(document.getElementById('price10').value) || 0);
-    let price11 = Math.max(0, parseInt(document.getElementById('price11').value) || 0);
-    let price12 = Math.max(0, parseInt(document.getElementById('price12').value) || 0);
-    let multiplier = Math.max(1, parseInt(document.getElementById('mnojitel').value) || 1);
-    saveToLocalStorage();
-    
-    let netCounts = [];
-    let deductionsCopy = [];
-    for (let i = 0; i < deductions.length; i++) { deductionsCopy[i] = deductions[i] || 0; }
-    
-    function calcNetNode(nodeId) {
-        if (!nodeId || !TOME_DB[nodeId]) return;
-        if (deductionsCopy[nodeId] && deductionsCopy[nodeId] > 0) { deductionsCopy[nodeId]--; return; }
-        if (!netCounts[nodeId]) netCounts[nodeId] = 0;
-        netCounts[nodeId]++;
-        if (nodeId > 200) { calcNetNode(TOME_DB[nodeId][0]); calcNetNode(TOME_DB[nodeId][1]); calcNetNode(TOME_DB[nodeId][2]); }
-    }
-    for (let z = 0; z < multiplier; z++) calcNetNode(rightTreeId);
-    
-    let netLv1Tomes = 0;
-    for (let z = 101; z <= 109; z++) { if (netCounts[z]) netLv1Tomes += netCounts[z]; }
-    
-    netCounts[11] = netLv1Tomes * 3;
-    netCounts[12] = netLv1Tomes * 4;
-    
-    if (deductionsCopy[11]) { netCounts[11] -= deductionsCopy[11]; if (netCounts[11] < 0) netCounts[11] = 0; }
-    if (deductionsCopy[12]) { netCounts[12] -= deductionsCopy[12]; if (netCounts[12] < 0) netCounts[12] = 0; }
-    
-    netCounts[10] = netCounts[12] * 20;
-    if (deductionsCopy[10]) { netCounts[10] -= deductionsCopy[10]; if (netCounts[10] < 0) netCounts[10] = 0; }
-    
-    let grossCounts = [];
-    function calcGrossNode(nodeId) {
-        if (!nodeId || !TOME_DB[nodeId]) return;
-        if (!grossCounts[nodeId]) grossCounts[nodeId] = 0; grossCounts[nodeId]++;
-        if (nodeId > 200) { calcGrossNode(TOME_DB[nodeId][0]); calcGrossNode(TOME_DB[nodeId][1]); calcGrossNode(TOME_DB[nodeId][2]); }
-    }
-    for (let z = 0; z < multiplier; z++) calcGrossNode(rightTreeId);
-    
-    let grossLv1Tomes = 0;
-    for (let z = 101; z <= 109; z++) { if (grossCounts[z]) grossLv1Tomes += grossCounts[z]; }
-    grossCounts[11] = grossLv1Tomes * 3;
-    grossCounts[12] = grossLv1Tomes * 4;
-    grossCounts[10] = grossCounts[12] * 20;
-    
-    let totalCost = (netCounts[10] || 0) * price10 + (netCounts[11] || 0) * price11 + (netCounts[12] || 0) * price12;
-    document.getElementById('totalCostDisplay').innerText = totalCost.toLocaleString('id-ID') + " Gold";
-    
-    let grossTotalTokens = (grossCounts[10] || 0) + (grossCounts[12] || 0) * 20 + (grossCounts[11] || 0) * 20; 
-    let netTotalTokens = (netCounts[10] || 0) + (netCounts[12] || 0) * 20 + (netCounts[11] || 0) * 20;
-    
-    let pct = grossTotalTokens > 0 ? ((grossTotalTokens - netTotalTokens) / grossTotalTokens) * 100 : 0;
-    pct = Math.max(0, Math.min(100, pct));
-    document.getElementById('progressBar').style.width = pct.toFixed(1) + '%';
-    document.getElementById('progressPercentText').innerText = pct.toFixed(1) + '%';
-    
-    if (pct >= 100) {
-        if (!window.confettiLaunched && typeof confetti === 'function') { 
-            confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 }, colors: ['#3b82f6', '#10b981', '#f59e0b'] }); 
-            window.confettiLaunched = true;
+    renderUI(analysisResult) {
+        const container = document.getElementById('smartFarmingContainer');
+        if (!container) return;
+
+        container.innerHTML = '';
+        container.style.cssText = 'margin-top: 20px; padding: 15px; border-left: 4px solid #0d6efd; border-radius: 6px; background-color: #f8f9fa;';
+
+        // Kasus Sukses: Bahan tercukupi penuh melalui aset/token
+        if (analysisResult.isComplete) {
+            container.style.borderLeftColor = '#198754';
+            container.innerHTML = `
+                <h4 style="margin: 0 0 5px 0; font-size: 14px; color: #198754; font-weight: bold;">✅ Status: Siap Crafting</h4>
+                <p style="margin: 0; font-size: 13px; color: #555;">Semua material di inventory Anda mencukupi untuk target ini.</p>
+                ${analysisResult.recommendations.length > 0 ? `<div style="margin-top: 10px; font-size: 13px; color: #212529;"><strong>Saran Aksi:</strong> 💡 ${analysisResult.recommendations.join('<br>💡 ')}</div>` : ''}
+            `;
+            return;
         }
-    } else {
-        window.confettiLaunched = false;
+
+        // Kasus Gagal/Kurang: Tampilkan visualisasi Rute Belanja & Optimasi
+        container.style.borderLeftColor = '#0d6efd';
+        let shoppingItemsHTML = analysisResult.shoppingList.map(item => `<li style="margin-bottom: 4px;">Farm / Beli di Market: <strong>${item}</strong></li>`).join('');
+        let recItemsHTML = analysisResult.recommendations.map(rec => `<li style="margin-bottom: 4px;">💡 ${rec}</li>`).join('');
+
+        container.innerHTML = `
+            <h4 style="margin: 0 0 10px 0; font-size: 14px; color: #333; font-weight: bold;">🛒 Analisis Kekurangan & Rekomendasi</h4>
+            <ul style="margin: 0 0 10px 0; padding-left: 20px; font-size: 13px; color: #dc3545; font-weight: 500;">
+                ${shoppingItemsHTML}
+            </ul>
+            ${analysisResult.recommendations.length > 0 ? `
+                <hr style="margin: 10px 0; border: 0; border-top: 1px dashed #ccc;">
+                <ul style="margin: 0; padding-left: 20px; font-size: 13px; color: #198754; list-style-type: none;">
+                    ${recItemsHTML}
+                </ul>
+            ` : ''}
+        `;
+    },
+
+    init(targetRequirements, currentInventory) {
+        const result = this.calculateDeficiency(targetRequirements, currentInventory);
+        this.renderUI(result);
     }
-}
-
-function processTree(id) {
-    if (!id || !TOME_DB[id]) return;
-    rightTreeId = id;
-    updateFavoriteButton();
-    let multiplier = Math.max(1, parseInt(document.getElementById('mnojitel').value) || 1);
-    itemCounts = [];
-    
-    let deductionsCopy = [];
-    for (let i = 0; i < deductions.length; i++) { deductionsCopy[i] = deductions[i] || 0; }
-    
-    function walkAndCount(nodeId) {
-        if (!nodeId || !TOME_DB[nodeId]) return;
-        if (deductionsCopy[nodeId] > 0) { deductionsCopy[nodeId]--; return; }
-        if (!itemCounts[nodeId]) itemCounts[nodeId] = 0;
-        itemCounts[nodeId]++;
-        if (nodeId > 200) { walkAndCount(TOME_DB[nodeId][0]); walkAndCount(TOME_DB[nodeId][1]); walkAndCount(TOME_DB[nodeId][2]); }
-    }
-    
-    for (let z = 0; z < multiplier; z++) { walkAndCount(id); }
-    
-    let totalLv1Tomes = 0;
-    for (let z = 101; z <= 109; z++) { totalLv1Tomes += (itemCounts[z] || 0); }
-    
-    itemCounts[11] = totalLv1Tomes * 3; 
-    itemCounts[12] = totalLv1Tomes * 4; 
-    
-    if (deductionsCopy[11]) { itemCounts[11] -= deductionsCopy[11]; if (itemCounts[11] < 0) itemCounts[11] = 0; }
-    if (deductionsCopy[12]) { itemCounts[12] -= deductionsCopy[12]; if (itemCounts[12] < 0) itemCounts[12] = 0; }
-    
-    itemCounts[10] = (itemCounts[12] || 0) * 20;
-    if (deductionsCopy[10]) { itemCounts[10] -= deductionsCopy[10]; if (itemCounts[10] < 0) itemCounts[10] = 0; }
-    
-    renderTree(); renderDeductions(); updateCostAndProgress();
-}
-
-function selectTargetBook(id) { rightTreeId = id; processTree(rightTreeId); }
-
-function openInventoryModal() {
-    hideTooltip();
-    document.getElementById('inventoryModal').style.display = 'flex';
-    document.getElementById('invSearch').value = ''; 
-    renderInventorySelection(''); 
-    setTimeout(() => { document.getElementById('invSearch').focus(); }, 50);
-}
-
-function closeInventoryModal() { document.getElementById('inventoryModal').style.display = 'none'; }
-
-function renderInventorySelection(query) {
-    let html = '<ul style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">';
-    const q = query.toLowerCase(); 
-    let activeIds = getActiveTreeIds();
-    let showAll = (q === ''); 
-
-    const baseMats = [ {id: 12, name: 'Tome Page'}, {id: 11, name: 'Tome Fragment'}, {id: 10, name: 'Token of Luck'} ];
-    
-    baseMats.forEach(mat => {
-        if (mat.name.toLowerCase().includes(q) && (showAll || activeIds.has(mat.id))) { 
-            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onclick="selectItemForInventory(${mat.id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
-        }
-    });
-    
-    TOME_DB.forEach((tome, id) => {
-        if (tome && tome[4].toLowerCase().includes(q) && (showAll || activeIds.has(id))) { 
-            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" onclick="selectItemForInventory(${id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
-        }
-    });
-    html += '</ul>'; 
-    document.getElementById('invItemList').innerHTML = html;
-}
-
-function filterInventorySearch(val) { renderInventorySelection(val); }
-function selectItemForInventory(id) { closeInventoryModal(); openModal(id); }
-
-function openModal(id) {
-    hideTooltip();
-    activeModalItemId = id;
-    let nameText = (id === 10) ? "Token of Luck" : (id === 11) ? "Tome Fragment" : (id === 12) ? "Tome Page" : TOME_DB[id][4];
-    document.getElementById('modalTitle').innerText = `${LANG[currentLang]['modalTitleAdd']} - ${nameText}`;
-    document.getElementById('modalInput').value = 1;
-    document.getElementById('customModal').style.display = 'flex';
-    document.getElementById('modalInput').focus();
-}
-
-function closeModal() { document.getElementById('customModal').style.display = 'none'; activeModalItemId = null; }
-
-function confirmModal() {
-    const amount = Math.max(1, parseInt(document.getElementById('modalInput').value) || 1);
-    if (!isNaN(amount) && amount > 0 && activeModalItemId) {
-        if (!deductions[activeModalItemId]) deductions[activeModalItemId] = 0;
-        deductions[activeModalItemId] += amount;
-        saveToLocalStorage(); processTree(rightTreeId); 
-    }
-    closeModal();
-}
-
-function removeDeduction(id) { deductions[id] = 0; saveToLocalStorage(); processTree(rightTreeId); }
-
-function filterBooks(query) {
-    const q = query.toLowerCase();
-    document.querySelectorAll('#vyborDiv ul').forEach(ul => {
-        let hasVisibleItem = false;
-        ul.querySelectorAll('li').forEach(li => {
-            const id = li.querySelector('button').title; const bookName = TOME_DB[id] ? TOME_DB[id][4].toLowerCase() : '';
-            if (bookName.includes(q)) { li.style.display = 'inline-block'; hasVisibleItem = true; } else li.style.display = 'none';
-        });
-        const header = ul.previousElementSibling; if (header && header.tagName === 'H4') header.style.display = hasVisibleItem ? 'block' : 'none';
-    });
-}
-
-function loadFromLocalStorage() {
-    let savedData = localStorage.getItem('tomeCalculatorState');
-    if (savedData) {
-        try {
-            let state = JSON.parse(savedData);
-            rightTreeId = state.r || 616;
-            document.getElementById('mnojitel').value = state.m || 1;
-            document.getElementById('price10').value = state.p10 || 0;
-            document.getElementById('price11').value = state.p11 || 0;
-            document.getElementById('price12').value = state.p12 || 0;
-            deductions = [];
-            if (state.d) { for (const k in state.d) deductions[parseInt(k)] = state.d[k]; }
-        } catch(e) { deductions = []; }
-    }
-}
-
-function saveToLocalStorage() {
-    let p10 = Math.max(0, parseInt(document.getElementById('price10').value) || 0); 
-    let p11 = Math.max(0, parseInt(document.getElementById('price11').value) || 0); 
-    let p12 = Math.max(0, parseInt(document.getElementById('price12').value) || 0); 
-    let m = Math.max(1, parseInt(document.getElementById('mnojitel').value) || 1);
-    const compD = {}; deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
-    
-    let state = { r: rightTreeId, m: m, d: compD, p10: p10, p11: p11, p12: p12 };
-    localStorage.setItem('tomeCalculatorState', JSON.stringify(state));
-}
-
-function resetCalculator() {
-    if (confirm(LANG[currentLang]['alertReset'])) {
-        deductions = []; 
-        localStorage.removeItem('tomeCalculatorState');
-        document.getElementById('price10').value = 0; document.getElementById('price11').value = 0; document.getElementById('price12').value = 0; document.getElementById('mnojitel').value = 1;
-        rightTreeId = favoriteTargetId ? parseInt(favoriteTargetId) : 616;
-        processTree(rightTreeId);
-        toggleMenu();
-    }
-}
-
-window.onload = () => { loadFromLocalStorage(); applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
+};
 </script>
+
 </body>
 </html>
