@@ -1392,4 +1392,34 @@ document.addEventListener('click', function(event) {
     }
 });
 
+// ==================== FITUR SCROLLSPY MOBILE NAVBAR ====================
+window.addEventListener('scroll', () => {
+    // 1. Ambil semua elemen kartu yang memiliki ID
+    const sections = document.querySelectorAll('.calc-card[id]');
+    const navItems = document.querySelectorAll('.mobile-navbar .nav-item');
+    
+    let currentSectionId = '';
+
+    // 2. Deteksi posisi layar saat ini
+    sections.forEach(section => {
+        // Ambil jarak kartu dari ujung atas web
+        const sectionTop = section.offsetTop;
+        
+        // 90px adalah angka kompensasi (karena layar tertutup navbar di atasnya)
+        if (pageYOffset >= (sectionTop - 90)) {
+            currentSectionId = section.getAttribute('id');
+        }
+    });
+
+    // 3. Matikan semua ikon menu, lalu nyalakan ikon yang ID-nya cocok
+    navItems.forEach(item => {
+        item.classList.remove('active'); // Matikan semua dulu
+        
+        // Jika link (href) pada navbar sama dengan ID kartu yang sedang dilihat layarnya
+        if (item.getAttribute('href') === `#${currentSectionId}`) {
+            item.classList.add('active'); // Nyalakan efek warnanya!
+        }
+    });
+});
+
 window.onload = () => { applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };

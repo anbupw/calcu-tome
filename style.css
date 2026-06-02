@@ -426,10 +426,22 @@ html {
         font-size: 1.05rem;
     }
 
-    /* Efek menyala saat ditekan atau aktif */
-    .nav-item:hover, .nav-item:active {
+    /* Efek menyala saat ditekan, di-hover, atau aktif karena Scrollspy */
+    .nav-item:hover, .nav-item:active, .nav-item.active {
         color: var(--accent);
-        transform: scale(1.05);
+        transform: scale(1.1); /* Sedikit diperbesar agar lebih jelas */
+    }
+	
+	/* Opsional: Beri penanda garis atau titik di bawah menu yang aktif */
+    .nav-item.active::after {
+        content: '';
+        display: block;
+        width: 15px;
+        height: 3px;
+        background-color: var(--accent);
+        border-radius: 5px;
+        margin-top: 2px;
+        transition: all 0.3s ease;
     }
 
     /* Berikan jarak atas pada container agar konten utama tidak tertutup navbar */
