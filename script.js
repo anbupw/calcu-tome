@@ -1152,6 +1152,15 @@ function attemptCrafting(targetId) {
         if (typeof confetti === 'function') {
             confetti({ particleCount: 150, spread: 80, origin: { y: 0.5 }, colors: ['#fbbf24', '#f59e0b', '#d97706'] });
         }
+		
+		try {
+            // Ganti 'success.mp3' dengan nama file atau URL link suara Anda
+            let craftSound = new Audio('success.mp3'); 
+            craftSound.volume = 0.6; // Mengatur volume (0.0 sampai 1.0)
+            craftSound.play();
+        } catch (error) {
+            console.log("Gagal memutar suara, kemungkinan diblokir browser:", error);
+        }
         
         const bookName = (TOME_DB[targetId] && TOME_DB[targetId][4]) ? TOME_DB[targetId][4] : "Target Tome";
         alert(`🎉 CRAFTING SUKSES!\n\n[${bookName}] telah berhasil dirakit dan dimasukkan ke Inventory Anda.`);
