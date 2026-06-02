@@ -937,7 +937,6 @@ function filterBooks(query) {
 }
 
 // ---------------- DATABASE MECHANISM (CLOUD VS LOCAL) ---------------- //
-
 function saveDataTrigger() {
     // 1. Pengaman agar tidak menimpa data Cloud saat refresh halaman
     if (!isDataLoaded) return;
