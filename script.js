@@ -109,7 +109,7 @@ const LANG = {
 		txtNoMats: "Inventory Anda kosong. Tambahkan beberapa bahan atau Tome terlebih dahulu!",
 		txtSelectTarget: "Jadikan Target",
 		farmTitle: "Optimalisasi Farm",
-		farmComplete: "✅ Semua material (atau Token) mencukupi untuk Crafting!",
+		farmComplete: "✅ Semua material atau Token mencukupi untuk Crafting!",
 		farmBuy: "🛒 Beli di Item Mall/Farming:",
 		farmRecToken: "Gunakan <strong>{tokens} Token of Luck</strong> untuk mencetak <strong>{pages} Tome Page</strong>."
 	},
