@@ -16,105 +16,129 @@
 </head>
 <body>
 
-<div class="app-container">
-    <header class="app-header">
-        <div class="header-main">
-            <h1><i class="fa-solid fa-book-atlas"></i> <span data-lang="title">Kalkulator Tome</span></h1>
-            <p class="subtitle" data-lang="subtitle">Perfect World Mobile — Edisi Imersif</p>
-        </div>
-        <div class="header-controls">
-            <div class="lang-selector">
-                <button onclick="setLanguage('id')" id="lang-id" class="lang-btn active">ID</button>
-                <button onclick="setLanguage('en')" id="lang-en" class="lang-btn">EN</button>
-                <button onclick="setLanguage('ru')" id="lang-ru" class="lang-btn">RU</button>
-            </div>
-            <button onclick="resetCalculator()" class="btn btn-danger" title="Reset Data">
-                <i class="fa-solid fa-rotate-left"></i> <span data-lang="btnReset">Reset</span>
-            </button>
-        </div>
-    </header>
+<div class="container">
+	
+	<div class="main-column">
+		<div class="calc-card">
+			<h1 data-i18n="btnTarget">📚 Target Pembuatan Tome</h1>
+			<div class="podzagolovok" id="nazvaniye">Arahkan kursor ke ikon untuk melihat nama buku.</div>
+			<input type="text" id="bookSearch" class="search-box" data-i18n="searchPlaceholder" placeholder="🔍 Cari nama buku target..." oninput="filterBooks(this.value)">
+			<div id="vyborDiv" class="branch"></div>
+		</div>
+		
+		<div class="calc-card">
+			<h2 data-i18n="title4">📦 Inventory</h2>
+			<div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+				<span data-i18n="desc4" style="flex:1; min-width: 180px;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
+				<div style="display:flex; gap:8px;">
+					<button class="btn-success" style="background:#8b5cf6; box-shadow:0 4px 6px -1px rgba(139,92,246,0.3);" onclick="openReverseCalcModal()"><span data-i18n="btnReverse">🔍 Analisis Potensi</span></button>
+					<button class="btn-success" onclick="openInventoryModal()"><span data-i18n="btnAddItem">➕ Tambah Item</span></button>
+				</div>
+			</div>
+			<div id="deductionsList" class="branch"></div>
+		</div>
+	</div>
 
-    <div class="main-grid">
-        <aside class="panel-left">
-            <section class="card border-accent">
-                <h2 class="card-title"><i class="fa-solid fa-coins text-accent"></i> <span data-lang="marketPrices">Harga Pasar Bahan Dasar</span></h2>
-                <div class="price-inputs">
-                    <div class="input-group">
-                        <label for="price10"><i class="fa-solid fa-scroll text-muted"></i> <span data-lang="itemLevel1">Tome Frag. Lvl 1</span></label>
-                        <div class="input-wrapper">
-                            <input type="number" id="price10" value="0" min="0" oninput="updatePrices()">
-                            <span class="currency-badge">Gold</span>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="price11"><i class="fa-solid fa-feather text-muted"></i> <span data-lang="itemLevel2">Tome Frag. Lvl 2</span></label>
-                        <div class="input-wrapper">
-                            <input type="number" id="price11" value="0" min="0" oninput="updatePrices()">
-                            <span class="currency-badge">Gold</span>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="price12"><i class="fa-solid fa-gem text-muted"></i> <span data-lang="itemLevel3">Tome Frag. Lvl 3</span></label>
-                        <div class="input-wrapper">
-                            <input type="number" id="price12" value="0" min="0" oninput="updatePrices()">
-                            <span class="currency-badge">Gold</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
+    <div class="main-column">
+		<div class="calc-card">
+			<h2 data-i18n="title2">📋 Rincian Crafting Tome</h2>
+			<div class="podzagolovok" style="gap: 8px;">
+				<input type="number" id="mnojitel" value="1" min="1" max="99" oninput="sanitizeMultiplier(this)">
+				<button class="btn-calc" data-i18n="btnCalc" onclick="processTree(rightTreeId)">Hitung Kuantitas</button>
+				
+				<button class="btn-icon" onclick="copyShoppingList()" data-i18n-title="btnCopy" title="Salin Daftar Belanja"><i class="fas fa-clipboard"></i></button>
+				<button class="btn-icon" id="btnCompact" onclick="toggleCompactMode()" data-i18n-title="btnCompact" title="Toggle Mode Ringkas"><i class="fas fa-eye"></i></button>
+				<button class="btn-icon" id="btnFavorite" onclick="saveFavorite()" data-i18n-title="btnFav" title="Simpan sebagai Favorit"><i class="far fa-star"></i></button>
+				<button class="btn-icon" onclick="loadFavorite()" data-i18n-title="btnLoadFav" title="Muat Favorit Tersimpan"><i class="fas fa-bookmark"></i></button>
+			</div>
+			
+			<div class="progress-container">
+				<div class="progress-text">
+					<span data-i18n="progText">Progres Pengumpulan:</span>
+					<span id="progressPercentText">0.0%</span>
+				</div>
+				<div class="progress-bar-bg">
+					<div id="progressBar" class="progress-bar"></div>
+				</div>
+			</div>
+			<div id="rightTree" class="branch"></div>
+		</div>
 
-            <section class="card">
-                <div class="control-row">
-                    <div class="input-group flex-1">
-                        <label for="mnojitel"><i class="fa-solid fa-layer-group text-muted"></i> <span data-lang="labelQuantity">Jumlah Pembuatan</span></label>
-                        <input type="number" id="mnojitel" value="1" min="1" oninput="updateMultiplier()">
-                    </div>
-                </div>
-                <div class="search-box">
-                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" id="search-input" placeholder="Cari nama Tome..." oninput="filterTomes()">
-                    <button id="clear-search" onclick="clearSearch()" style="display:none;"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-            </section>
-
-            <section class="card flex-1 list-card">
-                <div class="tabs">
-                    <button class="tab-btn active" onclick="switchTab(3)">Lvl 3</button>
-                    <button class="tab-btn" onclick="switchTab(4)">Lvl 4</button>
-                    <button class="tab-btn" onclick="switchTab(5)">Lvl 5</button>
-                    <button class="tab-btn" onclick="switchTab(6)">Lvl 6</button>
-                </div>
-                <div id="tome-list" class="tome-list-container">
-                    </div>
-            </section>
-        </aside>
-
-        <main class="panel-right">
-            <section class="card tree-card">
-                <div class="tree-header">
-                    <h2 class="card-title"><i class="fa-solid fa-network-wired text-accent"></i> <span data-lang="craftingTree">Pohon Struktur Crafting</span></h2>
-                    <div id="target-tome-display" class="target-badge">Pilih Tome Terlebih Dahulu</div>
-                </div>
-                
-                <div class="tree-wrapper">
-                    <div id="tree-root" class="tree-container">
-                        </div>
-                </div>
-
-                <div class="summary-bar" id="summary-bar">
-                    <div class="summary-item">
-                        <span class="summary-label" data-lang="totalCost">Total Biaya Belanja Pasar:</span>
-                        <span class="summary-value" id="total-cost-display">0 Gold</span>
-                    </div>
-                </div>
-            </section>
-        </main>
-    </div>
+		<div class="calc-card">
+			<h2 data-i18n="title3">Estimasi Biaya Pasar</h2>
+			<div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
+			<div class="cost-input-group">
+				<label><span style="background-position:32px -32px;"></span> Token of Luck:</label>
+				<input type="number" id="price10" value="0" min="0" oninput="sanitizePrice(this); updateCostAndProgress();" placeholder="0">
+			</div>
+			<div class="cost-input-group">
+				<label><span style="background-position:64px 0px;"></span> Tome Fragment:</label>
+				<input type="number" id="price11" value="0" min="0" oninput="sanitizePrice(this); updateCostAndProgress();" placeholder="0">
+			</div>
+			<div class="cost-input-group">
+				<label><span style="background-position:32px 0px;"></span> Tome Page:</label>
+				<input type="number" id="price12" value="0" min="0" oninput="sanitizePrice(this); updateCostAndProgress();" placeholder="0">
+			</div>
+			<div class="total-cost-box">
+				<div class="total-cost-label" data-i18n="totalCostLabel">Total Sisa Biaya:</div>
+				<div id="totalCostDisplay" class="total-cost-value">0 Gold</div>
+			</div>
+		</div>
+	</div>
 </div>
 
-<footer class="app-footer-credit">
-    <p>&copy; 2026 Kalkulator Tome - Edisi Imersif Berstruktur. Built with ❤️</p>
+<footer class="footer">
+	<div class="footer-text" data-i18n="footerText">
+		Kalkulator Tome &copy; 2026 | Dibuat oleh <strong>Sulfikar</strong>
+	</div>
+	<div class="social-icons">
+		<a href="https://www.facebook.com/zullQQ/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+		<a href="https://discord.gg/npyUAZuV" target="_blank" title="Discord"><i class="fab fa-discord"></i></a>
+		<a href="https://www.youtube.com/@idSkynet" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+		<a href="https://www.zull.com/" target="_blank" title="Website"><i class="fas fa-globe"></i></a>
+	</div>
 </footer>
+
+<button class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleMenu()" title="Pengaturan"><i class="fas fa-gear"></i></button>
+
+<div class="vybor" id="mainMenuPanel" style="display:none;">
+	<div class="panel-actions">
+		<button class="btn-purple" onclick="toggleLanguage()" id="langBtn">🌐 Switch to English</button>
+		<button class="btn-danger" onclick="resetCalculator()"><span data-i18n="btnReset">🔄 Reset Kalkulator</span></button>
+	</div>
+</div>
+
+<div id="customModal" class="modal-backdrop" style="display:none;" onclick="if(event.target===this) closeModal()">
+	<div class="modal-content">
+		<h3 id="modalTitle" data-i18n="modalTitleAdd">Masukkan ke Inventory</h3>
+		<p data-i18n="modalDesc">Berapa banyak item yang Anda inginkan?</p>
+		<input type="number" id="modalInput" min="1" max="999" value="1" oninput="sanitizeMultiplier(this)">
+		<div class="modal-buttons">
+			<button class="modal-btn-confirm" data-i18n="btnSave" onclick="confirmModal()">Simpan</button>
+			<button class="modal-btn-cancel" data-i18n="btnCancel" onclick="closeModal()">Batal</button>
+		</div>
+	</div>
+</div>
+
+<div id="inventoryModal" class="modal-backdrop" style="display:none; z-index: 2001;" onclick="if(event.target===this) closeInventoryModal()">
+	<div class="modal-content" style="max-width: 450px;">
+		<h3 data-i18n="modalInvTitle">Menambahkan Item</h3>
+		<input type="text" id="invSearch" class="search-box" style="margin-bottom: 5px;" data-i18n="invSearchPlaceholder" placeholder="🔍 Cari nama tome/bahan..." onkeyup="filterInventorySearch(this.value)">
+		<div id="invItemList" class="branch" style="max-height: 250px; overflow-y: auto; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);"></div>
+		<button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onclick="closeInventoryModal()" data-i18n="btnCloseWindow">Tutup Jendela</button>
+	</div>
+</div>
+
+<div id="reverseCalcModal" class="modal-backdrop" style="display:none; z-index: 2001;" onclick="if(event.target===this) closeReverseCalcModal()">
+	<div class="modal-content" style="max-width: 450px; max-height:85vh; overflow-y:auto;">
+		<h3 data-i18n="modalRevTitle">🔍 Analisis Potensi Crafting</h3>
+		<p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:15px;" data-i18n="modalRevDesc">Sistem mendeteksi isi Inventory Anda dan menghitung Tome terbaik yang bisa dibuat.</p>
+		<div id="reverseCalcResults" style="margin-bottom: 20px;"></div>
+		<button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onclick="closeReverseCalcModal()" data-i18n="btnCloseWindow">Tutup Jendela</button>
+	</div>
+</div>
+
+<div id="floatingTooltip" class="floating-tooltip"></div>
 
 <script src="script.js" defer></script>
 </body>
