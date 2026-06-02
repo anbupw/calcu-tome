@@ -24,7 +24,7 @@ auth.onAuthStateChanged(user => {
                     Cloud Sync Aktif
                 </div>
                 <button class="btn-danger" style="padding: 6px 14px; font-size: 0.75rem; width: auto; border-radius:6px; font-weight:600;" onclick="logoutGoogle()">
-                	<i class="fas fa-sign-out-alt"></i> Keluar Akun
+                	<i class="fas fa-sign-out-alt"></i> Keluar
                 </button>
             `;
         }
