@@ -998,4 +998,31 @@ function resetCalculator() {
     }
 }
 
+// ==================== SELECTION FILTER HELPER ====================
+function filterBooks(val) {
+    const query = val.toLowerCase().trim();
+    const vyborDiv = document.getElementById('vybor');
+    if (!vyborDiv) return;
+
+    // Mengambil seluruh tombol pemilihan buku target
+    const buttons = vyborDiv.getElementsByTagName('button');
+    
+    for (let btn of buttons) {
+        const title = btn.getAttribute('title') || '';
+        const bookId = parseInt(title);
+        
+        // Memastikan database TOME_DB tersedia sebelum memfilter
+        if (typeof TOME_DB !== 'undefined' && TOME_DB[bookId]) {
+            const bookName = TOME_DB[bookId][4].toLowerCase();
+            
+            // Tampilkan jika cocok dengan pencarian, sembunyikan jika tidak
+            if (bookName.includes(query)) {
+                btn.style.display = '';
+            } else {
+                btn.style.display = 'none';
+            }
+        }
+    }
+}
+
 window.onload = () => { applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
