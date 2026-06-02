@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reverse Calculator & Smart Farming - Master Beta v1.1.0</title>
+    <title>Tome Crafting Analyzer & Financial Optimizer - v2.0.0</title>
     <style>
         :root {
             --primary-color: #0d6efd;
             --success-color: #198754;
             --danger-color: #dc3545;
+            --warning-color: #ffc107;
             --dark-color: #212529;
             --light-bg: #f8f9fa;
         }
@@ -52,11 +53,28 @@
             border-bottom: 2px solid #dee2e6;
             padding-bottom: 5px;
             margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-badge {
+            font-size: 11px;
+            background: #e2e3e5;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: normal;
         }
 
         .grid-3 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 15px;
         }
 
@@ -213,22 +231,39 @@
 <body>
 
 <div class="container">
-    <h1>📚 Tome Crafting Analyzer Dashboard</h1>
+    <h1>📚 Tome Crafting Analyzer & Financial Dashboard</h1>
     
     <div class="section">
-        <div class="section-title">📦 Data Inventory Aktual</div>
+        <div class="section-title">
+            <span>📦 Data Inventory Aktual</span>
+            <span class="status-badge" style="background:#d1e7dd; color:#0f5132;">💾 Autosave Aktif</span>
+        </div>
         <div class="grid-3">
             <div class="form-group">
                 <label for="invPages">Tome Page</label>
-                <input type="number" id="invPages" value="12" min="0">
+                <input type="number" id="invPages" value="12" min="0" oninput="StorageModule.saveToLocal()">
             </div>
             <div class="form-group">
                 <label for="invFragments">Tome Fragment</label>
-                <input type="number" id="invFragments" value="8" min="0">
+                <input type="number" id="invFragments" value="8" min="0" oninput="StorageModule.saveToLocal()">
             </div>
             <div class="form-group">
                 <label for="invTokens">Token of Luck</label>
-                <input type="number" id="invTokens" value="150" min="0">
+                <input type="number" id="invTokens" value="150" min="0" oninput="StorageModule.saveToLocal()">
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">💰 Harga Pasar Aktual (Market Price)</div>
+        <div class="grid-2">
+            <div class="form-group">
+                <label for="pricePage">Harga 1x Tome Page (Gold/Zeny)</label>
+                <input type="number" id="pricePage" value="500" min="0" oninput="StorageModule.saveToLocal()">
+            </div>
+            <div class="form-group">
+                <label for="priceFragment">Harga 1x Tome Fragment (Gold/Zeny)</label>
+                <input type="number" id="priceFragment" value="150" min="0" oninput="StorageModule.saveToLocal()">
             </div>
         </div>
     </div>
@@ -237,7 +272,7 @@
         <div class="section-title">🎯 Pilih Target Kombinasi Tome</div>
         <div class="form-group">
             <label for="targetTome">Buku Target Rekursif</label>
-            <select id="targetTome"></select>
+            <select id="targetTome" onchange="StorageModule.saveToLocal()"></select>
         </div>
     </div>
 
@@ -247,13 +282,11 @@
 <div class="modal-overlay" id="reverseCalcModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 id="modalTitle">Hasil Analisis Reverse Calculator</h3>
+            <h3>Hasil Analisis Reverse Calculator</h3>
             <button class="close-modal" onclick="closeModal()">&times;</button>
         </div>
         <div class="modal-body">
-            <div id="analysisSummary">
-                </div>
-            
+            <div id="analysisSummary"></div>
             <div id="smartFarmingContainer"></div>
         </div>
         <div class="modal-footer">
@@ -289,6 +322,49 @@ for (const [id, book] of Object.entries(TOME_DB)) {
 
 /**
  * ====================================================================
+ * RUTE 1: MODUL LOCAL STORAGE (DATA PERSISTENCE)
+ * ====================================================================
+ */
+const StorageModule = {
+    KEY: 'TomeAnalyzer_MasterData',
+    
+    saveToLocal() {
+        const data = {
+            pages: document.getElementById('invPages').value,
+            fragments: document.getElementById('invFragments').value,
+            tokens: document.getElementById('invTokens').value,
+            pricePage: document.getElementById('pricePage').value,
+            priceFragment: document.getElementById('priceFragment').value,
+            targetTome: document.getElementById('targetTome').value
+        };
+        localStorage.setItem(this.KEY, JSON.stringify(data));
+    },
+
+    loadFromLocal() {
+        const savedData = localStorage.getItem(this.KEY);
+        if (!savedData) return;
+        
+        try {
+            const data = JSON.parse(savedData);
+            if(data.pages !== undefined) document.getElementById('invPages').value = data.pages;
+            if(data.fragments !== undefined) document.getElementById('invFragments').value = data.fragments;
+            if(data.tokens !== undefined) document.getElementById('invTokens').value = data.tokens;
+            if(data.pricePage !== undefined) document.getElementById('pricePage').value = data.pricePage;
+            if(data.priceFragment !== undefined) document.getElementById('priceFragment').value = data.priceFragment;
+            if(data.targetTome !== undefined) document.getElementById('targetTome').value = data.targetTome;
+        } catch (e) {
+            console.error("Gagal memuat data dari LocalStorage", e);
+        }
+    }
+};
+
+// Jalankan auto-load saat pertama kali halaman terbuka
+window.onload = () => {
+    StorageModule.loadFromLocal();
+};
+
+/**
+ * ====================================================================
  * CORE ENGINE KALKULATOR: RECURSIVE DEEP COPY LOGIC (LOCKED)
  * ====================================================================
  */
@@ -296,12 +372,10 @@ function testCraft(tomeId, pool) {
     const book = TOME_DB[tomeId];
     if (!book) return { progress: 0, required: { pages: 0, fragments: 0 } };
 
-    // Kasus Dasar: Buku Level 1 (Evaluasi Ketersediaan Bahan Dasar langsung)
     if (book.level === 1) {
-        const totalElements = 7; // 4 Pages + 3 Fragments
+        const totalElements = 7; 
         let matchedElements = 0;
 
-        // Hitung kontribusi proporsional Pages
         if (pool.pages >= book.reqPages) {
             matchedElements += 4;
             pool.pages -= book.reqPages;
@@ -310,7 +384,6 @@ function testCraft(tomeId, pool) {
             pool.pages = 0;
         }
 
-        // Hitung kontribusi proporsional Fragments
         if (pool.fragments >= book.reqFragments) {
             matchedElements += 3;
             pool.fragments -= book.reqFragments;
@@ -326,7 +399,6 @@ function testCraft(tomeId, pool) {
         };
     }
 
-    // Kasus Rekursif: Buku Level 2-6 (Membagi bobot sama rata ke 3 anak buku)
     if (book.childs && book.childs.length === 3) {
         let totalProgressAccumulated = 0;
         let aggregateRequirements = { pages: 0, fragments: 0 };
@@ -349,35 +421,30 @@ function testCraft(tomeId, pool) {
 
 /**
  * ====================================================================
- * CONTROLLER: RUN REVERSE CALCULATOR PROCESS
+ * CONTROLLER: RUN PROCESS
  * ====================================================================
  */
 let globalCurrentTargetId = null;
 
 function runReverseCalculator() {
-    const startTime = performance.now(); // Pantau batas performa 10ms
-
-    // Ambil input aktual
     const currentInventory = {
         pages: parseInt(document.getElementById('invPages').value) || 0,
         fragments: parseInt(document.getElementById('invFragments').value) || 0,
         tokens: parseInt(document.getElementById('invTokens').value) || 0
     };
 
+    const marketPrices = {
+        pagePrice: parseInt(document.getElementById('pricePage').value) || 0,
+        fragmentPrice: parseInt(document.getElementById('priceFragment').value) || 0
+    };
+
     const targetId = document.getElementById('targetTome').value;
     globalCurrentTargetId = targetId;
 
-    // ISOLATED DATA POOL: Murni menggunakan Deep Copy (Aman dari Kerusakan Data)
     const simulationPool = { ...currentInventory };
-
-    // Eksekusi Logika Inti Komputasi Rekursif
     const analysis = testCraft(targetId, simulationPool);
     const targetBookData = TOME_DB[targetId];
 
-    const endTime = performance.now();
-    console.log(`Execution time: ${(endTime - startTime).toFixed(4)}ms`);
-
-    // Render Hasil Utama ke Jendela Modal
     const summaryUI = document.getElementById('analysisSummary');
     summaryUI.innerHTML = `
         <p style="margin:0 0 10px 0;">Analisis Kelayakan Pembuatan:</p>
@@ -398,14 +465,14 @@ function runReverseCalculator() {
         </div>
     `;
 
-    // INJEKSI MODUL EKSTENSI: Mengaktifkan Sistem Rekomendasi Pintar & Belanja
-    SmartFarmingModule.init(analysis.required, currentInventory);
+    // Eksekusi Modul Finansial & Smart Farming secara bersamaan
+    SmartFarmingModule.init(analysis.required, currentInventory, marketPrices);
 
-    // Buka Modal
     document.getElementById('reverseCalcModal').classList.add('active');
 }
 
 function closeModal() {
+    document.getElementById('reverseCalcModal').classList.remove('remove');
     document.getElementById('reverseCalcModal').classList.remove('active');
 }
 
@@ -418,15 +485,15 @@ function selectTargetBook() {
 
 /**
  * ====================================================================
- * EXTENSION MODULE: SMART FARMING & DEFICIENCY OPTIMIZER (v1.1.0)
+ * RUTE 2: EXTENSION MODULE - SMART FARMING & FINANCIAL VALUATION (v2.0.0)
  * ====================================================================
  */
 const SmartFarmingModule = {
     CONFIG: {
-        TOKEN_COST_PER_PAGE: 20 // Aturan Konversi Game: 1 Page = 20 Token of Luck
+        TOKEN_COST_PER_PAGE: 20
     },
 
-    calculateDeficiency(target, inventory) {
+    calculateDeficiency(target, inventory, marketPrices) {
         const missingPages = Math.max(0, target.pages - inventory.pages);
         const missingFragments = Math.max(0, target.fragments - inventory.fragments);
         
@@ -435,7 +502,7 @@ const SmartFarmingModule = {
         const recommendations = [];
         const shoppingList = [];
 
-        // Logika Pengambilan Keputusan Konversi Token Automatis
+        // 1. Optimasi Token of Luck (Menghemat pengeluaran Gold pemain)
         if (missingPages > 0 && remainingTokens > 0) {
             const affordablePages = Math.floor(remainingTokens / this.CONFIG.TOKEN_COST_PER_PAGE);
             
@@ -446,18 +513,24 @@ const SmartFarmingModule = {
                 finalMissingPages -= pagesToCraft;
                 remainingTokens -= tokensUsed;
                 
-                recommendations.push(`Gunakan <strong>${tokensUsed} Token of Luck</strong> untuk membuat <strong>${pagesToCraft} Tome Page</strong>.`);
+                recommendations.push(`Gunakan <strong>${tokensUsed} Token of Luck</strong> untuk mencetak <strong>${pagesToCraft} Tome Page</strong>.`);
             }
         }
 
-        // Pemetaan kebutuhan sisa untuk diletakkan di list farming/belanja pasar
-        if (finalMissingPages > 0) shoppingList.push(`${finalMissingPages}x Tome Page`);
-        if (missingFragments > 0) shoppingList.push(`${missingFragments}x Tome Fragment`);
+        // 2. Pemetaan Daftar Belanja Pasar
+        if (finalMissingPages > 0) shoppingList.push({ name: 'Tome Page', qty: finalMissingPages });
+        if (missingFragments > 0) shoppingList.push({ name: 'Tome Fragment', qty: missingFragments });
+
+        // 3. MATEMATIKA FINANSIAL: Hitung estimasi modal Gold yang dibutuhkan
+        const costFromPages = finalMissingPages * marketPrices.pagePrice;
+        const costFromFragments = missingFragments * marketPrices.fragmentPrice;
+        const totalEstimatedGold = costFromPages + costFromFragments;
 
         return {
             isComplete: finalMissingPages === 0 && missingFragments === 0,
             shoppingList: shoppingList,
-            recommendations: recommendations
+            recommendations: recommendations,
+            totalGoldRequired: totalEstimatedGold
         };
     },
 
@@ -468,38 +541,46 @@ const SmartFarmingModule = {
         container.innerHTML = '';
         container.style.cssText = 'margin-top: 20px; padding: 15px; border-left: 4px solid #0d6efd; border-radius: 6px; background-color: #f8f9fa;';
 
-        // Kasus Sukses: Bahan tercukupi penuh melalui aset/token
+        // Kasus A: Bahan Baku Sempurna Mencukupi
         if (analysisResult.isComplete) {
             container.style.borderLeftColor = '#198754';
             container.innerHTML = `
                 <h4 style="margin: 0 0 5px 0; font-size: 14px; color: #198754; font-weight: bold;">✅ Status: Siap Crafting</h4>
                 <p style="margin: 0; font-size: 13px; color: #555;">Semua material di inventory Anda mencukupi untuk target ini.</p>
-                ${analysisResult.recommendations.length > 0 ? `<div style="margin-top: 10px; font-size: 13px; color: #212529;"><strong>Saran Aksi:</strong> 💡 ${analysisResult.recommendations.join('<br>💡 ')}</div>` : ''}
+                ${analysisResult.recommendations.length > 0 ? `<div style="margin-top: 10px; font-size: 13px; color: #212529; background: #e8f5e9; padding: 8px; border-radius:4px;"><strong>Saran Aksi:</strong><br>💡 ${analysisResult.recommendations.join('<br>💡 ')}</div>` : ''}
             `;
             return;
         }
 
-        // Kasus Gagal/Kurang: Tampilkan visualisasi Rute Belanja & Optimasi
+        // Kasus B: Bahan Kurang (Tampilkan Rute Belanja + Estimasi Harga Pasar)
         container.style.borderLeftColor = '#0d6efd';
-        let shoppingItemsHTML = analysisResult.shoppingList.map(item => `<li style="margin-bottom: 4px;">Farm / Beli di Market: <strong>${item}</strong></li>`).join('');
+        let shoppingItemsHTML = analysisResult.shoppingList.map(item => `<li style="margin-bottom: 4px;">Beli di Market: <strong>${item.qty}x ${item.name}</strong></li>`).join('');
         let recItemsHTML = analysisResult.recommendations.map(rec => `<li style="margin-bottom: 4px;">💡 ${rec}</li>`).join('');
+
+        // Format angka mata uang agar mudah dibaca (e.g. 15.000)
+        const formattedGold = new Intl.NumberFormat('id-ID').format(analysisResult.totalGoldRequired);
 
         container.innerHTML = `
             <h4 style="margin: 0 0 10px 0; font-size: 14px; color: #333; font-weight: bold;">🛒 Analisis Kekurangan & Rekomendasi</h4>
             <ul style="margin: 0 0 10px 0; padding-left: 20px; font-size: 13px; color: #dc3545; font-weight: 500;">
                 ${shoppingItemsHTML}
             </ul>
+            
+            <div style="margin: 12px 0; padding: 10px; background-color: #fff3cd; border: 1px solid #ffe69c; color: #664d03; border-radius: 6px; font-size: 13px;">
+                💰 Estimasi Dana Tambahan: <strong>${formattedGold} Gold/Zeny</strong>
+            </div>
+
             ${analysisResult.recommendations.length > 0 ? `
                 <hr style="margin: 10px 0; border: 0; border-top: 1px dashed #ccc;">
-                <ul style="margin: 0; padding-left: 20px; font-size: 13px; color: #198754; list-style-type: none;">
+                <ul style="margin: 0; padding-left: 0; font-size: 13px; color: #198754; list-style-type: none;">
                     ${recItemsHTML}
                 </ul>
             ` : ''}
         `;
     },
 
-    init(targetRequirements, currentInventory) {
-        const result = this.calculateDeficiency(targetRequirements, currentInventory);
+    init(targetRequirements, currentInventory, marketPrices) {
+        const result = this.calculateDeficiency(targetRequirements, currentInventory, marketPrices);
         this.renderUI(result);
     }
 };
