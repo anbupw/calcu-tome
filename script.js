@@ -2,17 +2,19 @@
 
 // 1. ISI KONFIGURASI FIREBASE ANDA DI SINI
 const firebaseConfig = {
-	 apiKey: "AIzaSyC1eCaQkeCf1IJQIDqveEKhHHFEYMd6bSs",
-	 authDomain: "kalkulator-tome.firebaseapp.com",
-	 projectId: "kalkulator-tome",
-	 storageBucket: "kalkulator-tome.firebasestorage.app",
-	 messagingSenderId: "794012581588",
-	 appId: "1:794012581588:web:021341eda428298daf0541"
+   apiKey: "AIzaSyC1eCaQkeCf1IJQIDqveEKhHHFEYMd6bSs",
+   authDomain: "kalkulator-tome.firebaseapp.com",
+   projectId: "kalkulator-tome",
+   storageBucket: "kalkulator-tome.firebasestorage.app",
+   messagingSenderId: "794012581588",
+   appId: "1:794012581588:web:021341eda428298daf0541"
+};
 };
 
 // Inisialisasi Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
+const db = firebase.firestore();
 const provider = new firebase.auth.GoogleAuthProvider();
 
 let currentUser = null;
@@ -32,27 +34,34 @@ auth.onAuthStateChanged(user => {
         // Tampilkan info Akun di panel gear pengaturan
         if (accountSection) {
             accountSection.innerHTML = `
-                <img src="${user.photoURL || 'https://via.placeholder.com/40'}" class="user-profile-img" alt="Avatar">
-                <div style="font-size:0.85rem; font-weight:600; color:white;">${user.displayName}</div>
-                <div style="font-size:0.7rem; color:var(--text-muted);">${user.email}</div>
+                <img src="${user.photoURL || 'https://via.placeholder.com/48'}" class="user-profile-img" alt="Avatar">
+                <div style="font-size:0.95rem; font-weight:600; color:white; margin-bottom:2px;">${user.displayName}</div>
+                <div style="font-size:0.75rem; color:var(--success); display:flex; align-items:center; justify-content:center; gap:6px; font-weight:500; margin-bottom: 10px;">
+                    <span style="display:inline-block; width:6px; height:6px; background:var(--success); border-radius:50%; box-shadow:0 0 6px var(--success);"></span> 
+                    Cloud Sync Aktif
+                </div>
+                <button class="btn-danger" style="padding: 6px 14px; font-size: 0.75rem; width: auto; border-radius:6px; font-weight:600;" onclick="logoutGoogle()">
+                	<i class="fas fa-sign-out-alt"></i> Keluar Akun
+                </button>
             `;
         }
         
-        // Jalankan fungsi render bawaan aplikasi Anda
-        applyLanguage(); 
+        loadFromCloud(user.uid);
         
     } else {
         // Jika belum Login / Keluar Akun -> Kunci Aplikasi & Paksa Layar Login Muncul
         if (loginOverlay) loginOverlay.style.display = 'flex';
         if (appContent) appContent.style.display = 'none';
+        
+        if (accountSection) accountSection.innerHTML = ''; // Kosongkan saat logout
     }
 });
 
 // FUNGSI TOMBOL LOGIN
 function loginGoogle() {
     auth.signInWithPopup(provider)
-        .then((result) => {
-            console.log("Berhasil Masuk:", result.user.displayName);
+        .then(() => {
+            // Berhasil, UI otomatis ditangani oleh onAuthStateChanged
         })
         .catch(err => {
             console.error("Gagal melakukan autentikasi:", err);
@@ -62,16 +71,15 @@ function loginGoogle() {
 
 // FUNGSI TOMBOL LOGOUT
 function logoutGoogle() {
-    if (confirm("Apakah Anda yakin ingin keluar dari aplikasi kalkulator?")) {
+    if (confirm("Apakah Anda yakin ingin keluar dari aplikasi?")) {
         auth.signOut().then(() => {
-            localStorage.removeItem('tomeCalculatorState'); // Bersihkan state lokal opsional
-            window.location.reload();
+            // UI otomatis mengunci layar setelah logout selesai
+            toggleMenu(); // tutup panel jika terbuka
         });
     }
 }
 
-// ==================== LOGIKA BAWAAN APLIKASI ANDA DIMULAI DI SINI ====================
-// (Biarkan isi variabel LANG, fungsi applyLanguage, database TOME_DB, dll tetap di bawah ini)
+// ==================== LOGIKA BAWAAN APLIKASI ====================
 
 const LANG = {
 	id: { 
@@ -92,7 +100,7 @@ const LANG = {
 		btnCancel: "Batal", 
 		baseMat: "Bahan Dasar", 
 		lvl: "Level", 
-		alertReset: "Hapus semua perhitungan dan mulai dari awal?", 
+		alertReset: "Hapus semua perhitungan dan mulai dari awal di Cloud?", 
 		statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", 
 		footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", 
 		matDesc: "Bahan Crafting",
@@ -141,7 +149,7 @@ const LANG = {
 		btnCancel: "Cancel", 
 		baseMat: "Base Materials", 
 		lvl: "Level", 
-		alertReset: "Clear all calculations and start over?", 
+		alertReset: "Clear all calculations and start over from Cloud?", 
 		statEquipDesc: "* Bind on Equip.", 
 		footerText: "Tome Calculator © 2026 | Created by <strong>Sulfikar</strong>", 
 		matDesc: "Crafting Material",
@@ -670,7 +678,7 @@ function updateCostAndProgress() {
     let price11 = Math.max(0, parseInt(document.getElementById('price11').value) || 0);
     let price12 = Math.max(0, parseInt(document.getElementById('price12').value) || 0);
     let multiplier = Math.max(1, parseInt(document.getElementById('mnojitel').value) || 1);
-    saveToLocalStorage();
+    saveDataTrigger();
     
     let netCounts = [];
     let deductionsCopy = [];
@@ -813,6 +821,7 @@ function updateCostAndProgress() {
         };
     }
 })();
+
 // ------------------------------------------------------------------ //
 
 function processTree(id) {
@@ -905,12 +914,12 @@ function confirmModal() {
     if (!isNaN(amount) && amount > 0 && activeModalItemId) {
         if (!deductions[activeModalItemId]) deductions[activeModalItemId] = 0;
         deductions[activeModalItemId] += amount;
-        saveToLocalStorage(); processTree(rightTreeId); 
+        saveDataTrigger(); processTree(rightTreeId); 
     }
     closeModal();
 }
 
-function removeDeduction(id) { deductions[id] = 0; saveToLocalStorage(); processTree(rightTreeId); }
+function removeDeduction(id) { deductions[id] = 0; saveDataTrigger(); processTree(rightTreeId); }
 
 function filterBooks(query) {
     const q = query.toLowerCase();
@@ -924,36 +933,68 @@ function filterBooks(query) {
     });
 }
 
+// ---------------- DATABASE MECHANISM (CLOUD VS LOCAL) ---------------- //
+
+function saveDataTrigger() {
+    let p10 = Math.max(0, parseInt(document.getElementById('price10').value) || 0); 
+    let p11 = Math.max(0, parseInt(document.getElementById('price11').value) || 0); 
+    let p12 = Math.max(0, parseInt(document.getElementById('price12').value) || 0); 
+    let m = Math.max(1, parseInt(document.getElementById('mnojitel').value) || 1);
+    const compD = {}; 
+    deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
+    
+    let state = { r: rightTreeId, m: m, d: compD, p10: p10, p11: p11, p12: p12 };
+    
+    try { localStorage.setItem('tomeCalculatorState', JSON.stringify(state)); } catch(e){}
+    
+    if (currentUser) {
+        db.collection("users").doc(currentUser.uid).set({
+            calculatorState: state,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true }).catch(e => console.warn("Cloud save error:", e));
+    }
+}
+
 function loadFromLocalStorage() {
     let savedData = localStorage.getItem('tomeCalculatorState');
     if (savedData) {
         try {
             let state = JSON.parse(savedData);
-            rightTreeId = state.r || 616;
-            document.getElementById('mnojitel').value = state.m || 1;
-            document.getElementById('price10').value = state.p10 || 0;
-            document.getElementById('price11').value = state.p11 || 0;
-            document.getElementById('price12').value = state.p12 || 0;
-            deductions = [];
-            if (state.d) { for (const k in state.d) deductions[parseInt(k)] = state.d[k]; }
+            parseStateToUI(state);
         } catch(e) { deductions = []; }
     }
 }
 
-function saveToLocalStorage() {
-    try {
-        let p10 = Math.max(0, parseInt(document.getElementById('price10').value) || 0); 
-        let p11 = Math.max(0, parseInt(document.getElementById('price11').value) || 0); 
-        let p12 = Math.max(0, parseInt(document.getElementById('price12').value) || 0); 
-        let m = Math.max(1, parseInt(document.getElementById('mnojitel').value) || 1);
-        const compD = {}; 
-        deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
-        
-        let state = { r: rightTreeId, m: m, d: compD, p10: p10, p11: p11, p12: p12 };
-        localStorage.setItem('tomeCalculatorState', JSON.stringify(state));
-    } catch (error) {
-        console.warn("Browser memblokir LocalStorage. Fitur autosave dinonaktifkan sementara.");
-    }
+function loadFromCloud(uid) {
+    db.collection("users").doc(uid).get().then(doc => {
+        if (doc.exists && doc.data().calculatorState) {
+            parseStateToUI(doc.data().calculatorState);
+        } else {
+            let savedData = localStorage.getItem('tomeCalculatorState');
+            if (savedData) {
+                try {
+                    let state = JSON.parse(savedData);
+                    parseStateToUI(state);
+                    saveDataTrigger();
+                } catch(e){}
+            }
+        }
+        applyLanguage();
+    }).catch(err => {
+        console.error("Gagal sinkronisasi cloud, fallback ke lokal:", err);
+        loadFromLocalStorage();
+        applyLanguage();
+    });
+}
+
+function parseStateToUI(state) {
+    rightTreeId = state.r || 616;
+    document.getElementById('mnojitel').value = state.m || 1;
+    document.getElementById('price10').value = state.p10 || 0;
+    document.getElementById('price11').value = state.p11 || 0;
+    document.getElementById('price12').value = state.p12 || 0;
+    deductions = [];
+    if (state.d) { for (const k in state.d) deductions[parseInt(k)] = state.d[k]; }
 }
 
 function resetCalculator() {
@@ -962,9 +1003,17 @@ function resetCalculator() {
         localStorage.removeItem('tomeCalculatorState');
         document.getElementById('price10').value = 0; document.getElementById('price11').value = 0; document.getElementById('price12').value = 0; document.getElementById('mnojitel').value = 1;
         rightTreeId = favoriteTargetId ? parseInt(favoriteTargetId) : 616;
+        
+        if (currentUser) {
+            db.collection("users").doc(currentUser.uid).set({
+                calculatorState: { r: 616, m: 1, d: {}, p10: 0, p11: 0, p12: 0 },
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+        }
+        
         processTree(rightTreeId);
         toggleMenu();
     }
 }
 
-window.onload = () => { loadFromLocalStorage(); applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
+window.onload = () => { applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };

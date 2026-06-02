@@ -236,7 +236,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 	.menu-toggle-btn { bottom: 20px; right: 20px; }
 }
 
-/* ================= GERBANG LOGIN PREMIUM STYLES ================= */
+/* ================= GERBANG LOGIN PREMIUM STYLES (SINGLE BUTTON) ================= */
 .login-overlay {
 	position: fixed;
 	top: 0; left: 0;
@@ -287,6 +287,7 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 	height: 1px;
 	background: linear-gradient(90deg, transparent, var(--border-color), transparent);
 	margin: 25px 0;
+	display: block; /* Pastikan divider muncul kembali */
 }
 
 .login-desc {
@@ -326,9 +327,10 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 }
 
 .user-profile-img {
-	width: 42px;
-	height: 42px;
+	width: 48px;
+	height: 48px;
 	border-radius: 50%;
-	border: 2px solid var(--accent);
-	margin-bottom: 6px;
+	border: 2px solid var(--success);
+	margin-bottom: 8px;
+	box-shadow: 0 0 10px rgba(16,185,129,0.2);
 }

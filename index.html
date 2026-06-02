@@ -14,6 +14,7 @@
 
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
 <link rel="stylesheet" href="style.css">
 </head>
@@ -26,8 +27,11 @@
 		</div>
 		<h2>Kalkulator Tome</h2>
 		<p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">Perfect World Imersif Edition</p>
+		
 		<div class="login-divider"></div>
+		
 		<p class="login-desc">Selamat datang! Silakan masuk dengan akun Google Anda untuk mengakses seluruh fitur kalkulator, inventory, dan sinkronisasi data cloud otomatis.</p>
+		
 		<button class="btn-google-login" onclick="loginGoogle()">
 			<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 48 48" style="display:block;">
 			  <g>
@@ -93,46 +97,51 @@
 			</div>
 			
 			<div class="calc-card">
-				<h2 data-i18n="title3">Estimasi Biaya Pasar</h2>
+				<h2 data-i18n="title3">💰 Estimasi Biaya Pasar</h2>
 				<p class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</p>
 				
-				<div class="cost-input-container">
-					<div class="cost-input-group">
-						<label><span style="background-position: -288px -32px;"></span> Token of Luck</label>
-						<input type="number" id="price10" value="0" min="0" oninput="updateCostAndProgress()">
-					</div>
-					<div class="cost-input-group">
-						<label><span style="background-position: -320px -32px;"></span> Tome Fragment</label>
-						<input type="number" id="price11" value="0" min="0" oninput="updateCostAndProgress()">
-					</div>
-					<div class="cost-input-group">
-						<label><span style="background-position: -352px -32px;"></span> Tome Page</label>
-						<input type="number" id="price12" value="0" min="0" oninput="updateCostAndProgress()">
-					</div>
+				<div class="cost-input-group">
+					<label><span style="background-position:32px -32px;"></span> Token of Luck:</label>
+					<input type="number" id="price10" value="0" min="0" oninput="sanitizePrice(this); updateCostAndProgress();" placeholder="0">
+				</div>
+				<div class="cost-input-group">
+					<label><span style="background-position:64px 0px;"></span> Tome Fragment:</label>
+					<input type="number" id="price11" value="0" min="0" oninput="sanitizePrice(this); updateCostAndProgress();" placeholder="0">
+				</div>
+				<div class="cost-input-group">
+					<label><span style="background-position:32px 0px;"></span> Tome Page:</label>
+					<input type="number" id="price12" value="0" min="0" oninput="sanitizePrice(this); updateCostAndProgress();" placeholder="0">
 				</div>
 				
 				<div class="total-cost-box">
-					<span data-i18n="totalCostLabel">Total Sisa Biaya:</span>
-					<span id="totalCostDisplay" class="cost-amount">0 Gold</span>
+					<div class="total-cost-label" data-i18n="totalCostLabel">Total Sisa Biaya:</div>
+					<div id="totalCostDisplay" class="total-cost-value">0 Gold</div>
 				</div>
 			</div>
 		</div>
 		
 	</div>
 
-	<footer class="footer" style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.85rem; margin-top: 30px; border-top: 1px solid var(--border-color);" data-i18n="footerText">
-		Kalkulator Tome &copy; 2026 | Dibuat oleh <strong>Sulfikar</strong>
+	<footer class="footer">
+		<div class="footer-text" data-i18n="footerText">
+			Kalkulator Tome &copy; 2026 | Dibuat oleh <strong>Sulfikar</strong>
+		</div>
+		<div class="social-icons">
+			<a href="https://t.me/idperfectworld" target="_blank" title="Telegram"><i class="fab fa-telegram"></i></a>
+			<a href="https://discord.gg/" target="_blank" title="Discord"><i class="fab fa-discord"></i></a>
+			<a href="https://www.youtube.com/@idSkynet" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+			<a href="https://www.zull.com/" target="_blank" title="Website"><i class="fas fa-globe"></i></a>
+		</div>
 	</footer>
 
 	<button class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleMenu()" title="Pengaturan"><i class="fas fa-gear"></i></button>
 
 	<div class="vybor" id="mainMenuPanel" style="display:none;">
-		<div id="userAccountSection" style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); text-align: center;">
+		<div id="userAccountSection" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); text-align: center; display:flex; flex-direction:column; align-items:center; gap:8px;">
 			</div>
 		<div class="panel-actions" style="display: flex; flex-direction: column; gap: 8px;">
 			<button class="btn-purple" onclick="toggleLanguage()" id="langBtn">🌐 Switch to English</button>
 			<button class="btn-danger" onclick="resetCalculator()"><span data-i18n="btnReset">🔄 Reset Kalkulator</span></button>
-			<button class="btn-danger" onclick="logoutGoogle()" style="background: #ef4444;"><i class="fas fa-sign-out-alt"></i> Keluar Akun</button>
 		</div>
 	</div>
 
@@ -140,7 +149,7 @@
 		<div class="modal-content">
 			<h3 id="modalTitle" data-i18n="modalTitleAdd">Masukkan ke Inventory</h3>
 			<p data-i18n="modalDesc">Berapa banyak item yang Anda inginkan?</p>
-			<input type="number" id="modalInput" value="1" min="1" max="999">
+			<input type="number" id="modalInput" value="1" min="1" max="999" oninput="sanitizeMultiplier(this)">
 			<div class="modal-buttons">
 				<button class="modal-btn-confirm" onclick="confirmModal()">OK</button>
 				<button class="modal-btn-cancel" onclick="closeModal()">Batal</button>
