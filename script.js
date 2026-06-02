@@ -1017,23 +1017,27 @@ function parseStateToUI(state) {
     if (document.getElementById('price12')) document.getElementById('price12').value = state.p12 || 0;
     if (document.getElementById('mnojitel')) document.getElementById('mnojitel').value = state.m || 1;
 
-    // 2. BONGKAR DATA TARGET TOME (r)
+    // 2. BONGKAR DATA TARGET TOME (r) 🎯
     if (state.r) {
-        rightTreeId = state.r; // Setel ulang buku target terakhir dari cloud
+        rightTreeId = state.r;
     } else {
-        rightTreeId = 101; // Default jika kosong
+        rightTreeId = 101;
     }
 
-    // 3. BONGKAR DATA INVENTORY (d)
-    deductions = []; // Kosongkan array lokal dulu sebelum diisi
+    // 3. BONGKAR DATA INVENTORY (d) 🎒 - VERSI ANTI-NaN (SUPER AMAN)
+    // Kita reset semua slot yang ada di deductions menjadi 0 terlebih dahulu
+    for (let i = 0; i < deductions.length; i++) {
+        deductions[i] = 0;
+    }
+    
+    // Baru kita isi dengan data asli dari Cloud
     if (state.d) {
-        // Masukkan kembali data objek kompresi cloud ke array deductions lokal
         for (let idx in state.d) {
-            deductions[parseInt(idx)] = state.d[idx];
+            deductions[parseInt(idx)] = parseInt(state.d[idx]) || 0;
         }
     }
 
-    // 4. Segarkan Tampilan Aplikasi agar Pohon UI Tergambar Ulang
+    // 4. Segarkan Tampilan Aplikasi
     if (typeof processTree === 'function') {
         processTree(rightTreeId);
     }
