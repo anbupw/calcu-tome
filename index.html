@@ -363,6 +363,13 @@ function runReverseCalculator() {
     globalCurrentTargetId = targetId;
 
     const simulationPool = { ...currentInventory };
+	
+	const targetBookData = TOME_DB[targetId];
+
+	if (!targetBookData) {
+		alert("Eror: Target Buku tidak ditemukan di dalam database!");
+		return; 
+	}
 
     const analysis = testCraft(targetId, simulationPool);
     const targetBookData = TOME_DB[targetId];
