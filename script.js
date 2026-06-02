@@ -939,19 +939,31 @@ function filterBooks(query) {
 // ---------------- DATABASE MECHANISM (CLOUD VS LOCAL) ---------------- //
 
 function saveDataTrigger() {
+    // 1. Pengaman agar tidak menimpa data Cloud saat refresh halaman
     if (!isDataLoaded) return;
-	
+    
     let p10 = Math.max(0, parseInt(document.getElementById('price10').value) || 0); 
     let p11 = Math.max(0, parseInt(document.getElementById('price11').value) || 0); 
     let p12 = Math.max(0, parseInt(document.getElementById('price12').value) || 0); 
     let m = Math.max(1, parseInt(document.getElementById('mnojitel').value) || 1);
+    
+    // Mengompres array deductions (Inventory) menjadi objek ringkas
     const compD = {}; 
     deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
     
-    let state = { r: rightTreeId, m: m, d: compD, p10: p10, p11: p11, p12: p12 };
+    // Objek State yang dikirim ke Firebase
+    let state = { 
+        r: rightTreeId, // Target Tome disimpan di sini (r)
+        m: m, 
+        d: compD,       // Inventory disimpan di sini (d)
+        p10: p10, 
+        p11: p11, 
+        p12: p12 
+    };
     
     try { localStorage.setItem('tomeCalculatorState', JSON.stringify(state)); } catch(e){}
     
+    // Kirim ke Firebase Firestore
     if (currentUser) {
         db.collection("users").doc(currentUser.uid).set({
             calculatorState: state,
@@ -998,13 +1010,34 @@ function loadFromCloud(uid) {
 }
 
 function parseStateToUI(state) {
-    rightTreeId = state.r || 616;
-    document.getElementById('mnojitel').value = state.m || 1;
-    document.getElementById('price10').value = state.p10 || 0;
-    document.getElementById('price11').value = state.p11 || 0;
-    document.getElementById('price12').value = state.p12 || 0;
-    deductions = [];
-    if (state.d) { for (const k in state.d) deductions[parseInt(k)] = state.d[k]; }
+    if (!state) return;
+
+    // 1. Bongkar harga-harga dan multiplier ke input HTML
+    if (document.getElementById('price10')) document.getElementById('price10').value = state.p10 || 0;
+    if (document.getElementById('price11')) document.getElementById('price11').value = state.p11 || 0;
+    if (document.getElementById('price12')) document.getElementById('price12').value = state.p12 || 0;
+    if (document.getElementById('mnojitel')) document.getElementById('mnojitel').value = state.m || 1;
+
+    // 2. BONGKAR DATA TARGET TOME (r)
+    if (state.r) {
+        rightTreeId = state.r; // Setel ulang buku target terakhir dari cloud
+    } else {
+        rightTreeId = 101; // Default jika kosong
+    }
+
+    // 3. BONGKAR DATA INVENTORY (d)
+    deductions = []; // Kosongkan array lokal dulu sebelum diisi
+    if (state.d) {
+        // Masukkan kembali data objek kompresi cloud ke array deductions lokal
+        for (let idx in state.d) {
+            deductions[parseInt(idx)] = state.d[idx];
+        }
+    }
+
+    // 4. Segarkan Tampilan Aplikasi agar Pohon UI Tergambar Ulang
+    if (typeof processTree === 'function') {
+        processTree(rightTreeId);
+    }
 }
 
 function resetCalculator() {
