@@ -223,24 +223,6 @@
 			<button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onclick="closeInventoryModal()" data-i18n="btnCloseWindow">Tutup Jendela</button>
 		</div>
 	</div>
-	
-	<div id="deleteConfirmModal" class="modal-backdrop" style="display:none;">
-    <div class="modal-content" style="max-width: 350px;">
-        <h3 id="deleteItemTitle">Hapus/Kurangi Item</h3>
-        <p id="deleteItemStock" style="font-size: 0.85rem; color: var(--text-muted);"></p>
-        
-        <div style="margin: 15px 0;">
-            <label style="font-size: 0.8rem; display:block; margin-bottom:5px;">Jumlah yang ingin dikurangi:</label>
-            <input type="number" id="deleteQtyInput" min="1" value="1" style="width:100%; padding: 8px; border-radius:6px; background:var(--bg-main); color:white; border:1px solid var(--border-color);">
-        </div>
-        
-        <div style="display:flex; flex-direction:column; gap:8px;">
-            <button onclick="executeReduceItem()" class="btn-success" style="padding:10px; border-radius:6px;">Kurangi Sesuai Jumlah</button>
-            <button onclick="executeDeleteAllItem()" class="btn-danger" style="padding:10px; border-radius:6px;">Hapus Semua (Kosongkan)</button>
-            <button onclick="closeDeleteModal()" style="padding:8px; border-radius:6px; background:#475569; color:white; border:none;">Batal</button>
-        </div>
-    </div>
-</div>
 
 	<div id="reverseCalcModal" class="modal-backdrop" style="display:none; z-index: 2001;" onclick="if(event.target===this) closeReverseCalcModal()">
 		<div class="modal-content" style="max-width: 450px; max-height:85vh; overflow-y:auto;">

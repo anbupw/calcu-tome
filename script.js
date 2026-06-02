@@ -1072,19 +1072,6 @@ function fungsiX(id) {
     processTree(rightTreeId);
 }
 
-let activeDeleteItemId = null;
-
-// Fungsi ini dipicu saat pengguna mengklik item di tas
-function openDeleteConfirmation(itemId, itemName, currentQty) {
-    activeDeleteItemId = itemId;
-    document.getElementById('deleteItemTitle').innerText = `Kelola ${itemName}`;
-    document.getElementById('deleteItemStock').innerText = `Jumlah di inventory saat ini: ${currentQty}`;
-    document.getElementById('deleteQtyInput').value = 1; // reset ke angka 1
-    document.getElementById('deleteQtyInput').max = currentQty; // batasi maksimal input
-    
-    document.getElementById('deleteConfirmModal').style.display = 'flex';
-}
-
 function resetCalculator() {
     if (confirm(LANG[currentLang]['alertReset'])) {
         deductions = []; 
