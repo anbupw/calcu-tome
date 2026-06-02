@@ -596,12 +596,32 @@ function hideTooltip() { document.getElementById('floatingTooltip').style.displa
 document.addEventListener('click', function(e) { if (!e.target.closest('button[title]')) { hideTooltip(); } });
 document.addEventListener('touchstart', function(e) { if (!e.target.closest('button[title]')) { hideTooltip(); } });
 
+// ==================== GENERATOR TOMBOL (UPDATE CRAFTING SIMULATOR) ====================
 function getTreeItemHtml(id, isDeductionsView = false) {
     let count = isDeductionsView ? deductions[id] : itemCounts[id];
     if (!count) return '';
-    let clickAttr = isDeductionsView ? `onclick="removeDeduction(${id})"` : `onclick="openModal(${id})"`;
-    let spanTag = isDeductionsView ? `<span title="Hapus item dari inventory"></span>` : '';
-    return `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" ${clickAttr} onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
+    
+    let clickAttr = '';
+    let extraStyle = '';
+    let spanTag = '';
+
+    if (isDeductionsView) {
+        // Jika ini di area Inventory, klik untuk menghapus
+        clickAttr = `onclick="removeDeduction(${id})"`;
+        spanTag = `<span title="Hapus item dari inventory"></span>`;
+    } else {
+        // JIKA INI ADALAH TOME TARGET UTAMA DI ATAS POHON
+        if (id == rightTreeId) {
+            clickAttr = `onclick="attemptCrafting(${id})"`;
+            // Tambahkan efek glow hijau agar user tahu ini bisa diklik untuk di-craft
+            extraStyle = "box-shadow: 0 0 12px var(--success); border: 2px solid var(--success); border-radius: 6px; cursor: pointer;";
+        } else {
+            // Item pohon lainnya klik untuk masuk modal tambah manual
+            clickAttr = `onclick="openModal(${id})"`;
+        }
+    }
+    
+    return `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}; ${extraStyle}" title="${id}" ${clickAttr} onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
 }
 
 function renderTree() {
@@ -1033,6 +1053,112 @@ function filterBooks(query) {
             header.style.display = hasVisibleItem ? 'block' : 'none';
         }
     });
+}
+
+// ==================== MESIN SIMULATOR CRAFTING TOME ====================
+function attemptCrafting(targetId) {
+    if (!targetId) return;
+
+    // Fungsi rekursif untuk mengecek dan memotong bahan secara virtual
+    function tryCraftNode(nodeId, pool) {
+        if (!nodeId) return false;
+        
+        // 1. Jika barang jadi (Tome/Bahan) sudah ada di inventory, pakai langsung
+        if (pool[nodeId] && pool[nodeId] > 0) {
+            pool[nodeId]--;
+            return true;
+        }
+
+        // 2. Base mats (10, 11) tidak bisa dipecah lagi
+        if (nodeId === 10 || nodeId === 11) return false; 
+        
+        // Tome Page (12) bisa dibuat otomatis jika ada 20 Token (10)
+        if (nodeId === 12) {
+            if (pool[10] >= 20) {
+                pool[10] -= 20;
+                return true;
+            }
+            return false;
+        }
+
+        // 3. Level 1 Tome (ID 101-109) -> Butuh 4 Page & 3 Fragment
+        if (nodeId >= 101 && nodeId <= 109) {
+            let backupPool = [...pool]; // Simpan state jika gagal di tengah jalan
+            
+            let pagesNeeded = 4;
+            for(let i=0; i<4; i++) {
+                if (pool[12] && pool[12] > 0) { pool[12]--; pagesNeeded--; }
+                else if (pool[10] >= 20) { pool[10] -= 20; pagesNeeded--; }
+            }
+            
+            let fragsNeeded = 3;
+            for(let i=0; i<3; i++) {
+                if (pool[11] && pool[11] > 0) { pool[11]--; fragsNeeded--; }
+            }
+            
+            if (pagesNeeded === 0 && fragsNeeded === 0) {
+                return true; // Bahan cukup!
+            } else {
+                // Rollback jika bahan kurang
+                for(let i=0; i<pool.length; i++) pool[i] = backupPool[i] || 0;
+                return false;
+            }
+        }
+
+        // 4. Level 2 - 6 Tomes -> Butuh 3 sub-tome
+        let recipe = TOME_DB[nodeId];
+        if (!recipe) return false;
+
+        let backupPool = [...pool];
+        
+        let s0 = tryCraftNode(recipe[0], pool);
+        let s1 = tryCraftNode(recipe[1], pool);
+        let s2 = tryCraftNode(recipe[2], pool);
+
+        // Jika ketiga buku penyusun berhasil dibuat/dimiliki
+        if (s0 && s1 && s2) {
+            return true;
+        } else {
+            // Rollback jika gagal
+            for(let i=0; i<pool.length; i++) pool[i] = backupPool[i] || 0;
+            return false;
+        }
+    }
+
+    // --- Mulai Eksekusi ---
+    // Copy isi inventory nyata ke kolam simulasi
+    let pool = [];
+    for (let i = 0; i < deductions.length; i++) {
+        pool[i] = deductions[i] || 0;
+    }
+
+    // Jalankan simulasi Crafting
+    let success = tryCraftNode(targetId, pool);
+
+    if (success) {
+        // Terapkan hasil potongan bahan simulasi ke Inventory Asli
+        for (let i = 0; i < pool.length; i++) {
+            deductions[i] = pool[i] || 0;
+        }
+        
+        // Tambahkan buku hasil craft ke Inventory
+        if (!deductions[targetId]) deductions[targetId] = 0;
+        deductions[targetId]++;
+        
+        saveDataTrigger(); // Simpan ke Cloud otomatis
+        processTree(rightTreeId); // Segarkan UI
+        
+        // Mainkan efek Confetti Kemenangan!
+        if (typeof confetti === 'function') {
+            confetti({ particleCount: 150, spread: 80, origin: { y: 0.5 }, colors: ['#fbbf24', '#f59e0b', '#d97706'] });
+        }
+        
+        const bookName = (TOME_DB[targetId] && TOME_DB[targetId][4]) ? TOME_DB[targetId][4] : "Target Tome";
+        alert(`🎉 CRAFTING SUKSES!\n\n[${bookName}] telah berhasil dirakit dan dimasukkan ke Inventory Anda.`);
+    } else {
+        const bookName = (TOME_DB[targetId] && TOME_DB[targetId][4]) ? TOME_DB[targetId][4] : "Target Tome";
+        alert(`❌ CRAFTING GAGAL!\n\nBahan baku atau sub-buku di Inventory Anda belum cukup untuk merakit [${bookName}].`);
+    }
 }
 
 window.onload = () => { applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
