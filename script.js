@@ -998,7 +998,7 @@ function resetCalculator() {
     }
 }
 
-// ==================== SELECTION FILTER HELPER ====================
+// ==================== SELECTION FILTER HELPER (PERBAIKAN BUG) ====================
 function filterBooks(val) {
     const query = val.toLowerCase().trim();
     const vyborDiv = document.getElementById('vybor');
@@ -1008,19 +1008,33 @@ function filterBooks(val) {
     const buttons = vyborDiv.getElementsByTagName('button');
     
     for (let btn of buttons) {
-        const title = btn.getAttribute('title') || '';
-        const bookId = parseInt(title);
+        // Ambil text content yang terlihat di tombol (Nama buku yang tampil di UI pengguna)
+        const textInButton = btn.textContent || btn.innerText || '';
+        const bookNameHTML = textInButton.toLowerCase();
         
-        // Memastikan database TOME_DB tersedia sebelum memfilter
-        if (typeof TOME_DB !== 'undefined' && TOME_DB[bookId]) {
-            const bookName = TOME_DB[bookId][4].toLowerCase();
-            
-            // Tampilkan jika cocok dengan pencarian, sembunyikan jika tidak
-            if (bookName.includes(query)) {
-                btn.style.display = '';
-            } else {
-                btn.style.display = 'none';
+        const titleAttr = btn.getAttribute('title') || '';
+        const bookId = parseInt(titleAttr);
+        
+        let matchFound = false;
+
+        // Metode 1: Cek kecocokan langsung dari teks tombol yang tampil di UI (Aman & Akurat)
+        if (bookNameHTML.includes(query)) {
+            matchFound = true;
+        }
+        
+        // Metode 2: Cadangan pencarian berdasarkan database nama bahasa inggris aslinya
+        if (!matchFound && typeof TOME_DB !== 'undefined' && TOME_DB[bookId]) {
+            const bookNameDB = TOME_DB[bookId][4].toLowerCase();
+            if (bookNameDB.includes(query)) {
+                matchFound = true;
             }
+        }
+        
+        // Eksekusi Tampilkan atau Sembunyikan Tombol Buku
+        if (matchFound) {
+            btn.style.display = ''; // Tampilkan tombol jika cocok
+        } else {
+            btn.style.display = 'none'; // Sembunyikan jika tidak cocok
         }
     }
 }
