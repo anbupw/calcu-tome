@@ -1055,18 +1055,9 @@ function filterBooks(query) {
     });
 }
 
-// ==================== MESIN SIMULATOR CRAFTING TOME (WITH CONFIRMATION) ====================
+// ==================== MESIN SIMULATOR CRAFTING TOME ====================
 function attemptCrafting(targetId) {
     if (!targetId) return;
-
-    // 1. Ambil nama Tome target terlebih dahulu
-    const bookName = (TOME_DB[targetId] && TOME_DB[targetId][4]) ? TOME_DB[targetId][4] : "Target Tome";
-
-    // 2. Munculkan jendela konfirmasi (Tombol OK = Craft, Tombol Cancel = Batal)
-    const konfirmasi = confirm(`Apakah Anda ingin meng-craft Tome [${bookName}]?`);
-    
-    // Jika pengguna menekan tombol "Batal" (Cancel), hentikan fungsi di sini
-    if (!konfirmasi) return;
 
     // Fungsi rekursif untuk mengecek dan memotong bahan secara virtual
     function tryCraftNode(nodeId, pool) {
@@ -1162,8 +1153,10 @@ function attemptCrafting(targetId) {
             confetti({ particleCount: 150, spread: 80, origin: { y: 0.5 }, colors: ['#fbbf24', '#f59e0b', '#d97706'] });
         }
         
+        const bookName = (TOME_DB[targetId] && TOME_DB[targetId][4]) ? TOME_DB[targetId][4] : "Target Tome";
         alert(`🎉 CRAFTING SUKSES!\n\n[${bookName}] telah berhasil dirakit dan dimasukkan ke Inventory Anda.`);
     } else {
+        const bookName = (TOME_DB[targetId] && TOME_DB[targetId][4]) ? TOME_DB[targetId][4] : "Target Tome";
         alert(`❌ CRAFTING GAGAL!\n\nBahan baku atau sub-buku di Inventory Anda belum cukup untuk merakit [${bookName}].`);
     }
 }
