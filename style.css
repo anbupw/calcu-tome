@@ -335,9 +335,14 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 	box-shadow: 0 0 10px rgba(16,185,129,0.2);
 }
 
+/* =========================================================
+   Menyembunyikan Tooltip/Stats Preview di Layar Mobile
+   ========================================================= */
 @media screen and (max-width: 768px) {
-    #statsPreview {
+    #floatingTooltip, .floating-tooltip {
         display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
     }
 }
 
