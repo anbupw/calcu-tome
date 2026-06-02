@@ -118,7 +118,12 @@ const LANG = {
 		farmRecToken: "Gunakan <strong>{tokens} Token of Luck</strong> untuk mencetak <strong>{pages} Tome Page</strong>.",
 		chatTitle: "🔊 Forum Chat Global",
 		chatDesc: "Tempat berkumpul dan koordinasi semua Player secara real-time!",
-		chatPlaceholder: "Ketik pesan di sini (Enter untuk kirim)..."
+		chatPlaceholder: "Ketik pesan di sini (Enter untuk kirim)...",
+		navTarget: "Target",
+		navCraft: "Crafting",
+		navInv: "Inventory",
+		navCost: "Biaya",
+		navChat: "Chat"
 	},
 	en: { 
 		btnTarget: "📚 Target Tome Crafting", 
@@ -170,7 +175,12 @@ const LANG = {
 		farmRecToken: "Use <strong>{tokens} Token of Luck</strong> to forge <strong>{pages} Tome Page</strong>.",
 		chatTitle: "🔊 Global Chat Forum",
 		chatDesc: "Real-time gathering and coordination room for all players!",
-		chatPlaceholder: "Type a message here (Enter to send)..."
+		chatPlaceholder: "Type a message here (Enter to send)...",
+		navTarget: "Target",
+		navCraft: "Crafting",
+		navInv: "Inventory",
+		navCost: "Cost",
+		navChat: "Chat"
 	}
 };
 

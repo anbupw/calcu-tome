@@ -47,17 +47,25 @@
 </div>
 
 <div id="appContent" style="display: none;">
+
+	<div class="mobile-navbar">
+		<a href="#cardTarget" class="nav-item"><i class="fas fa-book"></i><span data-i18n="navTarget">Target</span></a>
+		<a href="#cardCraft" class="nav-item"><i class="fas fa-list-ol"></i><span data-i18n="navCraft">Craft</span></a>
+		<a href="#cardInventory" class="nav-item"><i class="fas fa-box"></i><span data-i18n="navInv">Inv</span></a>
+		<a href="#cardCost" class="nav-item"><i class="fas fa-coins"></i><span data-i18n="navCost">Biaya</span></a>
+		<a href="#cardChat" class="nav-item"><i class="fas fa-comments"></i><span data-i18n="navChat">Chat</span></a>
+	</div>
 	<div class="container">
 		
 		<div class="main-column">
-			<div class="calc-card">
+			<div class="calc-card" id="cardTarget">
 				<h1 data-i18n="btnTarget">📚 Target Pembuatan Tome</h1>
 				<div class="podzagolovok" id="nazvaniye">Arahkan kursor ke ikon untuk melihat nama buku.</div>
 				<input type="text" id="bookSearch" class="search-box" data-i18n="searchPlaceholder" placeholder="🔍 Cari nama buku target..." oninput="filterBooks(this.value)">
 				<div id="vyborDiv" class="branch"></div>
 			</div>
 			
-			<div class="calc-card">
+			<div class="calc-card" id="cardInventory">
 				<h2 data-i18n="title4">📦 Inventory</h2>
 				<div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
 					<span data-i18n="desc4" style="flex:1; min-width: 180px;">Item ini secara otomatis akan mengurangi total kebutuhan</span>
@@ -71,7 +79,7 @@
 		</div>
 
 		<div class="main-column">
-			<div class="calc-card">
+			<div class="calc-card" id="cardCraft">
 				<h2 data-i18n="title2">📋 Rincian Crafting Tome</h2>
 				<div class="podzagolovok" style="gap: 8px;">
 					<input type="number" id="mnojitel" value="1" min="1" max="99" oninput="sanitizeMultiplier(this)">
@@ -96,7 +104,7 @@
 				<div id="rightTree" class="branch"></div>
 			</div>
 			
-			<div class="calc-card">
+			<div class="calc-card" id="cardCost">
 				<h2 data-i18n="title3">💰 Estimasi Biaya Pasar</h2>
 				<p class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</p>
 				
@@ -128,7 +136,7 @@
 				</div>
 			</div>
 			
-			<div class="calc-card" style="margin-top: 20px;">
+			<div class="calc-card" id="cardChat" style="margin-top: 20px;">
 				<h2 style="display: flex; align-items: center; gap: 10px;">
 					<i class="fas fa-comments" style="color: var(--accent);"></i>
 					<span data-i18n="chatTitle">🔊 Forum Chat Global</span>

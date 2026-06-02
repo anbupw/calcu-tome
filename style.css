@@ -373,3 +373,67 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 .chat-emoji:hover {
     transform: scale(1.3);
 }
+
+/* =========================================================
+   STICKY TOP QUICK NAVIGATION (MOBILE ONLY)
+   ========================================================= */
+
+/* Efek berseluncur halus saat menu navigasi diklik */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 75px; /* Kompensasi tinggi navbar agar judul card tidak tertutup */
+}
+
+/* Sembunyikan secara default pada layar monitor laptop/komputer */
+.mobile-navbar {
+    display: none;
+}
+
+/* Modifikasi layout khusus perangkat HP (Smartphone) */
+@media screen and (max-width: 768px) {
+    .mobile-navbar {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(30, 41, 59, 0.92); /* Background var(--bg-card) semi transparan */
+        backdrop-filter: blur(10px); /* Efek blur kaca premium */
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border-color);
+        z-index: 999; /* Berada di atas konten utama, di bawah jendela modal pop-up */
+        padding: 8px 0;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.7rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        flex: 1;
+        text-align: center;
+    }
+
+    .nav-item i {
+        font-size: 1.05rem;
+    }
+
+    /* Efek menyala saat ditekan atau aktif */
+    .nav-item:hover, .nav-item:active {
+        color: var(--accent);
+        transform: scale(1.05);
+    }
+
+    /* Berikan jarak atas pada container agar konten utama tidak tertutup navbar */
+    .container {
+        padding-top: 65px !important;
+    }
+}
