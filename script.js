@@ -116,7 +116,7 @@ const LANG = {
 		farmComplete: "✅ Semua material atau Token mencukupi untuk Crafting!",
 		farmBuy: "🛒 Beli di Item Mall/Farming:",
 		farmRecToken: "Gunakan <strong>{tokens} Token of Luck</strong> untuk mencetak <strong>{pages} Tome Page</strong>.",
-		chatTitle: "🔊 Forum Chat Global",
+		chatTitle: "Chat Global",
 		chatDesc: "Tempat berkumpul dan koordinasi semua Player secara real-time!",
 		chatPlaceholder: "Ketik pesan di sini (Enter untuk kirim)...",
 		navTarget: "Target",
@@ -170,10 +170,10 @@ const LANG = {
 		txtNoMats: "Your inventory is empty. Please add some materials or Tomes first!",
 		txtSelectTarget: "Set as Target",
 		farmTitle: "Smart Farming Optimizer",
-		farmComplete: "✅ All materials (or Tokens) are sufficient for Crafting!",
+		farmComplete: "✅ All materials or Tokens are sufficient for Crafting!",
 		farmBuy: "🛒 Buy from Item Mall:",
 		farmRecToken: "Use <strong>{tokens} Token of Luck</strong> to forge <strong>{pages} Tome Page</strong>.",
-		chatTitle: "🔊 Global Chat Forum",
+		chatTitle: "Global Chat",
 		chatDesc: "Real-time gathering and coordination room for all players!",
 		chatPlaceholder: "Type a message here (Enter to send)...",
 		navTarget: "Target",
@@ -1235,10 +1235,10 @@ function attemptCrafting(targetId) {
         }
         
         const bookName = (TOME_DB[targetId] && TOME_DB[targetId][4]) ? TOME_DB[targetId][4] : "Target Tome";
-        alert(`🎉 CRAFTING SUKSES!\n\n[${bookName}] telah berhasil dirakit dan dimasukkan ke Inventory Anda.`);
+        alert(`🎉 CRAFTING SUKSES!\n\n[${bookName}] telah berhasil dirakit dan disimpan ke Inventory Anda.`);
     } else {
         const bookName = (TOME_DB[targetId] && TOME_DB[targetId][4]) ? TOME_DB[targetId][4] : "Target Tome";
-        alert(`❌ CRAFTING GAGAL!\n\nBahan baku atau sub-buku di Inventory Anda belum cukup untuk merakit [${bookName}].`);
+        alert(`❌ CRAFTING GAGAL!\n\nMaterial atau sub-tome di Inventory Anda belum cukup untuk merakit [${bookName}].`);
     }
 }
 
