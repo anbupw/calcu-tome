@@ -70,7 +70,7 @@ const LANG = {
 		title3: "💰 Estimasi Biaya Pasar", 
 		title4: "📦 Inventory", 
 		desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", 
-		desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", 
+		desc4: "Item ini secara otomatis akan mengurangi total kebutuhan", 
 		progText: "Progres Pengumpulan:", 
 		btnCalc: "Hitung Kuantitas", 
 		totalCostLabel: "Total Sisa Biaya:", 
@@ -108,9 +108,9 @@ const LANG = {
 		txtNearbyCraft: "⚡ HAMPIR SELESAI (TOP PROGRES)",
 		txtNoMats: "Inventory Anda kosong. Tambahkan beberapa bahan atau Tome terlebih dahulu!",
 		txtSelectTarget: "Jadikan Target",
-		farmTitle: "Smart Farming Optimizer",
+		farmTitle: "Optimalisasi Farm",
 		farmComplete: "✅ Semua material (atau Token) mencukupi untuk Crafting!",
-		farmBuy: "🛒 Beli di Item Mall:",
+		farmBuy: "🛒 Beli di Item Mall/Farming:",
 		farmRecToken: "Gunakan <strong>{tokens} Token of Luck</strong> untuk mencetak <strong>{pages} Tome Page</strong>."
 	},
 	en: { 
