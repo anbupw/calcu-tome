@@ -139,8 +139,29 @@
 					<div style="color: var(--text-muted); text-align: center; padding: 20px; font-style: italic;">Memuat obrolan guild...</div>
 				</div>
 				
-				<div class="chat-input-group" style="display: flex; gap: 8px; align-items: center;">
-					<input type="text" id="chatInputField" class="search-box" style="margin: 0; flex: 1;" data-i18n="chatPlaceholder" placeholder="Ketik pesan di sini lalu tekan Enter..." onkeydown="if(event.key === 'Enter') sendGlobalChat()">
+				<div class="chat-input-group" style="display: flex; gap: 8px; align-items: center; position: relative; margin-top: 5px;">
+    
+					<button class="btn-calc" id="btnEmojiToggle" onclick="toggleEmojiPicker()" style="width: auto; padding: 0 12px; height: 42px; margin: 0; border-radius: 8px; background: var(--bg-card-hover); border: 1px solid var(--border-color); color: #fbbf24;">
+						<i class="fas fa-smile"></i>
+					</button>
+
+					<div id="emojiPickerPanel" style="display: none; position: absolute; bottom: 50px; left: 0; background: var(--bg-card); border: 1px solid var(--border-color); padding: 10px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 100; width: 220px; flex-wrap: wrap; gap: 8px;">
+						<span class="chat-emoji" onclick="insertEmoji('😊')">😊</span>
+						<span class="chat-emoji" onclick="insertEmoji('😂')">😂</span>
+						<span class="chat-emoji" onclick="insertEmoji('😭')">😭</span>
+						<span class="chat-emoji" onclick="insertEmoji('😡')">😡</span>
+						<span class="chat-emoji" onclick="insertEmoji('👍')">👍</span>
+						<span class="chat-emoji" onclick="insertEmoji('🙏')">🙏</span>
+						<span class="chat-emoji" onclick="insertEmoji('🎉')">🎉</span>
+						<span class="chat-emoji" onclick="insertEmoji('🔥')">🔥</span>
+						<span class="chat-emoji" onclick="insertEmoji('💰')">💰</span>
+						<span class="chat-emoji" onclick="insertEmoji('📚')">📚</span>
+						<span class="chat-emoji" onclick="insertEmoji('🎮')">🎮</span>
+						<span class="chat-emoji" onclick="insertEmoji('🚀')">🚀</span>
+					</div>
+
+					<input type="text" id="chatInputField" class="search-box" style="margin: 0; flex: 1;" data-i18n="chatPlaceholder" placeholder="Ketik pesan di sini..." onkeydown="if(event.key === 'Enter') sendGlobalChat()">
+					
 					<button class="btn-calc" id="btnSendChat" onclick="sendGlobalChat()" style="width: auto; padding: 0 16px; height: 42px; margin: 0; border-radius: 8px;">
 						<i class="fas fa-paper-plane"></i>
 					</button>

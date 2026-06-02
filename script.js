@@ -1343,4 +1343,43 @@ function escapeChatHTML(str) {
     }[tag] || tag));
 }
 
+// ==================== FITUR EMOJI PICKER ====================
+
+// 1. Membuka dan Menutup Panel Emoji
+function toggleEmojiPicker() {
+    const panel = document.getElementById('emojiPickerPanel');
+    if (panel.style.display === 'none' || panel.style.display === '') {
+        panel.style.display = 'flex';
+    } else {
+        panel.style.display = 'none';
+    }
+}
+
+// 2. Memasukkan Emoji ke Kotak Input
+function insertEmoji(emoji) {
+    const inputField = document.getElementById('chatInputField');
+    
+    // Tambahkan emoji ke posisi terakhir teks di input
+    inputField.value += emoji;
+    
+    // Kembalikan fokus kursor ke input agar pengguna bisa langsung mengetik lagi
+    inputField.focus();
+    
+    // Tutup panel setelah memilih
+    document.getElementById('emojiPickerPanel').style.display = 'none';
+}
+
+// 3. Menutup Panel jika pengguna mengklik area luar panel
+document.addEventListener('click', function(event) {
+    const panel = document.getElementById('emojiPickerPanel');
+    const toggleBtn = document.getElementById('btnEmojiToggle');
+    
+    // Jika panel sedang terbuka dan klik terjadi di luar panel & luar tombol toggle
+    if (panel && panel.style.display === 'flex') {
+        if (!panel.contains(event.target) && !toggleBtn.contains(event.target) && !toggleBtn.querySelector('i').contains(event.target)) {
+            panel.style.display = 'none';
+        }
+    }
+});
+
 window.onload = () => { applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
