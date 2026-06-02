@@ -1,3 +1,78 @@
+// ==================== INITIALIZATION & FIREBASE AUTH WALL ====================
+
+// 1. ISI KONFIGURASI FIREBASE ANDA DI SINI
+const firebaseConfig = {
+	 apiKey: "AIzaSyC1eCaQkeCf1IJQIDqveEKhHHFEYMd6bSs",
+	 authDomain: "kalkulator-tome.firebaseapp.com",
+	 projectId: "kalkulator-tome",
+	 storageBucket: "kalkulator-tome.firebasestorage.app",
+	 messagingSenderId: "794012581588",
+	 appId: "1:794012581588:web:021341eda428298daf0541"
+};
+
+// Inisialisasi Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const provider = new firebase.auth.GoogleAuthProvider();
+
+let currentUser = null;
+
+// GERBANG MONITOR STATUS LOG-IN REALTIME
+auth.onAuthStateChanged(user => {
+    currentUser = user;
+    const loginOverlay = document.getElementById('loginOverlay');
+    const appContent = document.getElementById('appContent');
+    const accountSection = document.getElementById('userAccountSection');
+    
+    if (user) {
+        // Jika sukses Login -> Buka Aplikasi & Sembunyikan Layar Kunci
+        if (loginOverlay) loginOverlay.style.display = 'none';
+        if (appContent) appContent.style.display = 'block';
+        
+        // Tampilkan info Akun di panel gear pengaturan
+        if (accountSection) {
+            accountSection.innerHTML = `
+                <img src="${user.photoURL || 'https://via.placeholder.com/40'}" class="user-profile-img" alt="Avatar">
+                <div style="font-size:0.85rem; font-weight:600; color:white;">${user.displayName}</div>
+                <div style="font-size:0.7rem; color:var(--text-muted);">${user.email}</div>
+            `;
+        }
+        
+        // Jalankan fungsi render bawaan aplikasi Anda
+        applyLanguage(); 
+        
+    } else {
+        // Jika belum Login / Keluar Akun -> Kunci Aplikasi & Paksa Layar Login Muncul
+        if (loginOverlay) loginOverlay.style.display = 'flex';
+        if (appContent) appContent.style.display = 'none';
+    }
+});
+
+// FUNGSI TOMBOL LOGIN
+function loginGoogle() {
+    auth.signInWithPopup(provider)
+        .then((result) => {
+            console.log("Berhasil Masuk:", result.user.displayName);
+        })
+        .catch(err => {
+            console.error("Gagal melakukan autentikasi:", err);
+            alert("Gagal masuk menggunakan Google. Silakan coba kembali.");
+        });
+}
+
+// FUNGSI TOMBOL LOGOUT
+function logoutGoogle() {
+    if (confirm("Apakah Anda yakin ingin keluar dari aplikasi kalkulator?")) {
+        auth.signOut().then(() => {
+            localStorage.removeItem('tomeCalculatorState'); // Bersihkan state lokal opsional
+            window.location.reload();
+        });
+    }
+}
+
+// ==================== LOGIKA BAWAAN APLIKASI ANDA DIMULAI DI SINI ====================
+// (Biarkan isi variabel LANG, fungsi applyLanguage, database TOME_DB, dll tetap di bawah ini)
+
 const LANG = {
 	id: { 
 		btnTarget: "📚 Target Pembuatan Tome", 

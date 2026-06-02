@@ -12,133 +12,163 @@
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
-	
-	<div class="main-column">
-		<div class="calc-card">
-			<h1 data-i18n="btnTarget">📚 Target Pembuatan Tome</h1>
-			<div class="podzagolovok" id="nazvaniye">Arahkan kursor ke ikon untuk melihat nama buku.</div>
-			<input type="text" id="bookSearch" class="search-box" data-i18n="searchPlaceholder" placeholder="🔍 Cari nama buku target..." oninput="filterBooks(this.value)">
-			<div id="vyborDiv" class="branch"></div>
+<div id="loginOverlay" class="login-overlay" style="display: none;">
+	<div class="login-card">
+		<div class="login-logo">
+			<i class="fas fa-book-bookmark"></i>
 		</div>
-		
-		<div class="calc-card">
-			<h2 data-i18n="title4">📦 Inventory</h2>
-			<div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-				<span data-i18n="desc4" style="flex:1; min-width: 180px;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
-				<div style="display:flex; gap:8px;">
-					<button class="btn-success" style="background:#8b5cf6; box-shadow:0 4px 6px -1px rgba(139,92,246,0.3);" onclick="openReverseCalcModal()"><span data-i18n="btnReverse">🔍 Analisis Potensi</span></button>
-					<button class="btn-success" onclick="openInventoryModal()"><span data-i18n="btnAddItem">➕ Tambah Item</span></button>
-				</div>
-			</div>
-			<div id="deductionsList" class="branch"></div>
-		</div>
+		<h2>Kalkulator Tome</h2>
+		<p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">Perfect World Imersif Edition</p>
+		<div class="login-divider"></div>
+		<p class="login-desc">Selamat datang! Silakan masuk dengan akun Google Anda untuk mengakses seluruh fitur kalkulator, inventory, dan sinkronisasi data cloud otomatis.</p>
+		<button class="btn-google-login" onclick="loginGoogle()">
+			<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 48 48" style="display:block;">
+			  <g>
+				<path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
+				<path fill="#4285F4" d="M46.5 24c0-1.55-.15-3.24-.47-4.77H24v9.03h12.75c-.55 2.87-2.18 5.31-4.62 6.95l7.2 5.58C43.55 36.5 46.5 31 46.5 24z"></path>
+				<path fill="#FBBC05" d="M10.54 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.98-6.19z"></path>
+				<path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.2-5.58c-2.11 1.41-4.8 2.27-8.69 2.27-6.26 0-11.57-4.22-13.46-10.42l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+			  </g>
+			</svg>
+			<span>Masuk dengan Google</span>
+		</button>
 	</div>
+</div>
 
-    <div class="main-column">
-		<div class="calc-card">
-			<h2 data-i18n="title2">📋 Rincian Crafting Tome</h2>
-			<div class="podzagolovok" style="gap: 8px;">
-				<input type="number" id="mnojitel" value="1" min="1" max="99" oninput="sanitizeMultiplier(this)">
-				<button class="btn-calc" data-i18n="btnCalc" onclick="processTree(rightTreeId)">Hitung Kuantitas</button>
-				
-				<button class="btn-icon" onclick="copyShoppingList()" data-i18n-title="btnCopy" title="Salin Daftar Belanja"><i class="fas fa-clipboard"></i></button>
-				<button class="btn-icon" id="btnCompact" onclick="toggleCompactMode()" data-i18n-title="btnCompact" title="Toggle Mode Ringkas"><i class="fas fa-eye"></i></button>
-				<button class="btn-icon" id="btnFavorite" onclick="saveFavorite()" data-i18n-title="btnFav" title="Simpan sebagai Favorit"><i class="far fa-star"></i></button>
-				<button class="btn-icon" onclick="loadFavorite()" data-i18n-title="btnLoadFav" title="Muat Favorit Tersimpan"><i class="fas fa-bookmark"></i></button>
+<div id="appContent" style="display: none;">
+	<div class="container">
+		
+		<div class="main-column">
+			<div class="calc-card">
+				<h1 data-i18n="btnTarget">📚 Target Pembuatan Tome</h1>
+				<div class="podzagolovok" id="nazvaniye">Arahkan kursor ke ikon untuk melihat nama buku.</div>
+				<input type="text" id="bookSearch" class="search-box" data-i18n="searchPlaceholder" placeholder="🔍 Cari nama buku target..." oninput="filterBooks(this.value)">
+				<div id="vyborDiv" class="branch"></div>
 			</div>
 			
-			<div class="progress-container">
-				<div class="progress-text">
-					<span data-i18n="progText">Progres Pengumpulan:</span>
-					<span id="progressPercentText">0.0%</span>
+			<div class="calc-card">
+				<h2 data-i18n="title4">📦 Inventory</h2>
+				<div class="podzagolovok" id="nazvaniye_vychet" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+					<span data-i18n="desc4" style="flex:1; min-width: 180px;">Item di sini akan otomatis mengurangi total kebutuhan.</span>
+					<div style="display:flex; gap:8px;">
+						<button class="btn-success" style="background:#8b5cf6; box-shadow:0 4px 6px -1px rgba(139,92,246,0.3);" onclick="openReverseCalcModal()"><span data-i18n="btnReverse">🔍 Analisis Potensi</span></button>
+						<button class="btn-success" onclick="openInventoryModal()"><span data-i18n="btnAddItem">➕ Tambah Item</span></button>
+					</div>
 				</div>
-				<div class="progress-bar-bg">
-					<div id="progressBar" class="progress-bar"></div>
-				</div>
+				<div id="deductionsList" class="branch"></div>
 			</div>
-			<div id="rightTree" class="branch"></div>
 		</div>
 
-		<div class="calc-card">
-			<h2 data-i18n="title3">💰 Estimasi Biaya Pasar</h2>
-			<div class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</div>
-			<div class="cost-input-group">
-				<label><span style="background-position:32px -32px;"></span> Token of Luck:</label>
-				<input type="number" id="price10" value="0" min="0" oninput="sanitizePrice(this); updateCostAndProgress();" placeholder="0">
+		<div class="main-column">
+			<div class="calc-card">
+				<h2 data-i18n="title2">📋 Rincian Crafting Tome</h2>
+				<div class="podzagolovok" style="gap: 8px;">
+					<input type="number" id="mnojitel" value="1" min="1" max="99" oninput="sanitizeMultiplier(this)">
+					<button class="btn-calc" data-i18n="btnCalc" onclick="processTree(rightTreeId)">Hitung Kuantitas</button>
+					
+					<button class="btn-icon" onclick="copyShoppingList()" data-i18n-title="btnCopy" title="Salin Daftar Belanja"><i class="fas fa-clipboard"></i></button>
+					<button class="btn-icon" id="btnCompact" onclick="toggleCompactMode()" data-i18n-title="btnCompact" title="Toggle Mode Ringkas"><i class="fas fa-eye"></i></button>
+					<button class="btn-icon" id="btnFavorite" onclick="saveFavorite()" data-i18n-title="btnFav" title="Simpan sebagai Favorit"><i class="far fa-star"></i></button>
+					<button class="btn-icon" onclick="loadFavorite()" data-i18n-title="btnLoadFav" title="Muat Favorit Tersimpan"><i class="fas fa-folder-open"></i></button>
+				</div>
+				
+				<div class="progress-container">
+					<div class="progress-text">
+						<span data-i18n="progText">Progres Pengumpulan:</span>
+						<span id="progressPercentText">0%</span>
+					</div>
+					<div class="progress-bar-bg">
+						<div id="progressBar" class="progress-bar"></div>
+					</div>
+				</div>
+				
+				<div id="rightTree" class="branch"></div>
 			</div>
-			<div class="cost-input-group">
-				<label><span style="background-position:64px 0px;"></span> Tome Fragment:</label>
-				<input type="number" id="price11" value="0" min="0" oninput="sanitizePrice(this); updateCostAndProgress();" placeholder="0">
-			</div>
-			<div class="cost-input-group">
-				<label><span style="background-position:32px 0px;"></span> Tome Page:</label>
-				<input type="number" id="price12" value="0" min="0" oninput="sanitizePrice(this); updateCostAndProgress();" placeholder="0">
-			</div>
-			<div class="total-cost-box">
-				<div class="total-cost-label" data-i18n="totalCostLabel">Total Sisa Biaya:</div>
-				<div id="totalCostDisplay" class="total-cost-value">0 Gold</div>
+			
+			<div class="calc-card">
+				<h2 data-i18n="title3">Estimasi Biaya Pasar</h2>
+				<p class="podzagolovok" data-i18n="desc3">Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.</p>
+				
+				<div class="cost-input-container">
+					<div class="cost-input-group">
+						<label><span style="background-position: -288px -32px;"></span> Token of Luck</label>
+						<input type="number" id="price10" value="0" min="0" oninput="updateCostAndProgress()">
+					</div>
+					<div class="cost-input-group">
+						<label><span style="background-position: -320px -32px;"></span> Tome Fragment</label>
+						<input type="number" id="price11" value="0" min="0" oninput="updateCostAndProgress()">
+					</div>
+					<div class="cost-input-group">
+						<label><span style="background-position: -352px -32px;"></span> Tome Page</label>
+						<input type="number" id="price12" value="0" min="0" oninput="updateCostAndProgress()">
+					</div>
+				</div>
+				
+				<div class="total-cost-box">
+					<span data-i18n="totalCostLabel">Total Sisa Biaya:</span>
+					<span id="totalCostDisplay" class="cost-amount">0 Gold</span>
+				</div>
 			</div>
 		</div>
+		
 	</div>
-</div>
 
-<footer class="footer">
-	<div class="footer-text" data-i18n="footerText">
+	<footer class="footer" style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.85rem; margin-top: 30px; border-top: 1px solid var(--border-color);" data-i18n="footerText">
 		Kalkulator Tome &copy; 2026 | Dibuat oleh <strong>Sulfikar</strong>
-	</div>
-	<div class="social-icons">
-		<a href="https://t.me/idperfectworld" target="_blank" title="Telegram"><i class="fab fa-telegram"></i></a>
-		<a href="https://discord.gg/" target="_blank" title="Discord"><i class="fab fa-discord"></i></a>
-		<a href="https://www.youtube.com/@idSkynet" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
-		<a href="https://www.zull.com/" target="_blank" title="Website"><i class="fas fa-globe"></i></a>
-	</div>
-</footer>
+	</footer>
 
-<button class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleMenu()" title="Pengaturan"><i class="fas fa-gear"></i></button>
+	<button class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleMenu()" title="Pengaturan"><i class="fas fa-gear"></i></button>
 
-<div class="vybor" id="mainMenuPanel" style="display:none;">
-	<div class="panel-actions">
-		<button class="btn-purple" onclick="toggleLanguage()" id="langBtn">🌐 Switch to English</button>
-		<button class="btn-danger" onclick="resetCalculator()"><span data-i18n="btnReset">🔄 Reset Kalkulator</span></button>
-	</div>
-</div>
-
-<div id="customModal" class="modal-backdrop" style="display:none;" onclick="if(event.target===this) closeModal()">
-	<div class="modal-content">
-		<h3 id="modalTitle" data-i18n="modalTitleAdd">Masukkan ke Inventory</h3>
-		<p data-i18n="modalDesc">Berapa banyak item yang Anda inginkan?</p>
-		<input type="number" id="modalInput" min="1" max="999" value="1" oninput="sanitizeMultiplier(this)">
-		<div class="modal-buttons">
-			<button class="modal-btn-confirm" data-i18n="btnSave" onclick="confirmModal()">Simpan</button>
-			<button class="modal-btn-cancel" data-i18n="btnCancel" onclick="closeModal()">Batal</button>
+	<div class="vybor" id="mainMenuPanel" style="display:none;">
+		<div id="userAccountSection" style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); text-align: center;">
+			</div>
+		<div class="panel-actions" style="display: flex; flex-direction: column; gap: 8px;">
+			<button class="btn-purple" onclick="toggleLanguage()" id="langBtn">🌐 Switch to English</button>
+			<button class="btn-danger" onclick="resetCalculator()"><span data-i18n="btnReset">🔄 Reset Kalkulator</span></button>
+			<button class="btn-danger" onclick="logoutGoogle()" style="background: #ef4444;"><i class="fas fa-sign-out-alt"></i> Keluar Akun</button>
 		</div>
 	</div>
-</div>
 
-<div id="inventoryModal" class="modal-backdrop" style="display:none; z-index: 2001;" onclick="if(event.target===this) closeInventoryModal()">
-	<div class="modal-content" style="max-width: 450px;">
-		<h3 data-i18n="modalInvTitle">Menambahkan Item</h3>
-		<input type="text" id="invSearch" class="search-box" style="margin-bottom: 5px;" data-i18n="invSearchPlaceholder" placeholder="🔍 Cari nama tome/bahan..." onkeyup="filterInventorySearch(this.value)">
-		<div id="invItemList" class="branch" style="max-height: 250px; overflow-y: auto; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);"></div>
-		<button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onclick="closeInventoryModal()" data-i18n="btnCloseWindow">Tutup Jendela</button>
+	<div id="customModal" class="modal-backdrop" style="display:none;" onclick="if(event.target===this) closeModal()">
+		<div class="modal-content">
+			<h3 id="modalTitle" data-i18n="modalTitleAdd">Masukkan ke Inventory</h3>
+			<p data-i18n="modalDesc">Berapa banyak item yang Anda inginkan?</p>
+			<input type="number" id="modalInput" value="1" min="1" max="999">
+			<div class="modal-buttons">
+				<button class="modal-btn-confirm" onclick="confirmModal()">OK</button>
+				<button class="modal-btn-cancel" onclick="closeModal()">Batal</button>
+			</div>
+		</div>
 	</div>
-</div>
 
-<div id="reverseCalcModal" class="modal-backdrop" style="display:none; z-index: 2001;" onclick="if(event.target===this) closeReverseCalcModal()">
-	<div class="modal-content" style="max-width: 450px; max-height:85vh; overflow-y:auto;">
-		<h3 data-i18n="modalRevTitle">🔍 Analisis Potensi Crafting</h3>
-		<p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:15px;" data-i18n="modalRevDesc">Sistem mendeteksi isi Inventory Anda dan menghitung Tome terbaik yang bisa dibuat.</p>
-		<div id="reverseCalcResults" style="margin-bottom: 20px;"></div>
-		<button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onclick="closeReverseCalcModal()" data-i18n="btnCloseWindow">Tutup Jendela</button>
+	<div id="inventoryModal" class="modal-backdrop" style="display:none; z-index: 2000;" onclick="if(event.target===this) closeInventoryModal()">
+		<div class="modal-content" style="max-width: 550px; max-height: 85vh; overflow-y: auto;">
+			<h3 data-i18n="modalInvTitle">Menambahkan Item</h3>
+			<input type="text" id="invSearch" class="search-box" data-i18n="invSearchPlaceholder" placeholder="🔍 Cari nama tome/bahan..." onkeyup="filterInventorySearch(this.value)">
+			<div id="invItemList" class="branch" style="max-height: 250px; overflow-y: auto; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);"></div>
+			<button class="modal-btn-cancel" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;" onclick="closeInventoryModal()" data-i18n="btnCloseWindow">Tutup Jendela</button>
+		</div>
 	</div>
-</div>
 
-<div id="floatingTooltip" class="floating-tooltip"></div>
+	<div id="reverseCalcModal" class="modal-backdrop" style="display:none; z-index: 2001;" onclick="if(event.target===this) closeReverseCalcModal()">
+		<div class="modal-content" style="max-width: 450px; max-height:85vh; overflow-y:auto;">
+			<h3 data-i18n="modalRevTitle">🔍 Analisis Potensi Crafting</h3>
+			<p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:15px;" data-i18n="modalRevDesc">Sistem mendeteksi isi Inventory Anda dan menghitung Tome terbaik yang bisa dibuat.</p>
+			<div id="reverseCalcResults" style="margin-bottom: 15px;"></div>
+			<button class="modal-btn-cancel" style="width:100%; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer; border:none;" onclick="closeReverseCalcModal()" data-i18n="btnCloseWindow">Tutup Jendela</button>
+		</div>
+	</div>
+
+	<div id="floatingTooltip" class="floating-tooltip"></div>
+
+</div>
 
 <script src="script.js" defer></script>
 </body>
