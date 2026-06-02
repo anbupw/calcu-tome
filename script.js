@@ -75,7 +75,7 @@ const LANG = {
 		btnCalc: "Hitung Kuantitas", 
 		totalCostLabel: "Total Sisa Biaya:", 
 		btnReset: "🔄 Reset Kalkulator", 
-		searchPlaceholder: "🔍 Cari Tome...", 
+		searchPlaceholder: "🔍 Cari nama buku target...", 
 		modalTitleAdd: "Masukkan ke Inventory", 
 		modalDesc: "Berapa banyak item yang Anda inginkan?", 
 		btnSave: "Simpan", 
@@ -1157,23 +1157,15 @@ function attemptCrafting(targetId) {
         saveDataTrigger(); // Simpan ke Cloud otomatis
         processTree(rightTreeId); // Segarkan UI
         
-        // 1. Mainkan efek Confetti Kemenangan!
+        // Mainkan efek Confetti Kemenangan!
         if (typeof confetti === 'function') {
             confetti({ particleCount: 150, spread: 80, origin: { y: 0.5 }, colors: ['#fbbf24', '#f59e0b', '#d97706'] });
         }
         
-        // 2. TIMBULKAN EFEK SUARA DI SINI 🎉
-        try {
-            // Ganti 'success.mp3' dengan nama file atau URL link suara Anda
-            let craftSound = new Audio('success.mp3'); 
-            craftSound.volume = 0.6; // Mengatur volume (0.0 sampai 1.0)
-            craftSound.play();
-        } catch (error) {
-            console.log("Gagal memutar suara, kemungkinan diblokir browser:", error);
-        }
-        
         alert(`🎉 CRAFTING SUKSES!\n\n[${bookName}] telah berhasil dirakit dan dimasukkan ke Inventory Anda.`);
     } else {
+        alert(`❌ CRAFTING GAGAL!\n\nBahan baku atau sub-buku di Inventory Anda belum cukup untuk merakit [${bookName}].`);
+    }
 }
 
 window.onload = () => { applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
