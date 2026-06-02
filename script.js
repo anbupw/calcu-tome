@@ -2,7 +2,7 @@ const LANG = {
 	id: { 
 		btnTarget: "📚 Target Pembuatan Tome", 
 		title2: "📋 Rincian Crafting Tome", 
-		title3: "Estimasi Biaya Pasar", 
+		title3: "💰 Estimasi Biaya Pasar", 
 		title4: "📦 Inventory", 
 		desc3: "Masukkan harga pasar per item untuk mengestimasi Gold yang dibutuhkan.", 
 		desc4: "Item di sini akan otomatis mengurangi total kebutuhan.", 
@@ -43,7 +43,6 @@ const LANG = {
 		txtNearbyCraft: "⚡ HAMPIR SELESAI (TOP PROGRES)",
 		txtNoMats: "Inventory Anda kosong. Tambahkan beberapa bahan atau Tome terlebih dahulu!",
 		txtSelectTarget: "Jadikan Target",
-		// Kunci terjemahan baru untuk Smart Farming Optimizer
 		farmTitle: "Smart Farming Optimizer",
 		farmComplete: "✅ Semua material (atau Token) mencukupi untuk Crafting!",
 		farmBuy: "🛒 Beli di Item Mall:",
@@ -52,7 +51,7 @@ const LANG = {
 	en: { 
 		btnTarget: "📚 Target Tome Crafting", 
 		title2: "📋 Tome Crafting Details", 
-		title3: "Market Cost Estimator", 
+		title3: "💰 Market Cost Estimator", 
 		title4: "📦 Inventory", 
 		desc3: "Enter the market price per item to estimate required Gold.", 
 		desc4: "Items here will automatically deduct from total requirements.", 
@@ -93,7 +92,6 @@ const LANG = {
 		txtNearbyCraft: "⚡ NEARBY COMPLETION (TOP PROGRESS)",
 		txtNoMats: "Your inventory is empty. Please add some materials or Tomes first!",
 		txtSelectTarget: "Set as Target",
-		// New translation keys for Smart Farming Optimizer
 		farmTitle: "Smart Farming Optimizer",
 		farmComplete: "✅ All materials (or Tokens) are sufficient for Crafting!",
 		farmBuy: "🛒 Buy from Item Mall:",
