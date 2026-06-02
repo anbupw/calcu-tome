@@ -983,10 +983,11 @@ function saveDataTrigger() {
     
     // Kirim ke Firebase Firestore
     if (currentUser) {
-        db.collection("users").doc(currentUser.uid).set({
+
+        db.collection("users").doc(currentUser.uid).update({
             calculatorState: state,
             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true }).catch(e => console.warn("Cloud save error:", e));
+        }).catch(e => console.warn("Cloud save error:", e));
     }
 }
 
