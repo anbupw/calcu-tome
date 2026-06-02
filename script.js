@@ -13,6 +13,8 @@ const LANG = {
 		searchPlaceholder: "🔍 Cari nama buku target...", 
 		modalTitleAdd: "Masukkan ke Inventory", 
 		modalDesc: "Berapa banyak item yang Anda inginkan?", 
+		btnSave: "Simpan", 
+		btnCancel: "Batal", 
 		baseMat: "Bahan Dasar", 
 		lvl: "Level", 
 		alertReset: "Hapus semua perhitungan dan mulai dari awal?", 
@@ -40,7 +42,12 @@ const LANG = {
 		txtReadyToCraft: "✅ SIAP DIRAKIT (100% LENGKAP)",
 		txtNearbyCraft: "⚡ HAMPIR SELESAI (TOP PROGRES)",
 		txtNoMats: "Inventory Anda kosong. Tambahkan beberapa bahan atau Tome terlebih dahulu!",
-		txtSelectTarget: "Jadikan Target"
+		txtSelectTarget: "Jadikan Target",
+		// Kunci terjemahan baru untuk Smart Farming Optimizer
+		farmTitle: "Smart Farming Optimizer",
+		farmComplete: "✅ Semua material (atau Token) mencukupi untuk Crafting!",
+		farmBuy: "🛒 Beli di Item Mall:",
+		farmRecToken: "Gunakan <strong>{tokens} Token of Luck</strong> untuk mencetak <strong>{pages} Tome Page</strong>."
 	},
 	en: { 
 		btnTarget: "📚 Target Tome Crafting", 
@@ -85,7 +92,12 @@ const LANG = {
 		txtReadyToCraft: "✅ READY TO CRAFT (100% COMPLETE)",
 		txtNearbyCraft: "⚡ NEARBY COMPLETION (TOP PROGRESS)",
 		txtNoMats: "Your inventory is empty. Please add some materials or Tomes first!",
-		txtSelectTarget: "Set as Target"
+		txtSelectTarget: "Set as Target",
+		// New translation keys for Smart Farming Optimizer
+		farmTitle: "Smart Farming Optimizer",
+		farmComplete: "✅ All materials (or Tokens) are sufficient for Crafting!",
+		farmBuy: "🛒 Buy from Item Mall:",
+		farmRecToken: "Use <strong>{tokens} Token of Luck</strong> to forge <strong>{pages} Tome Page</strong>."
 	}
 };
 
@@ -433,12 +445,13 @@ let activeModalItemId = null;
 function sanitizeMultiplier(input) {
 	let val = parseInt(input.value);
 	if (isNaN(val) || val < 1) input.value = 1;
-	if (val > 999) input.value = 999;
+	if (val > 99) input.value = 99;
 }
 
 function sanitizePrice(input) {
 	let val = parseInt(input.value);
 	if (isNaN(val) || val < 0) input.value = 0;
+	if (val > 999999999) input.value = 999999999;
 }
 
 function getSpritePosition(id) {
@@ -646,8 +659,8 @@ function updateCostAndProgress() {
     }
 }
 
+// ---------------- SMART FARMING OPTIMIZER WITH i18n ---------------- //
 (function() {
-    // 1. Membangun UI Smart Farming secara Otomatis
     const rightTreeCard = document.getElementById('rightTree').parentElement;
     if (!document.getElementById('smartFarmingContainer')) {
         const farmingContainer = document.createElement('div');
@@ -662,7 +675,6 @@ function updateCostAndProgress() {
         rightTreeCard.appendChild(farmingContainer);
     }
 
-    // 2. Modul Logika Pintar
     const SmartFarmingModule = {
         analyze: function(requiredPages, requiredFragments, currentTokens) {
             let missingPages = requiredPages || 0;
@@ -672,14 +684,17 @@ function updateCostAndProgress() {
             let recs = [];
             let shopping = [];
 
-            // Kalkulasi Optimasi Token (Asumsi 1 Page = 20 Token)
             if (missingPages > 0 && remainingTokens > 0) {
                 let affordablePages = Math.floor(remainingTokens / 20); 
                 if (affordablePages > 0) {
                     let pagesCrafted = Math.min(affordablePages, missingPages);
                     let tokensUsed = pagesCrafted * 20;
                     missingPages -= pagesCrafted;
-                    recs.push(`Gunakan <strong>${tokensUsed} Token of Luck</strong> untuk mencetak <strong>${pagesCrafted} Tome Page</strong>.`);
+                    
+                    let recText = LANG[currentLang]['farmRecToken']
+                        .replace('{tokens}', tokensUsed)
+                        .replace('{pages}', pagesCrafted);
+                    recs.push(recText);
                 }
             }
 
@@ -693,39 +708,39 @@ function updateCostAndProgress() {
             const container = document.getElementById('smartFarmingContainer');
             const listUI = document.getElementById('farmingListUI');
             const recUI = document.getElementById('farmingRecUI');
+            const titleUI = container.querySelector('h4');
             
             container.style.display = 'block';
             listUI.innerHTML = ''; recUI.innerHTML = '';
 
+            titleUI.innerHTML = `<i class="fas fa-magic"></i> ${LANG[currentLang]['farmTitle']}`;
+
             if (isComplete && shoppingList.length === 0) {
                 container.style.borderLeftColor = '#34d399';
-                listUI.innerHTML = '<li style="color: #34d399;">✅ Semua material (atau Token) mencukupi untuk Crafting!</li>';
+                listUI.innerHTML = `<li style="color: #34d399;">${LANG[currentLang]['farmComplete']}</li>`;
             } else {
                 container.style.borderLeftColor = '#3b82f6';
-                shoppingList.forEach(item => { listUI.innerHTML += `<li>🛒 Beli / Farm di Market: ${item}</li>`; });
+                let prefix = LANG[currentLang]['farmBuy'];
+                shoppingList.forEach(item => { listUI.innerHTML += `<li>${prefix} ${item}</li>`; });
             }
 
             recommendations.forEach(rec => { recUI.innerHTML += `<li>💡 ${rec}</li>`; });
         }
     };
 
-    // 3. Menghubungkan ke Mesin Kalkulator Utama secara Siluman (Intercept)
     if (typeof processTree === 'function') {
         const originalProcessTree = processTree;
         processTree = function(id) {
-            // Jalankan perhitungan asli Master File Anda
             originalProcessTree(id);
-            
-            // Baca data hasil (Di database Anda: ID 10 = Token, ID 11 = Fragment, ID 12 = Page)
             let pagesNeeded = (typeof itemCounts !== 'undefined') ? (itemCounts[12] || 0) : 0;
             let fragsNeeded = (typeof itemCounts !== 'undefined') ? (itemCounts[11] || 0) : 0;
             let tokensAvailable = (typeof deductions !== 'undefined') ? (deductions[10] || 0) : 0;
             
-            // Picu modul Smart Farming
             SmartFarmingModule.analyze(pagesNeeded, fragsNeeded, tokensAvailable);
         };
     }
 })();
+// ------------------------------------------------------------------ //
 
 function processTree(id) {
     if (!id || !TOME_DB[id]) return;
