@@ -107,7 +107,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 2001;
+            z-index: 2001; /* Z-Index Locked */
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
@@ -122,7 +122,7 @@
             background: #fff;
             width: 90%;
             max-width: 550px;
-            max-height: 85vh;
+            max-height: 85vh; /* Responsive Constraint Locked */
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.25);
             display: flex;
@@ -160,7 +160,7 @@
 
         .modal-body {
             padding: 20px;
-            overflow-y: auto;
+            overflow-y: auto; /* Scroll Locked */
             flex: 1;
         }
 
@@ -296,10 +296,12 @@ function testCraft(tomeId, pool) {
     const book = TOME_DB[tomeId];
     if (!book) return { progress: 0, required: { pages: 0, fragments: 0 } };
 
+    // Kasus Dasar: Buku Level 1 (Evaluasi Ketersediaan Bahan Dasar langsung)
     if (book.level === 1) {
-        const totalElements = 7; 
+        const totalElements = 7; // 4 Pages + 3 Fragments
         let matchedElements = 0;
 
+        // Hitung kontribusi proporsional Pages
         if (pool.pages >= book.reqPages) {
             matchedElements += 4;
             pool.pages -= book.reqPages;
@@ -308,6 +310,7 @@ function testCraft(tomeId, pool) {
             pool.pages = 0;
         }
 
+        // Hitung kontribusi proporsional Fragments
         if (pool.fragments >= book.reqFragments) {
             matchedElements += 3;
             pool.fragments -= book.reqFragments;
@@ -323,6 +326,7 @@ function testCraft(tomeId, pool) {
         };
     }
 
+    // Kasus Rekursif: Buku Level 2-6 (Membagi bobot sama rata ke 3 anak buku)
     if (book.childs && book.childs.length === 3) {
         let totalProgressAccumulated = 0;
         let aggregateRequirements = { pages: 0, fragments: 0 };
@@ -351,8 +355,9 @@ function testCraft(tomeId, pool) {
 let globalCurrentTargetId = null;
 
 function runReverseCalculator() {
-    const startTime = performance.now(); 
+    const startTime = performance.now(); // Pantau batas performa 10ms
 
+    // Ambil input aktual
     const currentInventory = {
         pages: parseInt(document.getElementById('invPages').value) || 0,
         fragments: parseInt(document.getElementById('invFragments').value) || 0,
@@ -362,21 +367,17 @@ function runReverseCalculator() {
     const targetId = document.getElementById('targetTome').value;
     globalCurrentTargetId = targetId;
 
+    // ISOLATED DATA POOL: Murni menggunakan Deep Copy (Aman dari Kerusakan Data)
     const simulationPool = { ...currentInventory };
-	
-	const targetBookData = TOME_DB[targetId];
 
-	if (!targetBookData) {
-		alert("Eror: Target Buku tidak ditemukan di dalam database!");
-		return; 
-	}
-
+    // Eksekusi Logika Inti Komputasi Rekursif
     const analysis = testCraft(targetId, simulationPool);
     const targetBookData = TOME_DB[targetId];
 
     const endTime = performance.now();
     console.log(`Execution time: ${(endTime - startTime).toFixed(4)}ms`);
 
+    // Render Hasil Utama ke Jendela Modal
     const summaryUI = document.getElementById('analysisSummary');
     summaryUI.innerHTML = `
         <p style="margin:0 0 10px 0;">Analisis Kelayakan Pembuatan:</p>
@@ -397,8 +398,10 @@ function runReverseCalculator() {
         </div>
     `;
 
+    // INJEKSI MODUL EKSTENSI: Mengaktifkan Sistem Rekomendasi Pintar & Belanja
     SmartFarmingModule.init(analysis.required, currentInventory);
 
+    // Buka Modal
     document.getElementById('reverseCalcModal').classList.add('active');
 }
 
@@ -420,7 +423,7 @@ function selectTargetBook() {
  */
 const SmartFarmingModule = {
     CONFIG: {
-        TOKEN_COST_PER_PAGE: 20 
+        TOKEN_COST_PER_PAGE: 20 // Aturan Konversi Game: 1 Page = 20 Token of Luck
     },
 
     calculateDeficiency(target, inventory) {
@@ -432,6 +435,7 @@ const SmartFarmingModule = {
         const recommendations = [];
         const shoppingList = [];
 
+        // Logika Pengambilan Keputusan Konversi Token Automatis
         if (missingPages > 0 && remainingTokens > 0) {
             const affordablePages = Math.floor(remainingTokens / this.CONFIG.TOKEN_COST_PER_PAGE);
             
@@ -446,6 +450,7 @@ const SmartFarmingModule = {
             }
         }
 
+        // Pemetaan kebutuhan sisa untuk diletakkan di list farming/belanja pasar
         if (finalMissingPages > 0) shoppingList.push(`${finalMissingPages}x Tome Page`);
         if (missingFragments > 0) shoppingList.push(`${missingFragments}x Tome Fragment`);
 
@@ -463,6 +468,7 @@ const SmartFarmingModule = {
         container.innerHTML = '';
         container.style.cssText = 'margin-top: 20px; padding: 15px; border-left: 4px solid #0d6efd; border-radius: 6px; background-color: #f8f9fa;';
 
+        // Kasus Sukses: Bahan tercukupi penuh melalui aset/token
         if (analysisResult.isComplete) {
             container.style.borderLeftColor = '#198754';
             container.innerHTML = `
@@ -473,6 +479,7 @@ const SmartFarmingModule = {
             return;
         }
 
+        // Kasus Gagal/Kurang: Tampilkan visualisasi Rute Belanja & Optimasi
         container.style.borderLeftColor = '#0d6efd';
         let shoppingItemsHTML = analysisResult.shoppingList.map(item => `<li style="margin-bottom: 4px;">Farm / Beli di Market: <strong>${item}</strong></li>`).join('');
         let recItemsHTML = analysisResult.recommendations.map(rec => `<li style="margin-bottom: 4px;">💡 ${rec}</li>`).join('');
