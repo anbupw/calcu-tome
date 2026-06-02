@@ -432,7 +432,7 @@ html {
         transform: scale(1.1); /* Sedikit diperbesar agar lebih jelas */
     }
 	
-	/* Opsional: Beri penanda garis atau titik di bawah menu yang aktif */
+	/* Opsional: Beri penanda garis atau titik di bawah menu yang aktif 
     .nav-item.active::after {
         content: '';
         display: block;
@@ -443,6 +443,7 @@ html {
         margin-top: 2px;
         transition: all 0.3s ease;
     }
+	*/
 
     /* Berikan jarak atas pada container agar konten utama tidak tertutup navbar */
     .container {
