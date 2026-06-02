@@ -76,7 +76,7 @@ const LANG = {
 		totalCostLabel: "Total Sisa Biaya:", 
 		btnReset: "🔄 Reset Kalkulator", 
 		searchPlaceholder: "🔍 Cari nama buku target...", 
-		modalTitleAdd: "Masukkan ke Inventory", 
+		modalTitleAdd: "Simpan ke Inventaris", 
 		modalDesc: "Berapa banyak item yang Anda inginkan?", 
 		btnSave: "Simpan", 
 		btnCancel: "Batal", 
