@@ -998,45 +998,41 @@ function resetCalculator() {
     }
 }
 
-// ==================== SELECTION FILTER HELPER (PERBAIKAN BUG) ====================
-function filterBooks(val) {
-    const query = val.toLowerCase().trim();
-    const vyborDiv = document.getElementById('vybor');
+// ==================== SELECTION FILTER HELPER (FIX FINAL) ====================
+function filterBooks(query) {
+    const q = query.toLowerCase().trim();
+    
+    // 1. Pastikan ID kontainernya BENAR: vyborDiv
+    const vyborDiv = document.getElementById('vyborDiv');
     if (!vyborDiv) return;
 
-    // Mengambil seluruh tombol pemilihan buku target
-    const buttons = vyborDiv.getElementsByTagName('button');
-    
-    for (let btn of buttons) {
-        // Ambil text content yang terlihat di tombol (Nama buku yang tampil di UI pengguna)
-        const textInButton = btn.textContent || btn.innerText || '';
-        const bookNameHTML = textInButton.toLowerCase();
+    // 2. Loop setiap grup (ul) dari Level 6 sampai 1
+    vyborDiv.querySelectorAll('ul').forEach(ul => {
+        let hasVisibleItem = false;
         
-        const titleAttr = btn.getAttribute('title') || '';
-        const bookId = parseInt(titleAttr);
-        
-        let matchFound = false;
-
-        // Metode 1: Cek kecocokan langsung dari teks tombol yang tampil di UI (Aman & Akurat)
-        if (bookNameHTML.includes(query)) {
-            matchFound = true;
-        }
-        
-        // Metode 2: Cadangan pencarian berdasarkan database nama bahasa inggris aslinya
-        if (!matchFound && typeof TOME_DB !== 'undefined' && TOME_DB[bookId]) {
-            const bookNameDB = TOME_DB[bookId][4].toLowerCase();
-            if (bookNameDB.includes(query)) {
-                matchFound = true;
+        // Loop setiap item buku (li) di dalam grup tersebut
+        ul.querySelectorAll('li').forEach(li => {
+            const btn = li.querySelector('button');
+            if (!btn) return;
+            
+            const id = btn.getAttribute('title');
+            const bookName = (typeof TOME_DB !== 'undefined' && TOME_DB[id]) ? TOME_DB[id][4].toLowerCase() : '';
+            
+            // Cocokkan nama di TOME_DB dengan ketikan user
+            if (bookName.includes(q)) {
+                li.style.display = 'inline-block'; // Tampilkan tombol
+                hasVisibleItem = true;             // Tandai bahwa grup ini punya isi
+            } else {
+                li.style.display = 'none';         // Sembunyikan tombol
             }
-        }
+        });
         
-        // Eksekusi Tampilkan atau Sembunyikan Tombol Buku
-        if (matchFound) {
-            btn.style.display = ''; // Tampilkan tombol jika cocok
-        } else {
-            btn.style.display = 'none'; // Sembunyikan jika tidak cocok
+        // 3. Sembunyikan atau tampilkan header "Level X" (h4)
+        const header = ul.previousElementSibling;
+        if (header && header.tagName === 'H4') {
+            header.style.display = hasVisibleItem ? 'block' : 'none';
         }
-    }
+    });
 }
 
 window.onload = () => { applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
