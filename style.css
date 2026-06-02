@@ -334,3 +334,12 @@ h1::before, h2::before { content: ''; display: inline-block; width: 12px; height
 	margin-bottom: 8px;
 	box-shadow: 0 0 10px rgba(16,185,129,0.2);
 }
+
+/* =========================================================
+   Menyembunyikan Stats Preview di Layar Smartphone (Mobile)
+   ========================================================= */
+@media screen and (max-width: 768px) {
+    #statsPreview {
+        display: none !important;
+    }
+}
