@@ -1,8 +1,7 @@
-// ==================== INITIALIZATION & FIREBASE AUTH WALL ====================
+// ==================== AUTH WALL ====================
 let currentUser = null;
-let isDataLoaded = false; // Kunci pengaman Cloud Sync
+let isDataLoaded = false; 
 
-// GERBANG MONITOR STATUS LOG-IN REALTIME
 auth.onAuthStateChanged(user => {
     currentUser = user;
     const loginOverlay = document.getElementById('loginOverlay');
@@ -10,11 +9,9 @@ auth.onAuthStateChanged(user => {
     const accountSection = document.getElementById('userAccountSection');
     
     if (user) {
-        // Jika sukses Login -> Buka Aplikasi & Sembunyikan Layar Kunci
         if (loginOverlay) loginOverlay.style.display = 'none';
         if (appContent) appContent.style.display = 'block';
         
-        // Tampilkan info Akun di panel gear pengaturan
         if (accountSection) {
             accountSection.innerHTML = `
                 <img src="${user.photoURL || 'https://via.placeholder.com/48'}" class="user-profile-img" alt="Avatar">
@@ -33,21 +30,18 @@ auth.onAuthStateChanged(user => {
 		listenGlobalChat();
         
     } else {
-        // Jika belum Login / Keluar Akun -> Kunci Aplikasi & Paksa Layar Login Muncul
         if (loginOverlay) loginOverlay.style.display = 'flex';
         if (appContent) appContent.style.display = 'none';
         
-        if (accountSection) accountSection.innerHTML = ''; // Kosongkan saat logout
+        if (accountSection) accountSection.innerHTML = '';
 		
 		unsubscribeGlobalChat();
     }
 });
 
-// FUNGSI TOMBOL LOGIN
 function loginGoogle() {
     auth.signInWithPopup(provider)
         .then(() => {
-            // Berhasil, UI otomatis ditangani oleh onAuthStateChanged
         })
         .catch(err => {
             console.error("Gagal melakukan autentikasi:", err);
@@ -55,12 +49,10 @@ function loginGoogle() {
         });
 }
 
-// FUNGSI TOMBOL LOGOUT
 function logoutGoogle() {
     if (confirm("Apakah Anda yakin ingin keluar dari aplikasi?")) {
         auth.signOut().then(() => {
-            // UI otomatis mengunci layar setelah logout selesai
-            toggleMenu(); // tutup panel jika terbuka
+            toggleMenu();
         });
     }
 }
@@ -188,8 +180,6 @@ function loadFavorite() {
 	}
 }
 
-// ---------------- REVERSE CALCULATOR CORE LOGIC ---------------- //
-
 function openReverseCalcModal() {
     hideTooltip();
     document.getElementById('reverseCalcModal').style.display = 'flex';
@@ -204,6 +194,9 @@ function testCraft(id, pool) {
     if (pool[id] && pool[id] > 0) {
         pool[id]--;
         return 1;
+    }
+	if (!TOME_DB[id]) {
+        return 0; 
     }
     if (id === 10 || id === 11 || id === 12) {
         if (id === 12 && pool[10] >= 20) { pool[10] -= 20; return 1; }
@@ -411,7 +404,6 @@ function hideTooltip() { document.getElementById('floatingTooltip').style.displa
 document.addEventListener('click', function(e) { if (!e.target.closest('button[title]')) { hideTooltip(); } });
 document.addEventListener('touchstart', function(e) { if (!e.target.closest('button[title]')) { hideTooltip(); } });
 
-// ==================== GENERATOR TOMBOL (UPDATE CRAFTING SIMULATOR) ====================
 function getTreeItemHtml(id, isDeductionsView = false) {
     let count = isDeductionsView ? deductions[id] : itemCounts[id];
     if (!count) return '';
@@ -421,17 +413,13 @@ function getTreeItemHtml(id, isDeductionsView = false) {
     let spanTag = '';
 
     if (isDeductionsView) {
-        // Jika ini di area Inventory, klik untuk menghapus
         clickAttr = `onclick="removeDeduction(${id})"`;
         spanTag = `<span title="Hapus item dari inventory"></span>`;
     } else {
-        // JIKA INI ADALAH TOME TARGET UTAMA DI ATAS POHON
         if (id == rightTreeId) {
             clickAttr = `onclick="attemptCrafting(${id})"`;
-            // Tambahkan efek glow hijau agar user tahu ini bisa diklik untuk di-craft
             extraStyle = "box-shadow: 0 0 12px var(--success); border: 2px solid var(--success); border-radius: 6px; cursor: pointer;";
         } else {
-            // Item pohon lainnya klik untuk masuk modal tambah manual
             clickAttr = `onclick="openModal(${id})"`;
         }
     }
@@ -557,7 +545,6 @@ function updateCostAndProgress() {
     }
 }
 
-// ---------------- SMART FARMING OPTIMIZER WITH i18n ---------------- //
 (function() {
     const rightTreeCard = document.getElementById('rightTree').parentElement;
     if (!document.getElementById('smartFarmingContainer')) {
@@ -638,8 +625,6 @@ function updateCostAndProgress() {
         };
     }
 })();
-
-// ------------------------------------------------------------------ //
 
 function processTree(id) {
     if (!id || !TOME_DB[id]) return;
@@ -750,9 +735,7 @@ function filterBooks(query) {
     });
 }
 
-// ---------------- DATABASE MECHANISM (CLOUD VS LOCAL) ---------------- //
 function saveDataTrigger() {
-    // 1. Pengaman agar tidak menimpa data Cloud saat refresh halaman
     if (!isDataLoaded) return;
     
     let p10 = Math.max(0, parseInt(document.getElementById('price10').value) || 0); 
@@ -760,15 +743,13 @@ function saveDataTrigger() {
     let p12 = Math.max(0, parseInt(document.getElementById('price12').value) || 0); 
     let m = Math.max(1, parseInt(document.getElementById('mnojitel').value) || 1);
     
-    // Mengompres array deductions (Inventory) menjadi objek ringkas
     const compD = {}; 
     deductions.forEach((val, idx) => { if (val > 0) compD[idx] = val; });
     
-    // Objek State yang dikirim ke Firebase
     let state = { 
-        r: rightTreeId, // Target Tome disimpan di sini (r)
+        r: rightTreeId,
         m: m, 
-        d: compD,       // Inventory disimpan di sini (d)
+        d: compD,
         p10: p10, 
         p11: p11, 
         p12: p12 
@@ -776,7 +757,6 @@ function saveDataTrigger() {
     
     try { localStorage.setItem('tomeCalculatorState', JSON.stringify(state)); } catch(e){}
     
-    // Kirim ke Firebase Firestore
     if (currentUser) {
 
         db.collection("users").doc(currentUser.uid).update({
@@ -807,18 +787,18 @@ function loadFromCloud(uid) {
                     let state = JSON.parse(savedData);
                     parseStateToUI(state);
 					
-					isDataLoaded = true; // <--- BUKA KUNCI SEBELUM SAVE TRIGGER
+					isDataLoaded = true;
                     saveDataTrigger();
                 } catch(e){}
             }
         }
-		isDataLoaded = true; // <--- BUKA KUNCI JIKA BERHASIL LOAD DARI CLOUD
+		isDataLoaded = true;
         applyLanguage();
     }).catch(err => {
         console.error("Gagal sinkronisasi cloud, fallback ke lokal:", err);
         loadFromLocalStorage();
         
-		isDataLoaded = true; // <--- TETAP BUKA KUNCI MESKI ERROR (Agar aplikasi tetap bisa save saat offline)
+		isDataLoaded = true;
 		applyLanguage();
     });
 }
@@ -826,33 +806,27 @@ function loadFromCloud(uid) {
 function parseStateToUI(state) {
     if (!state) return;
 
-    // 1. Bongkar harga-harga dan multiplier ke input HTML
     if (document.getElementById('price10')) document.getElementById('price10').value = state.p10 || 0;
     if (document.getElementById('price11')) document.getElementById('price11').value = state.p11 || 0;
     if (document.getElementById('price12')) document.getElementById('price12').value = state.p12 || 0;
     if (document.getElementById('mnojitel')) document.getElementById('mnojitel').value = state.m || 1;
 
-    // 2. BONGKAR DATA TARGET TOME (r) 🎯
     if (state.r) {
         rightTreeId = state.r;
     } else {
         rightTreeId = 101;
     }
 
-    // 3. BONGKAR DATA INVENTORY (d) 🎒 - VERSI ANTI-NaN (SUPER AMAN)
-    // Kita reset semua slot yang ada di deductions menjadi 0 terlebih dahulu
     for (let i = 0; i < deductions.length; i++) {
         deductions[i] = 0;
     }
     
-    // Baru kita isi dengan data asli dari Cloud
     if (state.d) {
         for (let idx in state.d) {
             deductions[parseInt(idx)] = parseInt(state.d[idx]) || 0;
         }
     }
 
-    // 4. Segarkan Tampilan Aplikasi
     if (typeof processTree === 'function') {
         processTree(rightTreeId);
     }
@@ -860,7 +834,6 @@ function parseStateToUI(state) {
 
 
 function fungsiX(id) {
-    // Pastikan jika bernilai undefined, dia otomatis menjadi 0 sebelum ditambah 1
     deductions[id] = (deductions[id] || 0) + 1; 
     
     saveDataTrigger();
@@ -886,19 +859,14 @@ function resetCalculator() {
     }
 }
 
-// ==================== SELECTION FILTER HELPER (FIX FINAL) ====================
 function filterBooks(query) {
     const q = query.toLowerCase().trim();
-    
-    // 1. Pastikan ID kontainernya BENAR: vyborDiv
     const vyborDiv = document.getElementById('vyborDiv');
     if (!vyborDiv) return;
 
-    // 2. Loop setiap grup (ul) dari Level 6 sampai 1
     vyborDiv.querySelectorAll('ul').forEach(ul => {
         let hasVisibleItem = false;
         
-        // Loop setiap item buku (li) di dalam grup tersebut
         ul.querySelectorAll('li').forEach(li => {
             const btn = li.querySelector('button');
             if (!btn) return;
@@ -906,16 +874,14 @@ function filterBooks(query) {
             const id = btn.getAttribute('title');
             const bookName = (typeof TOME_DB !== 'undefined' && TOME_DB[id]) ? TOME_DB[id][4].toLowerCase() : '';
             
-            // Cocokkan nama di TOME_DB dengan ketikan user
             if (bookName.includes(q)) {
-                li.style.display = 'inline-block'; // Tampilkan tombol
-                hasVisibleItem = true;             // Tandai bahwa grup ini punya isi
+                li.style.display = 'inline-block';
+                hasVisibleItem = true;
             } else {
-                li.style.display = 'none';         // Sembunyikan tombol
+                li.style.display = 'none';
             }
         });
         
-        // 3. Sembunyikan atau tampilkan header "Level X" (h4)
         const header = ul.previousElementSibling;
         if (header && header.tagName === 'H4') {
             header.style.display = hasVisibleItem ? 'block' : 'none';
@@ -923,24 +889,19 @@ function filterBooks(query) {
     });
 }
 
-// ==================== MESIN SIMULATOR CRAFTING TOME ====================
 function attemptCrafting(targetId) {
     if (!targetId) return;
 
-    // Fungsi rekursif untuk mengecek dan memotong bahan secara virtual
     function tryCraftNode(nodeId, pool) {
         if (!nodeId) return false;
         
-        // 1. Jika barang jadi (Tome/Bahan) sudah ada di inventory, pakai langsung
         if (pool[nodeId] && pool[nodeId] > 0) {
             pool[nodeId]--;
             return true;
         }
 
-        // 2. Base mats (10, 11) tidak bisa dipecah lagi
         if (nodeId === 10 || nodeId === 11) return false; 
         
-        // Tome Page (12) bisa dibuat otomatis jika ada 20 Token (10)
         if (nodeId === 12) {
             if (pool[10] >= 20) {
                 pool[10] -= 20;
@@ -949,9 +910,8 @@ function attemptCrafting(targetId) {
             return false;
         }
 
-        // 3. Level 1 Tome (ID 101-109) -> Butuh 4 Page & 3 Fragment
         if (nodeId >= 101 && nodeId <= 109) {
-            let backupPool = [...pool]; // Simpan state jika gagal di tengah jalan
+            let backupPool = [...pool];
             
             let pagesNeeded = 4;
             for(let i=0; i<4; i++) {
@@ -965,15 +925,13 @@ function attemptCrafting(targetId) {
             }
             
             if (pagesNeeded === 0 && fragsNeeded === 0) {
-                return true; // Bahan cukup!
+                return true;
             } else {
-                // Rollback jika bahan kurang
                 for(let i=0; i<pool.length; i++) pool[i] = backupPool[i] || 0;
                 return false;
             }
         }
 
-        // 4. Level 2 - 6 Tomes -> Butuh 3 sub-tome
         let recipe = TOME_DB[nodeId];
         if (!recipe) return false;
 
@@ -983,48 +941,39 @@ function attemptCrafting(targetId) {
         let s1 = tryCraftNode(recipe[1], pool);
         let s2 = tryCraftNode(recipe[2], pool);
 
-        // Jika ketiga buku penyusun berhasil dibuat/dimiliki
         if (s0 && s1 && s2) {
             return true;
         } else {
-            // Rollback jika gagal
             for(let i=0; i<pool.length; i++) pool[i] = backupPool[i] || 0;
             return false;
         }
     }
 
-    // --- Mulai Eksekusi ---
-    // Copy isi inventory nyata ke kolam simulasi
     let pool = [];
     for (let i = 0; i < deductions.length; i++) {
         pool[i] = deductions[i] || 0;
     }
 
-    // Jalankan simulasi Crafting
     let success = tryCraftNode(targetId, pool);
 
     if (success) {
-        // Terapkan hasil potongan bahan simulasi ke Inventory Asli
         for (let i = 0; i < pool.length; i++) {
             deductions[i] = pool[i] || 0;
         }
         
-        // Tambahkan buku hasil craft ke Inventory
         if (!deductions[targetId]) deductions[targetId] = 0;
         deductions[targetId]++;
         
-        saveDataTrigger(); // Simpan ke Cloud otomatis
-        processTree(rightTreeId); // Segarkan UI
+        saveDataTrigger();
+        processTree(rightTreeId);
         
-        // Mainkan efek Confetti Kemenangan!
         if (typeof confetti === 'function') {
             confetti({ particleCount: 150, spread: 80, origin: { y: 0.5 }, colors: ['#fbbf24', '#f59e0b', '#d97706'] });
         }
 		
 		try {
-            // Ganti 'success.mp3' dengan nama file atau URL link suara Anda
             let craftSound = new Audio('success.mp3'); 
-            craftSound.volume = 0.6; // Mengatur volume (0.0 sampai 1.0)
+            craftSound.volume = 0.6;
             craftSound.play();
         } catch (error) {
             console.log("Gagal memutar suara, kemungkinan diblokir browser:", error);
@@ -1038,12 +987,9 @@ function attemptCrafting(targetId) {
     }
 }
 
-// ==================== ENGINE CORE: REAL-TIME GLOBAL CHAT LOGIC ====================
 let chatUnsubscribe = null;
 
-// A. FUNGSI SINKRONISASI REAL-TIME (MENDENGAR CHAT MASUK)
 function listenGlobalChat() {
-    // Bersihkan listener aktif sebelumnya jika ada (Mencegah memory leak)
     if (chatUnsubscribe) chatUnsubscribe();
 
     const chatMessages = document.getElementById('chatMessages');
@@ -1051,10 +997,10 @@ function listenGlobalChat() {
 
     chatUnsubscribe = db.collection("global_chats")
         .orderBy("timestamp", "desc")
-        .limit(50) // Hanya ambil 50 pesan terakhir demi performa & menghemat kuota Firestore
+        .limit(50)
         .onSnapshot(snapshot => {
             let html = "";
-            const docs = snapshot.docs.reverse(); // Balik urutan agar pesan terbaru berada di bawah
+            const docs = snapshot.docs.reverse();
 
             if (docs.length === 0) {
                 html = `<div style="color:var(--text-muted); text-align:center; padding: 20px; font-style:italic; font-size:0.85rem;">Belum ada obrolan. Mari sapa pemain lain pertama kali!</div>`;
@@ -1066,19 +1012,16 @@ function listenGlobalChat() {
                 const data = doc.data();
                 const isMe = data.uid === (currentUser ? currentUser.uid : null);
                 
-                // Konfigurasi waktu pesan secara lokal
                 let timeStr = "...";
                 if (data.timestamp) {
                     const date = data.timestamp.toDate();
                     timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 }
 
-                // Proteksi Keamanan Tinggi: Bersihkan input teks dari kode berbahaya (Anti-XSS Injection)
                 const safeName = escapeChatHTML(data.name || "Anonymous");
                 const safeMessage = escapeChatHTML(data.message || "");
                 const photoURL = data.photo || "https://via.placeholder.com/40";
 
-                // Layouting chat bubble yang presisi sesuai identitas pengirim
                 html += `
                     <div class="chat-bubble" style="display: flex; gap: 10px; align-items: flex-start; ${isMe ? 'flex-direction: row-reverse;' : ''}">
                         <img src="${photoURL}" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid ${isMe ? 'var(--accent)' : 'var(--border-color)'}; flex-shrink: 0;" alt="Avatar">
@@ -1095,14 +1038,12 @@ function listenGlobalChat() {
 
             chatMessages.innerHTML = html;
             
-            // Auto-scroll halus ke pesan paling bawah setiap ada pesan baru masuk
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }, err => {
             console.error("Gagal melakukan sinkronisasi chat forum:", err);
         });
 }
 
-// B. FUNGSI UNTUK MEMATIKAN STREAM CHAT
 function unsubscribeGlobalChat() {
     if (chatUnsubscribe) {
         chatUnsubscribe();
@@ -1110,13 +1051,12 @@ function unsubscribeGlobalChat() {
     }
 }
 
-// C. FUNGSI MENGIRIM PESAN BARU KELIAR
 function sendGlobalChat() {
     const inputField = document.getElementById('chatInputField');
     if (!inputField) return;
 
     const text = inputField.value.trim();
-    if (!text) return; // Validasi: Dilarang kirim pesan kosong
+    if (!text) return;
     if (!currentUser) return;
 
     if (text.length > 400) {
@@ -1124,7 +1064,6 @@ function sendGlobalChat() {
         return;
     }
 
-    // Eksekusi kirim paket data ke Cloud Firestore
     db.collection("global_chats").add({
         uid: currentUser.uid,
         name: currentUser.displayName || "Player Classic",
@@ -1133,7 +1072,7 @@ function sendGlobalChat() {
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
     })
     .then(() => {
-        inputField.value = ''; // Kosongkan kolom input seketika setelah berhasil terkirim
+        inputField.value = '';
     })
     .catch(err => {
         console.error("Gagal mengirim pesan ke server:", err);
@@ -1141,7 +1080,6 @@ function sendGlobalChat() {
     });
 }
 
-// D. HELPER PROTEKSI SCRIPT INJECTION (XSS SANITIZER)
 function escapeChatHTML(str) {
     if (!str) return '';
     return str.replace(/[&<>'"]/g, tag => ({
@@ -1149,9 +1087,6 @@ function escapeChatHTML(str) {
     }[tag] || tag));
 }
 
-// ==================== FITUR EMOJI PICKER ====================
-
-// 1. Membuka dan Menutup Panel Emoji
 function toggleEmojiPicker() {
     const panel = document.getElementById('emojiPickerPanel');
     if (panel.style.display === 'none' || panel.style.display === '') {
@@ -1161,26 +1096,17 @@ function toggleEmojiPicker() {
     }
 }
 
-// 2. Memasukkan Emoji ke Kotak Input
 function insertEmoji(emoji) {
     const inputField = document.getElementById('chatInputField');
-    
-    // Tambahkan emoji ke posisi terakhir teks di input
     inputField.value += emoji;
-    
-    // Kembalikan fokus kursor ke input agar pengguna bisa langsung mengetik lagi
     inputField.focus();
-    
-    // Tutup panel setelah memilih
     document.getElementById('emojiPickerPanel').style.display = 'none';
 }
 
-// 3. Menutup Panel jika pengguna mengklik area luar panel
 document.addEventListener('click', function(event) {
     const panel = document.getElementById('emojiPickerPanel');
     const toggleBtn = document.getElementById('btnEmojiToggle');
-    
-    // Jika panel sedang terbuka dan klik terjadi di luar panel & luar tombol toggle
+
     if (panel && panel.style.display === 'flex') {
         if (!panel.contains(event.target) && !toggleBtn.contains(event.target) && !toggleBtn.querySelector('i').contains(event.target)) {
             panel.style.display = 'none';
@@ -1188,35 +1114,29 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// ==================== FITUR SCROLLSPY MOBILE NAVBAR (VERSI VIEWPORT) ====================
 window.addEventListener('scroll', () => {
     const sections = document.querySelectorAll('.calc-card[id]');
     const navItems = document.querySelectorAll('.mobile-navbar .nav-item');
     
     let currentSectionId = '';
 
-    // Gunakan getBoundingClientRect untuk mengukur jarak real-time dari lensa layar
     sections.forEach(section => {
         const rect = section.getBoundingClientRect();
         
-        // 150 adalah titik toleransi (sensor). Jika bagian atas kartu sudah
-        // menyentuh atau melewati 150px dari puncak layar, jadikan ini sebagai seksi aktif.
         if (rect.top <= 150) {
             currentSectionId = section.getAttribute('id');
         }
     });
 
-    // Jika pengguna menggulir ke paling atas mentok (opsional, untuk memastikan Target menyala)
     if (window.scrollY === 0) {
         currentSectionId = 'cardTarget';
     }
 
-    // Jalankan efek ganti warna di Navbar
     if (currentSectionId) {
         navItems.forEach(item => {
-            item.classList.remove('active'); // Matikan semua
+            item.classList.remove('active');
             if (item.getAttribute('href') === `#${currentSectionId}`) {
-                item.classList.add('active'); // Nyalakan yang sedang dilihat
+                item.classList.add('active');
             }
         });
     }
