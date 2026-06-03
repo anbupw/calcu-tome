@@ -537,7 +537,6 @@ function updateCostAndProgress() {
     
     if (pct >= 100) {
         if (!window.confettiLaunched && typeof confetti === 'function') { 
-            //confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 }, colors: ['#3b82f6', '#10b981', '#f59e0b'] }); 
             window.confettiLaunched = true;
         }
     } else {
