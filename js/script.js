@@ -748,6 +748,43 @@ if (typeof db !== 'undefined') {
     console.warn("Firebase (db) belum terhubung ke script ini.");
 }
 
+// ==========================================
+// MENANGKAP DATA DARI ADMIN (FIREBASE COMPAT)
+// ==========================================
+
+console.log("Mencoba membaca Firebase..."); // <--- Tambahkan ini
+
+if (typeof window.db !== 'undefined') {
+    console.log("Firebase (db) DITEMUKAN! Memulai penangkapan data..."); // <--- Tambahkan ini
+    
+    // 1. MENANGKAP BANNER PENGUMUMAN
+    const bannerElement = document.getElementById('globalBanner');
+    const bannerTextElement = document.getElementById('bannerText');
+
+    console.log("Elemen Banner HTML:", bannerElement); // <--- Tambahkan ini
+
+    if (bannerElement && bannerTextElement) {
+        window.db.collection("admin_data").doc("global_settings").onSnapshot((docSnap) => {
+            if (docSnap.exists) {
+                const data = docSnap.data();
+                console.log("Data pengumuman diterima dari server:", data); // <--- Tambahkan ini
+                
+                if (data.bannerText && data.bannerText.trim() !== "") {
+                    bannerTextElement.innerText = data.bannerText;
+                    bannerElement.style.display = "block";
+                } else {
+                    bannerElement.style.display = "none";
+                }
+            } else {
+                console.log("Dokumen global_settings belum ada di database."); // <--- Tambahkan ini
+            }
+        });
+    }
+
+} else {
+    console.error("GAGAL: Firebase (db) tidak terbaca oleh script ini!"); // <--- Tambahkan ini
+}
+
 window.onload = () => { applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
 window.filterBooks = filterBooks;
 window.renderBookSelection = renderBookSelection;
