@@ -1,11 +1,11 @@
-// admin/admin-script.js
-
 // ==========================================
-// 1. KONFIGURASI FIREBASE (CONTOH)
+// 1. KONFIGURASI & IMPOR FIREBASE
 // ==========================================
-// Nanti, ganti bagian ini dengan konfigurasi Firebase Anda yang asli
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+// Tambahkan impor khusus Authentication di sini:
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC1eCaQkeCf1IJQIDqveEKhHHFEYMd6bSs",
@@ -19,24 +19,61 @@ const firebaseConfig = {
 // Inisialisasi Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app); // <-- Inisialisasi Auth
 
 // ==========================================
-// 2. LOGIKA LOGIN SEDERHANA (TAMPILAN)
+// 2. LOGIKA LOGIN FIREBASE ASLI
 // ==========================================
 const loginOverlay = document.getElementById('loginOverlay');
 const btnLoginAdmin = document.getElementById('btnLoginAdmin');
+const btnLogout = document.getElementById('btnLogout'); // Pastikan tombol logout di HTML ada ID ini
 
-// (Catatan: Ini hanya simulasi visual buka-tutup gembok. 
-// Keamanan aslinya nanti akan kita sambungkan dengan Firebase Auth)
-btnLoginAdmin.addEventListener('click', () => {
+// A. Pemantau Status Penjaga Pintu (onAuthStateChanged)
+// Fungsi ini otomatis mengecek: "Apakah admin sedang login atau tidak?"
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        // Jika sudah login, sembunyikan layar hitam (Buka Pintu)
+        loginOverlay.style.display = 'none';
+    } else {
+        // Jika belum login / sudah logout, munculkan layar hitam (Kunci Pintu)
+        loginOverlay.style.display = 'flex';
+    }
+});
+
+// B. Tombol Eksekusi Login
+btnLoginAdmin.addEventListener('click', async () => {
     const email = document.getElementById('adminEmail').value;
     const password = document.getElementById('adminPassword').value;
 
-    if (email !== "" && password !== "") {
-        loginOverlay.style.display = 'none'; // Sembunyikan layar hitam
+    if (email === "" || password === "") {
+        alert("Email dan Password tidak boleh kosong!");
+        return;
+    }
+
+    btnLoginAdmin.innerText = "Memeriksa...";
+    btnLoginAdmin.disabled = true;
+
+    try {
+        // Mengetuk pintu server Firebase dengan email dan password
+        await signInWithEmailAndPassword(auth, email, password);
         alert("Selamat datang, Komandan!");
-    } else {
-        alert("Email dan Password wajib diisi!");
+        // (Tidak perlu manual menghilangkan overlay di sini, karena onAuthStateChanged di atas akan otomatis melakukannya)
+    } catch (error) {
+        console.error("Login Error:", error.code);
+        alert("Akses Ditolak! Email atau Password salah.");
+    } finally {
+        btnLoginAdmin.innerText = "Masuk ke Dasbor";
+        btnLoginAdmin.disabled = false;
+    }
+});
+
+// C. Tombol Eksekusi Keluar (Logout)
+btnLogout.addEventListener('click', async () => {
+    try {
+        await signOut(auth);
+        alert("Anda telah berhasil keluar dari mode Admin.");
+    } catch (error) {
+        console.error("Logout Error:", error);
     }
 });
 

@@ -462,3 +462,20 @@ html {
     animation: readyGlow 1.5s infinite ease-in-out !important;
     border: 2px solid #fbbf24 !important;
 }
+
+/* Gaya untuk Banner Pengumuman Global */
+.global-banner {
+    background-color: #1a1a1a;
+    color: #00ff00; /* Hijau neon estetik */
+    border-bottom: 2px solid #00ff00;
+    text-align: center;
+    padding: 12px;
+    font-weight: bold;
+    font-size: 15px;
+    box-shadow: 0 4px 10px rgba(0, 255, 0, 0.1);
+    
+    /* Membuat banner tetap menempel di atas saat pemain men-scroll */
+    position: sticky; 
+    top: 0;
+    z-index: 1000;
+}

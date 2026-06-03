@@ -689,4 +689,38 @@ function attemptCrafting(targetId) {
     }
 }
 
+//anuna admin
+import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+const bannerElement = document.getElementById('globalBanner');
+const bannerTextElement = document.getElementById('bannerText');
+
+onSnapshot(doc(db, "admin_data", "global_settings"), (docSnap) => {
+    if (docSnap.exists()) {
+        const data = docSnap.data();
+        
+        if (data.bannerText && data.bannerText.trim() !== "") {
+            bannerTextElement.innerText = data.bannerText;
+            bannerElement.style.display = "block";
+        } else {
+            bannerElement.style.display = "none";
+        }
+    }
+});
+
+let hargaMysticPage = 0; 
+let hargaFragment = 0;
+
+onSnapshot(doc(db, "admin_data", "market_prices"), (docSnap) => {
+    if (docSnap.exists()) {
+        const data = docSnap.data();
+        
+        hargaMysticPage = data.mysticPagePrice || 0;
+        hargaFragment = data.fragmentPrice || 0;
+        
+        console.log("🔥 Harga terupdate dari server:", hargaMysticPage, hargaFragment);
+        
+    }
+});
+
 window.onload = () => { applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
