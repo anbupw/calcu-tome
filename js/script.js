@@ -523,18 +523,6 @@ function confirmModal() {
 
 function removeDeduction(id) { deductions[id] = 0; saveDataTrigger(); processTree(rightTreeId); }
 
-function filterBooks(query) {
-    const q = query.toLowerCase();
-    document.querySelectorAll('#vyborDiv ul').forEach(ul => {
-        let hasVisibleItem = false;
-        ul.querySelectorAll('li').forEach(li => {
-            const id = li.querySelector('button').title; const bookName = TOME_DB[id] ? TOME_DB[id][4].toLowerCase() : '';
-            if (bookName.includes(q)) { li.style.display = 'inline-block'; hasVisibleItem = true; } else li.style.display = 'none';
-        });
-        const header = ul.previousElementSibling; if (header && header.tagName === 'H4') header.style.display = hasVisibleItem ? 'block' : 'none';
-    });
-}
-
 function fungsiX(id) {
     deductions[id] = (deductions[id] || 0) + 1; 
     
@@ -724,3 +712,5 @@ onSnapshot(doc(db, "admin_data", "market_prices"), (docSnap) => {
 });
 
 window.onload = () => { applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
+window.filterBooks = filterBooks;
+window.renderBookSelection = renderBookSelection;
