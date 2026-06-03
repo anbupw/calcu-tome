@@ -1124,6 +1124,33 @@ function filterBooks(query) {
     });
 }
 
+function attemptCrafting(id) {
+    if (!TOME_DB[id]) return;
+    
+    // Lakukan simulasi pengurangan bahan dan penambahan buku (Logika asli aplikasi Anda)
+    let recipe = TOME_DB[id];
+    let req1 = recipe[0], qty1 = recipe[1];
+    let req2 = recipe[2], qty2 = recipe[3];
+
+    // Potong bahan 1
+    if (req1) deductions[req1] = Math.max(0, (deductions[req1] || 0) - qty1);
+    // Potong bahan 2
+    if (req2) deductions[req2] = Math.max(0, (deductions[req2] || 0) - qty2);
+
+    // Tambahkan item hasil rakitan ke dalam tas (+1)
+    deductions[id] = (deductions[id] || 0) + 1;
+
+    // Efek perayaan kembang api kecil (Confetti) saat berhasil craft buku tingkat tinggi
+    if (typeof confetti === 'function' && id > 200) {
+        confetti({ particleCount: 40, spread: 60, origin: { y: 0.7 } });
+    }
+
+    // SINKRONISASI TOTAL
+    saveDataTrigger(); // Simpan ke cloud firebase
+    processTree(rightTreeId); // Hitung ulang bagan pohon
+    renderInventory(); // Segarkan isi tas (Tome 615 sekarang akan langsung muncul!)
+}
+
 // ==================== MESIN SIMULATOR CRAFTING TOME ====================
 function attemptCrafting(targetId) {
     if (!targetId) return;
@@ -1473,6 +1500,46 @@ function filterBooks(query) {
     // Tampilkan di area Target Pembuatan
     const targetDiv = document.getElementById('vyborDiv');
     if (targetDiv) targetDiv.innerHTML = html;
+}
+
+function renderInventory() {
+    let html = '';
+    let hasItems = false;
+
+    // KUNCI UTAMA: Kita naikkan batas pengecekan hingga ID 1000 agar Tome 615 dkk terbaca!
+    for (let i = 0; i <= 1000; i++) {
+        if (deductions[i] > 0) {
+            hasItems = true;
+            let name = 'Unknown Item';
+            
+            // Cari nama item berdasarkan ID
+            if (i === 12) name = 'Tome Page';
+            else if (i === 11) name = 'Tome Fragment';
+            else if (i === 10) name = 'Token of Luck';
+            else if (TOME_DB[i]) name = TOME_DB[i][4];
+
+            html += `
+                <div class="inv-row">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <div style="background-image:url('znachki.png'); ${getSpritePosition(i)}; width:32px; height:32px; background-size:auto;"></div>
+                        <span class="inv-item-name">${name}</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <input type="number" class="inv-qty-input" value="${deductions[i]}" onchange="updateInventoryDirect(${i}, this.value)">
+                        <button class="inv-btn-delete" onclick="deleteInventoryItem(${i})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    const container = document.getElementById('inventoryListContent');
+    if (container) {
+        container.innerHTML = hasItems ? html : `<div style="text-align:center; color:var(--text-muted); padding:20px;" data-i18n=\"invEmpty\">Tas Inventory Kosong</div>`;
+    }
+    
+    // Perbarui juga analisis potensi bentukan (Reverse Calc) jika ada
+    if (typeof runReverseCalc === 'function') runReverseCalc();
 }
 
 // MASTER FUNGSI 3: MENAMPILKAN DAFTAR BUKU DI MODAL INVENTORY (Aman untuk Level 5 & 6)
