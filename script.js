@@ -1442,4 +1442,69 @@ window.addEventListener('scroll', () => {
     }
 });
 
+// MASTER FUNGSI 1: MEMILIH TARGET (TIDAK AKAN MASUK INVENTORY/CRAFT)
+function selectTargetBook(id) { 
+    rightTreeId = id; // Kunci target utama
+    
+    // Segarkan bagan pohon di rincian crafting
+    if (typeof processTree === 'function') {
+        processTree(rightTreeId); 
+    }
+    // Simpan ke Cloud agar tidak hilang
+    if (typeof saveDataTrigger === 'function') {
+        saveDataTrigger();
+    }
+}
+
+// MASTER FUNGSI 2: MENAMPILKAN DAFTAR BUKU DI KARTU TARGET (Pencarian Target)
+function filterBooks(query) {
+    let q = query ? query.toLowerCase() : '';
+    let html = '<ul style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">';
+    
+    TOME_DB.forEach((tome, id) => {
+        // Jika nama buku cocok dengan pencarian
+        if (tome && tome[4].toLowerCase().includes(q)) { 
+            // PERHATIKAN: onclick secara paksa hanya memanggil selectTargetBook
+            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${tome[4]}" onclick="selectTargetBook(${id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
+        }
+    });
+    html += '</ul>';
+    
+    // Tampilkan di area Target Pembuatan
+    const targetDiv = document.getElementById('vyborDiv');
+    if (targetDiv) targetDiv.innerHTML = html;
+}
+
+// MASTER FUNGSI 3: MENAMPILKAN DAFTAR BUKU DI MODAL INVENTORY (Aman untuk Level 5 & 6)
+function renderInventorySelection(query) {
+    let html = '<ul style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">';
+    const q = query ? query.toLowerCase() : ''; 
+    let activeIds = typeof getActiveTreeIds === 'function' ? getActiveTreeIds() : new Set();
+    let showAll = (q === ''); 
+
+    const baseMats = [ {id: 12, name: 'Tome Page'}, {id: 11, name: 'Tome Fragment'}, {id: 10, name: 'Token of Luck'} ];
+    
+    // Tampilkan Bahan Dasar
+    baseMats.forEach(mat => {
+        if (mat.name.toLowerCase().includes(q) && (showAll || activeIds.has(mat.id))) { 
+            // PERHATIKAN: onclick secara paksa memanggil openModal (Pop-up Jumlah)
+            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.name}" onclick="openModal(${mat.id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
+        }
+    });
+    
+    // Tampilkan Buku Level 1 sampai 6
+    TOME_DB.forEach((tome, id) => {
+        if (tome && tome[4].toLowerCase().includes(q) && (showAll || activeIds.has(id))) { 
+            // PERHATIKAN: onclick secara paksa memanggil openModal (Pop-up Jumlah)
+            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${tome[4]}" onclick="openModal(${id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
+        }
+    });
+    
+    html += '</ul>'; 
+    
+    // Tampilkan di jendela Modal Inventory
+    const invDiv = document.getElementById('invItemList');
+    if (invDiv) invDiv.innerHTML = html;
+}
+
 window.onload = () => { applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
