@@ -105,7 +105,7 @@ function runReverseCalculator() {
             let lvl = Math.floor(item.id / 100);
             html += `
                 <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:10px; border-radius:10px; gap:10px;">
-                    <div style="width:32px; height:32px; flex-shrink:0; background-image:url('img/znachki.png'); ${getSpritePosition(item.id)}"></div>
+                    <div style="width:32px; height:32px; flex-shrink:0; background-image:url('../img/znachki.png'); ${getSpritePosition(item.id)}"></div>
                     <div style="flex:1; text-align:left;">
                         <div style="font-weight:600; font-size:0.9rem; color:white;">${name}</div>
                         <div style="font-size:0.75rem; color:var(--text-muted);">${LANG[currentLang]['lvl']} ${lvl}</div>
@@ -128,7 +128,7 @@ function runReverseCalculator() {
             html += `
                 <div style="display:flex; flex-direction:column; background:rgba(255,255,255,0.02); border:1px solid var(--border-color); padding:10px; border-radius:10px; gap:6px;">
                     <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
-                        <div style="width:32px; height:32px; flex-shrink:0; background-image:url('img/znachki.png'); ${getSpritePosition(item.id)}"></div>
+                        <div style="width:32px; height:32px; flex-shrink:0; background-image:url('../img/znachki.png'); ${getSpritePosition(item.id)}"></div>
                         <div style="flex:1; text-align:left;">
                             <div style="font-weight:600; font-size:0.9rem; color:white;">${name}</div>
                             <div style="font-size:0.75rem; color:var(--text-muted);">${LANG[currentLang]['lvl']} ${lvl}</div>
@@ -213,7 +213,7 @@ function getTreeItemHtml(id, isDeductionsView = false) {
         }
     }
     
-    return `<li><button style="background-image:url('img/znachki.png'); ${getSpritePosition(id)}; ${extraStyle}" title="${id}" ${clickAttr} onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
+    return `<li><button style="background-image:url('../img/znachki.png'); ${getSpritePosition(id)}; ${extraStyle}" title="${id}" ${clickAttr} onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
 }
 
 function renderTree() {
@@ -262,7 +262,7 @@ function renderBookSelection() {
     let txt = '';
     for (let r = 6; r >= 1; r--) {
         let lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
-        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="background-image:url('img/znachki.png'); ${getSpritePosition(e)}" title="${e}" onclick="selectTargetBook(${e})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`;
+        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="background-image:url('../img/znachki.png'); ${getSpritePosition(e)}" title="${e}" onclick="selectTargetBook(${e})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`;
         if (lis !== '') txt += `<h4>${LANG[currentLang]['lvl']} ${r}</h4><ul>${lis}</ul>`;
     }
     document.getElementById('vyborDiv').innerHTML = txt;
@@ -470,13 +470,13 @@ function renderInventorySelection(query) {
     
     baseMats.forEach(mat => {
         if (mat.name.toLowerCase().includes(q)) { 
-            html += `<li><button style="background-image:url('img/znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onclick="selectItemForInventory(${mat.id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
+            html += `<li><button style="background-image:url('../img/znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onclick="selectItemForInventory(${mat.id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
         }
     });
     
     TOME_DB.forEach((tome, id) => {
         if (tome && tome[4].toLowerCase().includes(q)) { 
-            html += `<li><button style="background-image:url('img/znachki.png'); ${getSpritePosition(id)}" title="${id}" onclick="selectItemForInventory(${id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
+            html += `<li><button style="background-image:url('../img/znachki.png'); ${getSpritePosition(id)}" title="${id}" onclick="selectItemForInventory(${id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
         }
     });
     
