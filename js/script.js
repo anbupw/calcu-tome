@@ -711,6 +711,43 @@ onSnapshot(doc(db, "admin_data", "market_prices"), (docSnap) => {
     }
 });
 
+if (typeof db !== 'undefined') {
+    
+    const bannerElement = document.getElementById('globalBanner');
+    const bannerTextElement = document.getElementById('bannerText');
+
+    if (bannerElement && bannerTextElement) {
+        db.collection("admin_data").doc("global_settings").onSnapshot((docSnap) => {
+            if (docSnap.exists) {
+                const data = docSnap.data();
+                if (data.bannerText && data.bannerText.trim() !== "") {
+                    bannerTextElement.innerText = data.bannerText;
+                    bannerElement.style.display = "block";
+                } else {
+                    bannerElement.style.display = "none";
+                }
+            }
+        });
+    }
+
+    window.hargaMysticPageGlobal = 0; 
+    window.hargaFragmentGlobal = 0;
+
+    db.collection("admin_data").doc("market_prices").onSnapshot((docSnap) => {
+        if (docSnap.exists) {
+            const data = docSnap.data();
+            window.hargaMysticPageGlobal = data.mysticPagePrice || 0;
+            window.hargaFragmentGlobal = data.fragmentPrice || 0;
+            
+            console.log("🔥 Harga terupdate dari Admin:", window.hargaMysticPageGlobal, window.hargaFragmentGlobal);
+            
+        }
+    });
+
+} else {
+    console.warn("Firebase (db) belum terhubung ke script ini.");
+}
+
 window.onload = () => { applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
 window.filterBooks = filterBooks;
 window.renderBookSelection = renderBookSelection;
