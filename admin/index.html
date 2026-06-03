@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Simulator PW</title>
+    <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+
+    <!-- Pelindung Halaman (Akan dibuka lewat JS jika login sukses) -->
+    <div id="loginOverlay" class="overlay">
+        <div class="login-box">
+            <h2>🔒 Akses Terbatas</h2>
+            <p>Silakan login menggunakan akun Admin.</p>
+            <input type="email" id="adminEmail" placeholder="Email Admin">
+            <input type="password" id="adminPassword" placeholder="Password">
+            <button id="btnLoginAdmin">Masuk ke Dasbor</button>
+        </div>
+    </div>
+
+    <!-- Dasbor Utama -->
+    <div class="admin-container">
+        <header class="admin-header">
+            <h1>🛠️ Pusat Komando Admin</h1>
+            <button id="btnLogout">Keluar</button>
+        </header>
+
+        <div class="admin-grid">
+            
+            <!-- Panel 1: Harga Pasar -->
+            <div class="admin-card">
+                <h3>💰 Update Harga Pasar</h3>
+                <div class="input-group">
+                    <label>Harga Mystic Page (Gold):</label>
+                    <input type="number" id="priceMystic" placeholder="Misal: 150000">
+                </div>
+                <div class="input-group">
+                    <label>Harga Fragment (Gold):</label>
+                    <input type="number" id="priceFragment" placeholder="Misal: 25000">
+                </div>
+                <button class="btn-save" id="btnSavePrice">Update Harga Global</button>
+            </div>
+
+            <!-- Panel 2: Pengumuman Global -->
+            <div class="admin-card">
+                <h3>📢 Pengumuman Global (Banner)</h3>
+                <div class="input-group">
+                    <label>Teks Pengumuman Berjalan:</label>
+                    <textarea id="globalAnnouncement" rows="3" placeholder="Tulis info maintenance atau update fitur di sini..."></textarea>
+                </div>
+                <button class="btn-save" id="btnSaveAnnouncement">Sebarkan Pengumuman</button>
+            </div>
+
+            <!-- Panel 3: Statistik Singkat -->
+            <div class="admin-card">
+                <h3>📊 Statistik Pengguna</h3>
+                <ul class="stats-list">
+                    <li>Total Pengguna Terdaftar: <span id="statUsers">0</span> Pemain</li>
+                    <li>Tome Paling Banyak Dicari: <span id="statTopTome">Memuat...</span></li>
+                </ul>
+                <button class="btn-refresh" id="btnRefreshStats">Segarkan Data</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Load Firebase (Gunakan konfigurasi Firebase Anda nanti di sini) -->
+    <script src="admin-script.js"></script>
+</body>
+</html>
