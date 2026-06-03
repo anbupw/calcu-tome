@@ -284,14 +284,25 @@ function updateCostAndProgress() {
     let deductionsCopy = [];
     for (let i = 0; i < deductions.length; i++) { deductionsCopy[i] = deductions[i] || 0; }
     
-    function calcNetNode(nodeId) {
+    function calcNetNode(nodeId, isRoot = false) {
         if (!nodeId || !TOME_DB[nodeId]) return;
-        if (deductionsCopy[nodeId] && deductionsCopy[nodeId] > 0) { deductionsCopy[nodeId]--; return; }
+        
+        if (!isRoot && deductionsCopy[nodeId] && deductionsCopy[nodeId] > 0) { 
+            deductionsCopy[nodeId]--; 
+            return; 
+        }
+        
         if (!netCounts[nodeId]) netCounts[nodeId] = 0;
         netCounts[nodeId]++;
-        if (nodeId > 200) { calcNetNode(TOME_DB[nodeId][0]); calcNetNode(TOME_DB[nodeId][1]); calcNetNode(TOME_DB[nodeId][2]); }
+        
+        if (nodeId > 200) { 
+            calcNetNode(TOME_DB[nodeId][0], false); 
+            calcNetNode(TOME_DB[nodeId][1], false); 
+            calcNetNode(TOME_DB[nodeId][2], false); 
+        }
     }
-    for (let z = 0; z < multiplier; z++) calcNetNode(rightTreeId);
+    
+    for (let z = 0; z < multiplier; z++) calcNetNode(rightTreeId, true);
     
     let netLv1Tomes = 0;
     for (let z = 101; z <= 109; z++) { if (netCounts[z]) netLv1Tomes += netCounts[z]; }
