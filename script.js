@@ -1063,15 +1063,6 @@ function parseStateToUI(state) {
     }
 }
 
-
-function fungsiX(id) {
-    // Pastikan jika bernilai undefined, dia otomatis menjadi 0 sebelum ditambah 1
-    deductions[id] = (deductions[id] || 0) + 1; 
-    
-    saveDataTrigger();
-    processTree(rightTreeId);
-}
-
 function resetCalculator() {
     if (confirm(LANG[currentLang]['alertReset'])) {
         deductions = []; 
