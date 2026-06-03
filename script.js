@@ -901,17 +901,22 @@ function renderInventorySelection(query) {
 
     const baseMats = [ {id: 12, name: 'Tome Page'}, {id: 11, name: 'Tome Fragment'}, {id: 10, name: 'Token of Luck'} ];
     
+    // 1. Bagian Bahan Dasar (Tome Page, Fragment, Token)
     baseMats.forEach(mat => {
         if (mat.name.toLowerCase().includes(q) && (showAll || activeIds.has(mat.id))) { 
-            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onclick="selectItemForInventory(${mat.id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
+            // PERHATIKAN: onclick sekarang memanggil tambahItemKeBag
+            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onclick="tambahItemKeBag(${mat.id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
         }
     });
     
+    // 2. Bagian Buku Tome (Level 1 sampai Level 6)
     TOME_DB.forEach((tome, id) => {
         if (tome && tome[4].toLowerCase().includes(q) && (showAll || activeIds.has(id))) { 
-            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" onclick="selectItemForInventory(${id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
+            // PERHATIKAN: onclick sekarang memanggil tambahItemKeBag
+            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" onclick="tambahItemKeBag(${id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
         }
     });
+    
     html += '</ul>'; 
     document.getElementById('invItemList').innerHTML = html;
 }
@@ -1383,6 +1388,25 @@ document.addEventListener('click', function(event) {
         }
     }
 });
+
+// FUNGSI BARU: AMAN UNTUK SEMUA LEVEL TOME (1 SAMPAI 6)
+function tambahItemKeBag(id) {
+    if (!id) return;
+    
+    // Mengubah ID menjadi angka bulat agar tidak dibaca sebagai teks
+    const itemId = parseInt(id); 
+    
+    // Tambah jumlah item di inventory (+1)
+    deductions[itemId] = (deductions[itemId] || 0) + 1;
+    
+    // Picu penyimpanan otomatis ke Cloud Firebase dan perbarui tampilan
+    if (typeof saveDataTrigger === 'function') saveDataTrigger();
+    if (typeof processTree === 'function') processTree(rightTreeId);
+    
+    // Jika Anda memiliki fungsi khusus untuk menyegarkan tampilan list inventory
+    if (typeof renderInventory === 'function') renderInventory(); 
+    if (typeof renderDeductions === 'function') renderDeductions();
+}
 
 // ==================== FITUR SCROLLSPY MOBILE NAVBAR (VERSI VIEWPORT) ====================
 window.addEventListener('scroll', () => {
