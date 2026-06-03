@@ -901,22 +901,17 @@ function renderInventorySelection(query) {
 
     const baseMats = [ {id: 12, name: 'Tome Page'}, {id: 11, name: 'Tome Fragment'}, {id: 10, name: 'Token of Luck'} ];
     
-    // 1. Bagian Bahan Dasar 
     baseMats.forEach(mat => {
         if (mat.name.toLowerCase().includes(q) && (showAll || activeIds.has(mat.id))) { 
-            // PERHATIKAN: Sekarang kita memanggil openModal() agar jendela pop-up muncul
-            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onclick="openModal(${mat.id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
+            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onclick="selectItemForInventory(${mat.id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
         }
     });
     
-    // 2. Bagian Buku Tome (Level 1 sampai Level 6)
     TOME_DB.forEach((tome, id) => {
         if (tome && tome[4].toLowerCase().includes(q) && (showAll || activeIds.has(id))) { 
-            // PERHATIKAN: Sekarang kita memanggil openModal() agar jendela pop-up muncul
-            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" onclick="openModal(${id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
+            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" onclick="selectItemForInventory(${id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
         }
     });
-    
     html += '</ul>'; 
     document.getElementById('invItemList').innerHTML = html;
 }
@@ -1068,6 +1063,15 @@ function parseStateToUI(state) {
     }
 }
 
+
+function fungsiX(id) {
+    // Pastikan jika bernilai undefined, dia otomatis menjadi 0 sebelum ditambah 1
+    deductions[id] = (deductions[id] || 0) + 1; 
+    
+    saveDataTrigger();
+    processTree(rightTreeId);
+}
+
 function resetCalculator() {
     if (confirm(LANG[currentLang]['alertReset'])) {
         deductions = []; 
@@ -1122,33 +1126,6 @@ function filterBooks(query) {
             header.style.display = hasVisibleItem ? 'block' : 'none';
         }
     });
-}
-
-function attemptCrafting(id) {
-    if (!TOME_DB[id]) return;
-    
-    // Lakukan simulasi pengurangan bahan dan penambahan buku (Logika asli aplikasi Anda)
-    let recipe = TOME_DB[id];
-    let req1 = recipe[0], qty1 = recipe[1];
-    let req2 = recipe[2], qty2 = recipe[3];
-
-    // Potong bahan 1
-    if (req1) deductions[req1] = Math.max(0, (deductions[req1] || 0) - qty1);
-    // Potong bahan 2
-    if (req2) deductions[req2] = Math.max(0, (deductions[req2] || 0) - qty2);
-
-    // Tambahkan item hasil rakitan ke dalam tas (+1)
-    deductions[id] = (deductions[id] || 0) + 1;
-
-    // Efek perayaan kembang api kecil (Confetti) saat berhasil craft buku tingkat tinggi
-    if (typeof confetti === 'function' && id > 200) {
-        confetti({ particleCount: 40, spread: 60, origin: { y: 0.7 } });
-    }
-
-    // SINKRONISASI TOTAL
-    saveDataTrigger(); // Simpan ke cloud firebase
-    processTree(rightTreeId); // Hitung ulang bagan pohon
-    renderInventory(); // Segarkan isi tas (Tome 615 sekarang akan langsung muncul!)
 }
 
 // ==================== MESIN SIMULATOR CRAFTING TOME ====================
@@ -1416,25 +1393,6 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// FUNGSI BARU: AMAN UNTUK SEMUA LEVEL TOME (1 SAMPAI 6)
-function tambahItemKeBag(id) {
-    if (!id) return;
-    
-    // Mengubah ID menjadi angka bulat agar tidak dibaca sebagai teks
-    const itemId = parseInt(id); 
-    
-    // Tambah jumlah item di inventory (+1)
-    deductions[itemId] = (deductions[itemId] || 0) + 1;
-    
-    // Picu penyimpanan otomatis ke Cloud Firebase dan perbarui tampilan
-    if (typeof saveDataTrigger === 'function') saveDataTrigger();
-    if (typeof processTree === 'function') processTree(rightTreeId);
-    
-    // Jika Anda memiliki fungsi khusus untuk menyegarkan tampilan list inventory
-    if (typeof renderInventory === 'function') renderInventory(); 
-    if (typeof renderDeductions === 'function') renderDeductions();
-}
-
 // ==================== FITUR SCROLLSPY MOBILE NAVBAR (VERSI VIEWPORT) ====================
 window.addEventListener('scroll', () => {
     const sections = document.querySelectorAll('.calc-card[id]');
@@ -1468,110 +1426,5 @@ window.addEventListener('scroll', () => {
         });
     }
 });
-
-// MASTER FUNGSI 1: MEMILIH TARGET (TIDAK AKAN MASUK INVENTORY/CRAFT)
-function selectTargetBook(id) { 
-    rightTreeId = id; // Kunci target utama
-    
-    // Segarkan bagan pohon di rincian crafting
-    if (typeof processTree === 'function') {
-        processTree(rightTreeId); 
-    }
-    // Simpan ke Cloud agar tidak hilang
-    if (typeof saveDataTrigger === 'function') {
-        saveDataTrigger();
-    }
-}
-
-// MASTER FUNGSI 2: MENAMPILKAN DAFTAR BUKU DI KARTU TARGET (Pencarian Target)
-function filterBooks(query) {
-    let q = query ? query.toLowerCase() : '';
-    let html = '<ul style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">';
-    
-    TOME_DB.forEach((tome, id) => {
-        // Jika nama buku cocok dengan pencarian
-        if (tome && tome[4].toLowerCase().includes(q)) { 
-            // PERHATIKAN: onclick secara paksa hanya memanggil selectTargetBook
-            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${tome[4]}" onclick="selectTargetBook(${id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
-        }
-    });
-    html += '</ul>';
-    
-    // Tampilkan di area Target Pembuatan
-    const targetDiv = document.getElementById('vyborDiv');
-    if (targetDiv) targetDiv.innerHTML = html;
-}
-
-function renderInventory() {
-    let html = '';
-    let hasItems = false;
-
-    // KUNCI UTAMA: Kita naikkan batas pengecekan hingga ID 1000 agar Tome 615 dkk terbaca!
-    for (let i = 0; i <= 1000; i++) {
-        if (deductions[i] > 0) {
-            hasItems = true;
-            let name = 'Unknown Item';
-            
-            // Cari nama item berdasarkan ID
-            if (i === 12) name = 'Tome Page';
-            else if (i === 11) name = 'Tome Fragment';
-            else if (i === 10) name = 'Token of Luck';
-            else if (TOME_DB[i]) name = TOME_DB[i][4];
-
-            html += `
-                <div class="inv-row">
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <div style="background-image:url('znachki.png'); ${getSpritePosition(i)}; width:32px; height:32px; background-size:auto;"></div>
-                        <span class="inv-item-name">${name}</span>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <input type="number" class="inv-qty-input" value="${deductions[i]}" onchange="updateInventoryDirect(${i}, this.value)">
-                        <button class="inv-btn-delete" onclick="deleteInventoryItem(${i})"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                </div>
-            `;
-        }
-    }
-
-    const container = document.getElementById('inventoryListContent');
-    if (container) {
-        container.innerHTML = hasItems ? html : `<div style="text-align:center; color:var(--text-muted); padding:20px;" data-i18n=\"invEmpty\">Tas Inventory Kosong</div>`;
-    }
-    
-    // Perbarui juga analisis potensi bentukan (Reverse Calc) jika ada
-    if (typeof runReverseCalc === 'function') runReverseCalc();
-}
-
-// MASTER FUNGSI 3: MENAMPILKAN DAFTAR BUKU DI MODAL INVENTORY (Aman untuk Level 5 & 6)
-function renderInventorySelection(query) {
-    let html = '<ul style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">';
-    const q = query ? query.toLowerCase() : ''; 
-    let activeIds = typeof getActiveTreeIds === 'function' ? getActiveTreeIds() : new Set();
-    let showAll = (q === ''); 
-
-    const baseMats = [ {id: 12, name: 'Tome Page'}, {id: 11, name: 'Tome Fragment'}, {id: 10, name: 'Token of Luck'} ];
-    
-    // Tampilkan Bahan Dasar
-    baseMats.forEach(mat => {
-        if (mat.name.toLowerCase().includes(q) && (showAll || activeIds.has(mat.id))) { 
-            // PERHATIKAN: onclick secara paksa memanggil openModal (Pop-up Jumlah)
-            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.name}" onclick="openModal(${mat.id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
-        }
-    });
-    
-    // Tampilkan Buku Level 1 sampai 6
-    TOME_DB.forEach((tome, id) => {
-        if (tome && tome[4].toLowerCase().includes(q) && (showAll || activeIds.has(id))) { 
-            // PERHATIKAN: onclick secara paksa memanggil openModal (Pop-up Jumlah)
-            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${tome[4]}" onclick="openModal(${id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
-        }
-    });
-    
-    html += '</ul>'; 
-    
-    // Tampilkan di jendela Modal Inventory
-    const invDiv = document.getElementById('invItemList');
-    if (invDiv) invDiv.innerHTML = html;
-}
 
 window.onload = () => { applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
