@@ -207,7 +207,12 @@ function getTreeItemHtml(id, isDeductionsView = false) {
     } else {
         if (id == rightTreeId) {
             clickAttr = `onclick="attemptCrafting(${id})"`;
-            extraStyle = "box-shadow: 0 0 12px var(--success); border: 2px solid var(--success); border-radius: 6px; cursor: pointer;";
+            
+            // Hapus warna hijau permanen, biarkan polosan (hanya radius dan kursor pointer)
+            extraStyle = "border-radius: 6px; cursor: pointer;";
+            
+            // KUNCI: Kita menyisipkan id="mainTargetBtn" di dalam tag button di bawah ini
+            return `<li><button id="mainTargetBtn" style="background-image:url('img/znachki.png'); ${getSpritePosition(id)}; ${extraStyle}" title="${id}" ${clickAttr} onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
         } else {
             clickAttr = `onclick="openModal(${id})"`;
         }
@@ -325,11 +330,17 @@ function updateCostAndProgress() {
     document.getElementById('progressBar').style.width = pct.toFixed(1) + '%';
     document.getElementById('progressPercentText').innerText = pct.toFixed(1) + '%';
     
+    let mainBtn = document.getElementById('mainTargetBtn');
+
     if (pct >= 100) {
+        if (mainBtn) mainBtn.classList.add('tome-ready-to-craft');
+        
         if (!window.confettiLaunched && typeof confetti === 'function') { 
             window.confettiLaunched = true;
         }
     } else {
+        if (mainBtn) mainBtn.classList.remove('tome-ready-to-craft');
+        
         window.confettiLaunched = false;
     }
 }

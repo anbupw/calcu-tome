@@ -450,3 +450,15 @@ html {
         padding-top: 65px !important;
     }
 }
+
+/* Animasi bersinar keemasan berdenyut untuk Target Utama yang 100% lengkap */
+@keyframes readyGlow {
+    0% { box-shadow: 0 0 5px #fbbf24; border-color: #fbbf24; }
+    50% { box-shadow: 0 0 30px #f59e0b, 0 0 10px #fbbf24; border-color: #f59e0b; }
+    100% { box-shadow: 0 0 5px #fbbf24; border-color: #fbbf24; }
+}
+
+.tome-ready-to-craft {
+    animation: readyGlow 1.5s infinite ease-in-out !important;
+    border: 2px solid #fbbf24 !important;
+}
