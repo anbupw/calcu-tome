@@ -594,10 +594,10 @@ function filterBooks(query) {
 function attemptCrafting(targetId) {
     if (!targetId) return;
 
-    function tryCraftNode(nodeId, pool) {
+    function tryCraftNode(nodeId, pool, isRoot = false) {
         if (!nodeId) return false;
         
-        if (pool[nodeId] && pool[nodeId] > 0) {
+        if (!isRoot && pool[nodeId] && pool[nodeId] > 0) {
             pool[nodeId]--;
             return true;
         }
@@ -639,9 +639,9 @@ function attemptCrafting(targetId) {
 
         let backupPool = [...pool];
         
-        let s0 = tryCraftNode(recipe[0], pool);
-        let s1 = tryCraftNode(recipe[1], pool);
-        let s2 = tryCraftNode(recipe[2], pool);
+        let s0 = tryCraftNode(recipe[0], pool, false);
+        let s1 = tryCraftNode(recipe[1], pool, false);
+        let s2 = tryCraftNode(recipe[2], pool, false);
 
         if (s0 && s1 && s2) {
             return true;
@@ -656,7 +656,7 @@ function attemptCrafting(targetId) {
         pool[i] = deductions[i] || 0;
     }
 
-    let success = tryCraftNode(targetId, pool);
+    let success = tryCraftNode(targetId, pool, true);
 
     if (success) {
         for (let i = 0; i < pool.length; i++) {
@@ -674,7 +674,7 @@ function attemptCrafting(targetId) {
         }
 		
 		try {
-            let craftSound = new Audio('img/success.mp3'); 
+            let craftSound = new Audio('img/success.mp3'); // Pastikan path audio ini benar ('img/success.mp3')
             craftSound.volume = 0.6;
             craftSound.play();
         } catch (error) {
