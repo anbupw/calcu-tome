@@ -901,19 +901,19 @@ function renderInventorySelection(query) {
 
     const baseMats = [ {id: 12, name: 'Tome Page'}, {id: 11, name: 'Tome Fragment'}, {id: 10, name: 'Token of Luck'} ];
     
-    // 1. Bagian Bahan Dasar (Tome Page, Fragment, Token)
+    // 1. Bagian Bahan Dasar 
     baseMats.forEach(mat => {
         if (mat.name.toLowerCase().includes(q) && (showAll || activeIds.has(mat.id))) { 
-            // PERHATIKAN: onclick sekarang memanggil tambahItemKeBag
-            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onclick="tambahItemKeBag(${mat.id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
+            // PERHATIKAN: Sekarang kita memanggil openModal() agar jendela pop-up muncul
+            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onclick="openModal(${mat.id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
         }
     });
     
     // 2. Bagian Buku Tome (Level 1 sampai Level 6)
     TOME_DB.forEach((tome, id) => {
         if (tome && tome[4].toLowerCase().includes(q) && (showAll || activeIds.has(id))) { 
-            // PERHATIKAN: onclick sekarang memanggil tambahItemKeBag
-            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" onclick="tambahItemKeBag(${id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
+            // PERHATIKAN: Sekarang kita memanggil openModal() agar jendela pop-up muncul
+            html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" onclick="openModal(${id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
         }
     });
     
