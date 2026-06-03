@@ -677,9 +677,6 @@ function attemptCrafting(targetId) {
     }
 }
 
-//anuna admin
-import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
-
 const bannerElement = document.getElementById('globalBanner');
 const bannerTextElement = document.getElementById('bannerText');
 
