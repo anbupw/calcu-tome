@@ -455,16 +455,17 @@ function renderTree() {
 function renderDeductions() {
     let txt = ''; let lis = '';
     const deductionsDiv = document.getElementById('deductionsList');
-    let activeIds = getActiveTreeIds();
     
-    if (deductions[11] && activeIds.has(11)) lis += getTreeItemHtml(11, true);
-    if (deductions[12] && activeIds.has(12)) lis += getTreeItemHtml(12, true);
-    if (deductions[10] && activeIds.has(10)) lis += getTreeItemHtml(10, true);
+    if (deductions[11] > 0) lis += getTreeItemHtml(11, true);
+    if (deductions[12] > 0) lis += getTreeItemHtml(12, true);
+    if (deductions[10] > 0) lis += getTreeItemHtml(10, true);
     if (lis !== '') txt += `<ul><li>${LANG[currentLang]['baseMat']}</li> ${lis}</ul>`;
     
     for (let r = 1; r <= 6; r++) {
         lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
-        for (let e = start; e <= end; e++) { if (deductions[e] && activeIds.has(e)) lis += getTreeItemHtml(e, true); }
+        for (let e = start; e <= end; e++) { 
+            if (deductions[e] > 0) lis += getTreeItemHtml(e, true); 
+        }
         if (lis !== '') txt += `<ul><li>${LANG[currentLang]['lvl']} ${r}</li> ${lis}</ul>`;
     }
     deductionsDiv.innerHTML = txt;
@@ -687,22 +688,21 @@ function closeInventoryModal() { document.getElementById('inventoryModal').style
 function renderInventorySelection(query) {
     let html = '<ul style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">';
     const q = query.toLowerCase(); 
-    let activeIds = getActiveTreeIds();
-    let showAll = (q === ''); 
 
     const baseMats = [ {id: 12, name: 'Tome Page'}, {id: 11, name: 'Tome Fragment'}, {id: 10, name: 'Token of Luck'} ];
     
     baseMats.forEach(mat => {
-        if (mat.name.toLowerCase().includes(q) && (showAll || activeIds.has(mat.id))) { 
+        if (mat.name.toLowerCase().includes(q)) { 
             html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onclick="selectItemForInventory(${mat.id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
         }
     });
     
     TOME_DB.forEach((tome, id) => {
-        if (tome && tome[4].toLowerCase().includes(q) && (showAll || activeIds.has(id))) { 
+        if (tome && tome[4].toLowerCase().includes(q)) { 
             html += `<li><button style="background-image:url('znachki.png'); ${getSpritePosition(id)}" title="${id}" onclick="selectItemForInventory(${id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
         }
     });
+    
     html += '</ul>'; 
     document.getElementById('invItemList').innerHTML = html;
 }
