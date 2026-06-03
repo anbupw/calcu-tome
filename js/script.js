@@ -212,13 +212,13 @@ function getTreeItemHtml(id, isDeductionsView = false) {
             extraStyle = "border-radius: 6px; cursor: pointer;";
             
             // KUNCI: Kita menyisipkan id="mainTargetBtn" di dalam tag button di bawah ini
-            return `<li><button id="mainTargetBtn" style="background-image:url('img/znachki.png'); ${getSpritePosition(id)}; ${extraStyle}" title="${id}" ${clickAttr} onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
+            return `<li><button id="mainTargetBtn" style="background-image:url('img/znachki.png'); ${getSpritePosition(id)}; ${extraStyle}" data-id="${id}" ${clickAttr} onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
         } else {
             clickAttr = `onclick="openModal(${id})"`;
         }
     }
     
-    return `<li><button style="background-image:url('img/znachki.png'); ${getSpritePosition(id)}; ${extraStyle}" title="${id}" ${clickAttr} onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
+    return `<li><button style="background-image:url('img/znachki.png'); ${getSpritePosition(id)}; ${extraStyle}" data-id="${id}" ${clickAttr} onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
 }
 
 function renderTree() {
@@ -267,7 +267,7 @@ function renderBookSelection() {
     let txt = '';
     for (let r = 6; r >= 1; r--) {
         let lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
-        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="background-image:url('img/znachki.png'); ${getSpritePosition(e)}" title="${e}" onclick="selectTargetBook(${e})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`;
+        for (let e = start; e <= end; e++) if (TOME_DB[e]) lis += `<li><button style="background-image:url('img/znachki.png'); ${getSpritePosition(e)}" data-id="${e} onclick="selectTargetBook(${e})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`;
         if (lis !== '') txt += `<h4>${LANG[currentLang]['lvl']} ${r}</h4><ul>${lis}</ul>`;
     }
     document.getElementById('vyborDiv').innerHTML = txt;
@@ -492,13 +492,13 @@ function renderInventorySelection(query) {
     
     baseMats.forEach(mat => {
         if (mat.name.toLowerCase().includes(q)) { 
-            html += `<li><button style="background-image:url('img/znachki.png'); ${getSpritePosition(mat.id)}" title="${mat.id}" onclick="selectItemForInventory(${mat.id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
+            html += `<li><button style="background-image:url('img/znachki.png'); ${getSpritePosition(mat.id)}" data-id="${mat.id}" onclick="selectItemForInventory(${mat.id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
         }
     });
     
     TOME_DB.forEach((tome, id) => {
         if (tome && tome[4].toLowerCase().includes(q)) { 
-            html += `<li><button style="background-image:url('img/znachki.png'); ${getSpritePosition(id)}" title="${id}" onclick="selectItemForInventory(${id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
+            html += `<li><button style="background-image:url('img/znachki.png'); ${getSpritePosition(id)}" data-id="${id}" onclick="selectItemForInventory(${id})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`; 
         }
     });
     
@@ -573,7 +573,7 @@ function filterBooks(query) {
             const btn = li.querySelector('button');
             if (!btn) return;
             
-            const id = btn.getAttribute('title');
+            const id = btn.getAttribute('data-id');
             const bookName = (typeof TOME_DB !== 'undefined' && TOME_DB[id]) ? TOME_DB[id][4].toLowerCase() : '';
             
             if (bookName.includes(q)) {
