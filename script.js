@@ -240,6 +240,8 @@ function runReverseCalculator() {
         
         let simulationPool = [];
         for(let i=0; i<deductions.length; i++) { simulationPool[i] = deductions[i] || 0; }
+		
+		simulationPool[id] = 0;
         
         let score = testCraft(id, simulationPool);
         let percentage = score * 100;
@@ -635,15 +637,25 @@ function processTree(id) {
     let deductionsCopy = [];
     for (let i = 0; i < deductions.length; i++) { deductionsCopy[i] = deductions[i] || 0; }
     
-    function walkAndCount(nodeId) {
+    function walkAndCount(nodeId, isRoot = false) {
         if (!nodeId || !TOME_DB[nodeId]) return;
-        if (deductionsCopy[nodeId] > 0) { deductionsCopy[nodeId]--; return; }
+        
+        if (!isRoot && deductionsCopy[nodeId] > 0) { 
+            deductionsCopy[nodeId]--; 
+            return; 
+        }
+        
         if (!itemCounts[nodeId]) itemCounts[nodeId] = 0;
         itemCounts[nodeId]++;
-        if (nodeId > 200) { walkAndCount(TOME_DB[nodeId][0]); walkAndCount(TOME_DB[nodeId][1]); walkAndCount(TOME_DB[nodeId][2]); }
+        
+        if (nodeId > 200) { 
+            walkAndCount(TOME_DB[nodeId][0], false); 
+            walkAndCount(TOME_DB[nodeId][1], false); 
+            walkAndCount(TOME_DB[nodeId][2], false); 
+        }
     }
     
-    for (let z = 0; z < multiplier; z++) { walkAndCount(id); }
+    for (let z = 0; z < multiplier; z++) { walkAndCount(id, true); }
     
     let totalLv1Tomes = 0;
     for (let z = 101; z <= 109; z++) { totalLv1Tomes += (itemCounts[z] || 0); }
