@@ -30,19 +30,23 @@ auth.onAuthStateChanged(user => {
         loadFromCloud(user.uid);
         listenGlobalChat();
         
-        // 🚨 KODE BARU: PANTAU STATUS BANNED SECARA REAL-TIME 🚨
         if (window.db) {
-            // Ambil data user yang login saat ini dari database
+            window.db.collection("users").doc(user.uid).set({
+                email: user.email,
+                displayName: user.displayName || "Pemain Anonim",
+                photoURL: user.photoURL || ""
+            }, { merge: true }).catch(err => console.error("Gagal simpan profil:", err));
+        }
+		
+        if (window.db) {
             banListener = window.db.collection("users").doc(user.uid).onSnapshot((doc) => {
                 if (doc.exists) {
                     const userData = doc.data();
-                    // Jika admin mengubah isBanned menjadi true
                     if (userData.isBanned === true) {
                         alert("🚨 PERINGATAN SISTEM: Akun Anda telah di-banned oleh Admin karena pelanggaran! Anda dikeluarkan secara paksa.");
                         
-                        // Eksekusi Kick / Paksa Logout
                         auth.signOut().then(() => {
-                            window.location.reload(); // Refresh halaman untuk hapus total sisa cache session
+                            window.location.reload();
                         });
                     }
                 }
@@ -59,9 +63,8 @@ auth.onAuthStateChanged(user => {
         
         unsubscribeGlobalChat();
         
-        // 🛑 KODE BARU: MATIKAN PANTAUAN BAN SAAT LOGOUT 🛑
         if (banListener) {
-            banListener(); // Berhenti mendengarkan snapshot database
+            banListener();
             banListener = null;
         }
     }

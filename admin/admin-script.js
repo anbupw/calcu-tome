@@ -117,7 +117,8 @@ function loadPlayerCRM() {
         snap.forEach((doc) => {
             const data = doc.data();
             const userId = doc.id;
-            const email = data.email || 'Google Player';
+            const email = data.email || 'Email tidak diketahui';
+            const namaGamer = data.displayName || 'Pemain Google';
             const isBanned = data.isBanned || false;
             
             const tr = document.createElement('tr');
