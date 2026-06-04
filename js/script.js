@@ -496,9 +496,9 @@ function processTree(id) {
     renderDeductions(); 
     updateCostAndProgress();
 
-    if (window.sendStatsToFirebase && window.lastTrackedTomeId !== id) {
-        const judulBuku = document.getElementById('nazvaniye');
-        const targetBuku = judulBuku ? judulBuku.innerText : "Tome";
+    if (typeof window.sendStatsToFirebase === 'function' && window.lastTrackedTomeId !== id) {
+        const targetBuku = (TOME_DB[id] && TOME_DB[id][4]) ? TOME_DB[id][4] : "Tome Rahasia";
+        
         window.sendStatsToFirebase(targetBuku);
         window.lastTrackedTomeId = id;
         console.log("📈 Statistik dikirim untuk:", targetBuku);
@@ -756,7 +756,8 @@ window.sendStatsToFirebase = function(tomeName) {
     
     if (tomeName) {
         const cleanName = tomeName.replace(/[.#$/\[\]]/g, ""); 
-        updateData[`tomeCounter.${cleanName}`] = increment;
+        updateData.tomeCounter = {};
+        updateData.tomeCounter[cleanName] = increment;
     }
     
     window.db.collection("admin_data").doc("statistics").set(updateData, { merge: true })
