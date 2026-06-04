@@ -55,7 +55,14 @@ function testCraft(id, pool) {
 }
 
 function runReverseCalculator() {
-    let resultsDiv = document.getElementById('reverseCalcResults');
+
+    let resultsDiv = document.getElementById('reverseCalcResults') || document.getElementById('reverseResults');
+    
+    if (!resultsDiv) {
+        console.error("❌ Kotak hasil analisis tidak ditemukan! Pastikan di file HTML Anda terdapat <div id='reverseCalcResults'></div> atau <div id='reverseResults'></div>");
+        return;
+    }
+
     let hasItems = false;
     for(let i=0; i<deductions.length; i++) {
         if(deductions[i] > 0) { hasItems = true; break; }
@@ -72,8 +79,7 @@ function runReverseCalculator() {
     for (let id = 101; id < TOME_DB.length; id++) {
         if (!TOME_DB[id]) continue;
         
-        let simulationPool = [];
-        for(let i=0; i<deductions.length; i++) { simulationPool[i] = deductions[i] || 0; }
+        let simulationPool = deductions.slice();
 		
 		simulationPool[id] = 0;
         
