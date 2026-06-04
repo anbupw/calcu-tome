@@ -54,6 +54,7 @@ function loadCurrentData() {
     
     loadStatistics();
 	loadPlayerCRM();
+	loadLiveChatModeration();
 }
 
 function saveAdminBanner() {
@@ -147,6 +148,84 @@ function loadPlayerCRM() {
         });
     });
 }
+
+// ==========================================
+// 💬 FUNGSI MODERASI CHAT GLOBAL
+// ==========================================
+
+function loadLiveChatModeration() {
+    // Kita ambil 50 pesan terakhir, diurutkan dari yang terbaru
+    db.collection("global_chats").orderBy("timestamp", "desc").limit(50).onSnapshot((snap) => {
+        const streamContainer = document.getElementById('adminChatStream');
+        if (!streamContainer) return;
+        streamContainer.innerHTML = ''; // Bersihkan kontainer
+
+        if (snap.empty) {
+            streamContainer.innerHTML = '<div style="text-align: center; color: #94a3b8; padding: 20px;"><i>Belum ada pesan di Global Chat.</i></div>';
+            return;
+        }
+
+        snap.forEach((doc) => {
+            const data = doc.data();
+            const chatId = doc.id;
+            
+            // Asumsi field standar: displayName, uid, text, timestamp
+            const senderName = data.displayName || data.senderName || 'Pemain Anonim';
+            const senderId = data.uid || data.userId || '';
+            const message = data.text || data.message || '(Pesan Kosong)';
+            
+            // Format waktu menjadi Jam:Menit yang rapi
+            let timeString = '-';
+            if (data.timestamp) {
+                const date = data.timestamp.toDate ? data.timestamp.toDate() : new Date(data.timestamp);
+                timeString = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            }
+
+            // Buat gelembung chat
+            const chatDiv = document.createElement('div');
+            chatDiv.style.background = '#1e293b';
+            chatDiv.style.padding = '12px';
+            chatDiv.style.borderRadius = '8px';
+            chatDiv.style.borderLeft = '4px solid #3b82f6'; // Garis penanda
+            chatDiv.style.display = 'flex';
+            chatDiv.style.justifyContent = 'space-between';
+            chatDiv.style.alignItems = 'flex-start';
+            chatDiv.style.gap = '10px';
+
+            chatDiv.innerHTML = `
+                <div style="flex: 1; word-break: break-word;">
+                    <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px;">
+                        <strong style="color: #3b82f6; font-size: 0.95rem;">${senderName}</strong>
+                        <span style="color: #64748b; font-size: 0.75rem;">${timeString}</span>
+                    </div>
+                    <div style="color: #f8fafc; font-size: 0.9rem; line-height: 1.4;">
+                        ${message}
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px; min-width: 80px;">
+                    <button onclick="deleteChatMessage('${chatId}')" style="background: #ef4444; color: white; border: none; padding: 6px 8px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; font-weight: bold; width: 100%;">🗑️ Hapus</button>
+                    ${senderId ? `<button onclick="banFromChat('${senderId}')" style="background: #f59e0b; color: white; border: none; padding: 6px 8px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; font-weight: bold; width: 100%;">🔨 Ban Akun</button>` : ''}
+                </div>
+            `;
+            streamContainer.appendChild(chatDiv);
+        });
+    });
+}
+
+// 🗑️ Fungsi Menghapus Pesan
+window.deleteChatMessage = function(chatId) {
+    if (confirm("Hapus pesan ini secara permanen dari pandangan semua pemain?")) {
+        db.collection("global_chats").doc(chatId).delete()
+          .catch(err => alert("Gagal menghapus pesan: " + err.message));
+    }
+};
+
+// 🔨 Fungsi Ban User Cepat via Chat
+window.banFromChat = function(userId) {
+    // Kita panggil ulang fungsi toggleBan yang sudah kita buat sebelumnya!
+    // Flag 'false' karena diasumsikan akun tersebut sedang aktif dan akan di-ban
+    window.toggleBan(userId, false);
+};
 
 window.viewInventory = function(userId) {
     document.getElementById('godEyeModal').style.display = 'flex';
