@@ -55,7 +55,15 @@ function testCraft(id, pool) {
 }
 
 function runReverseCalculator() {
-    let resultsDiv = document.getElementById('reverseCalcResults');
+    // 🛡️ PERBAIKAN TOTAL: Mencari kedua kemungkinan ID agar 100% bebas dari error 'properties of null'
+    let resultsDiv = document.getElementById('reverseCalcResults') || document.getElementById('reverseResults');
+    
+    // Jika benar-benar tidak ketemu sama sekali di HTML, berikan pesan peringatan di console agar tidak crash
+    if (!resultsDiv) {
+        console.error("❌ Kotak hasil analisis tidak ditemukan! Pastikan di file HTML Anda terdapat <div id='reverseCalcResults'></div> atau <div id='reverseResults'></div>");
+        return;
+    }
+
     let hasItems = false;
     for(let i=0; i<deductions.length; i++) {
         if(deductions[i] > 0) { hasItems = true; break; }
@@ -72,6 +80,7 @@ function runReverseCalculator() {
     for (let id = 101; id < TOME_DB.length; id++) {
         if (!TOME_DB[id]) continue;
         
+        // ⚡ OPTIMASI ANTI-LAG: Menggunakan .slice() yang super ringan bagi processor
         let simulationPool = deductions.slice();
 		
 		simulationPool[id] = 0;
@@ -90,6 +99,7 @@ function runReverseCalculator() {
     let topProgress = progressList.slice(0, 5);
     let html = '';
     
+    // --- 🎨 KEMBALI KE UI DESAIN LAMA DENGAN PROGRESS BAR ---
     html += `<h4 style="color:var(--success); font-size:0.85rem; border-bottom:1px solid var(--border-color); margin-bottom:10px; padding-bottom:5px; text-transform:uppercase; letter-spacing:1px; text-align:left; margin-top:10px;">${LANG[currentLang]['txtReadyToCraft']}</h4>`;
     if (readyList.length === 0) {
         html += `<div style="color:var(--text-muted); font-size:0.85rem; text-align:left; margin-bottom:15px; font-style:italic;">-</div>`;
