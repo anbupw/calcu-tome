@@ -677,86 +677,18 @@ function attemptCrafting(targetId) {
     }
 }
 
-const bannerElement = document.getElementById('globalBanner');
-const bannerTextElement = document.getElementById('bannerText');
-
-onSnapshot(doc(db, "admin_data", "global_settings"), (docSnap) => {
-    if (docSnap.exists()) {
-        const data = docSnap.data();
-        
-        if (data.bannerText && data.bannerText.trim() !== "") {
-            bannerTextElement.innerText = data.bannerText;
-            bannerElement.style.display = "block";
-        } else {
-            bannerElement.style.display = "none";
-        }
-    }
-});
-
-let hargaMysticPage = 0; 
-let hargaFragment = 0;
-
-onSnapshot(doc(db, "admin_data", "market_prices"), (docSnap) => {
-    if (docSnap.exists()) {
-        const data = docSnap.data();
-        
-        hargaMysticPage = data.mysticPagePrice || 0;
-        hargaFragment = data.fragmentPrice || 0;
-        
-        console.log("🔥 Harga terupdate dari server:", hargaMysticPage, hargaFragment);
-        
-    }
-});
-
-if (typeof db !== 'undefined') {
-    
-    const bannerElement = document.getElementById('globalBanner');
-    const bannerTextElement = document.getElementById('bannerText');
-
-    if (bannerElement && bannerTextElement) {
-        db.collection("admin_data").doc("global_settings").onSnapshot((docSnap) => {
-            if (docSnap.exists) {
-                const data = docSnap.data();
-                if (data.bannerText && data.bannerText.trim() !== "") {
-                    bannerTextElement.innerText = data.bannerText;
-                    bannerElement.style.display = "block";
-                } else {
-                    bannerElement.style.display = "none";
-                }
-            }
-        });
-    }
-
-    window.hargaMysticPageGlobal = 0; 
-    window.hargaFragmentGlobal = 0;
-
-    db.collection("admin_data").doc("market_prices").onSnapshot((docSnap) => {
-        if (docSnap.exists) {
-            const data = docSnap.data();
-            window.hargaMysticPageGlobal = data.mysticPagePrice || 0;
-            window.hargaFragmentGlobal = data.fragmentPrice || 0;
-            
-            console.log("🔥 Harga terupdate dari Admin:", window.hargaMysticPageGlobal, window.hargaFragmentGlobal);
-            
-        }
-    });
-
-} else {
-    console.warn("Firebase (db) belum terhubung ke script ini.");
-}
-
 // ==========================================
 // MENANGKAP DATA DARI ADMIN (FIREBASE COMPAT)
 // ==========================================
 
-if (typeof db !== 'undefined') {
+if (typeof window.db !== 'undefined') {
     
     // 1. Banner Pengumuman
     const bannerElement = document.getElementById('globalBanner');
     const bannerTextElement = document.getElementById('bannerText');
 
     if (bannerElement && bannerTextElement) {
-        db.collection("admin_data").doc("global_settings").onSnapshot((docSnap) => {
+        window.db.collection("admin_data").doc("global_settings").onSnapshot((docSnap) => {
             if (docSnap.exists) {
                 const data = docSnap.data();
                 if (data.bannerText && data.bannerText.trim() !== "") {
@@ -773,7 +705,7 @@ if (typeof db !== 'undefined') {
     window.hargaMysticPageGlobal = 0; 
     window.hargaFragmentGlobal = 0;
 
-    db.collection("admin_data").doc("market_prices").onSnapshot((docSnap) => {
+    window.db.collection("admin_data").doc("market_prices").onSnapshot((docSnap) => {
         if (docSnap.exists) {
             const data = docSnap.data();
             window.hargaMysticPageGlobal = data.mysticPagePrice || 0;
@@ -787,6 +719,15 @@ if (typeof db !== 'undefined') {
     console.warn("Firebase (db) belum terhubung ke script ini.");
 }
 
-window.onload = () => { applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
+// ==========================================
+// INISIALISASI WEB
+// ==========================================
+window.onload = () => { 
+    applyLanguage(); 
+    document.getElementById('modalInput').addEventListener('keydown', function(e) { 
+        if(e.key === 'Enter') confirmModal(); 
+    }); 
+};
+
 window.filterBooks = filterBooks;
 window.renderBookSelection = renderBookSelection;
