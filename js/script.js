@@ -764,11 +764,62 @@ window.sendStatsToFirebase = function(tomeName) {
         .catch(err => console.error("Gagal mengirim statistik:", err));
 };
 
+/// 📥 FUNGSI SINKRONISASI DATABASE BUKU (REAL-TIME KILAT)
+function syncTomeDatabase(callback) {
+    if (!window.db) {
+        console.warn("Database tidak terhubung!");
+        if (callback) callback();
+        return;
+    }
+
+    console.log("Menghubungkan ke Database Tome...");
+    
+    // onSnapshot: Mengambil data pertama kali, DAN memantau perubahan seterusnya!
+    window.db.collection("tomes").onSnapshot((snap) => {
+        if (snap.empty) {
+            console.warn("Database Tome kosong atau belum dimigrasi.");
+            if (callback) callback();
+            return;
+        }
+
+        // Susun ulang data ke format Array klasik kalkulator Anda
+        snap.forEach((doc) => {
+            const data = doc.data();
+            window.TOME_DB[data.id] = [data.req[0], data.req[1], data.req[2], data.gameId, data.name];
+        });
+        
+        console.log("✅ Database Tome berhasil disinkronisasi!");
+
+        // Jika terjadi perubahan data (edit dari admin), render ulang daftarnya
+        if (typeof window.renderBookSelection === 'function') {
+            window.renderBookSelection();
+        }
+        
+        // Jalankan sistem web (applyLanguage dll) hanya pada saat pertama kali dimuat
+        if (callback) {
+            callback();
+            callback = null; // Matikan callback agar tidak berulang saat terjadi update data
+        }
+    }, (err) => {
+        console.error("Gagal sinkronisasi database:", err);
+        if (callback) callback();
+    });
+}
+
+// 🚀 INISIALISASI WEB SAAT PERTAMA KALI DIBUKA
 window.onload = () => { 
-    applyLanguage(); 
-    document.getElementById('modalInput').addEventListener('keydown', function(e) { 
-        if(e.key === 'Enter') confirmModal(); 
-    }); 
+    // 1. Tarik & Pantau data dari Firebase terlebih dahulu
+    syncTomeDatabase(() => {
+        // 2. Setelah data berhasil ditarik, nyalakan fitur website lainnya
+        applyLanguage(); 
+        
+        const modalInput = document.getElementById('modalInput');
+        if (modalInput) {
+            modalInput.addEventListener('keydown', function(e) { 
+                if(e.key === 'Enter') confirmModal(); 
+            }); 
+        }
+    });
 };
 
 window.filterBooks = filterBooks;
