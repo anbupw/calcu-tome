@@ -20,51 +20,60 @@
 </head>
 <body>
     <style>
-        @keyframes jalanKiri {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-        .marquee-box {
-            overflow: hidden;
-            white-space: nowrap;
-            position: relative;
-            width: calc(100% - 30px); 
-        }
-        .marquee-content {
-            display: inline-block;
-            animation: jalanKiri 15s linear infinite; 
-        }
-        .marquee-content:hover {
-            animation-play-state: paused; 
-        }
+		@keyframes jalanKiri {
+			0% { transform: translateX(100%); }
+			100% { transform: translateX(-100%); }
+		}
+		.marquee-box {
+			overflow: hidden;
+			white-space: nowrap;
+			position: relative;
+			width: calc(100% - 30px); 
+		}
+		.marquee-content {
+			display: inline-block;
+			animation: jalanKiri 9s linear infinite; 
+		}
+		.marquee-content:hover {
+			animation-play-state: paused; 
+		}
 
-        /* 📱 RESPONSIVE FIX KHUSUS SMARTPHONE (Layar di bawah 768px) */
-        @media (max-width: 768px) {
-            #globalBanner {
-                position: fixed !important; /* Membuat banner melayang tetap */
-                top: auto !important;       /* Mematikan instruksi menempel di atas */
-                bottom: 56px;               /* Memaksa banner berada di atas Mobile Navbar Anda (asumsi tinggi navbar ~56px) */
-                left: 0;
-                width: 100%;
-                border-bottom: none !important; 
-                border-top: 1px solid rgba(245, 158, 11, 0.2); /* Garis pembatas pindah ke atas banner */
-                box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.4); /* Memberikan bayangan halus ke bawah */
-            }
-        }
-    </style>
+		@media (max-width: 768px) {
+			#globalBanner {
+				position: relative !important; /* Tidak melayang, menyatu dengan halaman */
+				top: auto !important;
+				left: auto !important;
+				width: 100% !important;
+				background: rgba(30, 41, 59, 0.7) !important; /* Warna selaras dengan panel gelap */
+				border-radius: 12px !important; /* Melengkung presisi mengikuti gaya card */
+				margin-bottom: 12px !important; /* Jarak aman sebelum masuk ke target card */
+				border: 1px solid rgba(245, 158, 11, 0.2) !important;
+				box-shadow: none !important;
+				padding: 12px !important;
+			}
 
-    <div id="globalBanner" style="display: none; position: sticky; top: 0; left: 0; width: 100%; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #f59e0b; padding: 12px 15px; font-size: 0.95rem; font-weight: 600; z-index: 9999; box-sizing: border-box; border-bottom: 1px solid rgba(245, 158, 11, 0.2);">
-        
-        <div class="marquee-box">
-            <div class="marquee-content">
-                📢 <span id="bannerText">Memuat pengumuman...</span>
-            </div>
+			#globalBanner button {
+				display: none !important;
+			}
+
+			#globalBanner .marquee-box {
+				width: 100% !important;
+			}
+		}
+	</style>
+
+<div id="globalBanner" style="display: none; position: sticky; top: 0; left: 0; width: 100%; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #f59e0b; padding: 12px 15px; font-size: 0.95rem; font-weight: 600; z-index: 9999; box-sizing: border-box; border-bottom: 1px solid rgba(245, 158, 11, 0.2);">
+    
+    <div class="marquee-box">
+        <div class="marquee-content">
+            📢 <span id="bannerText">Memuat pengumuman...</span>
         </div>
-        
-        <button onclick="document.getElementById('globalBanner').style.display='none'" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: #9ca3af; font-size: 1.2rem; cursor: pointer; transition: 0.2s; z-index: 10;">
-            <i class="fas fa-times"></i>
-        </button>
     </div>
+    
+    <button onclick="document.getElementById('globalBanner').style.display='none'" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: #9ca3af; font-size: 1.2rem; cursor: pointer; transition: 0.2s; z-index: 10;">
+        <i class="fas fa-times"></i>
+    </button>
+</div>
 
 <div id="loginOverlay" class="login-overlay" style="display: none;">
 	<div class="login-card">
