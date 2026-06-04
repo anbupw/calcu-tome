@@ -1,6 +1,7 @@
 // ==================== AUTH WALL ====================
 let currentUser = null;
 let isDataLoaded = false; 
+let banListener = null;
 
 auth.onAuthStateChanged(user => {
     currentUser = user;
@@ -21,21 +22,48 @@ auth.onAuthStateChanged(user => {
                     Cloud Sync Aktif
                 </div>
                 <button class="btn-danger" style="padding: 6px 14px; font-size: 0.75rem; width: auto; border-radius:6px; font-weight:600;" onclick="logoutGoogle()">
-                	<i class="fas fa-sign-out-alt"></i> Keluar
+                    <i class="fas fa-sign-out-alt"></i> Keluar
                 </button>
             `;
         }
         
         loadFromCloud(user.uid);
-		listenGlobalChat();
+        listenGlobalChat();
+        
+        // 🚨 KODE BARU: PANTAU STATUS BANNED SECARA REAL-TIME 🚨
+        if (window.db) {
+            // Ambil data user yang login saat ini dari database
+            banListener = window.db.collection("users").doc(user.uid).onSnapshot((doc) => {
+                if (doc.exists) {
+                    const userData = doc.data();
+                    // Jika admin mengubah isBanned menjadi true
+                    if (userData.isBanned === true) {
+                        alert("🚨 PERINGATAN SISTEM: Akun Anda telah di-banned oleh Admin karena pelanggaran! Anda dikeluarkan secara paksa.");
+                        
+                        // Eksekusi Kick / Paksa Logout
+                        auth.signOut().then(() => {
+                            window.location.reload(); // Refresh halaman untuk hapus total sisa cache session
+                        });
+                    }
+                }
+            }, (error) => {
+                console.error("Gagal memantau status ban:", error);
+            });
+        }
         
     } else {
         if (loginOverlay) loginOverlay.style.display = 'flex';
         if (appContent) appContent.style.display = 'none';
         
         if (accountSection) accountSection.innerHTML = '';
-		
-		unsubscribeGlobalChat();
+        
+        unsubscribeGlobalChat();
+        
+        // 🛑 KODE BARU: MATIKAN PANTAUAN BAN SAAT LOGOUT 🛑
+        if (banListener) {
+            banListener(); // Berhenti mendengarkan snapshot database
+            banListener = null;
+        }
     }
 });
 

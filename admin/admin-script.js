@@ -53,6 +53,7 @@ function loadCurrentData() {
     });
     
     loadStatistics();
+	loadPlayerCRM();
 }
 
 function saveAdminBanner() {
@@ -99,9 +100,7 @@ function loadStatistics() {
                 document.getElementById('statTopTome').innerText = `${topTome} (${maxCount}x)`;
             }
         }
-    });
-    
-    loadPlayerCRM();
+    }); 
 }
 
 function loadPlayerCRM() {
