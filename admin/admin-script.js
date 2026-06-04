@@ -1,4 +1,4 @@
-<script>
+
     // MASUKKAN KONFIGURASI FIREBASE ASLI ANDA DI SINI
     const firebaseConfig = {
         apiKey: "AIzaSyC1eCaQkeCf1IJQIDqveEKhHHFEYMd6bSs",
@@ -55,6 +55,8 @@
                 if (data.fragmentPrice) document.getElementById('inputFragPriceAdmin').value = data.fragmentPrice;
             }
         });
+		
+		loadStatistics();
     }
 
     // Fungsi menyimpan data Banner
@@ -79,4 +81,34 @@
         .then(() => alert("Harga pasar global berhasil diperbarui!"))
         .catch(err => alert("Gagal: " + err.message));
     }
-</script>
+
+// 📊 FUNGSI MENAMPILKAN STATISTIK REAL-TIME
+    function loadStatistics() {
+        // 1. Hitung Total Pengguna
+        db.collection("users").get().then((snap) => {
+            document.getElementById('statUsers').innerText = snap.size;
+        });
+
+        // 2. Pantau Total Kalkulasi & Tome Terpopuler secara Real-Time
+        db.collection("admin_data").doc("statistics").onSnapshot((doc) => {
+            if (doc.exists) {
+                const data = doc.data();
+                
+                // Update Angka Kalkulasi
+                document.getElementById('statSimulations').innerText = data.totalCalculations || 0;
+                
+                // Cari Buku Terpopuler
+                if (data.tomeCounter) {
+                    let topTome = "-";
+                    let maxCount = 0;
+                    for (const [name, count] of Object.entries(data.tomeCounter)) {
+                        if (count > maxCount) {
+                            maxCount = count;
+                            topTome = name;
+                        }
+                    }
+                    document.getElementById('statTopTome').innerText = `${topTome} (${maxCount}x)`;
+                }
+            }
+        });
+    }

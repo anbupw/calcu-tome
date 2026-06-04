@@ -480,6 +480,11 @@ function processTree(id) {
     if (deductionsCopy[10]) { itemCounts[10] -= deductionsCopy[10]; if (itemCounts[10] < 0) itemCounts[10] = 0; }
     
     renderTree(); renderDeductions(); updateCostAndProgress();
+	
+	if (typeof window.sendStatsToFirebase === 'function') {
+        const targetBuku = document.getElementById('nazvaniye').innerText || "Tome Rahasia";
+        window.sendStatsToFirebase(targetBuku);
+    }
 }
 
 function selectTargetBook(id) { rightTreeId = id; processTree(rightTreeId); }
@@ -731,9 +736,27 @@ if (typeof window.db !== 'undefined') {
     console.warn("Firebase (db) belum terhubung ke script ini.");
 }
 
-// ==========================================
-// INISIALISASI WEB
-// ==========================================
+window.sendStatsToFirebase = function(tomeName) {
+    if (!window.db) return; // Cegah error jika database belum siap
+    
+    // Perintah increment (tambah +1 secara gaib tanpa menarik data lama)
+    const increment = firebase.firestore.FieldValue.increment(1);
+    
+    const updateData = {
+        totalCalculations: increment
+    };
+    
+    // Jika ada nama buku, catat juga bukunya!
+    if (tomeName) {
+        // Menghapus titik/simbol aneh agar tidak error di database
+        const cleanName = tomeName.replace(/[.#$/\[\]]/g, ""); 
+        updateData[`tomeCounter.${cleanName}`] = increment;
+    }
+    
+    window.db.collection("admin_data").doc("statistics").set(updateData, { merge: true })
+        .catch(err => console.error("Gagal mengirim statistik:", err));
+};
+
 window.onload = () => { 
     applyLanguage(); 
     document.getElementById('modalInput').addEventListener('keydown', function(e) { 
