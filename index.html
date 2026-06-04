@@ -19,38 +19,34 @@
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <style>
+        @keyframes jalanKiri {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .marquee-box {
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            width: calc(100% - 30px); 
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: jalanKiri 15s linear infinite; 
+        }
+        .marquee-content:hover {
+            animation-play-state: paused; 
+        }
+    </style>
 
-<style>
-    @keyframes jalanKiri {
-        0% { transform: translateX(100%); }
-        100% { transform: translateX(-100%); }
-    }
-    .marquee-box {
-        overflow: hidden;
-        white-space: nowrap;
-        position: relative;
-        /* Lebar dikurangi sedikit agar teks tidak menabrak tombol X */
-        width: calc(100% - 30px); 
-    }
-    .marquee-content {
-        display: inline-block;
-        /* Angka 15s adalah kecepatan (15 detik). Ubah jadi 10s jika ingin lebih cepat */
-        animation: jalanKiri 15s linear infinite; 
-    }
-    /* Teks akan berhenti jika disentuh kursor (sangat ramah pengguna) */
-    .marquee-content:hover {
-        animation-play-state: paused; 
-    }
-</style>
-
-<div id="globalBanner" style="display: none; position: relative; background: transparent; color: #f59e0b; padding: 10px 40px 10px 15px; font-size: 0.95rem; font-weight: 600; z-index: 1000;">
-    
+<div id="globalBanner" style="display: none; position: sticky; top: 0; left: 0; width: 100%; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #f59e0b; padding: 10px 15px; font-size: 0.95rem; font-weight: 600; z-index: 9999; box-sizing: border-box; border-bottom: 1px solid rgba(245, 158, 11, 0.2);">
+        
     <div class="marquee-box">
         <div class="marquee-content">
             📢 <span id="bannerText">Memuat pengumuman...</span>
         </div>
     </div>
-    
+        
     <button onclick="document.getElementById('globalBanner').style.display='none'" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: #9ca3af; font-size: 1.2rem; cursor: pointer; transition: 0.2s; z-index: 10;">
         <i class="fas fa-times"></i>
     </button>
