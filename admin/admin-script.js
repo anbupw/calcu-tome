@@ -107,10 +107,10 @@ function loadPlayerCRM() {
     db.collection("users").onSnapshot((snap) => {
         const tbody = document.getElementById('playerTableBody');
         if (!tbody) return;
-        tbody.innerHTML = '';
+        tbody.innerHTML = ''; // Bersihkan isi tabel
 
         if (snap.empty) {
-            tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 15px; color:#94a3b8;">Belum ada pemain yang mendaftar.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 20px; color:#94a3b8;">Belum ada pemain yang mendaftar.</td></tr>';
             return;
         }
 
@@ -122,20 +122,24 @@ function loadPlayerCRM() {
             
             const tr = document.createElement('tr');
             tr.style.borderBottom = '1px solid #334155';
+            tr.style.background = isBanned ? 'rgba(239, 68, 68, 0.05)' : 'transparent'; // Beri warna merah tipis jika dibanned
             
             tr.innerHTML = `
-                <td style="padding: 10px; font-size: 0.85rem;">
-                    <strong style="color: #3b82f6;">${email}</strong><br>
-                    <span style="color: #64748b; font-size: 0.7rem;">UID: ${userId.substring(0, 10)}...</span>
+                <td style="padding: 10px; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                    <strong style="color: #3b82f6; display: block; overflow: hidden; text-overflow: ellipsis;">${email}</strong>
+                    <span style="color: #64748b; font-size: 0.75rem;">ID: ${userId.substring(0, 8)}...</span>
                 </td>
-                <td style="padding: 10px; font-size: 0.85rem;">
-                    ${isBanned ? '<span style="color: #ef4444; font-weight:bold;">BANNED 🚫</span>' : '<span style="color: #10b981; font-weight:bold;">AKTIF ✅</span>'}
+                <td style="padding: 10px; text-align: center; vertical-align: middle;">
+                    ${isBanned ? '<span style="color: #ef4444; font-weight:bold; font-size: 0.75rem; background: rgba(239,68,68,0.1); padding: 3px 6px; border-radius: 4px;">BANNED</span>' : '<span style="color: #10b981; font-weight:bold; font-size: 0.75rem; background: rgba(16,185,129,0.1); padding: 3px 6px; border-radius: 4px;">AKTIF</span>'}
                 </td>
-                <td style="padding: 10px; text-align: center;">
-                    <button onclick="viewInventory('${userId}')" style="background: #f59e0b; color: #fff; border: none; padding: 6px 12px; border-radius: 5px; font-size: 0.8rem; cursor: pointer; margin-right: 5px; margin-bottom: 5px;">👁️ Intip Tas</button>
-                    <button onclick="toggleBan('${userId}', ${isBanned})" style="background: ${isBanned ? '#10b981' : '#ef4444'}; color: #fff; border: none; padding: 6px 12px; border-radius: 5px; font-size: 0.8rem; cursor: pointer;">
-                        ${isBanned ? 'PULIHKAN' : 'BANNED'}
-                    </button>
+                <td style="padding: 10px; vertical-align: middle;">
+                    <!-- FLEXBOX CONTAINER: Otomatis tersusun vertikal di layar HP cerdas -->
+                    <div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="viewInventory('${userId}')" style="background: #f59e0b; color: #fff; border: none; padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; font-weight: 600; flex: 1; min-width: 65px; text-align: center;">👁️ Intip</button>
+                        <button onclick="toggleBan('${userId}', ${isBanned})" style="background: ${isBanned ? '#10b981' : '#ef4444'}; color: #fff; border: none; padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; font-weight: 600; flex: 1; min-width: 65px; text-align: center;">
+                            ${isBanned ? 'UNBAN' : 'BAN'}
+                        </button>
+                    </div>
                 </td>
             `;
             tbody.appendChild(tr);
