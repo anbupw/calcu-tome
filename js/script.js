@@ -55,50 +55,92 @@ function testCraft(id, pool) {
 }
 
 function runReverseCalculator() {
-    let results = [];
+    let resultsDiv = document.getElementById('reverseCalcResults');
+    let hasItems = false;
+    for(let i=0; i<deductions.length; i++) {
+        if(deductions[i] > 0) { hasItems = true; break; }
+    }
     
-    // Perulangan dinamis hingga ID tertinggi di database
+    if(!hasItems) {
+        resultsDiv.innerHTML = `<div style="color:var(--text-muted); padding:20px; font-style:italic; text-align:center;">${LANG[currentLang]['txtNoMats']}</div>`;
+        return;
+    }
+    
+    let readyList = [];
+    let progressList = [];
+    
     for (let id = 101; id < TOME_DB.length; id++) {
         if (!TOME_DB[id]) continue;
         
-        // ⚡ OPTIMASI: Gunakan Array, bukan Object {}
-        let pool = [];
-        for (let i = 0; i < deductions.length; i++) {
-            pool[i] = deductions[i] || 0;
-        }
+        let simulationPool = deductions.slice();
+		
+		simulationPool[id] = 0;
         
-        let count = 0;
-        while (testCraft(id, pool)) {
-            count++;
-        }
+        let score = testCraft(id, simulationPool);
+        let percentage = score * 100;
         
-        if (count > 0) {
-            results.push({ id: id, count: count });
+        if (percentage >= 99.99) {
+            readyList.push({ id: id, pct: 100 });
+        } else if (percentage > 0) {
+            progressList.push({ id: id, pct: percentage });
         }
     }
     
-    results.sort((a, b) => b.count - a.count || b.id - a.id);
-    
+    progressList.sort((a, b) => b.pct - a.pct);
+    let topProgress = progressList.slice(0, 5);
     let html = '';
-    if (results.length === 0) {
-        html = `<p style="text-align:center; color:#9ca3af; font-style:italic;">${LANG[currentLang]['revNoResult']}</p>`;
+    
+    html += `<h4 style="color:var(--success); font-size:0.85rem; border-bottom:1px solid var(--border-color); margin-bottom:10px; padding-bottom:5px; text-transform:uppercase; letter-spacing:1px; text-align:left; margin-top:10px;">${LANG[currentLang]['txtReadyToCraft']}</h4>`;
+    if (readyList.length === 0) {
+        html += `<div style="color:var(--text-muted); font-size:0.85rem; text-align:left; margin-bottom:15px; font-style:italic;">-</div>`;
     } else {
-        html = '<div class="reverse-grid">';
-        results.forEach(res => {
+        html += `<div style="display:flex; flex-direction:column; gap:8px; margin-bottom:20px;">`;
+        readyList.forEach(item => {
+            let name = TOME_DB[item.id][4];
+            let lvl = Math.floor(item.id / 100);
             html += `
-                <div class="reverse-card" onclick="selectTargetBook(${res.id})">
-                    <div class="reverse-icon" style="background-image:url('img/znachki.png'); ${getSpritePosition(res.id)}"></div>
-                    <div class="reverse-info">
-                        <span class="reverse-name">${TOME_DB[res.id][4]}</span>
-                        <span class="reverse-count">${LANG[currentLang]['revCanCraft']}: <strong>${res.count}</strong></span>
+                <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:10px; border-radius:10px; gap:10px;">
+                    <div style="width:32px; height:32px; flex-shrink:0; background-image:url('img/znachki.png'); ${getSpritePosition(item.id)}"></div>
+                    <div style="flex:1; text-align:left;">
+                        <div style="font-weight:600; font-size:0.9rem; color:white;">${name}</div>
+                        <div style="font-size:0.75rem; color:var(--text-muted);">${LANG[currentLang]['lvl']} ${lvl}</div>
+                    </div>
+                    <button class="btn-success" style="padding:4px 10px; font-size:0.75rem;" onclick="selectTargetBook(${item.id}); closeReverseCalcModal();">${LANG[currentLang]['txtSelectTarget']}</button>
+                </div>
+            `;
+        });
+        html += `</div>`;
+    }
+    
+    html += `<h4 style="color:#f59e0b; font-size:0.85rem; border-bottom:1px solid var(--border-color); margin-bottom:10px; padding-bottom:5px; text-transform:uppercase; letter-spacing:1px; text-align:left;">${LANG[currentLang]['txtNearbyCraft']}</h4>`;
+    if (topProgress.length === 0) {
+        html += `<div style="color:var(--text-muted); font-size:0.85rem; text-align:left; font-style:italic;">-</div>`;
+    } else {
+        html += `<div style="display:flex; flex-direction:column; gap:10px;">`;
+        topProgress.forEach(item => {
+            let name = TOME_DB[item.id][4];
+            let lvl = Math.floor(item.id / 100);
+            html += `
+                <div style="display:flex; flex-direction:column; background:rgba(255,255,255,0.02); border:1px solid var(--border-color); padding:10px; border-radius:10px; gap:6px;">
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+                        <div style="width:32px; height:32px; flex-shrink:0; background-image:url('img/znachki.png'); ${getSpritePosition(item.id)}"></div>
+                        <div style="flex:1; text-align:left;">
+                            <div style="font-weight:600; font-size:0.9rem; color:white;">${name}</div>
+                            <div style="font-size:0.75rem; color:var(--text-muted);">${LANG[currentLang]['lvl']} ${lvl}</div>
+                        </div>
+                        <div style="font-weight:700; color:#f59e0b; font-size:0.85rem;">${item.pct.toFixed(0)}%</div>
+                        <button class="btn-calc" style="padding:4px 10px; font-size:0.75rem; background:#475569;" onclick="selectTargetBook(${item.id}); closeReverseCalcModal();">${LANG[currentLang]['txtSelectTarget']}</button>
+                    </div>
+                    <div class="progress-bar-bg" style="height:6px;">
+                        <div class="progress-bar" style="width:${item.pct}%; background:linear-gradient(90deg, #f59e0b, var(--success));"></div>
                     </div>
                 </div>
             `;
         });
-        html += '</div>';
+        html += `</div>`;
     }
     
-    document.getElementById('reverseResults').innerHTML = html;
+    resultsDiv.innerHTML = html;
 }
 
 let itemCounts = [];
