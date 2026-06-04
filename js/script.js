@@ -73,7 +73,7 @@ function runReverseCalculator() {
     let readyList = [];
     let progressList = [];
     
-    for (let id = 101; id <= 616; id++) {
+    for (let id = 101; id < TOME_DB.length; id++) {
         if (!TOME_DB[id]) continue;
         
         let simulationPool = [];
