@@ -148,14 +148,14 @@
         </div>
     </div>
 <!-- 🛠️ MODAL TOME EDITOR -->
-        <div id="tomeModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box;">
+    <div id="tomeModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box;">
             <div style="background: #1e293b; padding: 20px; border-radius: 12px; width: 100%; max-width: 400px; border: 1px solid #334155; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
                 <h3 id="tomeModalTitle" style="margin-top: 0; color: #3b82f6; border-bottom: 1px solid #334155; padding-bottom: 10px; font-size: 1.2rem;">📘 Edit Buku Tome</h3>
                 
                 <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px; margin-bottom: 20px;">
                     <div style="display: flex; gap: 10px;">
                         <div style="flex: 1;">
-                            <label style="color:#94a3b8; font-size: 0.8rem;">Tome ID (Misal: 601)</label>
+                            <label style="color:#94a3b8; font-size: 0.8rem;">Tome ID</label>
                             <input type="number" id="tomeEditId" style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px;" readonly>
                         </div>
                         <div style="flex: 1;">
@@ -164,9 +164,15 @@
                         </div>
                     </div>
                     
-                    <div>
-                        <label style="color:#94a3b8; font-size: 0.8rem;">Nama Buku</label>
-                        <input type="text" id="tomeEditName" style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px;">
+                    <div style="display: flex; gap: 10px;">
+                        <div style="flex: 2;">
+                            <label style="color:#94a3b8; font-size: 0.8rem;">Nama Buku</label>
+                            <input type="text" id="tomeEditName" style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px;">
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="color:#94a3b8; font-size: 0.75rem;">Icon (Opsional)</label>
+                            <input type="number" id="tomeEditIcon" placeholder="Auto" style="width: 100%; padding: 8px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px;" title="Isi dengan ID buku lain (misal 601) jika ingin menggunakan gambarnya. Kosongkan untuk default.">
+                        </div>
                     </div>
 
                     <div style="background: #0f172a; padding: 10px; border-radius: 6px; border: 1px solid #334155;">
@@ -182,9 +188,9 @@
                 <div style="display: flex; gap: 10px;">
                     <button onclick="saveTomeData()" style="flex: 1; background: #10b981; padding: 10px; border-radius: 8px; color: white; font-weight: bold; border: none; cursor: pointer;">💾 Simpan</button>
                     <button onclick="document.getElementById('tomeModal').style.display='none'" style="flex: 1; background: #64748b; padding: 10px; border-radius: 8px; color: white; font-weight: bold; border: none; cursor: pointer;">Batal</button>
-                </div>
             </div>
         </div>
+    </div>
 
 <script src="admin-script.js"></script>
 </body>

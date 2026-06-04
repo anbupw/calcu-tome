@@ -166,12 +166,18 @@ function sanitizePrice(input) {
 }
 
 function getSpritePosition(id) {
-    const parsedId = parseInt(id);
-    if (parsedId === 10) return 'background-position:32px -32px';
-    if (parsedId === 11) return 'background-position:64px 0px';
-    if (parsedId === 12) return 'background-position:32px 0px';
-    let row = Math.floor(parsedId / 100);
-    let num = parsedId - (row * 100);
+    let targetId = parseInt(id);
+    
+    if (targetId === 10) return 'background-position:32px -32px';
+    if (targetId === 11) return 'background-position:64px 0px';
+    if (targetId === 12) return 'background-position:32px 0px';
+    
+    if (typeof window.TOME_DB !== 'undefined' && window.TOME_DB[targetId] && window.TOME_DB[targetId][5]) {
+        targetId = parseInt(window.TOME_DB[targetId][5]);
+    }
+    
+    let row = Math.floor(targetId / 100);
+    let num = targetId - (row * 100);
     return `background-position:-${32 * (num - 1)}px -${32 * (row - 1)}px`;
 }
 
@@ -788,7 +794,7 @@ function syncTomeDatabase(callback) {
 
         snap.forEach((doc) => {
             const data = doc.data();
-            window.TOME_DB[data.id] = [data.req[0], data.req[1], data.req[2], data.gameId, data.name];
+            window.TOME_DB[data.id] = [data.req[0], data.req[1], data.req[2], data.gameId, data.name, data.iconId || null];
         });
         
         console.log("✅ Database Tome berhasil disinkronisasi!");

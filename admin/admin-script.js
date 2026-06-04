@@ -224,26 +224,16 @@ function loadTomeManager() {
         tbody.innerHTML = '';
 
         if (snap.empty) {
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="4" style="text-align: center; padding: 20px;">
-                        <div style="color: #94a3b8; margin-bottom:10px;">Database Tome saat ini kosong.</div>
-                        <button onclick="migrateOldTomeDB()" style="background: #f59e0b; color: #000; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer;">
-                            ⚡ Impor Data Lama (Migrasi)
-                        </button>
-                    </td>
-                </tr>`;
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 20px;">Database Kosong</td></tr>`;
             return;
         }
 
-        // Urutkan data berdasarkan ID secara manual
         let tomes = [];
         snap.forEach(doc => tomes.push(doc.data()));
         tomes.sort((a, b) => a.id - b.id);
 
         tomes.forEach((data) => {
-            const level = String(data.id).charAt(0); // Level diambil dari digit pertama ID
-            
+            const level = Math.floor(data.id / 100);
             const tr = document.createElement('tr');
             tr.style.borderBottom = '1px solid #334155';
             
@@ -251,19 +241,28 @@ function loadTomeManager() {
                 <td style="padding: 10px; color:#3b82f6; font-weight:bold;">${data.id}</td>
                 <td style="padding: 10px;">
                     <span style="color:#f8fafc; font-weight:bold;">${data.name}</span><br>
-                    <span style="color:#64748b; font-size:0.7rem;">Item ID: ${data.gameId}</span>
+                    <span style="color:#64748b; font-size:0.7rem;">Item ID: ${data.gameId} ${data.iconId ? '| Custom Icon: ' + data.iconId : ''}</span>
                 </td>
                 <td style="padding: 10px; text-align: center;">
                     <span style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; padding: 3px 8px; border-radius: 4px; font-size:0.75rem; font-weight:bold;">Lv ${level}</span>
                 </td>
-                <td style="padding: 10px; text-align: center;">
-                    <button onclick="openTomeModal(${data.id})" style="background: #3b82f6; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor:pointer; font-size:0.75rem; font-weight:bold;">✏️ Edit</button>
+                <td style="padding: 10px; text-align: right; display:flex; gap:5px; justify-content:center;">
+                    <button onclick="openTomeModal(${data.id})" style="background: #3b82f6; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor:pointer; font-size:0.75rem; font-weight:bold;">✏️ Edit</button>
+                    <button onclick="deleteTome(${data.id})" style="background: #ef4444; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor:pointer; font-size:0.75rem; font-weight:bold;">🗑️ Hapus</button>
                 </td>
             `;
             tbody.appendChild(tr);
         });
     });
 }
+
+// FUNGSI BARU: MENGHAPUS BUKU
+window.deleteTome = function(tomeId) {
+    if (confirm(`⚠️ PERINGATAN!\n\nYakin ingin menghapus Buku ID ${tomeId}?\nBuku ini akan hilang selamanya dari Database.`)) {
+        db.collection("tomes").doc(String(tomeId)).delete()
+          .catch(err => alert("Gagal menghapus buku: " + err.message));
+    }
+};
 
 // Buka Modal Edit/Tambah
 window.openTomeModal = function(tomeId) {
@@ -275,6 +274,7 @@ window.openTomeModal = function(tomeId) {
         document.getElementById('tomeEditId').value = "";
         document.getElementById('tomeEditGameId').value = "";
         document.getElementById('tomeEditName').value = "";
+        document.getElementById('tomeEditIcon').value = ""; // Form Icon Kosong
         document.getElementById('tomeReq1').value = "0";
         document.getElementById('tomeReq2').value = "0";
         document.getElementById('tomeReq3').value = "0";
@@ -288,6 +288,7 @@ window.openTomeModal = function(tomeId) {
                 document.getElementById('tomeEditId').value = d.id;
                 document.getElementById('tomeEditGameId').value = d.gameId;
                 document.getElementById('tomeEditName').value = d.name;
+                document.getElementById('tomeEditIcon').value = d.iconId || ""; // Panggil Custom Icon
                 document.getElementById('tomeReq1').value = d.req[0];
                 document.getElementById('tomeReq2').value = d.req[1];
                 document.getElementById('tomeReq3').value = d.req[2];
@@ -301,6 +302,7 @@ window.saveTomeData = function() {
     const id = document.getElementById('tomeEditId').value;
     const gameId = document.getElementById('tomeEditGameId').value;
     const name = document.getElementById('tomeEditName').value;
+    const iconId = document.getElementById('tomeEditIcon').value;
     const req1 = parseInt(document.getElementById('tomeReq1').value) || 0;
     const req2 = parseInt(document.getElementById('tomeReq2').value) || 0;
     const req3 = parseInt(document.getElementById('tomeReq3').value) || 0;
@@ -311,7 +313,8 @@ window.saveTomeData = function() {
         id: parseInt(id),
         gameId: parseInt(gameId),
         name: name,
-        req: [req1, req2, req3]
+        req: [req1, req2, req3],
+        iconId: iconId ? parseInt(iconId) : null // Simpan Icon ID jika ada isinya
     };
 
     db.collection("tomes").doc(String(id)).set(tomeData)
