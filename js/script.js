@@ -175,24 +175,6 @@ function getSpritePosition(id) {
     return `background-position:-${32 * (num - 1)}px -${32 * (row - 1)}px`;
 }
 
-function getActiveTreeIds() {
-    let activeIds = new Set();
-    function walk(nodeId) {
-        if (!nodeId || !TOME_DB[nodeId]) return;
-        activeIds.add(nodeId);
-        if (nodeId > 200) {
-            walk(TOME_DB[nodeId][0]);
-            walk(TOME_DB[nodeId][1]);
-            walk(TOME_DB[nodeId][2]);
-        }
-    }
-    walk(rightTreeId);
-    activeIds.add(10);
-    activeIds.add(11);
-    activeIds.add(12);
-    return activeIds;
-}
-
 function getTreeItemHtml(id, isDeductionsView = false) {
     let count = isDeductionsView ? deductions[id] : itemCounts[id];
     if (!count) return '';
@@ -575,13 +557,6 @@ function confirmModal() {
 }
 
 function removeDeduction(id) { deductions[id] = 0; saveDataTrigger(); processTree(rightTreeId); }
-
-function fungsiX(id) {
-    deductions[id] = (deductions[id] || 0) + 1; 
-    
-    saveDataTrigger();
-    processTree(rightTreeId);
-}
 
 function resetCalculator() {
     if (confirm(LANG[currentLang]['alertReset'])) {
