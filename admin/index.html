@@ -52,6 +52,34 @@
                 </div>
             </div>
         </div>
+		
+		<div class="admin-card" style="max-width: 800px;">
+            <h2>👥 Manajemen Pemain (Player CRM)</h2>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #334155; color: #94a3b8;">
+                            <th style="padding: 10px;">UID / Akun</th>
+                            <th style="padding: 10px;">Status</th>
+                            <th style="padding: 10px; text-align: center;">Aksi (God Mode)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="playerTableBody">
+                        <tr><td colspan="3" style="text-align: center; padding: 15px; color: #94a3b8;">Memuat data pemain...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="godEyeModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center;">
+            <div style="background: #1e293b; padding: 25px; border-radius: 12px; width: 90%; max-width: 400px; border: 1px solid #334155;">
+                <h3 id="godEyeTitle" style="margin-top: 0; color: #10b981; border-bottom: 1px solid #334155; padding-bottom: 10px;">🎒 Isi Tas Player</h3>
+                <div id="godEyeContent" style="margin-top: 15px; margin-bottom: 20px; color: #f8fafc; font-size: 0.95rem; max-height: 300px; overflow-y: auto; background: #0f172a; padding: 15px; border-radius: 8px;">
+                    Memuat data...
+                </div>
+                <button class="btn-danger" onclick="document.getElementById('godEyeModal').style.display='none'" style="width: 100%; background: #ef4444; padding: 12px; border-radius: 8px; color: white; font-weight: bold; border: none; cursor: pointer;">Tutup Jendela</button>
+            </div>
+        </div>
 
         <div class="admin-card">
             <h2>📢 Pengaturan Banner Global</h2>
