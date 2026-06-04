@@ -224,11 +224,23 @@ function renderTree() {
     const txtLvl = LANG[currentLang]['lvl'];
     const txtBase = LANG[currentLang]['baseMat'];
     
+    let maxLevel = 1;
+    for (let i = 101; i < TOME_DB.length; i++) {
+        if (TOME_DB[i]) {
+            let lvl = Math.floor(i / 100);
+            if (lvl > maxLevel) maxLevel = lvl;
+        }
+    }
+    
     if (!isCompactMode) {
-        for (let r = 6; r >= 1; r--) {
-            let start = r * 100 + 1; let end = r * 100 + 16; let hasItem = false;
+        for (let r = maxLevel; r >= 1; r--) {
+            let start = r * 100 + 1; 
+            let end = r * 100 + 99;
+            let hasItem = false;
             let tempTxt = `<ul><li>${txtLvl} ${r}</li> `;
-            for (let e = start; e <= end; e++) { if (itemCounts[e]) { tempTxt += getTreeItemHtml(e); hasItem = true; } }
+            for (let e = start; e <= end; e++) { 
+                if (itemCounts[e]) { tempTxt += getTreeItemHtml(e); hasItem = true; } 
+            }
             tempTxt += '</ul>';
             if (hasItem) txt += tempTxt;
         }
@@ -251,8 +263,18 @@ function renderDeductions() {
     if (deductions[10] > 0) lis += getTreeItemHtml(10, true);
     if (lis !== '') txt += `<ul><li>${LANG[currentLang]['baseMat']}</li> ${lis}</ul>`;
     
-    for (let r = 1; r <= 6; r++) {
-        lis = ''; let start = r * 100 + 1; let end = r * 100 + 16;
+    let maxLevel = 1;
+    for (let i = 101; i < TOME_DB.length; i++) {
+        if (TOME_DB[i]) {
+            let lvl = Math.floor(i / 100);
+            if (lvl > maxLevel) maxLevel = lvl;
+        }
+    }
+    
+    for (let r = 1; r <= maxLevel; r++) {
+        lis = ''; 
+        let start = r * 100 + 1; 
+        let end = r * 100 + 99;
         for (let e = start; e <= end; e++) { 
             if (deductions[e] > 0) lis += getTreeItemHtml(e, true); 
         }
@@ -265,7 +287,6 @@ function renderBookSelection() {
     let txt = '';
     const txtLvl = LANG[currentLang]['lvl'];
     
-    // 1. Cari level tertinggi secara otomatis dari TOME_DB
     let maxLevel = 1;
     for (let i = 101; i < TOME_DB.length; i++) {
         if (TOME_DB[i]) {
@@ -274,13 +295,10 @@ function renderBookSelection() {
         }
     }
     
-    // 2. Render dari level tertinggi turun ke level 1
     for (let r = maxLevel; r >= 1; r--) {
         let lis = ''; 
         let start = r * 100 + 1; 
         
-        // 3. Kita longgarkan batasan menjadi 99 buku per level (sebelumnya hanya 16)
-        // Jadi ID 701 sampai 799 akan terbaca semua!
         let end = r * 100 + 99; 
         
         for (let e = start; e <= end; e++) {
@@ -289,7 +307,6 @@ function renderBookSelection() {
             }
         }
         
-        // Jika ada isinya, tampilkan kategorinya
         if (lis !== '') txt += `<h4>${txtLvl} ${r}</h4><ul>${lis}</ul>`;
     }
     document.getElementById('vyborDiv').innerHTML = txt;
@@ -732,7 +749,6 @@ if (typeof window.db !== 'undefined') {
         });
     }
 
-    // 2. Harga Pasar (Auto syc)
     window.hargaMysticPageGlobal = 0; 
     window.hargaFragmentGlobal = 0;
 
@@ -742,8 +758,8 @@ if (typeof window.db !== 'undefined') {
             window.hargaMysticPageGlobal = data.mysticPagePrice || 0;
             window.hargaFragmentGlobal = data.fragmentPrice || 0;
             
-            const inputPrice11 = document.getElementById('price11'); // Kotak Tome Fragment
-            const inputPrice12 = document.getElementById('price12'); // Kotak Tome Page
+            const inputPrice11 = document.getElementById('price11');
+            const inputPrice12 = document.getElementById('price12');
 
             if (inputPrice11) inputPrice11.value = window.hargaFragmentGlobal;
             if (inputPrice12) inputPrice12.value = window.hargaMysticPageGlobal;
@@ -779,7 +795,6 @@ window.sendStatsToFirebase = function(tomeName) {
         .catch(err => console.error("Gagal mengirim statistik:", err));
 };
 
-/// 📥 FUNGSI SINKRONISASI DATABASE BUKU (REAL-TIME KILAT)
 function syncTomeDatabase(callback) {
     if (!window.db) {
         console.warn("Database tidak terhubung!");
@@ -789,7 +804,6 @@ function syncTomeDatabase(callback) {
 
     console.log("Menghubungkan ke Database Tome...");
     
-    // onSnapshot: Mengambil data pertama kali, DAN memantau perubahan seterusnya!
     window.db.collection("tomes").onSnapshot((snap) => {
         if (snap.empty) {
             console.warn("Database Tome kosong atau belum dimigrasi.");
@@ -797,7 +811,6 @@ function syncTomeDatabase(callback) {
             return;
         }
 
-        // Susun ulang data ke format Array klasik kalkulator Anda
         snap.forEach((doc) => {
             const data = doc.data();
             window.TOME_DB[data.id] = [data.req[0], data.req[1], data.req[2], data.gameId, data.name];
@@ -805,15 +818,13 @@ function syncTomeDatabase(callback) {
         
         console.log("✅ Database Tome berhasil disinkronisasi!");
 
-        // Jika terjadi perubahan data (edit dari admin), render ulang daftarnya
         if (typeof window.renderBookSelection === 'function') {
             window.renderBookSelection();
         }
         
-        // Jalankan sistem web (applyLanguage dll) hanya pada saat pertama kali dimuat
         if (callback) {
             callback();
-            callback = null; // Matikan callback agar tidak berulang saat terjadi update data
+            callback = null; 
         }
     }, (err) => {
         console.error("Gagal sinkronisasi database:", err);
@@ -821,11 +832,8 @@ function syncTomeDatabase(callback) {
     });
 }
 
-// 🚀 INISIALISASI WEB SAAT PERTAMA KALI DIBUKA
 window.onload = () => { 
-    // 1. Tarik & Pantau data dari Firebase terlebih dahulu
     syncTomeDatabase(() => {
-        // 2. Setelah data berhasil ditarik, nyalakan fitur website lainnya
         applyLanguage(); 
         
         const modalInput = document.getElementById('modalInput');
