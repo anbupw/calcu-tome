@@ -31,123 +31,74 @@ function loadFavorite() {
 }
 
 function testCraft(id, pool) {
-    if (pool[id] && pool[id] > 0) {
+    if (pool[id] > 0) {
         pool[id]--;
         return 1;
     }
-	if (!TOME_DB[id]) {
-        return 0; 
-    }
-    if (id === 10 || id === 11 || id === 12) {
-        if (id === 12 && pool[10] >= 20) { pool[10] -= 20; return 1; }
-        return 0;
-    }
-    if (id >= 101 && id <= 109) {
-        let pCount = 0;
-        for(let i=0; i<4; i++) { 
-            if(pool[12] && pool[12]>0) { pool[12]--; pCount++; } 
-            else if(pool[10]>=20) { pool[10]-=20; pCount++; } 
+    
+    if (id === 10 || id === 11 || id === 12) return 0;
+    
+    if (!TOME_DB[id]) return 0; 
+
+    let req = TOME_DB[id];
+    
+    let p1 = pool.slice(); 
+    
+    if (testCraft(req[0], p1) && testCraft(req[1], p1) && testCraft(req[2], p1)) {
+        for (let i = 0; i < p1.length; i++) {
+            pool[i] = p1[i];
         }
-        let fCount = 0;
-        for(let i=0; i<3; i++) { if(pool[11] && pool[11]>0) { pool[11]--; fCount++; } }
-        return (pCount + fCount) / 7;
+        return 1;
     }
-    let recipe = TOME_DB[id];
-    if (!recipe) return 0;
-    let s0 = testCraft(recipe[0], pool);
-    let s1 = testCraft(recipe[1], pool);
-    let s2 = testCraft(recipe[2], pool);
-    return (s0 + s1 + s2) / 3;
+    
+    return 0;
 }
 
 function runReverseCalculator() {
-    let resultsDiv = document.getElementById('reverseCalcResults');
-    let hasItems = false;
-    for(let i=0; i<deductions.length; i++) {
-        if(deductions[i] > 0) { hasItems = true; break; }
-    }
+    let results = [];
     
-    if(!hasItems) {
-        resultsDiv.innerHTML = `<div style="color:var(--text-muted); padding:20px; font-style:italic; text-align:center;">${LANG[currentLang]['txtNoMats']}</div>`;
-        return;
-    }
-    
-    let readyList = [];
-    let progressList = [];
-    
+    // Perulangan dinamis hingga ID tertinggi di database
     for (let id = 101; id < TOME_DB.length; id++) {
         if (!TOME_DB[id]) continue;
         
-        let simulationPool = [];
-        for(let i=0; i<deductions.length; i++) { simulationPool[i] = deductions[i] || 0; }
-		
-		simulationPool[id] = 0;
+        // ⚡ OPTIMASI: Gunakan Array, bukan Object {}
+        let pool = [];
+        for (let i = 0; i < deductions.length; i++) {
+            pool[i] = deductions[i] || 0;
+        }
         
-        let score = testCraft(id, simulationPool);
-        let percentage = score * 100;
+        let count = 0;
+        while (testCraft(id, pool)) {
+            count++;
+        }
         
-        if (percentage >= 99.99) {
-            readyList.push({ id: id, pct: 100 });
-        } else if (percentage > 0) {
-            progressList.push({ id: id, pct: percentage });
+        if (count > 0) {
+            results.push({ id: id, count: count });
         }
     }
     
-    progressList.sort((a, b) => b.pct - a.pct);
-    let topProgress = progressList.slice(0, 5);
+    results.sort((a, b) => b.count - a.count || b.id - a.id);
+    
     let html = '';
-    
-    html += `<h4 style="color:var(--success); font-size:0.85rem; border-bottom:1px solid var(--border-color); margin-bottom:10px; padding-bottom:5px; text-transform:uppercase; letter-spacing:1px; text-align:left; margin-top:10px;">${LANG[currentLang]['txtReadyToCraft']}</h4>`;
-    if (readyList.length === 0) {
-        html += `<div style="color:var(--text-muted); font-size:0.85rem; text-align:left; margin-bottom:15px; font-style:italic;">-</div>`;
+    if (results.length === 0) {
+        html = `<p style="text-align:center; color:#9ca3af; font-style:italic;">${LANG[currentLang]['revNoResult']}</p>`;
     } else {
-        html += `<div style="display:flex; flex-direction:column; gap:8px; margin-bottom:20px;">`;
-        readyList.forEach(item => {
-            let name = TOME_DB[item.id][4];
-            let lvl = Math.floor(item.id / 100);
+        html = '<div class="reverse-grid">';
+        results.forEach(res => {
             html += `
-                <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:10px; border-radius:10px; gap:10px;">
-                    <div style="width:32px; height:32px; flex-shrink:0; background-image:url('img/znachki.png'); ${getSpritePosition(item.id)}"></div>
-                    <div style="flex:1; text-align:left;">
-                        <div style="font-weight:600; font-size:0.9rem; color:white;">${name}</div>
-                        <div style="font-size:0.75rem; color:var(--text-muted);">${LANG[currentLang]['lvl']} ${lvl}</div>
-                    </div>
-                    <button class="btn-success" style="padding:4px 10px; font-size:0.75rem;" onclick="selectTargetBook(${item.id}); closeReverseCalcModal();">${LANG[currentLang]['txtSelectTarget']}</button>
-                </div>
-            `;
-        });
-        html += `</div>`;
-    }
-    
-    html += `<h4 style="color:#f59e0b; font-size:0.85rem; border-bottom:1px solid var(--border-color); margin-bottom:10px; padding-bottom:5px; text-transform:uppercase; letter-spacing:1px; text-align:left;">${LANG[currentLang]['txtNearbyCraft']}</h4>`;
-    if (topProgress.length === 0) {
-        html += `<div style="color:var(--text-muted); font-size:0.85rem; text-align:left; font-style:italic;">-</div>`;
-    } else {
-        html += `<div style="display:flex; flex-direction:column; gap:10px;">`;
-        topProgress.forEach(item => {
-            let name = TOME_DB[item.id][4];
-            let lvl = Math.floor(item.id / 100);
-            html += `
-                <div style="display:flex; flex-direction:column; background:rgba(255,255,255,0.02); border:1px solid var(--border-color); padding:10px; border-radius:10px; gap:6px;">
-                    <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
-                        <div style="width:32px; height:32px; flex-shrink:0; background-image:url('img/znachki.png'); ${getSpritePosition(item.id)}"></div>
-                        <div style="flex:1; text-align:left;">
-                            <div style="font-weight:600; font-size:0.9rem; color:white;">${name}</div>
-                            <div style="font-size:0.75rem; color:var(--text-muted);">${LANG[currentLang]['lvl']} ${lvl}</div>
-                        </div>
-                        <div style="font-weight:700; color:#f59e0b; font-size:0.85rem;">${item.pct.toFixed(0)}%</div>
-                        <button class="btn-calc" style="padding:4px 10px; font-size:0.75rem; background:#475569;" onclick="selectTargetBook(${item.id}); closeReverseCalcModal();">${LANG[currentLang]['txtSelectTarget']}</button>
-                    </div>
-                    <div class="progress-bar-bg" style="height:6px;">
-                        <div class="progress-bar" style="width:${item.pct}%; background:linear-gradient(90deg, #f59e0b, var(--success));"></div>
+                <div class="reverse-card" onclick="selectTargetBook(${res.id})">
+                    <div class="reverse-icon" style="background-image:url('img/znachki.png'); ${getSpritePosition(res.id)}"></div>
+                    <div class="reverse-info">
+                        <span class="reverse-name">${TOME_DB[res.id][4]}</span>
+                        <span class="reverse-count">${LANG[currentLang]['revCanCraft']}: <strong>${res.count}</strong></span>
                     </div>
                 </div>
             `;
         });
-        html += `</div>`;
+        html += '</div>';
     }
     
-    resultsDiv.innerHTML = html;
+    document.getElementById('reverseResults').innerHTML = html;
 }
 
 let itemCounts = [];
@@ -641,7 +592,7 @@ function attemptCrafting(targetId) {
         }
 
         if (nodeId >= 101 && nodeId <= 109) {
-            let backupPool = [...pool];
+            let backupPool = pool.slice(); 
             
             let pagesNeeded = 4;
             for(let i=0; i<4; i++) {
@@ -665,7 +616,7 @@ function attemptCrafting(targetId) {
         let recipe = TOME_DB[nodeId];
         if (!recipe) return false;
 
-        let backupPool = [...pool];
+        let backupPool = pool.slice(); 
         
         let s0 = tryCraftNode(recipe[0], pool, false);
         let s1 = tryCraftNode(recipe[1], pool, false);
@@ -694,14 +645,20 @@ function attemptCrafting(targetId) {
         if (!deductions[targetId]) deductions[targetId] = 0;
         deductions[targetId]++;
         
-        saveDataTrigger();
+        // Simpan Data
+        if (typeof saveDataTrigger === 'function') {
+            saveDataTrigger();
+        } else if (typeof saveDeductionsToLocalStorage === 'function') {
+            saveDeductionsToLocalStorage(); 
+        }
+        
         processTree(rightTreeId);
         
         if (typeof confetti === 'function') {
             confetti({ particleCount: 150, spread: 80, origin: { y: 0.5 }, colors: ['#fbbf24', '#f59e0b', '#d97706'] });
         }
-		
-		try {
+        
+        try {
             let craftSound = new Audio('img/success.mp3');
             craftSound.volume = 0.6;
             craftSound.play();
