@@ -82,7 +82,6 @@
         .catch(err => alert("Gagal: " + err.message));
     }
 
-// 📊 FUNGSI MENAMPILKAN STATISTIK REAL-TIME
     function loadStatistics() {
         // 1. Hitung Total Pengguna
         db.collection("users").get().then((snap) => {

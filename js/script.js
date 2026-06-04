@@ -208,10 +208,8 @@ function getTreeItemHtml(id, isDeductionsView = false) {
         if (id == rightTreeId) {
             clickAttr = `onclick="attemptCrafting(${id})"`;
             
-            // Hapus warna hijau permanen, biarkan polosan (hanya radius dan kursor pointer)
             extraStyle = "border-radius: 6px; cursor: pointer;";
             
-            // KUNCI: Kita menyisipkan id="mainTargetBtn" di dalam tag button di bawah ini
             return `<li><button id="mainTargetBtn" style="background-image:url('img/znachki.png'); ${getSpritePosition(id)}; ${extraStyle}" data-id="${id}" ${clickAttr} onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
         } else {
             clickAttr = `onclick="openModal(${id})"`;
@@ -514,8 +512,6 @@ function renderInventorySelection(query) {
 function filterInventorySearch(val) { renderInventorySelection(val); }
 function selectItemForInventory(id) { closeInventoryModal(); openModal(id); }
 
-
-
 function confirmModal() {
     const amount = Math.max(1, parseInt(document.getElementById('modalInput').value) || 1);
     if (!isNaN(amount) && amount > 0 && activeModalItemId) {
@@ -667,7 +663,7 @@ function attemptCrafting(targetId) {
         }
 		
 		try {
-            let craftSound = new Audio('img/success.mp3'); // Pastikan path audio ini benar ('img/success.mp3')
+            let craftSound = new Audio('img/success.mp3');
             craftSound.volume = 0.6;
             craftSound.play();
         } catch (error) {
@@ -681,10 +677,6 @@ function attemptCrafting(targetId) {
         alert(`❌ CRAFTING GAGAL!\n\nMaterial atau sub-tome di Inventory Anda belum cukup untuk merakit [${bookName}].`);
     }
 }
-
-// ==========================================
-// MENANGKAP DATA DARI ADMIN (FIREBASE COMPAT)
-// ==========================================
 
 if (typeof window.db !== 'undefined') {
     
@@ -716,14 +708,12 @@ if (typeof window.db !== 'undefined') {
             window.hargaMysticPageGlobal = data.mysticPagePrice || 0;
             window.hargaFragmentGlobal = data.fragmentPrice || 0;
             
-            // 🌟 MASUKKAN ANGKA DARI ADMIN KE KOTAK INPUT PLAYER
             const inputPrice11 = document.getElementById('price11'); // Kotak Tome Fragment
             const inputPrice12 = document.getElementById('price12'); // Kotak Tome Page
 
             if (inputPrice11) inputPrice11.value = window.hargaFragmentGlobal;
             if (inputPrice12) inputPrice12.value = window.hargaMysticPageGlobal;
             
-            // 🌟 HITUNG ULANG OTOMATIS BEGITU ADA PERUBAHAN HARGA GLOBAL
             if (typeof updateCostAndProgress === 'function') {
                 updateCostAndProgress();
             }
@@ -737,18 +727,15 @@ if (typeof window.db !== 'undefined') {
 }
 
 window.sendStatsToFirebase = function(tomeName) {
-    if (!window.db) return; // Cegah error jika database belum siap
+    if (!window.db) return;
     
-    // Perintah increment (tambah +1 secara gaib tanpa menarik data lama)
     const increment = firebase.firestore.FieldValue.increment(1);
     
     const updateData = {
         totalCalculations: increment
     };
     
-    // Jika ada nama buku, catat juga bukunya!
     if (tomeName) {
-        // Menghapus titik/simbol aneh agar tidak error di database
         const cleanName = tomeName.replace(/[.#$/\[\]]/g, ""); 
         updateData[`tomeCounter.${cleanName}`] = increment;
     }
