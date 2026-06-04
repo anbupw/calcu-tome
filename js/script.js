@@ -445,7 +445,7 @@ function updateCostAndProgress() {
 })();
 
 function processTree(id) {
-    console.log("🚀 processTree dipanggil! ID Tome:", id); // Pelacak Klik
+    console.log("🚀 processTree dipanggil! ID Tome:", id);
     
     if (!id || !TOME_DB[id]) {
         console.warn("⚠️ TOME_DB tidak ditemukan atau ID kosong!");
@@ -496,14 +496,11 @@ function processTree(id) {
     renderDeductions(); 
     updateCostAndProgress();
 
-    // ==========================================
-    // PENGIRIM STATISTIK KE ADMIN
-    // ==========================================
     if (window.sendStatsToFirebase && window.lastTrackedTomeId !== id) {
         const judulBuku = document.getElementById('nazvaniye');
         const targetBuku = judulBuku ? judulBuku.innerText : "Tome";
         window.sendStatsToFirebase(targetBuku);
-        window.lastTrackedTomeId = id; // Cegah duplikat spam
+        window.lastTrackedTomeId = id;
         console.log("📈 Statistik dikirim untuk:", targetBuku);
     }
 }
@@ -703,7 +700,6 @@ function attemptCrafting(targetId) {
 
 if (typeof window.db !== 'undefined') {
     
-    // 1. Banner Pengumuman
     const bannerElement = document.getElementById('globalBanner');
     const bannerTextElement = document.getElementById('bannerText');
 
@@ -721,7 +717,7 @@ if (typeof window.db !== 'undefined') {
         });
     }
 
-    // 2. Harga Pasar (SEKARANG DISINKRONKAN LANGSUNG KE INPUT LAYAR PLAYER)
+    // 2. Harga Pasar (Auto syc)
     window.hargaMysticPageGlobal = 0; 
     window.hargaFragmentGlobal = 0;
 
