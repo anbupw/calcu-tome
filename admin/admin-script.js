@@ -148,7 +148,6 @@ function loadPlayerCRM() {
     });
 }
 
-// 👁️ KEKUATAN GOD EYE: VERSI FIX (Target: calculatorState.d)
 window.viewInventory = function(userId) {
     document.getElementById('godEyeModal').style.display = 'flex';
     document.getElementById('godEyeTitle').innerText = `🎒 Mengintip Tas Player`;
@@ -158,7 +157,6 @@ window.viewInventory = function(userId) {
         if (doc.exists) {
             const data = doc.data();
             
-            // Membidik langsung ke dalam struktur data calculatorState.d milik web player
             const inventory = (data.calculatorState && data.calculatorState.d) ? data.calculatorState.d : null;
             
             let html = '<ul style="list-style: none; padding: 0; margin: 0;">';
@@ -169,7 +167,6 @@ window.viewInventory = function(userId) {
                     if (count > 0) {
                         hasItems = true;
                         
-                        // Terjemahkan ID menjadi Nama Item yang mudah dibaca
                         let itemName = `Tome ID [${itemId}]`;
                         if (itemId === "12") itemName = "Tome Page 📄";
                         if (itemId === "11") itemName = "Tome Fragment 🧩";
@@ -183,7 +180,6 @@ window.viewInventory = function(userId) {
             }
             html += '</ul>';
             
-            // Jika setelah diperiksa ternyata isi calculatorState.d memang kosong
             if (!hasItems) {
                 html = '<div style="text-align:center; color:#94a3b8; padding: 10px;"><i>Tas pemain ini kosong melompong.</i></div>';
             }
