@@ -37,7 +37,8 @@ function closeModal() {
 
 //Urusan Tooltip item
 function showTooltip(element, event) {
-    const id = parseInt(element.data-id);
+    const id = parseInt(element.getAttribute('data-id'));
+	
     if (!TOME_DB[id] && id !== 10 && id !== 11 && id !== 12) return;
     const tooltip = document.getElementById('floatingTooltip');
     let nameText = "";
