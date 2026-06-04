@@ -107,7 +107,7 @@ function loadPlayerCRM() {
     db.collection("users").onSnapshot((snap) => {
         const tbody = document.getElementById('playerTableBody');
         if (!tbody) return;
-        tbody.innerHTML = ''; // Bersihkan isi tabel
+        tbody.innerHTML = '';
 
         if (snap.empty) {
             tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 20px; color:#94a3b8;">Belum ada pemain yang mendaftar.</td></tr>';
@@ -148,6 +148,7 @@ function loadPlayerCRM() {
     });
 }
 
+// 👁️ KEKUATAN GOD EYE: VERSI DETEKTIF SAKTI
 window.viewInventory = function(userId) {
     document.getElementById('godEyeModal').style.display = 'flex';
     document.getElementById('godEyeTitle').innerText = `🎒 Mengintip Tas Player`;
@@ -156,32 +157,48 @@ window.viewInventory = function(userId) {
     db.collection("users").doc(userId).get().then((doc) => {
         if (doc.exists) {
             const data = doc.data();
-            const inventory = data.inventory || {};
+            
+            // Otomatis deteksi berbagai kemungkinan nama field inventory Anda
+            const inventory = data.inventory || data.bag || data.items || null;
+            
             let html = '<ul style="list-style: none; padding: 0; margin: 0;">';
             let hasItems = false;
             
-            for (const [itemId, count] of Object.entries(inventory)) {
-                if (count > 0) {
-                    hasItems = true;
-                    let itemName = `Tome ID [${itemId}]`;
-                    if(itemId == "12") itemName = "Tome Page";
-                    if(itemId == "11") itemName = "Tome Fragment";
-                    if(itemId == "10") itemName = "Token of Luck";
-                    
-                    html += `<li style="margin-bottom:8px; border-bottom: 1px dashed #334155; padding-bottom: 4px;">
-                                ${itemName}: <strong style="color:#f59e0b; float:right;">${count}x</strong>
-                             </li>`;
+            // Jika folder inventory ditemukan dan berbentuk objek
+            if (inventory && typeof inventory === 'object') {
+                for (const [itemId, count] of Object.entries(inventory)) {
+                    if (count > 0) {
+                        hasItems = true;
+                        
+                        // Deteksi ID angka atau ID teks nama variabel
+                        let itemName = `Item ID [${itemId}]`;
+                        if (itemId == "12" || itemId === "mysticPage" || itemId === "tomePage") itemName = "Tome Page";
+                        if (itemId == "11" || itemId === "fragment" || itemId === "tomeFragment") itemName = "Tome Fragment";
+                        if (itemId == "10" || itemId === "token" || itemId === "tokenOfLuck") itemName = "Token of Luck";
+                        
+                        html += `<li style="margin-bottom:8px; border-bottom: 1px dashed #334155; padding-bottom: 4px; font-size:0.9rem;">
+                                    ${itemName}: <strong style="color:#f59e0b; float:right;">${count}x</strong>
+                                 </li>`;
+                    }
                 }
             }
             html += '</ul>';
             
-            if (!hasItems) html = '<div style="text-align:center; color:#94a3b8;"><i>Tas pemain ini kosong melompong.</i></div>';
+            // 🕵️‍♂️ MODE DETEKTIF: Jika folder inventory kosong/tidak cocok, bongkar isi database aslinya!
+            if (!hasItems) {
+                html = '<div style="color:#94a3b8; font-size:0.8rem; margin-bottom:10px; line-height:1.4;"><i>Struktur "inventory" standar tidak ditemukan. Berikut data mentah akun ini di Firestore:</i></div>';
+                html += '<div style="background:#000; padding:10px; border-radius:6px; font-family:monospace; font-size:0.75rem; color:#10b981; overflow-x:auto; white-space:pre-wrap; max-height:200px; border:1px solid #334155;">';
+                html += JSON.stringify(data, null, 2);
+                html += '</div>';
+            }
+            
             document.getElementById('godEyeContent').innerHTML = html;
         } else {
-            document.getElementById('godEyeContent').innerHTML = '<i>Pemain belum menyimpan data inventory.</i>';
+            document.getElementById('godEyeContent').innerHTML = '<div style="text-align:center; color:#94a3b8;"><i>Pemain belum memiliki dokumen di database.</i></div>';
         }
     }).catch(err => {
-        document.getElementById('godEyeContent').innerHTML = `<span style="color:red;">Gagal: ${err.message}</span>`;
+        document.getElementById('godEyeContent').innerHTML = `<span style="color:#ef4444;">Gagal mengambil data: ${err.message}</span>`;
+        console.error("Error God Eye:", err);
     });
 };
 
