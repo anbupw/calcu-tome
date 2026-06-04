@@ -54,20 +54,16 @@ function testCraft(id, pool) {
     return 0;
 }
 
-// 🔥 FUNGSI BARU: Menghitung persentase progres crafting secara mendalam & rekursif
 function checkPartialCraft(id, pool) {
-    // Jika item/buku tersebut langsung tersedia di inventory
     if (pool[id] && pool[id] > 0) {
         pool[id]--;
         return 1;
     }
     
-    // Jika bahan dasar dasar (Token/Fragment/Page) dan sudah habis di inventory, return 0
     if (id === 10 || id === 11 || id === 12 || !TOME_DB[id]) {
         return 0;
     }
     
-    // Jika berupa buku craftable, pecah nilainya berdasarkan rata-rata dari 3 bahan penyusunnya
     let r0 = TOME_DB[id][0];
     let r1 = TOME_DB[id][1];
     let r2 = TOME_DB[id][2];
@@ -76,11 +72,10 @@ function checkPartialCraft(id, pool) {
     let p1 = checkPartialCraft(r1, pool);
     let p2 = checkPartialCraft(r2, pool);
     
-    // Mengembalikan nilai rata-rata kecukupan dari ketiga komponennya
     return (p0 + p1 + p2) / 3;
 }
 
-// 🚀 FUNGSI UTAMA REVERSE CALCULATOR (SUDAH KEBAL EROR & ANTI-LAG)
+
 function runReverseCalculator() {
     let resultsDiv = document.getElementById('reverseCalcResults') || document.getElementById('reverseResults');
     
@@ -106,9 +101,8 @@ function runReverseCalculator() {
         if (!TOME_DB[id]) continue;
         
         let simulationPool = deductions.slice();
-        simulationPool[id] = 0; // Mengabaikan jika buku target sudah dimiliki agar dihitung dari komponennya
+        simulationPool[id] = 0;
         
-        // ⚡ MENGGUNAKAN LOGIKA REKURSIF BARU AGAR MENDAPATKAN PERSENTASE AKURAT (0% - 100%)
         let score = checkPartialCraft(id, simulationPool);
         let percentage = score * 100;
         
@@ -119,12 +113,10 @@ function runReverseCalculator() {
         }
     }
     
-    // Mengurutkan progress dari yang paling tinggi ke terendah
     progressList.sort((a, b) => b.pct - a.pct);
     let topProgress = progressList.slice(0, 5);
     let html = '';
     
-    // --- 🎨 UI SIAP CRAFT (100%) ---
     html += `<h4 style="color:var(--success); font-size:0.85rem; border-bottom:1px solid var(--border-color); margin-bottom:10px; padding-bottom:5px; text-transform:uppercase; letter-spacing:1px; text-align:left; margin-top:10px;">${LANG[currentLang]['txtReadyToCraft']}</h4>`;
     if (readyList.length === 0) {
         html += `<div style="color:var(--text-muted); font-size:0.85rem; text-align:left; margin-bottom:15px; font-style:italic;">-</div>`;
@@ -147,7 +139,6 @@ function runReverseCalculator() {
         html += `</div>`;
     }
     
-    // --- 🎨 UI HAMPIR SELESAI (PROGRESS BAR SEKARANG BERFUNGSI AKTIF) ---
     html += `<h4 style="color:#f59e0b; font-size:0.85rem; border-bottom:1px solid var(--border-color); margin-bottom:10px; padding-bottom:5px; text-transform:uppercase; letter-spacing:1px; text-align:left;">${LANG[currentLang]['txtNearbyCraft']}</h4>`;
     if (topProgress.length === 0) {
         html += `<div style="color:var(--text-muted); font-size:0.85rem; text-align:left; font-style:italic;">-</div>`;
