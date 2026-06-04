@@ -95,14 +95,6 @@
             <button class="btn-success" onclick="saveAdminPrices()">💾 Perbarui Harga Global</button>
         </div>
 		
-		<div class="admin-card" style="width: 100%; max-width: 100%; box-sizing: border-box; padding: 15px; margin-bottom: 20px;">
-            <h2 style="font-size: 1.3rem; margin-top: 0; display: flex; align-items: center; gap: 8px;">💬 Live Moderasi Chat</h2>
-            
-            <div id="adminChatStream" style="background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 15px; height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;">
-                <div style="text-align: center; color: #94a3b8; padding: 20px;">Memuat aliran chat...</div>
-            </div>
-        </div>
-		
         <div class="admin-card" style="width: 100%; max-width: 100%; box-sizing: border-box; padding: 15px; margin-bottom: 20px;">
             <h2 style="font-size: 1.3rem; margin-top: 0; display: flex; align-items: center; gap: 8px;">👥 Manajemen Pemain</h2>
             
@@ -117,6 +109,39 @@
                     </thead>
                     <tbody id="playerTableBody" style="font-size: 0.85rem; color: #f8fafc;">
                         <tr><td colspan="3" style="text-align: center; padding: 20px; color: #94a3b8;">Memuat data pemain...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+		
+		<div class="admin-card" style="width: 100%; max-width: 100%; box-sizing: border-box; padding: 15px; margin-bottom: 20px;">
+            <h2 style="font-size: 1.3rem; margin-top: 0; display: flex; align-items: center; gap: 8px;">💬 Live Moderasi Chat</h2>
+            
+            <div id="adminChatStream" style="background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 15px; height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;">
+                <div style="text-align: center; color: #94a3b8; padding: 20px;">Memuat aliran chat...</div>
+            </div>
+        </div>
+		
+		<div class="admin-card" style="width: 100%; max-width: 100%; box-sizing: border-box; padding: 15px; margin-bottom: 20px;">
+            <h2 style="font-size: 1.3rem; margin-top: 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <span>🛠️ Tome Manager</span>
+                <button onclick="alert('Fungsi ini akan segera diracik!')" style="background: #3b82f6; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                    + Tambah Buku Baru
+                </button>
+            </h2>
+            
+            <div style="overflow-x: auto; width: 100%; border-radius: 8px; border: 1px solid #334155; background: #0f172a; -webkit-overflow-scrolling: touch;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 500px;">
+                    <thead>
+                        <tr style="background: #1e293b; border-bottom: 2px solid #334155; color: #94a3b8; font-size: 0.85rem;">
+                            <th style="padding: 12px 10px; width: 60px;">ID</th>
+                            <th style="padding: 12px 10px;">Nama Buku</th>
+                            <th style="padding: 12px 10px; width: 60px; text-align: center;">Level</th>
+                            <th style="padding: 12px 10px; width: 120px; text-align: center;">Aksi (Edit)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tomeTableBody" style="font-size: 0.85rem; color: #f8fafc;">
+                        <tr><td colspan="4" style="text-align: center; padding: 20px; color: #94a3b8;">Menunggu sinkronisasi Database Tome...</td></tr>
                     </tbody>
                 </table>
             </div>
