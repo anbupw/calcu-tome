@@ -148,7 +148,7 @@ function loadPlayerCRM() {
     });
 }
 
-// 👁️ KEKUATAN GOD EYE: VERSI DETEKTIF SAKTI
+// 👁️ KEKUATAN GOD EYE: VERSI FIX (Target: calculatorState.d)
 window.viewInventory = function(userId) {
     document.getElementById('godEyeModal').style.display = 'flex';
     document.getElementById('godEyeTitle').innerText = `🎒 Mengintip Tas Player`;
@@ -158,25 +158,24 @@ window.viewInventory = function(userId) {
         if (doc.exists) {
             const data = doc.data();
             
-            // Otomatis deteksi berbagai kemungkinan nama field inventory Anda
-            const inventory = data.inventory || data.bag || data.items || null;
+            // Membidik langsung ke dalam struktur data calculatorState.d milik web player
+            const inventory = (data.calculatorState && data.calculatorState.d) ? data.calculatorState.d : null;
             
             let html = '<ul style="list-style: none; padding: 0; margin: 0;">';
             let hasItems = false;
             
-            // Jika folder inventory ditemukan dan berbentuk objek
             if (inventory && typeof inventory === 'object') {
                 for (const [itemId, count] of Object.entries(inventory)) {
                     if (count > 0) {
                         hasItems = true;
                         
-                        // Deteksi ID angka atau ID teks nama variabel
-                        let itemName = `Item ID [${itemId}]`;
-                        if (itemId == "12" || itemId === "mysticPage" || itemId === "tomePage") itemName = "Tome Page";
-                        if (itemId == "11" || itemId === "fragment" || itemId === "tomeFragment") itemName = "Tome Fragment";
-                        if (itemId == "10" || itemId === "token" || itemId === "tokenOfLuck") itemName = "Token of Luck";
+                        // Terjemahkan ID menjadi Nama Item yang mudah dibaca
+                        let itemName = `Tome ID [${itemId}]`;
+                        if (itemId === "12") itemName = "Tome Page 📄";
+                        if (itemId === "11") itemName = "Tome Fragment 🧩";
+                        if (itemId === "10") itemName = "Token of Luck 🪙";
                         
-                        html += `<li style="margin-bottom:8px; border-bottom: 1px dashed #334155; padding-bottom: 4px; font-size:0.9rem;">
+                        html += `<li style="margin-bottom:8px; border-bottom: 1px dashed #334155; padding-bottom: 4px; font-size:0.95rem;">
                                     ${itemName}: <strong style="color:#f59e0b; float:right;">${count}x</strong>
                                  </li>`;
                     }
@@ -184,12 +183,9 @@ window.viewInventory = function(userId) {
             }
             html += '</ul>';
             
-            // 🕵️‍♂️ MODE DETEKTIF: Jika folder inventory kosong/tidak cocok, bongkar isi database aslinya!
+            // Jika setelah diperiksa ternyata isi calculatorState.d memang kosong
             if (!hasItems) {
-                html = '<div style="color:#94a3b8; font-size:0.8rem; margin-bottom:10px; line-height:1.4;"><i>Struktur "inventory" standar tidak ditemukan. Berikut data mentah akun ini di Firestore:</i></div>';
-                html += '<div style="background:#000; padding:10px; border-radius:6px; font-family:monospace; font-size:0.75rem; color:#10b981; overflow-x:auto; white-space:pre-wrap; max-height:200px; border:1px solid #334155;">';
-                html += JSON.stringify(data, null, 2);
-                html += '</div>';
+                html = '<div style="text-align:center; color:#94a3b8; padding: 10px;"><i>Tas pemain ini kosong melompong.</i></div>';
             }
             
             document.getElementById('godEyeContent').innerHTML = html;
