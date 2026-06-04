@@ -1,3 +1,5 @@
+let statsDebounceTimer = null;
+
 function updateFavoriteButton() {
 	const btn = document.getElementById('btnFavorite');
 	if(favoriteTargetId == rightTreeId) {
@@ -518,10 +520,14 @@ function processTree(id) {
 
     if (typeof window.sendStatsToFirebase === 'function' && window.lastTrackedTomeId !== id) {
         const targetBuku = (TOME_DB[id] && TOME_DB[id][4]) ? TOME_DB[id][4] : "Tome Rahasia";
-        
-        window.sendStatsToFirebase(targetBuku);
         window.lastTrackedTomeId = id;
-        console.log("📈 Statistik dikirim untuk:", targetBuku);
+        
+        clearTimeout(statsDebounceTimer);
+        
+        statsDebounceTimer = setTimeout(() => {
+            window.sendStatsToFirebase(targetBuku);
+            console.log("📈 Statistik dikirim untuk:", targetBuku);
+        }, 3000); 
     }
 }
 
