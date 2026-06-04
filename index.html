@@ -37,6 +37,7 @@
         animation-play-state: paused; 
     }
 
+    /* 💻 DESKTOP: Banner melayang menempel di ujung atas layar */
     .dynamic-banner {
         position: fixed;
         top: 0;
@@ -76,7 +77,6 @@
         }
     }
 </style>
-
 </head>
 <body>
 
@@ -87,32 +87,6 @@
 		<p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">Perfect World Classic</p>
 		<div class="login-divider"></div>
 		<p class="login-desc">Selamat datang! Silakan masuk dengan akun Google Anda untuk mengakses seluruh fitur kalkulator, inventory, dan sinkronisasi data cloud otomatis.</p>
-		<button class="btn-google-login" onclick="loginGoogle()">
-			<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 48 48" style="display:block;">
-			  <g>
-				<path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
-				<path fill="#4285F4" d="M46.5 24c0-1.55-.15-3.24-.47-4.77H24v9.03h12.75c-.55 2.87-2.18 5.31-4.62 6.95l7.2 5.58C43.55 36.5 46.5 31 46.5 24z"></path>
-				<path fill="#FBBC05" d="M10.54 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.98-6.19z"></path>
-				<path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.2-5.58c-2.11 1.41-4.8 2.27-8.69 2.27-6.26 0-11.57-4.22-13.46-10.42l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
-			  </g>
-			</svg>
-			<span>Masuk dengan Google</span>
-		</button>
-	</div>
-</div>
-
-<div id="loginOverlay" class="login-overlay" style="display: none;">
-	<div class="login-card">
-		<div class="login-logo">
-			<i class="fas fa-book-bookmark"></i>
-		</div>
-		<h3>Simulator Crafting Tome</h3>
-		<p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">Perfect World Classic</p>
-		
-		<div class="login-divider"></div>
-		
-		<p class="login-desc">Selamat datang! Silakan masuk dengan akun Google Anda untuk mengakses seluruh fitur kalkulator, inventory, dan sinkronisasi data cloud otomatis.</p>
-		
 		<button class="btn-google-login" onclick="loginGoogle()">
 			<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 48 48" style="display:block;">
 			  <g>
@@ -139,6 +113,18 @@
 	<div class="container">
 		
 		<div class="main-column">
+            
+            <div id="globalBanner" class="dynamic-banner" style="display: none;">
+                <div class="marquee-box">
+                    <div class="marquee-content">
+                        📢 <span id="bannerText">Memuat pengumuman...</span>
+                    </div>
+                </div>
+                <button class="btn-close-banner" onclick="document.getElementById('globalBanner').style.display='none'">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
 			<div class="calc-card" id="cardTarget">
 				<h1 data-i18n="btnTarget">📚 Target Pembuatan Tome</h1>
 				<div class="podzagolovok" id="nazvaniye">Arahkan kursor ke ikon untuk melihat nama buku.</div>
@@ -276,8 +262,7 @@
 	<button class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleMenu()" title="Pengaturan"><i class="fas fa-gear"></i></button>
 
 	<div class="vybor" id="mainMenuPanel" style="display:none;">
-		<div id="userAccountSection" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); text-align: center; display:flex; flex-direction:column; align-items:center; gap:8px;">
-			</div>
+		<div id="userAccountSection" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); text-align: center; display:flex; flex-direction:column; align-items:center; gap:8px;"></div>
 		<div class="panel-actions" style="display: flex; flex-direction: column; gap: 8px;">
 			<button class="btn-purple" onclick="toggleLanguage()" id="langBtn">🌐 Switch to English</button>
 			<button class="btn-danger" onclick="resetCalculator()"><span data-i18n="btnReset">🔄 Reset Kalkulator</span></button>
@@ -317,6 +302,7 @@
 	<div id="floatingTooltip" class="floating-tooltip"></div>
 
 </div>
+
 <script src="js/firebase-config.js"></script>
 <script src="js/db_stats.js"></script>
 <script src="js/db_tome.js"></script>
