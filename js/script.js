@@ -749,15 +749,14 @@ if (typeof db !== 'undefined') {
 // MENANGKAP DATA DARI ADMIN (FIREBASE COMPAT)
 // ==========================================
 
-if (typeof window.db !== 'undefined') {
+if (typeof db !== 'undefined') {
     
-    // 1. MENANGKAP BANNER PENGUMUMAN
+    // 1. Banner Pengumuman
     const bannerElement = document.getElementById('globalBanner');
     const bannerTextElement = document.getElementById('bannerText');
 
     if (bannerElement && bannerTextElement) {
-        // Gaya penulisan Compat menggunakan titik menyambung
-        window.db.collection("admin_data").doc("global_settings").onSnapshot((docSnap) => {
+        db.collection("admin_data").doc("global_settings").onSnapshot((docSnap) => {
             if (docSnap.exists) {
                 const data = docSnap.data();
                 if (data.bannerText && data.bannerText.trim() !== "") {
@@ -770,11 +769,11 @@ if (typeof window.db !== 'undefined') {
         });
     }
 
-    // 2. MENANGKAP HARGA PASAR
+    // 2. Harga Pasar
     window.hargaMysticPageGlobal = 0; 
     window.hargaFragmentGlobal = 0;
 
-    window.db.collection("admin_data").doc("market_prices").onSnapshot((docSnap) => {
+    db.collection("admin_data").doc("market_prices").onSnapshot((docSnap) => {
         if (docSnap.exists) {
             const data = docSnap.data();
             window.hargaMysticPageGlobal = data.mysticPagePrice || 0;
@@ -784,6 +783,8 @@ if (typeof window.db !== 'undefined') {
         }
     });
 
+} else {
+    console.warn("Firebase (db) belum terhubung ke script ini.");
 }
 
 window.onload = () => { applyLanguage(); document.getElementById('modalInput').addEventListener('keydown', function(e) { if(e.key === 'Enter') confirmModal(); }); };
