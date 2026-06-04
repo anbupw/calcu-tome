@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Tome Simulator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0f172a; color: #f8fafc; padding: 40px 20px; }
+        .admin-card { max-width: 600px; margin: 0 auto 30px auto; background: #1e293b; padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); }
+        h2 { margin-top: 0; color: #3b82f6; border-bottom: 2px solid #334155; padding-bottom: 10px; }
+        .form-group { margin-bottom: 20px; display: flex; flex-direction: column; gap: 8px; }
+        label { font-weight: 600; font-size: 0.9rem; color: #94a3b8; }
+        input { padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 1rem; width: 100%; box-sizing: border-box; }
+        input:focus { border-color: #3b82f6; outline: none; }
+        button { background: #3b82f6; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%; font-size: 1rem; }
+        button:hover { background: #2563eb; }
+        .btn-success { background: #10b981; }
+        .btn-success:hover { background: #059669; }
+        .btn-danger { background: #ef4444; margin-top: 10px; width: auto; padding: 6px 12px; font-size: 0.8rem; }
+        .btn-danger:hover { background: #dc2626; }
+        #adminSection { display: none; } /* Tersembunyi sebelum login sukses */
+        .user-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.85rem; color: #94a3b8; }
+    </style>
+</head>
+<body>
+
+    <div id="loginSection" class="admin-card">
+        <h2>🔒 Login Admin Panel</h2>
+        <div class="form-group">
+            <label for="loginEmail">Email Admin:</label>
+            <input type="email" id="loginEmail" placeholder="Masukkan email admin...">
+        </div>
+        <div class="form-group">
+            <label for="loginPassword">Password:</label>
+            <input type="password" id="loginPassword" placeholder="Masukkan password...">
+        </div>
+        <button onclick="loginAdmin()">Masuk Dashboard</button>
+    </div>
+
+    <div id="adminSection">
+        <div class="admin-card" style="padding: 15px 25px; margin-bottom: 20px;">
+            <div class="user-info">
+                <span>Login sebagai: <strong id="adminEmailTxt" style="color:#3b82f6;">-</strong></span>
+                <button onclick="logoutAdmin()" class="btn-danger">Logout</button>
+            </div>
+        </div>
+
+        <div class="admin-card">
+            <h2>📢 Pengaturan Banner Global</h2>
+            <div class="form-group">
+                <label for="inputBannerAdmin">Teks Banner Pengumuman berjalan:</label>
+                <input type="text" id="inputBannerAdmin" placeholder="Contoh: 📢 Maintenance besok jam 08.00 WIB...">
+            </div>
+            <button onclick="saveAdminBanner()">🚀 Perbarui Teks Banner</button>
+        </div>
+
+        <div class="admin-card">
+            <h2>💰 Update Harga Pasar Global</h2>
+            <div class="form-group">
+                <label for="inputPagePriceAdmin">Harga Pasar Tome Page (Gold):</label>
+                <input type="number" id="inputPagePriceAdmin" placeholder="Contoh: 150000">
+            </div>
+            <div class="form-group">
+                <label for="inputFragPriceAdmin">Harga Pasar Tome Fragment (Gold):</label>
+                <input type="number" id="inputFragPriceAdmin" placeholder="Contoh: 50000">
+            </div>
+            <button class="btn-success" onclick="saveAdminPrices()">💾 Perbarui Harga Global</button>
+        </div>
+    </div>
+
+<script>
+    // MASUKKAN KONFIGURASI FIREBASE ASLI ANDA DI SINI
+    const firebaseConfig = {
+        apiKey: "AIzaSyC1eCaQkeCf1IJQIDqveEKhHHFEYMd6bSs",
+		authDomain: "kalkulator-tome.firebaseapp.com",
+		projectId: "kalkulator-tome",
+		storageBucket: "kalkulator-tome.firebasestorage.app",
+		messagingSenderId: "794012581588",
+		appId: "1:794012581588:web:021341eda428298daf0541"
+    };
+
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    // 📡 CEK STATUS LOGIN SECARA REAL-TIME
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('adminSection').style.display = 'block';
+            document.getElementById('adminEmailTxt').innerText = user.email;
+            loadCurrentData(); // Muat data lama ke input box (Auto-Fill)
+        } else {
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('adminSection').style.display = 'none';
+        }
+    });
+
+    // Fungsi Login
+    function loginAdmin() {
+        const email = document.getElementById('loginEmail').value;
+        const pass = document.getElementById('loginPassword').value;
+        auth.signInWithEmailAndPassword(email, pass)
+            .catch(err => alert("Gagal Masuk: " + err.message));
+    }
+
+    // Fungsi Logout
+    function logoutAdmin() {
+        auth.signOut();
+    }
+
+    // 🔄 AUTO-FILL: Mengambil data aktif dari Firebase agar input form tidak kosong
+    function loadCurrentData() {
+        db.collection("admin_data").doc("global_settings").get().then((doc) => {
+            if (doc.exists && doc.data().bannerText) {
+                document.getElementById('inputBannerAdmin').value = doc.data().bannerText;
+            }
+        });
+        db.collection("admin_data").doc("market_prices").get().then((doc) => {
+            if (doc.exists) {
+                const data = doc.data();
+                if (data.mysticPagePrice) document.getElementById('inputPagePriceAdmin').value = data.mysticPagePrice;
+                if (data.fragmentPrice) document.getElementById('inputFragPriceAdmin').value = data.fragmentPrice;
+            }
+        });
+    }
+
+    // Fungsi menyimpan data Banner
+    function saveAdminBanner() {
+        const textTxt = document.getElementById('inputBannerAdmin').value;
+        db.collection("admin_data").doc("global_settings").set({
+            bannerText: textTxt
+        }, { merge: true })
+        .then(() => alert("Banner pengumuman berhasil diperbarui!"))
+        .catch(err => alert("Gagal: " + err.message));
+    }
+
+    // Fungsi menyimpan data Harga Pasar Global
+    function saveAdminPrices() {
+        const pagePrice = parseInt(document.getElementById('inputPagePriceAdmin').value) || 0;
+        const fragPrice = parseInt(document.getElementById('inputFragPriceAdmin').value) || 0;
+        
+        db.collection("admin_data").doc("market_prices").set({
+            mysticPagePrice: pagePrice,
+            fragmentPrice: fragPrice
+        }, { merge: true })
+        .then(() => alert("Harga pasar global berhasil diperbarui!"))
+        .catch(err => alert("Gagal: " + err.message));
+    }
+</script>
+
+</body>
+</html>

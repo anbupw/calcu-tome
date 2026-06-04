@@ -701,7 +701,7 @@ if (typeof window.db !== 'undefined') {
         });
     }
 
-    // 2. Harga Pasar
+    // 2. Harga Pasar (SEKARANG DISINKRONKAN LANGSUNG KE INPUT LAYAR PLAYER)
     window.hargaMysticPageGlobal = 0; 
     window.hargaFragmentGlobal = 0;
 
@@ -711,7 +711,19 @@ if (typeof window.db !== 'undefined') {
             window.hargaMysticPageGlobal = data.mysticPagePrice || 0;
             window.hargaFragmentGlobal = data.fragmentPrice || 0;
             
-            console.log("🔥 Harga terupdate dari Admin:", window.hargaMysticPageGlobal, window.hargaFragmentGlobal);
+            // 🌟 MASUKKAN ANGKA DARI ADMIN KE KOTAK INPUT PLAYER
+            const inputPrice11 = document.getElementById('price11'); // Kotak Tome Fragment
+            const inputPrice12 = document.getElementById('price12'); // Kotak Tome Page
+
+            if (inputPrice11) inputPrice11.value = window.hargaFragmentGlobal;
+            if (inputPrice12) inputPrice12.value = window.hargaMysticPageGlobal;
+            
+            // 🌟 HITUNG ULANG OTOMATIS BEGITU ADA PERUBAHAN HARGA GLOBAL
+            if (typeof updateCostAndProgress === 'function') {
+                updateCostAndProgress();
+            }
+            
+            console.log("🔥 Harga terupdate dari Admin & Sinkron ke UI:", window.hargaMysticPageGlobal, window.hargaFragmentGlobal);
         }
     });
 
