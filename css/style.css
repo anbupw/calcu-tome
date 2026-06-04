@@ -479,3 +479,55 @@ html {
     top: 0;
     z-index: 1000;
 }
+
+/* =========================================
+   GAYA UNTUK ANALISIS POTENSI CRAFTING
+========================================= */
+.reverse-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.reverse-card {
+    background: #1e293b; /* Warna latar gelap elegan */
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.reverse-card:hover {
+    background: #334155; /* Berubah warna saat disentuh/hover */
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.reverse-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.reverse-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.reverse-name {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #e2e8f0;
+}
+
+.reverse-count {
+    font-size: 0.75rem;
+    color: #10b981; /* Warna hijau untuk jumlah */
+    margin-top: 2px;
+}
