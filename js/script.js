@@ -265,17 +265,32 @@ function renderBookSelection() {
     let txt = '';
     const txtLvl = LANG[currentLang]['lvl'];
     
-    for (let r = 6; r >= 1; r--) {
+    // 1. Cari level tertinggi secara otomatis dari TOME_DB
+    let maxLevel = 1;
+    for (let i = 101; i < TOME_DB.length; i++) {
+        if (TOME_DB[i]) {
+            let lvl = Math.floor(i / 100);
+            if (lvl > maxLevel) maxLevel = lvl;
+        }
+    }
+    
+    // 2. Render dari level tertinggi turun ke level 1
+    for (let r = maxLevel; r >= 1; r--) {
         let lis = ''; 
         let start = r * 100 + 1; 
-        let end = r * 100 + 16;
+        
+        // 3. Kita longgarkan batasan menjadi 99 buku per level (sebelumnya hanya 16)
+        // Jadi ID 701 sampai 799 akan terbaca semua!
+        let end = r * 100 + 99; 
         
         for (let e = start; e <= end; e++) {
             if (TOME_DB[e]) {
                 lis += `<li><button style="background-image:url('img/znachki.png'); ${getSpritePosition(e)}" data-id="${e}" onclick="selectTargetBook(${e})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`;
             }
         }
-        if (lis !== '') txt += `<h4>${LANG[currentLang]['lvl']} ${r}</h4><ul>${lis}</ul>`;
+        
+        // Jika ada isinya, tampilkan kategorinya
+        if (lis !== '') txt += `<h4>${txtLvl} ${r}</h4><ul>${lis}</ul>`;
     }
     document.getElementById('vyborDiv').innerHTML = txt;
 }
