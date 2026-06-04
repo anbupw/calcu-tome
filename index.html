@@ -17,62 +17,88 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
 <link rel="stylesheet" href="css/style.css">
+
+<style>
+    @keyframes jalanKiri {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+    }
+    .marquee-box {
+        overflow: hidden;
+        white-space: nowrap;
+        position: relative;
+        width: calc(100% - 30px); 
+    }
+    .marquee-content {
+        display: inline-block;
+        animation: jalanKiri 15s linear infinite; 
+    }
+    .marquee-content:hover {
+        animation-play-state: paused; 
+    }
+
+    .dynamic-banner {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        color: #f59e0b;
+        padding: 12px 15px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        z-index: 9999;
+        box-sizing: border-box;
+        border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+    }
+    .btn-close-banner {
+        position: absolute; right: 15px; top: 50%; transform: translateY(-50%); 
+        background: transparent; border: none; color: #9ca3af; font-size: 1.2rem; cursor: pointer; z-index: 10;
+    }
+
+    /* 📱 SMARTPHONE: Banner menjadi Card yang menyatu di atas judul */
+    @media (max-width: 768px) {
+        .dynamic-banner {
+            position: relative !important;
+            width: 100% !important;
+            background: rgba(30, 41, 59, 0.7) !important;
+            border-radius: 12px !important;
+            margin-bottom: 15px !important;
+            border: 1px solid rgba(245, 158, 11, 0.2) !important;
+        }
+        .btn-close-banner {
+            display: none !important; /* Tombol X disembunyikan */
+        }
+        .dynamic-banner .marquee-box {
+            width: 100% !important; /* Teks full lebar */
+        }
+    }
+</style>
+
 </head>
 <body>
-    <style>
-		@keyframes jalanKiri {
-			0% { transform: translateX(100%); }
-			100% { transform: translateX(-100%); }
-		}
-		.marquee-box {
-			overflow: hidden;
-			white-space: nowrap;
-			position: relative;
-			width: calc(100% - 30px); 
-		}
-		.marquee-content {
-			display: inline-block;
-			animation: jalanKiri 9s linear infinite; 
-		}
-		.marquee-content:hover {
-			animation-play-state: paused; 
-		}
 
-		@media (max-width: 768px) {
-			#globalBanner {
-				position: relative !important; /* Tidak melayang, menyatu dengan halaman */
-				top: auto !important;
-				left: auto !important;
-				width: 100% !important;
-				background: rgba(30, 41, 59, 0.7) !important; /* Warna selaras dengan panel gelap */
-				border-radius: 12px !important; /* Melengkung presisi mengikuti gaya card */
-				margin-bottom: 12px !important; /* Jarak aman sebelum masuk ke target card */
-				border: 1px solid rgba(245, 158, 11, 0.2) !important;
-				box-shadow: none !important;
-				padding: 12px !important;
-			}
-
-			#globalBanner button {
-				display: none !important;
-			}
-
-			#globalBanner .marquee-box {
-				width: 100% !important;
-			}
-		}
-	</style>
-
-<div id="globalBanner" style="display: none; position: sticky; top: 0; left: 0; width: 100%; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #f59e0b; padding: 12px 15px; font-size: 0.95rem; font-weight: 600; z-index: 9999; box-sizing: border-box; border-bottom: 1px solid rgba(245, 158, 11, 0.2);">
-    
-    <div class="marquee-box">
-        <div class="marquee-content">
-            📢 <span id="bannerText">Memuat pengumuman...</span>
-        </div>
-    </div>
-    
-    <button onclick="document.getElementById('globalBanner').style.display='none'" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: #9ca3af; font-size: 1.2rem; cursor: pointer; transition: 0.2s; z-index: 10;">
-        <i class="fas fa-times"></i>
-    </button>
+<div id="loginOverlay" class="login-overlay" style="display: none;">
+	<div class="login-card">
+		<div class="login-logo"><i class="fas fa-book-bookmark"></i></div>
+		<h3>Simulator Crafting Tome</h3>
+		<p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">Perfect World Classic</p>
+		<div class="login-divider"></div>
+		<p class="login-desc">Selamat datang! Silakan masuk dengan akun Google Anda untuk mengakses seluruh fitur kalkulator, inventory, dan sinkronisasi data cloud otomatis.</p>
+		<button class="btn-google-login" onclick="loginGoogle()">
+			<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 48 48" style="display:block;">
+			  <g>
+				<path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
+				<path fill="#4285F4" d="M46.5 24c0-1.55-.15-3.24-.47-4.77H24v9.03h12.75c-.55 2.87-2.18 5.31-4.62 6.95l7.2 5.58C43.55 36.5 46.5 31 46.5 24z"></path>
+				<path fill="#FBBC05" d="M10.54 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.98-6.19z"></path>
+				<path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.2-5.58c-2.11 1.41-4.8 2.27-8.69 2.27-6.26 0-11.57-4.22-13.46-10.42l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+			  </g>
+			</svg>
+			<span>Masuk dengan Google</span>
+		</button>
+	</div>
 </div>
 
 <div id="loginOverlay" class="login-overlay" style="display: none;">
