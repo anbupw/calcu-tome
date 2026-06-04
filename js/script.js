@@ -436,52 +436,68 @@ function updateCostAndProgress() {
 })();
 
 function processTree(id) {
-    if (!id || !TOME_DB[id]) return;
-    rightTreeId = id;
-    updateFavoriteButton();
-    let multiplier = Math.max(1, parseInt(document.getElementById('mnojitel').value) || 1);
-    itemCounts = [];
-    
-    let deductionsCopy = [];
-    for (let i = 0; i < deductions.length; i++) { deductionsCopy[i] = deductions[i] || 0; }
-    
-    function walkAndCount(nodeId, isRoot = false) {
-        if (!nodeId || !TOME_DB[nodeId]) return;
+    try {
+        if (!id || !TOME_DB[id]) return;
+        rightTreeId = id;
         
-        if (!isRoot && deductionsCopy[nodeId] > 0) { 
-            deductionsCopy[nodeId]--; 
-            return; 
+        if (typeof updateFavoriteButton === 'function') updateFavoriteButton();
+        
+        let multiplier = Math.max(1, parseInt(document.getElementById('mnojitel').value) || 1);
+        itemCounts = [];
+        
+        let deductionsCopy = [];
+        if (typeof deductions !== 'undefined' && deductions !== null) {
+            for (let i = 0; i < deductions.length; i++) { 
+                deductionsCopy[i] = deductions[i] || 0; 
+            }
         }
         
-        if (!itemCounts[nodeId]) itemCounts[nodeId] = 0;
-        itemCounts[nodeId]++;
-        
-        if (nodeId > 200) { 
-            walkAndCount(TOME_DB[nodeId][0], false); 
-            walkAndCount(TOME_DB[nodeId][1], false); 
-            walkAndCount(TOME_DB[nodeId][2], false); 
+        function walkAndCount(nodeId, isRoot = false) {
+            if (!nodeId || !TOME_DB[nodeId]) return;
+            
+            if (!isRoot && deductionsCopy[nodeId] > 0) { 
+                deductionsCopy[nodeId]--; 
+                return; 
+            }
+            
+            if (!itemCounts[nodeId]) itemCounts[nodeId] = 0;
+            itemCounts[nodeId]++;
+            
+            if (nodeId > 200) { 
+                walkAndCount(TOME_DB[nodeId][0], false); 
+                walkAndCount(TOME_DB[nodeId][1], false); 
+                walkAndCount(TOME_DB[nodeId][2], false); 
+            }
         }
-    }
-    
-    for (let z = 0; z < multiplier; z++) { walkAndCount(id, true); }
-    
-    let totalLv1Tomes = 0;
-    for (let z = 101; z <= 109; z++) { totalLv1Tomes += (itemCounts[z] || 0); }
-    
-    itemCounts[11] = totalLv1Tomes * 3; 
-    itemCounts[12] = totalLv1Tomes * 4; 
-    
-    if (deductionsCopy[11]) { itemCounts[11] -= deductionsCopy[11]; if (itemCounts[11] < 0) itemCounts[11] = 0; }
-    if (deductionsCopy[12]) { itemCounts[12] -= deductionsCopy[12]; if (itemCounts[12] < 0) itemCounts[12] = 0; }
-    
-    itemCounts[10] = (itemCounts[12] || 0) * 20;
-    if (deductionsCopy[10]) { itemCounts[10] -= deductionsCopy[10]; if (itemCounts[10] < 0) itemCounts[10] = 0; }
-    
-    renderTree(); renderDeductions(); updateCostAndProgress();
-	
-	if (typeof window.sendStatsToFirebase === 'function') {
-        const targetBuku = document.getElementById('nazvaniye').innerText || "Tome Rahasia";
-        window.sendStatsToFirebase(targetBuku);
+        
+        for (let z = 0; z < multiplier; z++) { walkAndCount(id, true); }
+        
+        let totalLv1Tomes = 0;
+        for (let z = 101; z <= 109; z++) { totalLv1Tomes += (itemCounts[z] || 0); }
+        
+        itemCounts[11] = totalLv1Tomes * 3; 
+        itemCounts[12] = totalLv1Tomes * 4; 
+        
+        if (deductionsCopy[11]) { itemCounts[11] -= deductionsCopy[11]; if (itemCounts[11] < 0) itemCounts[11] = 0; }
+        if (deductionsCopy[12]) { itemCounts[12] -= deductionsCopy[12]; if (itemCounts[12] < 0) itemCounts[12] = 0; }
+        
+        itemCounts[10] = (itemCounts[12] || 0) * 20;
+        if (deductionsCopy[10]) { itemCounts[10] -= deductionsCopy[10]; if (itemCounts[10] < 0) itemCounts[10] = 0; }
+        
+        if (typeof renderTree === 'function') renderTree(); 
+        if (typeof renderDeductions === 'function') renderDeductions(); 
+        if (typeof updateCostAndProgress === 'function') updateCostAndProgress();
+
+        if (typeof window.sendStatsToFirebase === 'function') {
+            if (window.lastTrackedTomeId !== id) {
+                const targetBuku = document.getElementById('nazvaniye').innerText || "Tome Rahasia";
+                window.sendStatsToFirebase(targetBuku);
+                window.lastTrackedTomeId = id;
+            }
+        }
+
+    } catch (error) {
+        console.error("🚨 BUG TERDETEKSI DI processTree:", error);
     }
 }
 
