@@ -103,10 +103,10 @@ button:hover { background: #2563eb; }
 .btn-success { background: #10b981; color: white; border: none; }
 .btn-success:hover { background: #059669; }
 
-.btn-danger { background: #ef4444; margin-top: 10px; width: auto; padding: 6px 12px; font-size: 0.8rem; border: none; color: white; cursor: pointer; border-radius: 6px; }
+.btn-danger { background: #ef4444; width: auto; padding: 8px 15px; font-size: 0.85rem; border: none; color: white; cursor: pointer; border-radius: 6px; margin: 0; }
 .btn-danger:hover { background: #dc2626; }
 
-.btn-warning { background: #f59e0b; border: none; color: white; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+.btn-warning { background: #f59e0b; width: auto; padding: 8px 15px; font-size: 0.85rem; border: none; color: white; cursor: pointer; border-radius: 6px; margin: 0; }
 .btn-warning:hover { background: #d97706; }
 
 .btn-secondary { background: #64748b; color: white; border: none; cursor: pointer; border-radius: 8px; }

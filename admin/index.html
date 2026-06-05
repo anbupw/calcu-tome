@@ -45,14 +45,15 @@
             <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 15px;">
                 Fitur pemeliharaan server untuk mengosongkan log obrolan dan data statistik yang menumpuk.
             </p>
-            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                <button onclick="adminClearCollection('global_chats')" class="btn-danger" style="margin:0; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;">
-                    <i class="fas fa-comment-slash"></i> Sapu Bersih Chat Global
-                </button>
-                <button onclick="adminClearCollection('stats')" class="btn-warning" style="margin:0; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;">
-                    <i class="fas fa-chart-pie"></i> Reset Statistik Pencarian
-                </button>
-            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+				<button onclick="adminClearCollection('global_chats')" class="btn-danger" style="display: flex; justify-content: center; align-items: center; gap: 6px;">
+					<i class="fas fa-comment-slash"></i> Sapu Bersih Chat Global
+				</button>
+				
+				<button onclick="adminClearCollection('stats')" class="btn-warning" style="display: flex; justify-content: center; align-items: center; gap: 6px;">
+					<i class="fas fa-chart-pie"></i> Reset Statistik Pencarian
+				</button>
+			</div>
         </div>
 		
         <div class="admin-card">
