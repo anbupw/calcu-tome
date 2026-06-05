@@ -1,16 +1,149 @@
-/* admin-style.css */
-body { font-family: 'Inter', sans-serif; background: #0f172a; color: #f8fafc; padding: 40px 20px; }
-.admin-card { max-width: 600px; margin: 0 auto 30px auto; background: #1e293b; padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); }
-h2 { margin-top: 0; color: #3b82f6; border-bottom: 2px solid #334155; padding-bottom: 10px; }
-.form-group { margin-bottom: 20px; display: flex; flex-direction: column; gap: 8px; }
-label { font-weight: 600; font-size: 0.9rem; color: #94a3b8; }
-input { padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 1rem; width: 100%; box-sizing: border-box; }
-input:focus { border-color: #3b82f6; outline: none; }
-button { background: #3b82f6; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%; font-size: 1rem; }
+/* ==============================================
+   CSS KHUSUS ADMIN PANEL - KALKULATOR TOME
+============================================== */
+
+body { 
+    font-family: 'Inter', sans-serif; 
+    background: #0f172a; 
+    color: #f8fafc; 
+    padding: 40px 20px; 
+}
+
+/* --- KARTU LAYOUT --- */
+.admin-card { 
+    max-width: 600px; 
+    margin: 0 auto 30px auto; 
+    background: #1e293b; 
+    padding: 25px; 
+    border-radius: 12px; 
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); 
+}
+
+.wide-card {
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+h2 { 
+    margin-top: 0; 
+    color: #3b82f6; 
+    border-bottom: 2px solid #334155; 
+    padding-bottom: 10px; 
+}
+
+.card-title {
+    font-size: 1.3rem; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px;
+}
+
+.split-title {
+    justify-content: space-between; 
+    flex-wrap: wrap; 
+    gap: 10px;
+}
+
+/* --- FORM & INPUT --- */
+.form-group { 
+    margin-bottom: 20px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 8px; 
+}
+
+.form-container {
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; 
+    margin-top: 15px; 
+    margin-bottom: 20px;
+}
+
+label { 
+    font-weight: 600; 
+    font-size: 0.9rem; 
+    color: #94a3b8; 
+}
+
+input { 
+    padding: 12px; 
+    background: #0f172a; 
+    border: 1px solid #334155; 
+    border-radius: 8px; 
+    color: #fff; 
+    font-size: 1rem; 
+    width: 100%; 
+    box-sizing: border-box; 
+}
+
+input:focus { 
+    border-color: #3b82f6; 
+    outline: none; 
+}
+
+/* --- TOMBOL (BUTTONS) --- */
+button { 
+    background: #3b82f6; 
+    color: white; 
+    border: none; 
+    padding: 12px 20px; 
+    border-radius: 8px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    transition: 0.2s; 
+    width: 100%; 
+    font-size: 1rem; 
+}
+
 button:hover { background: #2563eb; }
-.btn-success { background: #10b981; }
+
+.btn-success { background: #10b981; color: white; border: none; }
 .btn-success:hover { background: #059669; }
-.btn-danger { background: #ef4444; margin-top: 10px; width: auto; padding: 6px 12px; font-size: 0.8rem; }
+
+.btn-danger { background: #ef4444; margin-top: 10px; width: auto; padding: 6px 12px; font-size: 0.8rem; border: none; color: white; cursor: pointer; border-radius: 6px; }
 .btn-danger:hover { background: #dc2626; }
-#adminSection { display: none; }
+
+.btn-warning { background: #f59e0b; border: none; color: white; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+.btn-warning:hover { background: #d97706; }
+
+.btn-secondary { background: #64748b; color: white; border: none; cursor: pointer; border-radius: 8px; }
+.btn-secondary:hover { background: #475569; }
+
+.btn-primary-small { background: #3b82f6; color: white; width: auto; padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; box-shadow: 0 4px 6px rgba(0,0,0,0.3); margin: 0; }
+.btn-full { width: 100%; padding: 12px; font-size: 1rem; margin-top: 0; }
+
+/* --- UTILITAS --- */
 .user-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.85rem; color: #94a3b8; }
+.flex-row { display: flex; gap: 10px; }
+.flex-1 { flex: 1; }
+.flex-2 { flex: 2; }
+.sm-gap { gap: 5px; }
+.text-center { text-align: center; color: #94a3b8; padding: 20px; }
+.text-blue { color: #3b82f6; }
+.text-green { color: #10b981; }
+.text-orange { color: #f59e0b; }
+
+/* --- STATISTIK --- */
+.grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px; }
+.stat-box { background: #0f172a; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #334155; }
+.stat-label { color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px; }
+.stat-value { font-size: 1.8rem; font-weight: bold; word-break: break-word; }
+
+/* --- TABEL & MODERASI --- */
+.table-responsive { overflow-x: auto; width: 100%; border-radius: 8px; border: 1px solid #334155; background: #0f172a; -webkit-overflow-scrolling: touch; }
+.admin-table { width: 100%; border-collapse: collapse; text-align: left; min-width: 500px; }
+.admin-table th { padding: 12px 10px; background: #1e293b; border-bottom: 2px solid #334155; color: #94a3b8; font-size: 0.85rem; }
+.admin-table tbody { font-size: 0.85rem; color: #f8fafc; }
+.chat-stream-box { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 15px; height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
+
+/* --- MODAL POPUP --- */
+.modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box; }
+.modal-content { background: #1e293b; padding: 25px; border-radius: 12px; width: 100%; max-width: 400px; border: 1px solid #334155; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+.modal-title { margin-top: 0; color: #10b981; border-bottom: 1px solid #334155; padding-bottom: 10px; font-size: 1.2rem; }
+.modal-body { margin-top: 15px; margin-bottom: 20px; color: #f8fafc; font-size: 0.95rem; max-height: 300px; overflow-y: auto; background: #0f172a; padding: 15px; border-radius: 8px; }
+.recipe-box { background: #0f172a; padding: 10px; border-radius: 6px; border: 1px solid #334155; }
+.recipe-box label { color: #f59e0b; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; display: block; }
+.recipe-box input { text-align: center; }

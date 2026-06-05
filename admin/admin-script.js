@@ -15,7 +15,9 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 
 auth.onAuthStateChanged((user) => {
-    if (user) {
+    const ADMIN_UID = "qU8hYt44KNZEmKhk1c6u9mO1cR92";
+
+    if (user && user.uid === ADMIN_UID) {
         document.getElementById('loginSection').style.display = 'none';
         document.getElementById('adminSection').style.display = 'block';
         document.getElementById('adminEmailTxt').innerText = user.email;
@@ -23,6 +25,11 @@ auth.onAuthStateChanged((user) => {
     } else {
         document.getElementById('loginSection').style.display = 'block';
         document.getElementById('adminSection').style.display = 'none';
+        
+        if (user && user.uid !== ADMIN_UID) {
+            firebase.auth().signOut();
+            alert("⛔ AKSES DITOLAK! Akun Anda tidak memiliki izin Admin.");
+        }
     }
 });
 
