@@ -375,8 +375,11 @@ window.openTomeModal = function(tomeId) {
     document.getElementById('tomeModal').style.display = 'flex';
     
     const urlInput = document.getElementById('tomeEditIconUrl');
-    if (urlInput) urlInput.value = ""; 
+    const statsInput = document.getElementById('tomeEditStats');
     
+    if (urlInput) urlInput.value = ""; 
+    if (statsInput) statsInput.value = "";
+
     if (tomeId === 'NEW') {
         document.getElementById('tomeModalTitle').innerText = "✨ Tambah Buku Baru";
         document.getElementById('tomeEditId').readOnly = false;
@@ -401,9 +404,17 @@ window.openTomeModal = function(tomeId) {
                 document.getElementById('tomeReq1').value = d.req[0];
                 document.getElementById('tomeReq2').value = d.req[1];
                 document.getElementById('tomeReq3').value = d.req[2];
-                
                 if (d.iconUrl) {
                     document.getElementById('tomeEditIconUrl').value = d.iconUrl;
+                }
+            }
+        });
+
+        db.collection("game_config").doc("tome_stats").get().then(statDoc => {
+            if (statDoc.exists) {
+                const allStats = statDoc.data();
+                if (allStats[tomeId]) {
+                    statsInput.value = Array.isArray(allStats[tomeId]) ? allStats[tomeId].join('\n') : allStats[tomeId];
                 }
             }
         });
@@ -422,6 +433,12 @@ window.saveTomeData = function() {
     const iconUrlInput = document.getElementById('tomeEditIconUrl');
     const iconUrl = iconUrlInput ? iconUrlInput.value.trim() : "";
 
+    const statsRaw = document.getElementById('tomeEditStats').value;
+    let statsArray = [];
+    if (statsRaw.trim() !== "") {
+        statsArray = statsRaw.split('\n').map(s => s.trim()).filter(s => s !== "");
+    }
+
     if (!id || !name) return alert("ID dan Nama Buku tidak boleh kosong!");
 
     const tomeData = {
@@ -435,8 +452,15 @@ window.saveTomeData = function() {
 
     db.collection("tomes").doc(String(id)).set(tomeData)
       .then(() => {
+          
+          return db.collection("game_config").doc("tome_stats").set({
+              [id]: statsArray
+          }, { merge: true }); 
+
+      })
+      .then(() => {
           document.getElementById('tomeModal').style.display = 'none';
-          alert("✅ Data Buku & Link Ikon Berhasil Disimpan!");
+          alert("✅ Data Buku & Statistik Berhasil Disimpan!");
       })
       .catch(err => {
           alert("❌ Gagal menyimpan ke Firestore: " + err.message);
