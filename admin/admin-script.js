@@ -14,27 +14,76 @@ if (!firebase.apps.length) {
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-auth.onAuthStateChanged((user) => {
+auth.onAuthStateChanged(user => {
+    const ADMIN_UID = "qU8hYt44KNZEmKhk1c6u9mO1cR92";
+    const adminMenuButton = document.getElementById('btnMenuAdmin'); // (Opsional) Jika Anda punya tombol menu ke halaman admin
+    const adminSection = document.getElementById('adminSection');
+
     if (user) {
-        document.getElementById('loginSection').style.display = 'none';
-        document.getElementById('adminSection').style.display = 'block';
-        document.getElementById('adminEmailTxt').innerText = user.email;
-        loadCurrentData();
+        // User berhasil login (bisa player biasa, bisa admin)
+        
+        // Cek apakah dia admin?
+        if (user.uid === ADMIN_UID) {
+            console.log("👑 Sesi Admin Terdeteksi!");
+            // Tampilkan tombol menu admin rahasia (jika ada)
+            if(adminMenuButton) adminMenuButton.style.display = 'block';
+        } else {
+            // Jika player biasa, pastikan menu dan halaman admin disembunyikan paksa
+            if(adminMenuButton) adminMenuButton.style.display = 'none';
+            if(adminSection) adminSection.style.display = 'none';
+        }
     } else {
-        document.getElementById('loginSection').style.display = 'block';
-        document.getElementById('adminSection').style.display = 'none';
+        // Saat belum login/logout
+        if(adminMenuButton) adminMenuButton.style.display = 'none';
+        if(adminSection) adminSection.style.display = 'none';
     }
 });
 
 function loginAdmin() {
     const email = document.getElementById('loginEmail').value;
     const pass = document.getElementById('loginPassword').value;
-    auth.signInWithEmailAndPassword(email, pass)
-        .catch(err => alert("Gagal Masuk: " + err.message));
+    
+    const ADMIN_UID = "qU8hYt44KNZEmKhk1c6u9mO1cR92";
+
+    if (!email || !pass) {
+        alert("Email dan Password tidak boleh kosong!");
+        return;
+    }
+
+    firebase.auth().signInWithEmailAndPassword(email, pass)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            
+            if (user.uid !== ADMIN_UID) {
+                alert("⛔ AKSES DITOLAK! Akun ini tidak memiliki otoritas sebagai Admin.");
+                firebase.auth().signOut();
+                return;
+            }
+
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('adminSection').style.display = 'block';
+            document.getElementById('adminEmailTxt').innerText = user.email;
+            
+            alert("✅ Selamat datang, Admin!");
+        })
+        .catch((error) => {
+            console.error("Error Login:", error);
+            alert("❌ Login Gagal: Pastikan Email & Password benar.");
+        });
 }
 
 function logoutAdmin() {
-    auth.signOut();
+    firebase.auth().signOut().then(() => {
+        document.getElementById('loginSection').style.display = 'block';
+        document.getElementById('adminSection').style.display = 'none';
+        
+        document.getElementById('loginEmail').value = '';
+        document.getElementById('loginPassword').value = '';
+        
+        alert("🔒 Anda telah berhasil keluar dari Panel Admin.");
+    }).catch((error) => {
+        alert("Gagal logout: " + error.message);
+    });
 }
 
 function loadCurrentData() {
@@ -150,16 +199,11 @@ function loadPlayerCRM() {
     });
 }
 
-// ==========================================
-// 💬 FUNGSI MODERASI CHAT GLOBAL
-// ==========================================
-
 function loadLiveChatModeration() {
-    // Kita ambil 50 pesan terakhir, diurutkan dari yang terbaru
     db.collection("global_chats").orderBy("timestamp", "desc").limit(50).onSnapshot((snap) => {
         const streamContainer = document.getElementById('adminChatStream');
         if (!streamContainer) return;
-        streamContainer.innerHTML = ''; // Bersihkan kontainer
+        streamContainer.innerHTML = '';
 
         if (snap.empty) {
             streamContainer.innerHTML = '<div style="text-align: center; color: #94a3b8; padding: 20px;"><i>Belum ada pesan di Global Chat.</i></div>';
@@ -170,24 +214,21 @@ function loadLiveChatModeration() {
             const data = doc.data();
             const chatId = doc.id;
             
-            // Asumsi field standar: displayName, uid, text, timestamp
             const senderName = data.displayName || data.senderName || 'Pemain Anonim';
             const senderId = data.uid || data.userId || '';
             const message = data.text || data.message || '(Pesan Kosong)';
             
-            // Format waktu menjadi Jam:Menit yang rapi
             let timeString = '-';
             if (data.timestamp) {
                 const date = data.timestamp.toDate ? data.timestamp.toDate() : new Date(data.timestamp);
                 timeString = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             }
 
-            // Buat gelembung chat
             const chatDiv = document.createElement('div');
             chatDiv.style.background = '#1e293b';
             chatDiv.style.padding = '12px';
             chatDiv.style.borderRadius = '8px';
-            chatDiv.style.borderLeft = '4px solid #3b82f6'; // Garis penanda
+            chatDiv.style.borderLeft = '4px solid #3b82f6';
             chatDiv.style.display = 'flex';
             chatDiv.style.justifyContent = 'space-between';
             chatDiv.style.alignItems = 'flex-start';
@@ -384,7 +425,7 @@ window.saveTomeData = function() {
         gameId: parseInt(gameId),
         name: name,
         req: [req1, req2, req3],
-        iconId: iconId ? parseInt(iconId) : null // Simpan Icon ID jika ada isinya
+        iconId: iconId ? parseInt(iconId) : null
     };
 
     db.collection("tomes").doc(String(id)).set(tomeData)
@@ -420,7 +461,7 @@ window.migrateOldTomeDB = function() {
     });
 
     batch.commit().then(() => {
-        alert("✅ BINGO! Semua data Tome berhasil dipindahkan ke Database!");
+        alert("✅ Semua data Tome berhasil dipindahkan ke Database!");
     }).catch(err => alert("Gagal migrasi: " + err.message));
 };
 
