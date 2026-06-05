@@ -14,28 +14,15 @@ if (!firebase.apps.length) {
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-auth.onAuthStateChanged(user => {
-    const ADMIN_UID = "qU8hYt44KNZEmKhk1c6u9mO1cR92";
-    const adminMenuButton = document.getElementById('btnMenuAdmin'); // (Opsional) Jika Anda punya tombol menu ke halaman admin
-    const adminSection = document.getElementById('adminSection');
-
+auth.onAuthStateChanged((user) => {
     if (user) {
-        // User berhasil login (bisa player biasa, bisa admin)
-        
-        // Cek apakah dia admin?
-        if (user.uid === ADMIN_UID) {
-            console.log("👑 Sesi Admin Terdeteksi!");
-            // Tampilkan tombol menu admin rahasia (jika ada)
-            if(adminMenuButton) adminMenuButton.style.display = 'block';
-        } else {
-            // Jika player biasa, pastikan menu dan halaman admin disembunyikan paksa
-            if(adminMenuButton) adminMenuButton.style.display = 'none';
-            if(adminSection) adminSection.style.display = 'none';
-        }
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('adminSection').style.display = 'block';
+        document.getElementById('adminEmailTxt').innerText = user.email;
+        loadCurrentData();
     } else {
-        // Saat belum login/logout
-        if(adminMenuButton) adminMenuButton.style.display = 'none';
-        if(adminSection) adminSection.style.display = 'none';
+        document.getElementById('loginSection').style.display = 'block';
+        document.getElementById('adminSection').style.display = 'none';
     }
 });
 
