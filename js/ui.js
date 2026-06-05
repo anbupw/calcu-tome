@@ -59,7 +59,7 @@ function showTooltip(element, event) {
     }
     
     tooltip.innerHTML = `
-        <div class="tooltip-title"><div style="width:32px; height:32px; display:inline-block; vertical-align:middle; background-image:url('img/znachki.png'); ${getSpritePosition(id)}; transform:scale(0.85); border-radius:4px;"></div> ${nameText}</div>
+        <div class="tooltip-title"><div style="width:32px; height:32px; display:inline-block; vertical-align:middle; ${getTomeIconStyle(id)}; transform:scale(0.85); border-radius:4px;"></div> ${nameText}</div>
         <div class="tooltip-type">${typeText}</div>
         <div class="tooltip-list">${statsHtml}</div>
         <div class="tooltip-footer">${footerText}</div>
