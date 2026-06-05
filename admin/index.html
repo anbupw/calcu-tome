@@ -32,11 +32,20 @@
     <div id="adminSection" style="display: none;">
         
         <div class="admin-card" style="padding: 15px 25px; margin-bottom: 20px;">
-            <div class="user-info">
-                <span>Login sebagai: <strong id="adminEmailTxt" style="color:#3b82f6;">-</strong></span>
-                <button onclick="logoutAdmin()" class="btn-danger">Logout</button>
-            </div>
-        </div>
+			<div class="user-info">
+				<span>Login sebagai: <strong id="adminEmailTxt" style="color:#3b82f6;">-</strong></span>
+				
+				<div style="display: inline-flex; gap: 8px; align-items: center; vertical-align: middle;">
+					
+					<button onclick="window.location.href='https://anbupw.github.io/calcu-tome/'" style="background: #475569; color: white; border: none; padding: 6px 14px; font-size: 0.8rem; border-radius: 4px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: background 0.2s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#475569'">
+						<i class="fas fa-home"></i> Home
+					</button>
+					
+					<button onclick="logoutAdmin()" class="btn-danger">Logout</button>
+					
+				</div>
+			</div>
+		</div>
 
         <div class="admin-card" style="padding: 20px; margin-bottom: 20px; border: 1px dashed #ef4444; background: rgba(239, 68, 68, 0.03); border-radius: 8px;">
             <h3 style="color: #ef4444; margin-bottom: 5px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
