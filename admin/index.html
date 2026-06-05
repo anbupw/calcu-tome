@@ -123,11 +123,16 @@
 		
         <div class="admin-card wide-card">
             <h2 class="card-title split-title">
-                <span>🛠️ Tome Manager</span>
-                <button onclick="openTomeModal('NEW')" class="btn-primary-small">
-					+ Tambah Buku Baru
-				</button>
-            </h2>
+				<span>🛠️ Tome Manager</span>
+				<div style="display: flex; gap: 8px;">
+					<button onclick="migrateStatsToFirebase()" class="btn-warning" style="padding: 8px 12px; font-size: 0.85rem; margin:0;">
+						🚀 Migrasi STATS_DB
+					</button>
+					<button onclick="openTomeModal('NEW')" class="btn-primary-small">
+						+ Tambah Buku Baru
+					</button>
+				</div>
+			</h2>
             <div class="table-responsive">
                 <table class="admin-table">
                     <thead>

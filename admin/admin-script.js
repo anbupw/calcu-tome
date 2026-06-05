@@ -526,3 +526,27 @@ window.toggleBan = function(userId, currentStatus) {
           .catch(err => alert("Gagal update status: " + err.message));
     }
 };
+
+// ========================================================
+// 🚀 FUNGSI MIGRASI STATS_DB KE FIREBASE
+// ========================================================
+async function migrateStatsToFirebase() {
+    // Memastikan STATS_DB masih ada di memori
+    if (typeof STATS_DB === "undefined") {
+        alert("❌ Error: File db_stats.js tidak terdeteksi!");
+        return;
+    }
+
+    if (!confirm("⚠️ Yakin ingin mengunggah seluruh data STATS_DB lokal ke Firebase?")) return;
+
+    try {
+        console.log("Memulai migrasi STATS_DB...");
+        // Menyimpan SELURUH objek STATS_DB ke dalam 1 dokumen bernama 'tome_stats'
+        await db.collection("game_config").doc("tome_stats").set(STATS_DB);
+        
+        alert("✅ MIGRASI BERHASIL! Seluruh data Stats Buku kini berada di Server Firebase.");
+    } catch (error) {
+        console.error("Gagal migrasi:", error);
+        alert("❌ Terjadi kesalahan: " + error.message);
+    }
+}
