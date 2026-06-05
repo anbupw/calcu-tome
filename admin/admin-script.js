@@ -13,6 +13,7 @@ if (!firebase.apps.length) {
 
 const db = firebase.firestore();
 const auth = firebase.auth();
+const storage = firebase.storage();
 
 auth.onAuthStateChanged((user) => {
     const ADMIN_UID = "qU8hYt44KNZEmKhk1c6u9mO1cR92";
@@ -374,13 +375,18 @@ window.deleteTome = function(tomeId) {
 window.openTomeModal = function(tomeId) {
     document.getElementById('tomeModal').style.display = 'flex';
     
+    const fileInput = document.getElementById('tomeEditFile');
+    const progressTxt = document.getElementById('uploadProgress');
+    if (fileInput) fileInput.value = ""; 
+    if (progressTxt) progressTxt.style.display = 'none';
+    
     if (tomeId === 'NEW') {
         document.getElementById('tomeModalTitle').innerText = "✨ Tambah Buku Baru";
         document.getElementById('tomeEditId').readOnly = false;
         document.getElementById('tomeEditId').value = "";
         document.getElementById('tomeEditGameId').value = "";
         document.getElementById('tomeEditName').value = "";
-        document.getElementById('tomeEditIcon').value = ""; // Form Icon Kosong
+        document.getElementById('tomeEditIcon').value = ""; 
         document.getElementById('tomeReq1').value = "0";
         document.getElementById('tomeReq2').value = "0";
         document.getElementById('tomeReq3').value = "0";
@@ -394,7 +400,7 @@ window.openTomeModal = function(tomeId) {
                 document.getElementById('tomeEditId').value = d.id;
                 document.getElementById('tomeEditGameId').value = d.gameId;
                 document.getElementById('tomeEditName').value = d.name;
-                document.getElementById('tomeEditIcon').value = d.iconId || ""; // Panggil Custom Icon
+                document.getElementById('tomeEditIcon').value = d.iconId || ""; 
                 document.getElementById('tomeReq1').value = d.req[0];
                 document.getElementById('tomeReq2').value = d.req[1];
                 document.getElementById('tomeReq3').value = d.req[2];
@@ -403,7 +409,7 @@ window.openTomeModal = function(tomeId) {
     }
 };
 
-window.saveTomeData = function() {
+window.saveTomeData = async function() {
     const id = document.getElementById('tomeEditId').value;
     const gameId = document.getElementById('tomeEditGameId').value;
     const name = document.getElementById('tomeEditName').value;
@@ -411,8 +417,34 @@ window.saveTomeData = function() {
     const req1 = parseInt(document.getElementById('tomeReq1').value) || 0;
     const req2 = parseInt(document.getElementById('tomeReq2').value) || 0;
     const req3 = parseInt(document.getElementById('tomeReq3').value) || 0;
+    
+    const fileInput = document.getElementById('tomeEditFile');
 
     if (!id || !name) return alert("ID dan Nama Buku tidak boleh kosong!");
+
+    let iconUrl = null;
+
+    if (fileInput && fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        const progressTxt = document.getElementById('uploadProgress');
+        progressTxt.style.display = 'block';
+        progressTxt.innerText = "⏳ Sedang mengunggah gambar ke server...";
+
+        try {
+            const fileExtension = file.name.split('.').pop();
+            const storageRef = storage.ref(`tome_icons/${id}.${fileExtension}`);
+            
+            await storageRef.put(file);
+            
+            iconUrl = await storageRef.getDownloadURL();
+            progressTxt.innerText = "✅ Gambar berhasil diunggah!";
+        } catch (uploadError) {
+            console.error("Gagal Upload:", uploadError);
+            alert("❌ Gagal mengunggah gambar: " + uploadError.message);
+            progressTxt.style.display = 'none';
+            return;
+        }
+    }
 
     const tomeData = {
         id: parseInt(id),
@@ -422,11 +454,25 @@ window.saveTomeData = function() {
         iconId: iconId ? parseInt(iconId) : null
     };
 
+    if (iconUrl) {
+        tomeData.iconUrl = iconUrl;
+    } else {
+        const currentDoc = await db.collection("tomes").doc(String(id)).get();
+        if (currentDoc.exists && currentDoc.data().iconUrl) {
+            tomeData.iconUrl = currentDoc.data().iconUrl;
+        }
+    }
+
     db.collection("tomes").doc(String(id)).set(tomeData)
       .then(() => {
           document.getElementById('tomeModal').style.display = 'none';
+          document.getElementById('uploadProgress').style.display = 'none';
+          alert("✅ Data Buku & Ikon Berhasil Disimpan!");
       })
-      .catch(err => alert("Gagal menyimpan: " + err.message));
+      .catch(err => {
+          alert("Gagal menyimpan ke Firestore: " + err.message);
+          document.getElementById('uploadProgress').style.display = 'none';
+      });
 };
 
 window.migrateOldTomeDB = function() {
@@ -527,11 +573,8 @@ window.toggleBan = function(userId, currentStatus) {
     }
 };
 
-// ========================================================
-// 🚀 FUNGSI MIGRASI STATS_DB KE FIREBASE
-// ========================================================
 async function migrateStatsToFirebase() {
-    // Memastikan STATS_DB masih ada di memori
+    
     if (typeof STATS_DB === "undefined") {
         alert("❌ Error: File db_stats.js tidak terdeteksi!");
         return;
@@ -541,7 +584,6 @@ async function migrateStatsToFirebase() {
 
     try {
         console.log("Memulai migrasi STATS_DB...");
-        // Menyimpan SELURUH objek STATS_DB ke dalam 1 dokumen bernama 'tome_stats'
         await db.collection("game_config").doc("tome_stats").set(STATS_DB);
         
         alert("✅ MIGRASI BERHASIL! Seluruh data Stats Buku kini berada di Server Firebase.");
