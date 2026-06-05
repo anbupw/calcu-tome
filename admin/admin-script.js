@@ -20,7 +20,9 @@ auth.onAuthStateChanged((user) => {
     if (user && user.uid === ADMIN_UID) {
         document.getElementById('loginSection').style.display = 'none';
         document.getElementById('adminSection').style.display = 'block';
-        document.getElementById('adminEmailTxt').innerText = user.email;
+        
+        document.getElementById('adminEmailTxt').innerText = "Admin"; 
+        
         loadCurrentData();
     } else {
         document.getElementById('loginSection').style.display = 'block';
@@ -56,7 +58,8 @@ function loginAdmin() {
 
             document.getElementById('loginSection').style.display = 'none';
             document.getElementById('adminSection').style.display = 'block';
-            document.getElementById('adminEmailTxt').innerText = user.email;
+            
+            document.getElementById('adminEmailTxt').innerText = "Admin";
             
             alert("✅ Selamat datang, Admin!");
         })
