@@ -308,12 +308,24 @@ function renderBookSelection() {
     for (let r = maxLevel; r >= 1; r--) {
         let lis = ''; 
         let start = r * 100 + 1; 
-        
         let end = r * 100 + 99; 
         
         for (let e = start; e <= end; e++) {
             if (TOME_DB[e]) {
-                lis += `<li><button style="background-image:url('img/znachki.png'); ${getSpritePosition(e)}" data-id="${e}" onclick="selectTargetBook(${e})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`;
+                const bookData = TOME_DB[e];
+                const iconId = bookData[5];
+                const iconUrl = bookData[6];
+                
+                let buttonStyle = '';
+                
+                if (iconUrl) {
+                    buttonStyle = `background-image: url('${iconUrl}'); background-size: cover; background-position: center;`;
+                } else {
+                    const targetIconId = iconId || e;
+                    buttonStyle = `background-image: url('img/znachki.png'); ${getSpritePosition(targetIconId)}`;
+                }
+                
+                lis += `<li><button style="${buttonStyle}" data-id="${e}" onclick="selectTargetBook(${e})" onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();"></button></li>`;
             }
         }
         
@@ -826,7 +838,15 @@ function syncTomeDatabase(callback) {
 
         snap.forEach((doc) => {
             const data = doc.data();
-            window.TOME_DB[data.id] = [data.req[0], data.req[1], data.req[2], data.gameId, data.name, data.iconId || null];
+            window.TOME_DB[data.id] = [
+                data.req[0], 
+                data.req[1], 
+                data.req[2], 
+                data.gameId, 
+                data.name, 
+                data.iconId || null,
+                data.iconUrl || null
+            ];
         });
         
         console.log("✅ Database Tome berhasil disinkronisasi!");

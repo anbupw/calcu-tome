@@ -375,10 +375,8 @@ window.deleteTome = function(tomeId) {
 window.openTomeModal = function(tomeId) {
     document.getElementById('tomeModal').style.display = 'flex';
     
-    const fileInput = document.getElementById('tomeEditFile');
-    const progressTxt = document.getElementById('uploadProgress');
-    if (fileInput) fileInput.value = ""; 
-    if (progressTxt) progressTxt.style.display = 'none';
+    const urlInput = document.getElementById('tomeEditIconUrl');
+    if (urlInput) urlInput.value = ""; 
     
     if (tomeId === 'NEW') {
         document.getElementById('tomeModalTitle').innerText = "✨ Tambah Buku Baru";
@@ -404,12 +402,16 @@ window.openTomeModal = function(tomeId) {
                 document.getElementById('tomeReq1').value = d.req[0];
                 document.getElementById('tomeReq2').value = d.req[1];
                 document.getElementById('tomeReq3').value = d.req[2];
+                
+                if (d.iconUrl) {
+                    document.getElementById('tomeEditIconUrl').value = d.iconUrl;
+                }
             }
         });
     }
 };
 
-window.saveTomeData = async function() {
+window.saveTomeData = function() {
     const id = document.getElementById('tomeEditId').value;
     const gameId = document.getElementById('tomeEditGameId').value;
     const name = document.getElementById('tomeEditName').value;
@@ -418,60 +420,27 @@ window.saveTomeData = async function() {
     const req2 = parseInt(document.getElementById('tomeReq2').value) || 0;
     const req3 = parseInt(document.getElementById('tomeReq3').value) || 0;
     
-    const fileInput = document.getElementById('tomeEditFile');
+    const iconUrlInput = document.getElementById('tomeEditIconUrl');
+    const iconUrl = iconUrlInput ? iconUrlInput.value.trim() : "";
 
     if (!id || !name) return alert("ID dan Nama Buku tidak boleh kosong!");
-
-    let iconUrl = null;
-
-    if (fileInput && fileInput.files.length > 0) {
-        const file = fileInput.files[0];
-        const progressTxt = document.getElementById('uploadProgress');
-        progressTxt.style.display = 'block';
-        progressTxt.innerText = "⏳ Sedang mengunggah gambar ke server...";
-
-        try {
-            const fileExtension = file.name.split('.').pop();
-            const storageRef = storage.ref(`tome_icons/${id}.${fileExtension}`);
-            
-            await storageRef.put(file);
-            
-            iconUrl = await storageRef.getDownloadURL();
-            progressTxt.innerText = "✅ Gambar berhasil diunggah!";
-        } catch (uploadError) {
-            console.error("Gagal Upload:", uploadError);
-            alert("❌ Gagal mengunggah gambar: " + uploadError.message);
-            progressTxt.style.display = 'none';
-            return;
-        }
-    }
 
     const tomeData = {
         id: parseInt(id),
         gameId: parseInt(gameId),
         name: name,
         req: [req1, req2, req3],
-        iconId: iconId ? parseInt(iconId) : null
+        iconId: iconId ? parseInt(iconId) : null,
+        iconUrl: iconUrl || null
     };
-
-    if (iconUrl) {
-        tomeData.iconUrl = iconUrl;
-    } else {
-        const currentDoc = await db.collection("tomes").doc(String(id)).get();
-        if (currentDoc.exists && currentDoc.data().iconUrl) {
-            tomeData.iconUrl = currentDoc.data().iconUrl;
-        }
-    }
 
     db.collection("tomes").doc(String(id)).set(tomeData)
       .then(() => {
           document.getElementById('tomeModal').style.display = 'none';
-          document.getElementById('uploadProgress').style.display = 'none';
-          alert("✅ Data Buku & Ikon Berhasil Disimpan!");
+          alert("✅ Data Buku & Link Ikon Berhasil Disimpan!");
       })
       .catch(err => {
-          alert("Gagal menyimpan ke Firestore: " + err.message);
-          document.getElementById('uploadProgress').style.display = 'none';
+          alert("❌ Gagal menyimpan ke Firestore: " + err.message);
       });
 };
 
