@@ -1,5 +1,5 @@
-# Perfect World Classic
-Simulator Crafting Tome for Perfect World Classic
+# PERFECT WORLD CLASSIC
+Simulator Crafting Tome for Game Perfect World Classic
 
 # Online version
 https://anbupw.github.io/calcu-tome/
