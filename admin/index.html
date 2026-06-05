@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Tome Simulator</title>
+    <title>Admin Panel</title>
 	<link rel="icon" type="image/x-icon" href="img/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     
@@ -16,25 +16,45 @@
 <body>
 
     <div id="loginSection" class="admin-card">
-        <h2>🔒 Login Admin Panel</h2>
-        <div class="form-group">
-            <label for="loginEmail">Email Admin:</label>
-            <input type="email" id="loginEmail" placeholder="Masukkan email admin...">
+    <h2>🔒 Login Admin Panel</h2>
+    <div class="form-group">
+        <label for="loginEmail">Email Admin:</label>
+        <input type="email" id="loginEmail" placeholder="Masukkan email admin...">
+    </div>
+    <div class="form-group">
+        <label for="loginPassword">Password:</label>
+        <input type="password" id="loginPassword" placeholder="Masukkan password...">
+    </div>
+    <button onclick="loginAdmin()">Masuk Dashboard</button>
+</div>
+
+<div id="adminSection">
+    <div class="admin-card" style="padding: 15px 25px; margin-bottom: 20px;">
+        <div class="user-info">
+            <span>Login sebagai: <strong id="adminEmailTxt" style="color:#3b82f6;">-</strong></span>
+            <button onclick="logoutAdmin()" class="btn-danger">Logout</button>
         </div>
-        <div class="form-group">
-            <label for="loginPassword">Password:</label>
-            <input type="password" id="loginPassword" placeholder="Masukkan password...">
-        </div>
-        <button onclick="loginAdmin()">Masuk Dashboard</button>
     </div>
 
-    <div id="adminSection">
-        <div class="admin-card" style="padding: 15px 25px; margin-bottom: 20px;">
-            <div class="user-info">
-                <span>Login sebagai: <strong id="adminEmailTxt" style="color:#3b82f6;">-</strong></span>
-                <button onclick="logoutAdmin()" class="btn-danger">Logout</button>
-            </div>
+    <div class="admin-card" style="padding: 20px; margin-bottom: 20px; border: 1px dashed #ef4444; background: rgba(239, 68, 68, 0.03); border-radius: 8px;">
+        <h3 style="color: #ef4444; margin-bottom: 5px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-tools"></i> Database Maintenance System
+        </h3>
+        <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 15px;">
+            Fitur pemeliharaan server untuk mengosongkan log obrolan dan data statistik yang menumpuk.
+        </p>
+        
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <button onclick="adminClearCollection('global_chats')" style="background: #ef4444; color: white; padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;">
+                <i class="fas fa-comment-slash"></i> Sapu Bersih Chat Global
+            </button>
+            
+            <button onclick="adminClearCollection('stats')" style="background: #f59e0b; color: white; padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;">
+                <i class="fas fa-chart-pie"></i> Reset Statistik Pencarian
+            </button>
         </div>
+    </div>
+</div>
 		
 		<div class="admin-card">
             <h2>📊 Statistik Global (Real-Time)</h2>
@@ -148,7 +168,7 @@
             </div>
         </div>
     </div>
-<!-- 🛠️ MODAL TOME EDITOR -->
+	
     <div id="tomeModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box;">
             <div style="background: #1e293b; padding: 20px; border-radius: 12px; width: 100%; max-width: 400px; border: 1px solid #334155; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
                 <h3 id="tomeModalTitle" style="margin-top: 0; color: #3b82f6; border-bottom: 1px solid #334155; padding-bottom: 10px; font-size: 1.2rem;">📘 Edit Buku Tome</h3>

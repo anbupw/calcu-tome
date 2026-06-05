@@ -213,10 +213,6 @@ function loadLiveChatModeration() {
     });
 }
 
-// ==========================================
-// 🛠️ FUNGSI TOME MANAGER (EDITOR DATABASE)
-// ==========================================
-
 function loadTomeManager() {
     db.collection("tomes").onSnapshot((snap) => {
         const tbody = document.getElementById('tomeTableBody');
@@ -256,7 +252,83 @@ function loadTomeManager() {
     });
 }
 
-// FUNGSI BARU: MENGHAPUS BUKU
+async function adminClearCollection(collectionName) {
+    const ADMIN_UID = "qU8hYt44KNZEmKhk1c6u9mO1cR92"; 
+    
+    if (!currentUser || currentUser.uid !== ADMIN_UID) {
+        alert("⛔ Akses Ditolak! Hanya Admin pembuat web yang boleh menekan tombol ini.");
+        return;
+    }
+
+    let confirmMsg = collectionName === 'global_chats' 
+        ? "⚠️ PERINGATAN! Yakin ingin MENGHAPUS SEMUA RIWAYAT CHAT pemain?" 
+        : "⚠️ PERINGATAN! Yakin ingin MERESET SEMUA DATA STATISTIK pencarian?";
+
+    if (!confirm(confirmMsg)) return;
+
+    try {
+        console.log(`Mencari data di koleksi ${collectionName}...`);
+        const snapshot = await db.collection(collectionName).get();
+        
+        if (snapshot.empty) {
+            alert(`✨ Bersih! Data di koleksi [${collectionName}] memang sudah kosong.`);
+            return;
+        }
+
+        const batch = db.batch();
+        snapshot.docs.forEach((doc) => {
+            batch.delete(doc.ref);
+        });
+
+        await batch.commit();
+        alert(`🧹 BERSALAM! Seluruh data di [${collectionName}] berhasil disapu bersih.`);
+        
+    } catch (error) {
+        console.error("Gagal membersihkan data:", error);
+        alert("❌ Terjadi kesalahan saat menghapus data. Periksa konsol browser.");
+    }
+}
+
+async function adminClearCollection(collectionName) {
+    const ADMIN_EMAIL = "zulloxford@gmail.com"; 
+    
+    const user = firebase.auth().currentUser;
+
+    if (!user || user.email !== ADMIN_EMAIL) {
+        alert("⛔ Akses Ilegal! Sesi admin tidak valid atau Anda tidak memiliki otoritas.");
+        return;
+    }
+
+    let confirmMsg = collectionName === 'global_chats' 
+        ? "⚠️ PERINGATAN BESAR!\nApakah Anda yakin ingin menghapus SELURUH pesan chat pemain secara permanen?" 
+        : "⚠️ PERINGATAN BESAR!\nApakah Anda yakin ingin me-RESET data statistik pencarian?";
+
+    if (!confirm(confirmMsg)) return;
+
+    try {
+        console.log(`Mengosongkan koleksi: ${collectionName}...`);
+        
+        const snapshot = await db.collection(collectionName).get();
+        
+        if (snapshot.empty) {
+            alert(`✨ Koleksi [${collectionName}] sudah dalam keadaan kosong bersih.`);
+            return;
+        }
+
+        const batch = db.batch();
+        snapshot.docs.forEach((doc) => {
+            batch.delete(doc.ref);
+        });
+
+        await batch.commit();
+        alert(`🧹 BERHASIL! Server dibersihkan, koleksi [${collectionName}] kini kosong.`);
+        
+    } catch (error) {
+        console.error("Gagal melakukan maintenance:", error);
+        alert("❌ Terjadi kesalahan server saat menghapus data. Periksa konsol.");
+    }
+}
+
 window.deleteTome = function(tomeId) {
     if (confirm(`⚠️ PERINGATAN!\n\nYakin ingin menghapus Buku ID ${tomeId}?\nBuku ini akan hilang selamanya dari Database.`)) {
         db.collection("tomes").doc(String(tomeId)).delete()
@@ -264,7 +336,6 @@ window.deleteTome = function(tomeId) {
     }
 };
 
-// Buka Modal Edit/Tambah
 window.openTomeModal = function(tomeId) {
     document.getElementById('tomeModal').style.display = 'flex';
     
@@ -297,7 +368,6 @@ window.openTomeModal = function(tomeId) {
     }
 };
 
-// Simpan Data ke Firebase
 window.saveTomeData = function() {
     const id = document.getElementById('tomeEditId').value;
     const gameId = document.getElementById('tomeEditGameId').value;
@@ -324,11 +394,9 @@ window.saveTomeData = function() {
       .catch(err => alert("Gagal menyimpan: " + err.message));
 };
 
-// ⚡ FUNGSI MIGRASI OTOMATIS (Satu Kali Pakai)
 window.migrateOldTomeDB = function() {
     if (!confirm("Proses ini akan mengimpor seluruh data dari Array lama Anda ke Firebase. Lanjutkan?")) return;
     
-    // Ini adalah data asli milik Anda
     const TOME_DB = [];
     TOME_DB[601]=[501,502,509,17615,'The Calm of Ice']; TOME_DB[602]=[502,503,505,17622,'The Khatru']; TOME_DB[603]=[504,503,508,17628,'A Carmine Tear']; TOME_DB[604]=[503,508,501,17630,'The Fruit of Intense Labor']; TOME_DB[605]=[505,512,509,17634,'Tomorrows Phoenix']; TOME_DB[606]=[505,506,507,17636,'Riding the Scree']; TOME_DB[607]=[513,514,507,17642,'Turning the Tide']; TOME_DB[608]=[508,506,514,17649,'Existential Woe']; TOME_DB[609]=[510,501,505,17655,'Book of Fragrances']; TOME_DB[610]=[510,506,501,17657,'Bouquet of Regrets']; TOME_DB[611]=[511,509,505,17661,'The Union']; TOME_DB[612]=[511,513,503,17663,'Oblivious Enlightenment']; TOME_DB[613]=[513,507,514,17669,'As the Universe Fades']; TOME_DB[614]=[514,512,513,17676,'The Concubines Laugh']; TOME_DB[615]=[515,501,507,17679,'The Academy of the East']; TOME_DB[616]=[516,515,514,17683,'Pan Gu Creator'];
     TOME_DB[501]=[401,408,405,17618,'A Heart like Still Water']; TOME_DB[502]=[409,405,403,17621,'The Tsunamis of Yore']; TOME_DB[503]=[404,408,401,17624,'Laughing Mad']; TOME_DB[504]=[408,404,401,17627,'The Book of Congratulations']; TOME_DB[505]=[403,409,404,17633,'The Wrath of Heaven']; TOME_DB[506]=[409,403,402,17639,'A Strange Kindness']; TOME_DB[507]=[402,404,409,17645,'Flesh of the Lamia']; TOME_DB[508]=[404,408,402,17648,'Everything is Emptiness']; TOME_DB[509]=[403,401,405,17651,'The Oasis Remembered']; TOME_DB[510]=[401,405,407,17654,'The Heavenly Scent']; TOME_DB[511]=[403,409,404,17660,'Debt and Tombstones']; TOME_DB[512]=[409,403,404,17666,'Endless Waves']; TOME_DB[513]=[408,402,404,17672,'Parting Grief']; TOME_DB[514]=[408,402,404,17675,'Rouge and Red Lips']; TOME_DB[515]=[406,407,401,17678,'Gang of Hooligans']; TOME_DB[516]=[406,407,402,17682,'The Voidlands'];
@@ -356,7 +424,6 @@ window.migrateOldTomeDB = function() {
     }).catch(err => alert("Gagal migrasi: " + err.message));
 };
 
-// 🗑️ Fungsi Menghapus Pesan
 window.deleteChatMessage = function(chatId) {
     if (confirm("Hapus pesan ini secara permanen dari pandangan semua pemain?")) {
         db.collection("global_chats").doc(chatId).delete()
@@ -364,10 +431,7 @@ window.deleteChatMessage = function(chatId) {
     }
 };
 
-// 🔨 Fungsi Ban User Cepat via Chat
 window.banFromChat = function(userId) {
-    // Kita panggil ulang fungsi toggleBan yang sudah kita buat sebelumnya!
-    // Flag 'false' karena diasumsikan akun tersebut sedang aktif dan akan di-ban
     window.toggleBan(userId, false);
 };
 
