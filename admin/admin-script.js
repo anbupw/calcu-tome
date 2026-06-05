@@ -13,7 +13,6 @@ if (!firebase.apps.length) {
 
 const db = firebase.firestore();
 const auth = firebase.auth();
-const storage = firebase.storage();
 
 auth.onAuthStateChanged((user) => {
     const ADMIN_UID = "qU8hYt44KNZEmKhk1c6u9mO1cR92";
