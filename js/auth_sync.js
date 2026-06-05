@@ -14,7 +14,7 @@ auth.onAuthStateChanged(user => {
         if (appContent) appContent.style.display = 'block';
         
         if (accountSection) {
-            const ADMIN_UIDS = ["qU8hYt44KNZEmKhk1c6u9mO1cR92""];
+            const ADMIN_UIDS = ["qU8hYt44KNZEmKhk1c6u9mO1cR92"];
             
             const isAdmin = user.uid && ADMIN_UIDS.includes(user.uid);
 
