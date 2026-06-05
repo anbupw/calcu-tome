@@ -845,16 +845,41 @@ function syncTomeDatabase(callback) {
     });
 }
 
+
+function syncStatsDatabase(callback) {
+    if (!window.db) {
+        if (callback) callback();
+        return;
+    }
+
+    console.log("Mengambil Data Stats Tome dari Cloud...");
+    
+    window.db.collection("game_config").doc("tome_stats").get().then((doc) => {
+        if (doc.exists) {
+            window.STATS_DB = doc.data();
+            console.log("✅ STATS_DB berhasil disinkronisasi!");
+        } else {
+            console.warn("⚠️ Dokumen STATS_DB tidak ditemukan di Firebase.");
+        }
+        if (callback) callback();
+    }).catch(err => {
+        console.error("Gagal load STATS_DB:", err);
+        if (callback) callback();
+    });
+}
+
 window.onload = () => { 
     syncTomeDatabase(() => {
-        applyLanguage(); 
-        
-        const modalInput = document.getElementById('modalInput');
-        if (modalInput) {
-            modalInput.addEventListener('keydown', function(e) { 
-                if(e.key === 'Enter') confirmModal(); 
-            }); 
-        }
+        syncStatsDatabase(() => {
+            applyLanguage(); 
+            
+            const modalInput = document.getElementById('modalInput');
+            if (modalInput) {
+                modalInput.addEventListener('keydown', function(e) { 
+                    if(e.key === 'Enter') confirmModal(); 
+                }); 
+            }
+        });
     });
 };
 
