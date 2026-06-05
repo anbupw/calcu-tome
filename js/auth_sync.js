@@ -14,6 +14,10 @@ auth.onAuthStateChanged(user => {
         if (appContent) appContent.style.display = 'block';
         
         if (accountSection) {
+            const ADMIN_UIDS = ["qU8hYt44KNZEmKhk1c6u9mO1cR92""];
+            
+            const isAdmin = user.uid && ADMIN_UIDS.includes(user.uid);
+
             accountSection.innerHTML = `
                 <img src="${user.photoURL || 'https://via.placeholder.com/48'}" class="user-profile-img" alt="Avatar">
                 <div style="font-size:0.95rem; font-weight:600; color:white; margin-bottom:2px;">${user.displayName}</div>
@@ -21,6 +25,14 @@ auth.onAuthStateChanged(user => {
                     <span style="display:inline-block; width:6px; height:6px; background:var(--success); border-radius:50%; box-shadow:0 0 6px var(--success);"></span> 
                     Cloud Sync Aktif
                 </div>
+
+                ${isAdmin ? `
+                    <button style="background: #8b5cf6; color: white; border: none; padding: 6px 14px; font-size: 0.75rem; width: auto; border-radius: 6px; font-weight: 600; margin-bottom: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;" onclick="window.location.href='https://anbupw.github.io/calcu-tome/admin'">
+                        <i class="fas fa-user-shield"></i> Admin Panel
+                    </button>
+                    <br>
+                ` : ''}
+                
                 <button class="btn-danger" style="padding: 6px 14px; font-size: 0.75rem; width: auto; border-radius:6px; font-weight:600;" onclick="logoutGoogle()">
                     <i class="fas fa-sign-out-alt"></i> Keluar
                 </button>
@@ -37,7 +49,7 @@ auth.onAuthStateChanged(user => {
                 photoURL: user.photoURL || ""
             }, { merge: true }).catch(err => console.error("Gagal simpan profil:", err));
         }
-		
+        
         if (window.db) {
             banListener = window.db.collection("users").doc(user.uid).onSnapshot((doc) => {
                 if (doc.exists) {
