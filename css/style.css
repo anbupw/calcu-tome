@@ -479,3 +479,25 @@ html {
     top: 0;
     z-index: 1000;
 }
+
+
+@keyframes emeraldGlow {
+    0% { 
+        box-shadow: 0 0 4px #10b981, inset 0 0 4px #10b981; 
+        border-color: #10b981; 
+    }
+    50% { 
+        box-shadow: 0 0 12px #34d399, inset 0 0 8px #34d399; 
+        border-color: #34d399; 
+    }
+    100% { 
+        box-shadow: 0 0 4px #10b981, inset 0 0 4px #10b981; 
+        border-color: #10b981; 
+    }
+}
+
+.inventory-glow-effect {
+    animation: emeraldGlow 1.5s infinite alternate !important;
+    border: 2px solid #10b981 !important;
+    border-radius: 6px !important;
+}
