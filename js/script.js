@@ -210,23 +210,24 @@ function getTreeItemHtml(id, isDeductionsView = false) {
     let clickAttr = '';
     let extraStyle = '';
     let spanTag = '';
+    let extraClass = '';
 
     if (isDeductionsView) {
         clickAttr = `onclick="removeDeduction(${id})"`;
         spanTag = `<span title="Hapus item dari inventory"></span>`;
+        extraClass = 'inventory-glow-effect'; 
     } else {
         if (id == rightTreeId) {
             clickAttr = `onclick="attemptCrafting(${id})"`;
-            
             extraStyle = "border-radius: 6px; cursor: pointer;";
             
-            return `<li><button id="mainTargetBtn" style="${getTomeIconStyle(id)}; ${extraStyle}" data-id="${id}" ${clickAttr} onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
+            return `<li><button id="mainTargetBtn" class="${extraClass}" style="${getTomeIconStyle(id)}; ${extraStyle}" data-id="${id}" ${clickAttr} onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
         } else {
             clickAttr = `onclick="openModal(${id})"`;
         }
     }
     
-    return `<li><button style="${getTomeIconStyle(id)}; ${extraStyle}" data-id="${id}" ${clickAttr} onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
+    return `<li><button class="${extraClass}" style="${getTomeIconStyle(id)}; ${extraStyle}" data-id="${id}" ${clickAttr} onmouseover="showTooltip(this, event);" onmousemove="moveTooltip(event);" onmouseout="hideTooltip();">${spanTag}</button><b>${count}</b></li>`;
 }
 
 function renderTree() {
