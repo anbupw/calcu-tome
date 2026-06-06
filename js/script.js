@@ -215,7 +215,7 @@ function getTreeItemHtml(id, isDeductionsView = false) {
     if (isDeductionsView) {
         clickAttr = `onclick="removeDeduction(${id})"`;
         spanTag = `<span title="Hapus item dari inventory"></span>`;
-        extraClass = 'inventory-glow-effect'; 
+        extraClass = 'inventory-glow-effect2'; 
     } else {
         if (id == rightTreeId) {
             clickAttr = `onclick="attemptCrafting(${id})"`;
