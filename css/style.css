@@ -480,7 +480,7 @@ html {
     z-index: 1000;
 }
 
-
+/* Animasi Emerald Glow untuk Inventory */
 @keyframes emeraldGlow {
     0% { 
         box-shadow: 0 0 4px #10b981, inset 0 0 4px #10b981; 
@@ -496,8 +496,35 @@ html {
     }
 }
 
+/* Class yang ditempelkan pada tombol item di Inventory */
 .inventory-glow-effect {
     animation: emeraldGlow 1.5s infinite alternate !important;
     border: 2px solid #10b981 !important;
     border-radius: 6px !important;
+}
+
+/* Animasi Glow Cyan/Teal Favorit Anda */
+@keyframes cyanTomeGlow {
+    0% { 
+        box-shadow: 0 0 5px #00f5d4, inset 0 0 3px #00f5d4; 
+        border-color: #00f5d4; 
+        filter: drop-shadow(0 0 2px rgba(0, 245, 212, 0.4));
+    }
+    50% { 
+        box-shadow: 0 0 15px #01c4ab, inset 0 0 8px #01c4ab; 
+        border-color: #01c4ab; 
+        filter: drop-shadow(0 0 8px rgba(1, 196, 171, 0.8));
+    }
+    100% { 
+        box-shadow: 0 0 5px #00f5d4, inset 0 0 3px #00f5d4; 
+        border-color: #00f5d4; 
+        filter: drop-shadow(0 0 2px rgba(0, 245, 212, 0.4));
+    }
+}
+
+/* Class Efek Menyala Berkedip */
+.inventory-glow-effect2 {
+    animation: cyanTomeGlow 1.8s infinite ease-in-out alternate !important;
+    border: 2px solid #00f5d4 !important;
+    border-radius: 8px !important;
 }
