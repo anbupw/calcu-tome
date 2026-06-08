@@ -171,7 +171,7 @@ function loadPlayerCRM() {
             
             const tr = document.createElement('tr');
             tr.style.borderBottom = '1px solid #334155';
-            tr.style.background = isBanned ? 'rgba(239, 68, 68, 0.05)' : 'transparent'; // Beri warna merah tipis jika dibanned
+            tr.style.background = isBanned ? 'rgba(239, 68, 68, 0.05)' : 'transparent';
             
             tr.innerHTML = `
                 <td style="padding: 10px; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
@@ -182,7 +182,6 @@ function loadPlayerCRM() {
                     ${isBanned ? '<span style="color: #ef4444; font-weight:bold; font-size: 0.75rem; background: rgba(239,68,68,0.1); padding: 3px 6px; border-radius: 4px;">BANNED</span>' : '<span style="color: #10b981; font-weight:bold; font-size: 0.75rem; background: rgba(16,185,129,0.1); padding: 3px 6px; border-radius: 4px;">AKTIF</span>'}
                 </td>
                 <td style="padding: 10px; vertical-align: middle;">
-                    <!-- FLEXBOX CONTAINER: Otomatis tersusun vertikal di layar HP cerdas -->
                     <div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;">
                         <button onclick="viewInventory('${userId}')" style="background: #f59e0b; color: #fff; border: none; padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; font-weight: 600; flex: 1; min-width: 65px; text-align: center;">👁️ Intip</button>
                         <button onclick="toggleBan('${userId}', ${isBanned})" style="background: ${isBanned ? '#10b981' : '#ef4444'}; color: #fff; border: none; padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; font-weight: 600; flex: 1; min-width: 65px; text-align: center;">
@@ -290,46 +289,9 @@ function loadTomeManager() {
     });
 }
 
-async function adminClearCollection(collectionName) {
-    const ADMIN_UID = "qU8hYt44KNZEmKhk1c6u9mO1cR92"; 
-    
-    if (!currentUser || currentUser.uid !== ADMIN_UID) {
-        alert("⛔ Akses Ditolak! Hanya Admin pembuat web yang boleh menekan tombol ini.");
-        return;
-    }
-
-    let confirmMsg = collectionName === 'global_chats' 
-        ? "⚠️ PERINGATAN! Yakin ingin MENGHAPUS SEMUA RIWAYAT CHAT pemain?" 
-        : "⚠️ PERINGATAN! Yakin ingin MERESET SEMUA DATA STATISTIK pencarian?";
-
-    if (!confirm(confirmMsg)) return;
-
-    try {
-        console.log(`Mencari data di koleksi ${collectionName}...`);
-        const snapshot = await db.collection(collectionName).get();
-        
-        if (snapshot.empty) {
-            alert(`✨ Bersih! Data di koleksi [${collectionName}] memang sudah kosong.`);
-            return;
-        }
-
-        const batch = db.batch();
-        snapshot.docs.forEach((doc) => {
-            batch.delete(doc.ref);
-        });
-
-        await batch.commit();
-        alert(`🧹 BERSALAM! Seluruh data di [${collectionName}] berhasil disapu bersih.`);
-        
-    } catch (error) {
-        console.error("Gagal membersihkan data:", error);
-        alert("❌ Terjadi kesalahan saat menghapus data. Periksa konsol browser.");
-    }
-}
-
+// 🔴 PERBAIKAN: Fungsi adminClearCollection duplikat dihapus, disisakan versi final yang bersih ini
 async function adminClearCollection(collectionName) {
     const ADMIN_EMAIL = "zulloxford@gmail.com"; 
-    
     const user = firebase.auth().currentUser;
 
     if (!user || user.email !== ADMIN_EMAIL) {
@@ -345,7 +307,6 @@ async function adminClearCollection(collectionName) {
 
     try {
         console.log(`Mengosongkan koleksi: ${collectionName}...`);
-        
         const snapshot = await db.collection(collectionName).get();
         
         if (snapshot.empty) {
@@ -455,11 +416,9 @@ window.saveTomeData = function() {
 
     db.collection("tomes").doc(String(id)).set(tomeData)
       .then(() => {
-          
           return db.collection("game_config").doc("tome_stats").set({
               [id]: statsArray
           }, { merge: true }); 
-
       })
       .then(() => {
           document.getElementById('tomeModal').style.display = 'none';
@@ -482,7 +441,6 @@ window.migrateOldTomeDB = function() {
     TOME_DB[101]=[0,0,0,17579,'Underestimated Resolve']; TOME_DB[102]=[0,0,0,17580,'Soaring Heart']; TOME_DB[103]=[0,0,0,17581,'Retributions Flame']; TOME_DB[104]=[0,0,0,17582,'Tome of the River Spirits']; TOME_DB[105]=[0,0,0,17583,'Flankers Tome']; TOME_DB[106]=[0,0,0,17584,'Tome of Hyperbolic Boasts']; TOME_DB[107]=[0,0,0,17585,'Tome of Grace']; TOME_DB[108]=[0,0,0,17607,'A Flowerless Plant']; TOME_DB[109]=[0,0,0,17611,'Eternitys Moon'];
 
     const batch = db.batch();
-    
     TOME_DB.forEach((item, index) => {
         if (item) {
             const docRef = db.collection("tomes").doc(String(index));
@@ -519,7 +477,6 @@ window.viewInventory = function(userId) {
     db.collection("users").doc(userId).get().then((doc) => {
         if (doc.exists) {
             const data = doc.data();
-            
             const inventory = (data.calculatorState && data.calculatorState.d) ? data.calculatorState.d : null;
             
             let html = '<ul style="list-style: none; padding: 0; margin: 0;">';
@@ -569,7 +526,6 @@ window.toggleBan = function(userId, currentStatus) {
 };
 
 async function migrateStatsToFirebase() {
-    
     if (typeof STATS_DB === "undefined") {
         alert("❌ Error: File db_stats.js tidak terdeteksi!");
         return;
@@ -580,8 +536,7 @@ async function migrateStatsToFirebase() {
     try {
         console.log("Memulai migrasi STATS_DB...");
         await db.collection("game_config").doc("tome_stats").set(STATS_DB);
-        
-        alert("✅ MIGRASI BERHASIL! Seluruh data Stats Buku kini berada di Server Firebase.");
+        alert("Paper ✅ MIGRASI BERHASIL! Seluruh data Stats Buku kini berada di Server Firebase.");
     } catch (error) {
         console.error("Gagal migrasi:", error);
         alert("❌ Terjadi kesalahan: " + error.message);
