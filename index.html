@@ -9,7 +9,12 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3b82f6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="img/icon-192.png">
+	
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -302,7 +307,16 @@
 	<div id="floatingTooltip" class="floating-tooltip"></div>
 
 </div>
-
+	
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('PWA Service Worker Berhasil Didaftarkan!', reg.scope))
+                .catch(err => console.log('Gagal mendaftarkan Service Worker:', err));
+        });
+    }
+</script>
 <script src="js/firebase-config.js"></script>
 <script src="js/db_stats.js"></script>
 <script src="js/db_tome.js"></script>
