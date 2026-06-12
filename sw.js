@@ -1,11 +1,11 @@
-const CACHE_NAME = 'calcu-tome-cache-v1';
+const CACHE_NAME = 'calcu-tome-cache-v2';
 
 // Daftarkan file lokal yang ingin bisa diakses secara offline
 const assets = [
   './',
   './index.html',
-  './style.css',
-  './script.js',
+  './css/style.css',
+  './js/script.js',
   './img/icon-192.png',
   './img/icon-512.png'
 ];
