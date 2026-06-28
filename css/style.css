@@ -528,3 +528,24 @@ html {
     border: 2px solid #00f5d4 !important;
     border-radius: 8px !important;
 }
+
+/* 1. Hilangkan titik/garis biru bawaan browser saat kolom input diklik */
+#loginSection input:focus {
+    outline: none !important;
+    /* Opsional: Berikan shadow halus berpendar agar tetap estetik tanpa titik tajam */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important; 
+    border-color: #3b82f6 !important;
+}
+
+/* 2. Jinakkan jika titik tersebut berasal dari sisa bullet-list template */
+#loginSection, #loginSection * {
+    list-style: none !important;
+    list-style-type: none !important;
+}
+
+/* 3. Matikan jika ada elemen dekoratif gaib (pseudo-element) di sekitar form login */
+#loginSection::before, #loginSection::after,
+.form-group::before, .form-group::after {
+    display: none !important;
+    content: none !important;
+}
