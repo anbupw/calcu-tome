@@ -271,9 +271,21 @@
 
 	<div class="vybor" id="mainMenuPanel" style="display:none;">
 		<div id="userAccountSection" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); text-align: center; display:flex; flex-direction:column; align-items:center; gap:8px;"></div>
+		
 		<div class="panel-actions" style="display: flex; flex-direction: column; gap: 8px;">
 			<button class="btn-purple" onclick="toggleLanguage()" id="langBtn">🌐 Switch to English</button>
-			<button class="btn-danger" onclick="resetCalculator()"><span data-i18n="btnReset">🔄 Reset Kalkulator</span></button>
+			
+			<button id="pwaInstallBtn" style="display: none; background: #10b981; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.9rem; align-items: center; justify-content: center; gap: 8px;">
+				<i class="fas fa-download"></i> <span data-i18n="pwaInstall">Install Aplikasi (HP / PC)</span>
+			</button>
+
+			<button id="pwaUpdateBtn" style="display: none; background: #3b82f6; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.9rem; align-items: center; justify-content: center; gap: 8px;">
+				<i class="fas fa-sync-alt"></i> <span data-i18n="pwaUpdate">Update Versi Baru Tersedia!</span>
+			</button>
+			
+			<button class="btn-danger" onclick="resetCalculator()">
+				<span data-i18n="btnReset">🔄 Reset Kalkulator</span>
+			</button>
 		</div>
 	</div>
 
@@ -312,13 +324,64 @@
 </div>
 	
 <script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js')
-                .then(reg => console.log('PWA Service Worker Berhasil Didaftarkan!', reg.scope))
-                .catch(err => console.log('Gagal mendaftarkan Service Worker:', err));
-        });
-    }
+    let deferredPrompt;
+	let newWorker;
+
+	if ('serviceWorker' in navigator) {
+		window.addEventListener('load', () => {
+			navigator.serviceWorker.register('./sw.js')
+				.then(reg => {
+					console.log('PWA Service Worker Aktif!');
+
+					reg.addEventListener('updatefound', () => {
+						newWorker = reg.installing;
+						newWorker.addEventListener('statechange', () => {
+							if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+								const updateBtn = document.getElementById('pwaUpdateBtn');
+								if (updateBtn) updateBtn.style.display = 'block';
+							}
+						});
+					});
+				})
+				.catch(err => console.error('Gagal registrasi SW:', err));
+		});
+
+		window.addEventListener('beforeinstallprompt', (e) => {
+			e.preventDefault();
+			deferredPrompt = e;
+			
+			const installBtn = document.getElementById('pwaInstallBtn');
+			if (installBtn) installBtn.style.display = 'block';
+		});
+
+		document.getElementById('pwaInstallBtn')?.addEventListener('click', async () => {
+			if (deferredPrompt) {
+				deferredPrompt.prompt();
+				const { outcome } = await deferredPrompt.userChoice;
+				if (outcome === 'accepted') {
+					console.log('User menyetujui instalasi PWA');
+				}
+				deferredPrompt = null;
+				document.getElementById('pwaInstallBtn').style.display = 'none';
+			}
+		});
+
+		window.addEventListener('appinstalled', () => {
+			console.log('Kalkulator Tome Berhasil Diinstal!');
+			const installBtn = document.getElementById('pwaInstallBtn');
+			if (installBtn) installBtn.style.display = 'none';
+		});
+
+		document.getElementById('pwaUpdateBtn')?.addEventListener('click', () => {
+			if (newWorker) {
+				newWorker.postMessage({ action: 'skipWaiting' });
+			}
+		});
+
+		navigator.serviceWorker.addEventListener('controllerchange', () => {
+			window.location.reload();
+		});
+	}
 </script>
 <script src="js/firebase-config.js"></script>
 <script src="js/db_stats.js"></script>
