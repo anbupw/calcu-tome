@@ -1,5 +1,6 @@
-const CACHE_NAME = 'Anbu-v2';
+const CACHE_NAME = 'Anbu-v3';
 
+// Daftar aset utama yang wajib diakses secara offline
 const assetsToCache = [
   './',
   './index.html',
@@ -12,11 +13,10 @@ const assetsToCache = [
   './js/lang.js'
 ];
 
-// 2. Tahap Install yang Pintar (Mendeteksi file yang rusak/404)
+// 1. Tahap Install: Amankan semua aset statis ke penyimpanan lokal browser
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      // Menggunakan map agar kita bisa menangkap (catch) file mana yang gagal di-fetch
       return Promise.all(
         assetsToCache.map((url) => {
           return cache.add(url).catch((err) => {
@@ -28,7 +28,7 @@ self.addEventListener('install', (e) => {
   );
 });
 
-// Tahap Aktivasi: Hapus cache usang secara otomatis
+// 2. Tahap Aktivasi: Bersihkan cache versi lama
 self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys().then((keys) => {
@@ -39,34 +39,44 @@ self.addEventListener('activate', (e) => {
   );
 });
 
-// Tahap Fetch (Strategi Super Offline): Ambil dari cache dulu, lalu perbarui dari internet di latar belakang
+// 3. Tahap Fetch: Strategi Pintar Offline (Mencegah Error "Response body is already used")
 self.addEventListener('fetch', (e) => {
-  // Abaikan request eksternal seperti Firebase Auth/Firestore agar tidak crash saat offline
+  // Abaikan request ke database Firebase / API Cloud agar tidak merusak sistem auth/live data saat offline
   if (!e.request.url.startsWith(self.location.origin)) {
     return;
   }
 
   e.respondWith(
     caches.match(e.request).then((cachedResponse) => {
+      
+      // Ambil data terbaru dari internet di latar belakang untuk memperbarui cache
       const fetchPromise = fetch(e.request).then((networkResponse) => {
-        if (networkResponse.status === 200) {
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(e.request, networkResponse.clone());
-          });
+        // VALIDASI: Pastikan respons valid sebelum disimpan
+        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+          return networkResponse;
         }
+
+        // PENTING: Lakukan .clone() SEBELUM data tersebut dikembalikan ke browser!
+        const responseToCache = networkResponse.clone();
+
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(e.request, responseToCache);
+        });
+
         return networkResponse;
       }).catch(() => {
-        // Menangkap error jika benar-benar offline tanpa koneksi sama sekali
-        console.log("Mode Offline Aktif untuk: " + e.request.url);
+        // Berhasil meredam error jika pengguna benar-benar offline tanpa internet
+        console.log("Mode Offline Aktif untuk asset: " + e.request.url);
       });
 
-      // Kembalikan response dari cache jika ada, jika tidak tunggu internet
+      // Jika file ada di cache local, langsung tampilkan (cepat/instan). 
+      // Jika tidak ada (misal file baru), tunggu hasil download internet.
       return cachedResponse || fetchPromise;
     })
   );
 });
 
-// Mendengar sinyal klik "Update" dari tombol UI untuk memaksa aktivasi kode baru
+// Mendengarkan sinyal dari tombol "Update Versi Baru Tersedia!" di UI pengaturan Anda
 self.addEventListener('message', (e) => {
   if (e.data && e.data.action === 'skipWaiting') {
     self.skipWaiting();
