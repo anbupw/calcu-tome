@@ -19,7 +19,7 @@ const LANG = {
 		lvl: "Level", 
 		alertReset: "Hapus semua perhitungan dan mulai dari awal di Cloud?", 
 		statEquipDesc: "* Mengikat saat digunakan (Bind on Equip).", 
-		footerText: "Kalkulator Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", 
+		footerText: "Simulator Crafting Tome © 2026 | Dibuat oleh <strong>Sulfikar</strong>", 
 		matDesc: "Bahan Crafting",
 		btnAddItem: "➕ Tambah Item",
 		modalInvTitle: "Menambahkan Item",
@@ -54,7 +54,9 @@ const LANG = {
 		navCraft: "Crafting",
 		navInv: "Inventory",
 		navCost: "Biaya",
-		navChat: "Chat"
+		navChat: "Chat",
+		pwaInstall: "Install Aplikasi (HP / PC)",
+		pwaUpdate: "Update Versi Baru Tersedia!"
 	},
 	en: { 
 		btnTarget: "📚 Target Tome Crafting", 
@@ -111,6 +113,8 @@ const LANG = {
 		navCraft: "Crafting",
 		navInv: "Inventory",
 		navCost: "Cost",
-		navChat: "Chat"
+		navChat: "Chat",
+		pwaInstall: "Install",
+		pwaUpdate: "Update"
 	}
 };
