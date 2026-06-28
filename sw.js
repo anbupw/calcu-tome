@@ -1,20 +1,29 @@
-const CACHE_NAME = 'Anbu-v1';
+const CACHE_NAME = 'Anbu-v2';
 
 const assetsToCache = [
   './',
   './index.html',
   './style.css',
-  './script.js',
-  './admin-script.js',
-  './icon-192.png',
-  './icon-512.png'
+  './img/icon-192.png',
+  './img/icon-512.png',
+  './js/firebase-config.js',
+  './js/db_stats.js',
+  './js/db_tome.js',
+  './js/lang.js'
 ];
 
-// Tahap Install: Kunci semua aset penting agar bisa dibuka offline
+// 2. Tahap Install yang Pintar (Mendeteksi file yang rusak/404)
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(assetsToCache);
+      // Menggunakan map agar kita bisa menangkap (catch) file mana yang gagal di-fetch
+      return Promise.all(
+        assetsToCache.map((url) => {
+          return cache.add(url).catch((err) => {
+            console.error(`❌ PWA gagal menyimpan file ini ke cache (Kemungkinan 404/Salah Jalur): ${url}`, err);
+          });
+        })
+      );
     }).then(() => self.skipWaiting())
   );
 });
