@@ -1,4 +1,4 @@
-const CACHE_NAME = 'Anbu-v3';
+const CACHE_NAME = 'Anbu-v3.1';
 
 // Daftar aset utama yang wajib diakses secara offline
 const assetsToCache = [
